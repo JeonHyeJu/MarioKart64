@@ -1,0 +1,259 @@
+newmtl NemuMat53
+Kd 0.671875 0.671875 0.671875
+illum 1
+map_Kd 7FC161EE_c.png
+
+newmtl NemuMat47
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 157229F2_c.png
+
+newmtl NemuMat34
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 3A87458D_c.png
+
+newmtl NemuMat12
+Kd 0.750000 0.750000 0.750000
+illum 1
+map_Kd 2F12B405_c.png
+
+newmtl NemuMat64
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 401177EA_c.png
+
+newmtl NemuMat26
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 7EEAA53A_fix.png
+
+newmtl NemuMat27
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 922DEA6_c.png
+
+newmtl NemuMat50
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 427F263_c.png
+
+newmtl NemuMat67
+Kd 0.996094 0.996094 0.992188
+illum 1
+map_Kd 6A0093C1_c.png
+map_d 6A0093C1_c.png
+
+newmtl NemuMat108
+Kd 0.996094 0.992188 0.992188
+illum 1
+map_Kd 2EE34466_c.png
+map_d 2EE34466_c.png
+
+newmtl NemuMat90
+Kd 0.996094 0.992188 0.992188
+illum 1
+map_Kd 1109B929_c.png
+map_d 1109B929_c.png
+
+newmtl NemuMat30
+Kd 0.515625 0.515625 0.515625
+illum 1
+map_Kd 2BF10659_c.png
+
+newmtl NemuMat43
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 438C7997_c.png
+
+newmtl NemuMat17
+Kd 0.750000 0.750000 0.750000
+illum 1
+map_Kd 491C24FB_c.png
+
+newmtl NemuMat16
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 6187BBB7_c.png
+
+newmtl NemuMat80
+Kd 0.984375 0.984375 0.984375
+illum 1
+
+newmtl NemuMat23
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 3A8EB414_c.png
+
+newmtl NemuMat22
+Kd 0.515625 0.515625 0.515625
+illum 1
+map_Kd 20D691D4_c.png
+
+newmtl NemuMat60
+Kd 0.593750 0.593750 0.593750
+illum 1
+map_Kd 61E8EC88_c.png
+
+newmtl NemuMat66
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 5EF6C775_c.png
+map_d 5EF6C775_c.png
+
+newmtl NemuMat14
+Kd 0.906250 0.906250 0.906250
+illum 1
+map_Kd 4297B7B6_c.png
+
+newmtl NemuMat28
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 192F266D_c.png
+
+newmtl NemuMat46
+Kd 0.453125 0.984375 0.125000
+illum 1
+map_Kd 17AF894B_c.png
+map_d 17AF894B_c.png
+
+newmtl NemuMat51
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 14A4A371_c.png
+map_d 14A4A371_c.png
+
+newmtl NemuMat52
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 1C427512_c.png
+map_d 1C427512_c.png
+
+newmtl NemuMat85
+Kd 0.750000 0.750000 0.750000
+illum 1
+map_Kd 7C26E661_c.png
+map_d 7C26E661_c.png
+
+newmtl NemuMat10
+Kd 0.515625 0.515625 0.515625
+illum 1
+map_Kd 1B359868_c.png
+
+newmtl NemuMat102
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 1724ABA5_c.png
+map_d 1724ABA5_c.png
+
+newmtl NemuMat81
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 19B3BF3F_c.png
+
+newmtl NemuMat37
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 4A670ACD_fix.png
+
+newmtl NemuMat38
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 6F63A9C2_fix.png
+
+newmtl NemuMat41
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 55C0C452_c.png
+
+newmtl NemuMat42
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 762B15A7_c.png
+
+newmtl NemuMat82
+Kd 0.750000 0.750000 0.750000
+illum 1
+map_Kd 4446B96F_c.png
+
+newmtl NemuMat83
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 5D984D62_fix.png
+
+newmtl NemuMat84
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 1BCEE00B_fix.png
+
+newmtl NemuMat86
+Kd 0.718750 0.718750 0.000000
+illum 1
+map_Kd 4E337CD8_fix.png
+
+newmtl NemuMat87
+Kd 0.984375 0.984375 0.000000
+illum 1
+map_Kd 7F6589E9_c.png
+
+newmtl NemuMat88
+Kd 0.984375 0.984375 0.000000
+illum 1
+map_Kd 7540F766_fix.png
+
+newmtl NemuMat104
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 67518AD3_c.png
+map_d 67518AD3_c.png
+
+newmtl NemuMat114
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 4725FB34_c.png
+
+newmtl NemuMat115
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 7D854C69_c.png
+
+newmtl NemuMat116
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 1987BFBA_c.png
+
+newmtl NemuMat117
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 1FD3F07F_c.png
+
+newmtl NemuMat118
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 329A494E_c.png
+
+newmtl NemuMat119
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 5AA76F39_c.png
+
+newmtl NemuMat120
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 66954F7D_c.png
+
+newmtl NemuMat121
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 62CF029A_c.png
+
+newmtl NemuMat122
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 2233600E_c.png
+
+newmtl NemuMat123
+Kd 0.996094 0.996094 0.996094
+illum 1
+map_Kd 5620E2B2_c.png
+map_d 5620E2B2_c.png

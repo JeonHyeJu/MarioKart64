@@ -3,10 +3,12 @@
   <ItemGroup>
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="PreCompile.cpp" />
+    <ClCompile Include="EngineDebug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="EngineDefine.h" />
+    <ClInclude Include="EngineDebug.h" />
   </ItemGroup>
 </Project>

@@ -6,12 +6,16 @@
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
+    <ClInclude Include="Actor.h" />
+    <ClInclude Include="Level.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <Filter>Precompile</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Level.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

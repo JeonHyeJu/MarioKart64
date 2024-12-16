@@ -5,7 +5,7 @@
 
 #include "EngineDefine.h"
 
-class UEngineMath
+class ENGINEAPI UEngineMath
 {
 public:
 	static const double DPI;
@@ -688,14 +688,20 @@ public:
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
 
 	FVector Scale;
+	FVector Rotation;
 	FVector Location;
 
-	FVector CenterLeftTop() const
+	FMatrix World;
+	FMatrix View;
+	FMatrix Projection;
+	FMatrix WVP;
+
+	FVector ZAxisCenterLeftTop() const
 	{
 		return Location - Scale.Half();
 	}
 
-	FVector CenterLeftBottom() const
+	FVector ZAxisCenterLeftBottom() const
 	{
 		FVector Result;
 		Result.X = Location.X - Scale.hX();
@@ -703,17 +709,17 @@ public:
 		return Result;
 	}
 
-	float CenterLeft() const
+	float ZAxisCenterLeft() const
 	{
 		return Location.X - Scale.hX();
 	}
 
-	float CenterTop() const
+	float ZAxisCenterTop() const
 	{
 		return Location.Y - Scale.hY();
 	}
 
-	FVector CenterRightTop() const
+	FVector ZAxisCenterRightTop() const
 	{
 		FVector Result;
 		Result.X = Location.X + Scale.hX();
@@ -721,17 +727,17 @@ public:
 		return Result;
 	}
 
-	FVector CenterRightBottom() const
+	FVector ZAxisCenterRightBottom() const
 	{
 		return Location + Scale.Half();
 	}
 
-	float CenterRight() const
+	float ZAxisCenterRight() const
 	{
 		return Location.X + Scale.hX();
 	}
 
-	float CenterBottom() const
+	float ZAxisCenterBottom() const
 	{
 		return Location.Y + Scale.hY();
 	}

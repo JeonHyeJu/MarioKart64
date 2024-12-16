@@ -85,22 +85,22 @@ bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Righ
 bool FTransform::RectToRect(const FTransform& _Left, const FTransform& _Right)
 {
 
-	if (_Left.CenterLeft() > _Right.CenterRight())
+	if (_Left.ZAxisCenterLeft() > _Right.ZAxisCenterRight())
 	{
 		return false;
 	}
 
-	if (_Left.CenterRight() < _Right.CenterLeft())
+	if (_Left.ZAxisCenterRight() < _Right.ZAxisCenterLeft())
 	{
 		return false;
 	}
 
-	if (_Left.CenterTop() > _Right.CenterBottom())
+	if (_Left.ZAxisCenterTop() > _Right.ZAxisCenterBottom())
 	{
 		return false;
 	}
 
-	if (_Left.CenterBottom() < _Right.CenterTop())
+	if (_Left.ZAxisCenterBottom() < _Right.ZAxisCenterTop())
 	{
 		return false;
 	}
@@ -129,10 +129,10 @@ bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
 
 	FVector ArrPoint[4];
 
-	ArrPoint[0] = _Right.CenterLeftTop();
-	ArrPoint[1] = _Right.CenterLeftBottom();
-	ArrPoint[2] = _Right.CenterRightTop();
-	ArrPoint[3] = _Right.CenterRightBottom();
+	ArrPoint[0] = _Right.ZAxisCenterLeftTop();
+	ArrPoint[1] = _Right.ZAxisCenterLeftBottom();
+	ArrPoint[2] = _Right.ZAxisCenterRightTop();
+	ArrPoint[3] = _Right.ZAxisCenterRightBottom();
 
 	FTransform PointCirCle;
 	PointCirCle.Scale = _Left.Scale;

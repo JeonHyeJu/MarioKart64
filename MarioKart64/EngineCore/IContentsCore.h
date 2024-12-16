@@ -18,8 +18,11 @@ public:
 	virtual void EngineEnd() {};
 };
 
+// STDAPI_(returnType) : extern "C" returnType STDAPICALLTYPE
+// STDAPICALLTYPE : __stdcall or _export __stdcall
+
 #define CreateContentsCoreDefine(TYPE) \
-STDAPI_(__declspec(dllexport) INT_PTR) __stdcall CreateContentsCore(std::shared_ptr<IContentsCore>& _Test) \
+STDAPI_(__declspec(dllexport) INT_PTR) CreateContentsCore(std::shared_ptr<IContentsCore>& _Test) \
 { \
 	_Test = std::make_shared<TYPE>(); \
 	if (nullptr == _Test) \

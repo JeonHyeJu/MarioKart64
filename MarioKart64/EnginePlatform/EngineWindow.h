@@ -35,14 +35,21 @@ public:
 		SetWindowTextA(WindowHandle, Text.data());
 	}
 
-	void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
+	ENGINEAPI void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
 
 	FVector GetMousePos();
+
+	void ApplicationOff()
+	{
+		LoopActive = false;
+	}
 
 protected:
 
 private:
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	static HINSTANCE hInstance;
+	static bool LoopActive;
 	static std::map<std::string, WNDCLASSEXA> WindowClasss;
 
 	FVector WindowSize;

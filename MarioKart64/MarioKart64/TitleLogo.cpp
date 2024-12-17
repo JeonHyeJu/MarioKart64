@@ -1,9 +1,10 @@
 #include "PreCompile.h"
 #include "TitleLogo.h"
+#include <EngineCore/Renderer.h>
 
 ATitleLogo::ATitleLogo()
 {
-	
+	std::shared_ptr<URenderer> NewRenderer = CreateDefaultSubObject<URenderer>();
 }
 
 ATitleLogo::~ATitleLogo()

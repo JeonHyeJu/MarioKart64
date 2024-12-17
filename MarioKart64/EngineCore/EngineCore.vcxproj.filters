@@ -20,6 +20,7 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -40,6 +41,7 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp" />
+    <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

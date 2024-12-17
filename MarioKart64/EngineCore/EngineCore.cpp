@@ -136,6 +136,7 @@ void UEngineCore::EngineFrame()
 	}
 
 	CurLevel->Tick(0.0f);
+	CurLevel->Render(0.0f);
 }
 
 void UEngineCore::EngineEnd()

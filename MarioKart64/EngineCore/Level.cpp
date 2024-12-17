@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Level.h"
 #include "Actor.h"
+#include "Renderer.h"
 
 ULevel::ULevel()
 {
@@ -43,4 +44,26 @@ void ULevel::Tick(float _DeltaTime)
 		CurActor->Tick(_DeltaTime);
 	}
 }
+
+void ULevel::Render(float _DeltaTime)
+{
+	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
+	{
+		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
+
+		for (std::shared_ptr<URenderer> Renderer : RenderList)
+		{
+			Renderer->Render(_DeltaTime);
+		}
+	}
+}
+
+void ULevel::ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
+{
+	Renderers[_PrevGroupOrder].remove(_Renderer);
+	Renderers[_Renderer->GetOrder()].push_back(_Renderer);
+}
+
+
+
 

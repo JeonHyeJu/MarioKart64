@@ -10,6 +10,12 @@
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
+    <ClInclude Include="TitleLogo.h">
+      <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -21,6 +27,12 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>Precompile</Filter>
     </ClCompile>
+    <ClCompile Include="TitleLogo.cpp">
+      <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGameMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -31,6 +43,12 @@
     </Filter>
     <Filter Include="Precompile">
       <UniqueIdentifier>{5c28fe08-4c5c-4d51-8682-fd8d473ff64e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title">
+      <UniqueIdentifier>{b9bc8367-7071-40b2-a3f5-e738301c24b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameMode">
+      <UniqueIdentifier>{56c335ce-bf49-4b5e-b569-d8317f80ad36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -9,7 +9,10 @@ UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
 
-std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::Levels;
+std::shared_ptr<class ULevel> UEngineCore::NextLevel;
+std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
+
+std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::LevelMap;
 
 UEngineCore::UEngineCore()
 {
@@ -85,6 +88,7 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		},
 		[]()
 		{
+			EngineFrame();
 		},
 		[]()
 		{
@@ -98,12 +102,44 @@ std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
 	Ptr->SetName(_Name);
 
-	Levels.insert({ _Name.data(), Ptr});
+	LevelMap.insert({ _Name.data(), Ptr});
+
+	std::cout << "NewLevelCreate" << std::endl;
 
 	return Ptr;
 }
 
+void UEngineCore::OpenLevel(std::string_view _Name)
+{
+	if (false == LevelMap.contains(_Name.data()))
+	{
+		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + std::string(_Name));
+		return;
+	}
+
+	NextLevel = LevelMap[_Name.data()];
+}
+
+void UEngineCore::EngineFrame()
+{
+	if (nullptr != NextLevel)
+	{
+		if (nullptr != CurLevel)
+		{
+			CurLevel->LevelChangeEnd();
+		}
+
+		CurLevel = NextLevel;
+
+		CurLevel->LevelChangeStart();
+		NextLevel = nullptr;
+	}
+
+	CurLevel->Tick(0.0f);
+}
+
 void UEngineCore::EngineEnd()
 {
-	Levels.clear();
+	LevelMap.clear();
+	UEngineDebug::EndConsole();
 }

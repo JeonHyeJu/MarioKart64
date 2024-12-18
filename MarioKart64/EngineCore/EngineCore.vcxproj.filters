@@ -21,6 +21,7 @@
     </ClInclude>
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="EngineGraphicDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -42,6 +43,7 @@
     </ClCompile>
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="EngineGraphicDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

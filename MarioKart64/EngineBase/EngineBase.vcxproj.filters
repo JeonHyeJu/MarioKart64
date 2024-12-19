@@ -19,6 +19,7 @@
       <Filter>Precompile</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="EngineString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -40,6 +41,7 @@
       <Filter>Precompile</Filter>
     </ClInclude>
     <ClInclude Include="Object.h" />
+    <ClInclude Include="EngineString.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">

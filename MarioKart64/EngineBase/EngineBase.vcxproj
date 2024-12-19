@@ -25,6 +25,7 @@
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="EnginePath.cpp" />
     <ClCompile Include="EngineSerializer.cpp" />
+    <ClCompile Include="EngineString.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -41,6 +42,7 @@
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnginePath.h" />
     <ClInclude Include="EngineSerializer.h" />
+    <ClInclude Include="EngineString.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>

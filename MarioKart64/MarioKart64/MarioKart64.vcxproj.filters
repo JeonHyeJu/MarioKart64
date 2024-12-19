@@ -50,5 +50,13 @@
     <Filter Include="GameMode">
       <UniqueIdentifier>{56c335ce-bf49-4b5e-b569-d8317f80ad36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{c953cdd4-eaf8-41b9-a264-ef39d43fd0a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="SpriteShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

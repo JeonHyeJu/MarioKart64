@@ -21,6 +21,7 @@ UEngineCore::UEngineCore()
 
 UEngineCore::~UEngineCore()
 {
+	FreeLibrary(ContentsDLL);
 }
 
 void UEngineCore::WindowInit(HINSTANCE _Instance)

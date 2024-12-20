@@ -28,6 +28,9 @@
     <ClInclude Include="EngineCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\DirectXTex\Inc\DirectXTex.h">
+      <Filter>ThirdParty\DirectXTex\Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -70,5 +73,33 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{88123aa3-d5e4-4524-9bb1-7880040af938}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{0f4a2647-b28b-432f-a568-59da80706c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectXTex">
+      <UniqueIdentifier>{aab3a29b-d693-4265-81f1-ac5272ee40c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectXTex\Debug">
+      <UniqueIdentifier>{d055502d-2666-4aaa-88f6-d4e4050a09e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectXTex\Release">
+      <UniqueIdentifier>{2c956bec-4038-42fc-81a3-7c93c0eda8b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\DirectXTex\Inc">
+      <UniqueIdentifier>{575da293-6183-48c0-b1c5-59263c4e9f04}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl">
+      <Filter>ThirdParty\DirectXTex\Inc</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
+      <Filter>ThirdParty\DirectXTex\Debug</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\DirectXTex\Release\DirectXTex.lib">
+      <Filter>ThirdParty\DirectXTex\Release</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

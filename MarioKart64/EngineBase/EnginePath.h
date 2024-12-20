@@ -24,7 +24,7 @@ public:
 
 	std::string GetDirectoryName();
 
-	std::string GetExtension();
+	ENGINEAPI std::string GetExtension();
 
 
 	ENGINEAPI bool MoveParentToDirectory(std::string_view _Path);

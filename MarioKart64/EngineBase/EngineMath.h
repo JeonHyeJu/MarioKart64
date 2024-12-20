@@ -3,6 +3,9 @@
 #include <string>
 #include <functional>
 
+#include <DirectXMath.h>
+#include <DirectXCollision.h>
+
 #include "EngineDefine.h"
 
 class ENGINEAPI UEngineMath
@@ -76,6 +79,8 @@ public:
 
 		float Arr2D[1][4];
 		float Arr1D[4];
+
+		DirectX::XMVECTOR DirectVector;
 	};
 
 	ENGINEAPI FVector()
@@ -435,6 +440,7 @@ public:
 		float Arr2D[4][4] = { 0, };
 		FVector ArrVector[4];
 		float Arr1D[16];
+		DirectX::XMMATRIX DirectMatrix;
 
 		struct
 		{
@@ -496,29 +502,22 @@ public:
 
 	void Scale(const FVector& _Value)
 	{
-		Arr2D[0][0] = _Value.X;
-		Arr2D[1][1] = _Value.Y;
-		Arr2D[2][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixScalingFromVector(_Value.DirectVector);
 	}
 
 	void Position(const FVector& _Value)
 	{
-		Arr2D[3][0] = _Value.X;
-		Arr2D[3][1] = _Value.Y;
-		Arr2D[3][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixTranslationFromVector(_Value.DirectVector);
 	}
 
 	void RotationDeg(const FVector& _Angle)
 	{
-		FMatrix RotX;
-		FMatrix RotY;
-		FMatrix RotZ;
+		RotationRad(_Angle * UEngineMath::D2R);
+	}
 
-		RotX.RotationXDeg(_Angle.X);
-		RotY.RotationYDeg(_Angle.Y);
-		RotZ.RotationZDeg(_Angle.Z);
-
-		*this = RotX * RotY * RotZ;
+	void RotationRad(const FVector& _Angle)
+	{
+		DirectMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(_Angle.DirectVector);
 	}
 
 	void Transpose()
@@ -668,8 +667,23 @@ enum class ECollisionType
 	Max
 };
 
-class FTransform
+struct FTransform
 {
+	FVector Scale;
+	FVector Rotation;
+	FVector Location;
+
+	FMatrix ScaleMat;
+	FMatrix RotationMat;
+	FMatrix LocationMat;
+	FMatrix World;
+	FMatrix View;
+	FMatrix Projection;
+	FMatrix WVP;
+
+public:
+	ENGINEAPI void TransformUpdate();
+
 private:
 	friend class CollisionFunctionInit;
 
@@ -686,15 +700,6 @@ public:
 
 	static bool CirCleToCirCle(const FTransform& _Left, const FTransform& _Right);
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
-
-	FVector Scale;
-	FVector Rotation;
-	FVector Location;
-
-	FMatrix World;
-	FMatrix View;
-	FMatrix Projection;
-	FMatrix WVP;
 
 	FVector ZAxisCenterLeftTop() const
 	{

@@ -22,6 +22,12 @@
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
+    <ClInclude Include="CameraActor.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -44,6 +50,12 @@
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
+    <ClCompile Include="CameraActor.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -54,6 +66,9 @@
     </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{30bd41ba-dddb-45fc-88a4-a26865146940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{88123aa3-d5e4-4524-9bb1-7880040af938}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

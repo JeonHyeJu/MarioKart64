@@ -169,6 +169,8 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorComponent.h" />
+    <ClInclude Include="CameraActor.h" />
+    <ClInclude Include="EngineCamera.h" />
     <ClInclude Include="EngineCore.h">
       <SubType>
       </SubType>
@@ -185,6 +187,8 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="CameraActor.cpp" />
+    <ClCompile Include="EngineCamera.cpp" />
     <ClCompile Include="EngineCore.cpp">
       <SubType>
       </SubType>

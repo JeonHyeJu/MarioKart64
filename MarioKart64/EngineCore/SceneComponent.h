@@ -12,10 +12,16 @@ public:
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
 
+	void SetRelativeScale3D(const FVector& _Scale)
+	{
+		Transform.Scale = _Scale;
+		Transform.TransformUpdate();
+	}
+
 protected:
+	FTransform Transform;
 
 private:
-	FTransform Transform;
 
 	USceneComponent* Parent;
 	std::list<std::shared_ptr<USceneComponent>> Childs;

@@ -22,8 +22,7 @@ void URenderer::SetOrder(int _Order)
 	ULevel* Level = GetActor()->GetWorld();
 
 	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
-
-	Level->ChangeRenderGroup(PrevOrder, RendererPtr);
+	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
 ENGINEAPI void URenderer::BeginPlay()
@@ -37,7 +36,7 @@ ENGINEAPI void URenderer::BeginPlay()
 	PixelShaderInit();
 }
 
-void URenderer::Render(float _DeltaTime)
+void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
 	InputAssembler1Setting();
 	VertexShaderSetting();
@@ -49,18 +48,16 @@ void URenderer::Render(float _DeltaTime)
 	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
 }
 
-
-
 void URenderer::InputAssembler1Init()
 {
 	std::vector<EngineVertex> Vertexs;
 	Vertexs.resize(4);
 
-	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {} };
-	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {} };
-	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {} };
-	Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {} };
-
+	Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {1.0f, 0.0f, 0.0f, 1.0f} };
+	Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {0.0f, 1.0f, 0.0f, 1.0f} };
+	Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {0.0f, 0.0f, 1.0f, 1.0f} };
+	Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {1.0f, 1.0f, 1.0f, 1.0f} };
+	
 	D3D11_BUFFER_DESC BufferInfo = {0};
 
 	BufferInfo.ByteWidth = sizeof(EngineVertex) * static_cast<int>(Vertexs.size());
@@ -93,7 +90,6 @@ void URenderer::InputAssembler1Setting()
 
 void URenderer::InputAssembler1LayOut()
 {
-
 	std::vector<D3D11_INPUT_ELEMENT_DESC> InputLayOutData;
 	{
 		D3D11_INPUT_ELEMENT_DESC Desc;

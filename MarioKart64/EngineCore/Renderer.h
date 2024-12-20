@@ -9,7 +9,7 @@ struct EngineVertex
 
 class URenderer : public USceneComponent
 {
-	friend class ULevel;
+	friend class UEngineCamera;
 
 public:
 	ENGINEAPI URenderer();
@@ -26,7 +26,7 @@ protected:
 	ENGINEAPI void BeginPlay() override;
 
 private:
-	virtual void Render(float _DeltaTime);
+	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;

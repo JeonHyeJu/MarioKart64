@@ -29,6 +29,10 @@ private:
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
+	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
+	void ShaderResInit();
+	void ShaderResSetting();
+
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
 	void InputAssembler1Init();

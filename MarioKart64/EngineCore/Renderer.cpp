@@ -35,6 +35,46 @@ ENGINEAPI void URenderer::BeginPlay()
 	InputAssembler2Init();
 	RasterizerInit();
 	PixelShaderInit();
+	ShaderResInit();
+
+}
+
+void URenderer::ShaderResInit()
+{
+	D3D11_BUFFER_DESC BufferInfo = { 0 };
+	BufferInfo.ByteWidth = sizeof(FTransform);
+	BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
+	BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
+	{
+		MSGASSERT("상수버퍼 생성에 실패했습니다..");
+		return;
+	}
+
+}
+
+void URenderer::ShaderResSetting()
+{
+	FTransform& RendererTrans = GetTransformRef();
+
+	D3D11_MAPPED_SUBRESOURCE Data = {};
+
+	UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+
+	if (nullptr == Data.pData)
+	{
+		MSGASSERT("그래픽카드가 수정을 거부했습니다.");
+	}
+
+	memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
+
+	UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+
+	ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
+
+	UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
 }
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
@@ -49,6 +89,7 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
 
 
+	ShaderResSetting();
 	InputAssembler1Setting();
 	VertexShaderSetting();
 	InputAssembler2Setting();

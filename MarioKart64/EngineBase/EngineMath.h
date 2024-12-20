@@ -432,6 +432,7 @@ public:
 
 };
 
+using float4 = FVector;
 class FMatrix
 {
 public:
@@ -615,6 +616,7 @@ public:
 
 };
 
+using float4x4 = FMatrix;
 
 
 enum class ECollisionType
@@ -627,17 +629,23 @@ enum class ECollisionType
 
 struct FTransform
 {
-	FVector Scale = {1.0f, 1.0f, 1.0f};
-	FVector Rotation;
-	FVector Location;
+	float4 Scale;
+	float4 Rotation;
+	float4 Location;
 
-	FMatrix ScaleMat;
-	FMatrix RotationMat;
-	FMatrix LocationMat;
-	FMatrix World;
-	FMatrix View;
-	FMatrix Projection;
-	FMatrix WVP;
+	float4x4 ScaleMat;
+	float4x4 RotationMat;
+	float4x4 LocationMat;
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
+	float4x4 WVP;
+
+	FTransform()
+		: Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
+	{
+
+	}
 
 public:
 	ENGINEAPI void TransformUpdate();
@@ -796,4 +804,3 @@ public:
 	}
 };
 
-using float4 = FVector;

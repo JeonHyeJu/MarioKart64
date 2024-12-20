@@ -9,11 +9,17 @@ UEngineGraphicDevice UEngineCore::Device;
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
+UEngineInitData UEngineCore::Data;
 
 std::shared_ptr<class ULevel> UEngineCore::NextLevel;
 std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
 
 std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::LevelMap;
+
+FVector UEngineCore::GetScreenScale()
+{
+	return Data.WindowSize;
+}
 
 UEngineCore::UEngineCore()
 {
@@ -83,7 +89,6 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 	UEngineWindow::WindowMessageLoop(
 		[]()
 		{
-			UEngineInitData Data;
 			Device.CreateDeviceAndContext();
 			Core->EngineStart(Data);
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);

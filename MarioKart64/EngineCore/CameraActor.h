@@ -13,6 +13,11 @@ public:
 	ACameraActor& operator=(ACameraActor&& _Other) noexcept = delete;
 
 	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
+
+	void BeginPlay() override;
+	void Tick(float _DeltaTime);
+
+
 protected:
 
 private:

@@ -15,6 +15,8 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 		MSGASSERT("이미 존재하는 카메라를 또 만들려고 했습니다.");
 	}
 
+	Camera->BeginPlay();
+
 	Cameras.insert({ _Order , Camera });
 	return Camera;
 }

@@ -20,6 +20,21 @@ public:
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
 
+	std::shared_ptr<class ACameraActor> GetMainCamera()
+	{
+		return GetCamera(0);
+	}
+
+	std::shared_ptr<class ACameraActor> GetCamera(int _Order)
+	{
+		if (false == Cameras.contains(_Order))
+		{
+			MSGASSERT("존재하지 않는 카메라를 사용하려고 했습니다.");
+		}
+
+		return Cameras[_Order];
+	}
+
 	template<typename EnumType>
 	std::shared_ptr<class ACameraActor> SpawnCamera(EnumType _Order)
 	{

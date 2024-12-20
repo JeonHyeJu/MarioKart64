@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Renderer.h"
 #include <EngineBase/EngineString.h>
+#include <EngineCore/EngineCamera.h>
 
 URenderer::URenderer()
 {
@@ -38,6 +39,16 @@ ENGINEAPI void URenderer::BeginPlay()
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+
+	FTransform& RendererTrans = GetTransformRef();
+	
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+
 	InputAssembler1Setting();
 	VertexShaderSetting();
 	InputAssembler2Setting();

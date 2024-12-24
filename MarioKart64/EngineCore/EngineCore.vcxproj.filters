@@ -20,7 +20,6 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="CameraActor.h">
       <Filter>Camera</Filter>
@@ -30,6 +29,18 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\DirectXTex\Inc\DirectXTex.h">
       <Filter>ThirdParty\DirectXTex\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineResources.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTexture.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -51,13 +62,24 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="CameraActor.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="EngineCamera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineResources.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTexture.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +110,12 @@
     <Filter Include="ThirdParty\DirectXTex\Inc">
       <UniqueIdentifier>{575da293-6183-48c0-b1c5-59263c4e9f04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{0d9704b0-edd8-43b3-b0ea-e0ce3adb1e92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{4aaea5b0-b7d4-47ec-9400-11847393edfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl">
@@ -95,11 +123,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
-      <Filter>ThirdParty\DirectXTex\Debug</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="ThirdParty\DirectXTex\Release\DirectXTex.lib">
+    <Library Include="ThirdParty\DirectXTex\Release\DirectXTex.lib">
       <Filter>ThirdParty\DirectXTex\Release</Filter>
-    </CopyFileToFolders>
+    </Library>
+    <Library Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
+      <Filter>ThirdParty\DirectXTex\Debug</Filter>
+    </Library>
   </ItemGroup>
 </Project>

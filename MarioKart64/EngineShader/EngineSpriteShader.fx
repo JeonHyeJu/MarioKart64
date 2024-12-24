@@ -27,11 +27,20 @@ cbuffer FTransform : register(b0)
 	float4x4 WVP;
 };
 
-VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
+cbuffer FSpriteData : register(b1)
 {
+	float4 CuttingPos;
+	float4 CuttingSize;
+};
+
+VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
+{	
 	VertexShaderOutPut OutPut;
 	OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-	OutPut.UV = _Vertex.UV;
+	
+	OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
+	OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
+			
 	OutPut.COLOR = _Vertex.COLOR;
 	
 	return OutPut;
@@ -43,6 +52,6 @@ SamplerState ImageSampler : register(s0);
 // 이미지를 샘플링해서 이미지를 보이게 만들고
 float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 {
-	
-	return ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+	return Color;
 }

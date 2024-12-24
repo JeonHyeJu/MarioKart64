@@ -11,15 +11,14 @@ public:
 	ENGINEAPI UEngineDirectory(std::filesystem::path _Path);
 	ENGINEAPI ~UEngineDirectory();
 
-	// delete Function
 	//UEngineDirectory(const UEngineDirectory& _Other) = delete;
 	//UEngineDirectory(UEngineDirectory&& _Other) noexcept = delete;
 	//UEngineDirectory& operator=(const UEngineDirectory& _Other) = delete;
 	//UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
 
-	std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
+	ENGINEAPI std::vector<class UEngineFile> GetAllFile(bool _IsRecursive, std::vector<std::string> _Exts);
 
-	std::vector<class UEngineDirectory> GetAllDirectory();
+	ENGINEAPI std::vector<class UEngineDirectory> GetAllDirectory();
 
 	ENGINEAPI UEngineFile GetFile(std::string_view _FileName);
 

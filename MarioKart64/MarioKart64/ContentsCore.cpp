@@ -28,7 +28,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			return;
 		}
 
+		Dir.Append("Sprites");
 		Dir.Append("Characters");
+
 		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, {".PNG", ".BMP", ".JPG"});
 		for (size_t i = 0; i < ImageFiles.size(); i++)
 		{

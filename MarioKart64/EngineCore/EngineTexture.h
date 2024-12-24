@@ -30,11 +30,19 @@ public:
 		return SRV.Get();
 	}
 
+	FVector GetTextureSize()
+	{
+		return Size;
+	}
+
 protected:
 
 private:
 	ENGINEAPI void ResLoad();
 
+	FVector Size;
+	DirectX::TexMetadata Metadata;
+	DirectX::ScratchImage ImageData;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture2D = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr;
 };

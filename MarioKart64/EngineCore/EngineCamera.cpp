@@ -48,6 +48,7 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.View.View(Trans.World.ArrVector[3], Trans.World.GetFoward(), Trans.World.GetUp());
 
+	//Trans.Projection.PerspectiveFovDeg(70, ProjectionScale.X, ProjectionScale.Y, Near, Far);
 	Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
 
 	int a = 0;

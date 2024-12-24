@@ -2,6 +2,7 @@
 #include "ContentsCore.h"
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
+#include <EngineCore/EngineSprite.h>
 #include "TitleGameMode.h"
 
 CreateContentsCoreDefine(UContentsCore);
@@ -35,6 +36,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			UEngineTexture::Load(FilePath);
 		}
 	}
+
+	UEngineSprite::CreateSpriteToMeta("Player.png");
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
 	UEngineCore::OpenLevel("Titlelevel");

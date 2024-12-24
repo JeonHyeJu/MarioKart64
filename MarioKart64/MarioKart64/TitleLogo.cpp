@@ -5,7 +5,8 @@
 ATitleLogo::ATitleLogo()
 {
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetSprite("Mario.png");
+	// LogoRenderer->SetSprite("Mario.png");
+	LogoRenderer->SetSprite("Player.png", 0);
 
 	SetActorRelativeScale3D({ 600.0f, 600.0f, 1.0f });
 }

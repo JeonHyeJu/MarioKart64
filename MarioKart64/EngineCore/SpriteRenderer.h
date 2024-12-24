@@ -12,7 +12,7 @@ public:
 	USpriteRenderer& operator=(const USpriteRenderer& _Other) = delete;
 	USpriteRenderer& operator=(USpriteRenderer&& _Other) noexcept = delete;
 
-	ENGINEAPI void SetSprite(std::string_view _Name);
+	ENGINEAPI void SetSprite(std::string_view _Name, size_t _Index);
 
 protected:
 

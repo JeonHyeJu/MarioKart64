@@ -177,6 +177,7 @@
     </ClInclude>
     <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="EngineResources.h" />
+    <ClInclude Include="EngineSprite.h" />
     <ClInclude Include="EngineTexture.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="IContentsCore.h" />
@@ -199,6 +200,7 @@
     </ClCompile>
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="EngineResources.cpp" />
+    <ClCompile Include="EngineSprite.cpp" />
     <ClCompile Include="EngineTexture.cpp" />
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="Level.cpp" />

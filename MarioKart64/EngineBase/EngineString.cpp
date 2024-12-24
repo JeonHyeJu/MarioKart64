@@ -48,3 +48,21 @@ std::wstring UEngineString::AnsiToUnicode(std::string_view _Name)
 }
 
 
+
+
+std::string UEngineString::InterString(const std::string& _Text, std::string_view _Start, std::string_view _End, size_t& _Offset)
+{
+	size_t DataStart = _Text.find(_Start, _Offset);
+	size_t DataEnd = _Text.find(_End, DataStart);
+
+	if (DataStart == std::string::npos || DataEnd == std::string::npos)
+	{
+		return "";
+	}
+
+
+	std::string Result = _Text.substr(DataStart + _Start.size(), (DataEnd - (DataStart + _Start.size()))).data();
+
+	_Offset = DataEnd + 1;
+	return Result;
+}

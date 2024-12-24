@@ -237,3 +237,22 @@ void FTransform::TransformUpdate()
 
 	World = ScaleMat * RotationMat * LocationMat;
 }
+
+
+
+void FMatrix::OrthographicLH(float _Width, float _Height, float _Near, float _Far)
+{
+	Identity();
+	DirectMatrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
+}
+
+void FMatrix::PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
+{
+	PerspectiveFovRad(_FovAngle * UEngineMath::D2R, _Width, _Height, _Near, _Far);
+}
+
+void FMatrix::PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
+{
+	Identity();
+	DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
+}

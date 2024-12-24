@@ -539,24 +539,9 @@ public:
 		return;
 	}
                
-	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
-	{
-		Identity();
-		DirectMatrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
-	}
-
-	void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
-	{
-		PerspectiveFovRad(_FovAngle * UEngineMath::D2R, _Width, _Height, _Near, _Far);
-	}
-
-	void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
-	{
-		Identity();
-
-		Identity();
-		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
-	}
+	ENGINEAPI void OrthographicLH(float _Width, float _Height, float _Near, float _Far);
+	ENGINEAPI void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far);
+	ENGINEAPI void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far);
 
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
 	{

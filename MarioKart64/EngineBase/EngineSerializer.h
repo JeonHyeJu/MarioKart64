@@ -140,13 +140,4 @@ public:
 	virtual void Serialize(UEngineSerializer& _Ser) = 0;
 	virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
 };
-//{
-//	// 정한다고 하면
-//	// Data 5 바이트 할당
-//	//             [C][V][V][V][V]
-//	// 직렬화의 첫번째 의미
-//	// 데이터의 최적화
-//
-//	bool Check; // [C][ ][ ][ ][v][v][v][v]
-//	int Value;  // 
-//};
+

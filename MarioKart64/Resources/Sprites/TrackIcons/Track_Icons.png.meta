@@ -1,0 +1,2698 @@
+fileFormatVersion: 2
+guid: a96634c0d62ee474bbcf7ced560e6621
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Track_Icons_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 1267
+        width: 190
+        height: 32
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2e6b8e759645784eaf42cb0caad48e4
+      internalID: 1105031606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_1
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 1267
+        width: 190
+        height: 32
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75e07b1e7b4325c4f8fb8b14dc359062
+      internalID: 1952004234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_2
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 1222
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec12e1654fae37b4ab2bc67df1010628
+      internalID: 535724735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_3
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 1222
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 673d39a5ba9996c45b6cd475eda2299c
+      internalID: 708207306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_4
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 1222
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76dff84c3d5056e4b858050ce9f2e208
+      internalID: -372109575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_5
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1141
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c849dfd7be420624e8367e096562de9e
+      internalID: 982830871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_6
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 1141
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff8e39ddf031da24e8b984f400509f46
+      internalID: 223055578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_7
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 1141
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cf1bead861596341b5972e359d0cb3d
+      internalID: -1015350779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_8
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 1141
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b54967147c30764b8a1639c84b535b7
+      internalID: -1859808575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1122
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe176096e1046cc4d9b4bd38cace113e
+      internalID: 1309286168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_10
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 1122
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 765009156de322f4c8f338e1aef1a8fe
+      internalID: 1595785643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_11
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1122
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01efcfd93006d214e8921f0bc10812b9
+      internalID: 1076802297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_12
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 1122
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc8d53c9e29addd4da04e5b137222141
+      internalID: -1316368793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_13
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1103
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9f9a505c3e990a438ae19638652176b
+      internalID: 182406664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_14
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 1103
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76c7c6e33015be44b9541209fd84ec4b
+      internalID: 2035103928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_15
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1103
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b6ebc1f460579e4db89a230aa6663e1
+      internalID: -595099433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_16
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 1103
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6707d56e432cb4c4282cf1fd8aeca4e0
+      internalID: -1903861144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_17
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1084
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d7a89b8daa29c3449a9190cc6abb1a5
+      internalID: -1641397521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_18
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 1084
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 036bf64f3e1f58e41900bdcf772f84ad
+      internalID: 815690841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_19
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1084
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f3b13ac73a76854fb455df37a294926
+      internalID: -1067816998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_20
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 1084
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7c3201184fb38d41aa58e19e98cb251
+      internalID: -964698280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_21
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1039
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f29b0f2d5865694b956f94a9bda6e2c
+      internalID: 1653167083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_22
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 1039
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58fd706aa0d1ce94db38ca6e94e37fce
+      internalID: -763715581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_23
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 956
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f342281163cf28148a276df2cc253233
+      internalID: -1839303527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_24
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 956
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12fef51073480f245992d95e1deab1b7
+      internalID: 697523530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_25
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 956
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b626dfed1d7b894439ccae9b349b6e32
+      internalID: -859646478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_26
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 956
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aadd1bed92b40f54c9f8f5216387880a
+      internalID: 415763009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_27
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 937
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b3a8dbf1e7e8445994f5d6e40a97f3
+      internalID: -2078933959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_28
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 937
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfa2d08dd9aec214693414b587eb8a69
+      internalID: -356356734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_29
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 937
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77b7945390d21f34cbd422052509709f
+      internalID: 1950533820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_30
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 937
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a11eca22d1543124eb1f35243424becc
+      internalID: -689741862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_31
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 918
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cfd346049c03b64ca84ed677fa267c7
+      internalID: -195386069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_32
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 918
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09b46b7d45fd26046ae06a1e2090dc7d
+      internalID: 456114792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_33
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 918
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93efb66223aefbf44bbae9b1aed261aa
+      internalID: -670782023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_34
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 918
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 013d4c85491a2324bba7734118c7894e
+      internalID: 993951362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_35
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 899
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ac578a4ccabcef438301afd8c31bc06
+      internalID: 2116279264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_36
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 899
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa35ed7a9d7258445b9d30431908de7b
+      internalID: -733175533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_37
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 899
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6df0c276530806a4daca5b4648cd1532
+      internalID: -1799176610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_38
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 899
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b8f6349a84dc52438c5812208e2b86f
+      internalID: -698508952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_39
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 857
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac33a3f5e76cc874d83dc2927a7f5791
+      internalID: -646109270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_40
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 857
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33e2c18cf5dcdfa4fa8473c8cad6e43d
+      internalID: -790294409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_41
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 775
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f674bafe43373a499ce8cc432b8ada2
+      internalID: -605507734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_42
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 775
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6053977ee9b141f41972ff14ac6f7f5e
+      internalID: -2120982713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_43
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 775
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 999d9590bb3e66a4fbf202ae283c5633
+      internalID: 1600027783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_44
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 775
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67a97c5f0857ca649a1f87c4d8575a01
+      internalID: 941014926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_45
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 756
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f30e4dde609e8a4e840a9c31a7c031f
+      internalID: 1780919911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_46
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 756
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff9cf8b907eacb748afaaf5d536f908a
+      internalID: -194101642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_47
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 756
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0790f68c8c08ed246bc2c26e98f185bd
+      internalID: 599104095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_48
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 756
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3453b01a13aba9439b6149e6e583772
+      internalID: 1527791695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_49
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 737
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68701e8b07320dd42aa9363e5e76d071
+      internalID: -1314196271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_50
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 737
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c2bd90757d4964999915dded655c98
+      internalID: 2100580759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_51
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 737
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2744e2486b8a3f04b92872cc4e650092
+      internalID: -822196849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_52
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 737
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeaf92630208afd42a14dbfe742b47a4
+      internalID: -1395389089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_53
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 718
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 147077367b2ed9b498af20e8fbe65ef3
+      internalID: -1945414848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_54
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 718
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a5d050bdbffcd74cb69e4a12b66f226
+      internalID: 922850616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_55
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 718
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c192635a64da47439a47542e95a626c
+      internalID: -1408512788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_56
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 718
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc4a3438ea9f4fd438a16e29d8d60e56
+      internalID: -604714443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_57
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 672
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 120381f5b8cc31540a500a113530871c
+      internalID: -248615131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_58
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 672
+        width: 65
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f815540496063f24c9971eb0fe3b9642
+      internalID: 2079306697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_59
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 590
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 327131ad9d2b5a645a0284535aaba255
+      internalID: -1911774622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_60
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 590
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c014c72f3f1986343a7ca27423704c62
+      internalID: -763862862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_61
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 590
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0949b2df8c97b64fa0125ec774d828b
+      internalID: -182999916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_62
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 590
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb26fc3a89699154e817fbbf570c26f6
+      internalID: 192771908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_63
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 571
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 411e4a6d0feebb948a53ed9a258fd8bf
+      internalID: 5402894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_64
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 571
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 552d879d04a7d2f48a12c0615a89160a
+      internalID: -294383660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_65
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 571
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d04eb8ddfa44794c81a56268b9707fa
+      internalID: 466383057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_66
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 571
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ddcd334411dfdf42bd041a09f976eea
+      internalID: 1008070415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_67
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 552
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31dd847a997becb40b55dbcca7daf737
+      internalID: -281723628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_68
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 552
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84b771964c9bbcd44a88965a9cc184b0
+      internalID: -2110063567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_69
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 552
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b00ae55a3c621d43b932844bf81f51a
+      internalID: 2129591835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_70
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 552
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04ec2a956022c444fb86826bd60f1d71
+      internalID: 1743078032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_71
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 532
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db8735d0e33cd5241a2e7c08a2cdc8ce
+      internalID: -1639854536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_72
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 532
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d796391519b9fc41b858f954f777ca2
+      internalID: -1711795310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_73
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 532
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e34e84cd6c0beb48b6b5344fb8bdbdf
+      internalID: 2056320171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_74
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 532
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4121bb4b65b98f74c9c54c534ae886c3
+      internalID: 42616218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_75
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 447
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6687b3434118e194d92e74a2b4dc7733
+      internalID: 988804968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_76
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 447
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd1a83b00872eb244ba68a5c43d11025
+      internalID: -1770945444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_77
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 447
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bcd16f8a0bcf2841b91fef057d78884
+      internalID: 28587143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_78
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 447
+        width: 128
+        height: 78
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3bb909d894fce64dbc8b9c5dec23925
+      internalID: -164171513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_79
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 428
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: baca3ce7cbe61a64ea574d5a80dd31de
+      internalID: 346200077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_80
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 428
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8294fc799703dfb41b295b07292b402d
+      internalID: -2041856114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_81
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 428
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec9b17d45b6a18842ab7ae3e6e9d1fa4
+      internalID: -1015869081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_82
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 428
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be632b02bded92241a33bd90af44deba
+      internalID: 88552123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_83
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 409
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b75ac7d95ae45924aa6ad28b2c25baf0
+      internalID: 1885263194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_84
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 409
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81834d685402d764695e39d054333c2b
+      internalID: 1388789446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_85
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 409
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa8c0778ea356d842af1c1592bd8d376
+      internalID: 1898946708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_86
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 409
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78c9633e22f7a8b449325865beb65b0a
+      internalID: 1750721046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_87
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 390
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c0a2647046e2c74a9bfeb04e2e9df84
+      internalID: 2049002620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_88
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 390
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1fca4e41f6312b4cbe82834a4ae34ea
+      internalID: -515440728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_89
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 390
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8606736589e867458d823ddf43aac93
+      internalID: 935623589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_90
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 390
+        width: 140
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71fc327fbb0fdf540b8e0b095c62c1a4
+      internalID: -707314651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_91
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 300
+        width: 27
+        height: 80
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cbe6719beb2ffd4fa6015c9d172bdd3
+      internalID: -1215807689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_92
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 308
+        width: 36
+        height: 63
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e4817df0f06f34c93d5f9585d51b31
+      internalID: -283566869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_93
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 307
+        width: 36
+        height: 64
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfd57d87464572b4dae3d28b3fad6f4a
+      internalID: 1465530199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_94
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 299
+        width: 49
+        height: 79
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 003d8740c4b2f6640bf4a8b011fc854f
+      internalID: -1422675347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_95
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 230
+        width: 82
+        height: 57
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13fabfb8571fb344f8bf66c2abeefe2b
+      internalID: 1060113153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_96
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 228
+        width: 54
+        height: 61
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a81442d050e29b478071da10cf3e128
+      internalID: 748102414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_97
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 229
+        width: 63
+        height: 55
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2b4533abb668a8479c8115624a95e08
+      internalID: 41658398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_98
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 228
+        width: 58
+        height: 58
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 852195895d01c884093cbf082c46b53a
+      internalID: 2125247815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_99
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 163
+        width: 46
+        height: 62
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ee59f743e1e87044967ff1c4f4aea7c
+      internalID: 712380758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_100
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 162
+        width: 58
+        height: 63
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54f2d3f6331db934b95d50295b2fb910
+      internalID: 683915752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_101
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 165
+        width: 59
+        height: 54
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fea287e55c5b74a48bff9b6f6b2f1313
+      internalID: 492011048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_102
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 161
+        width: 46
+        height: 64
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82764c14eb1d5a0499881e3ec2d0f6be
+      internalID: 68921815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_104
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 82
+        width: 63
+        height: 57
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3b612771dc23e14eb23bd2435ae22ab
+      internalID: -1643589043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_105
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 83
+        width: 60
+        height: 58
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 749e4e2e55085314e86225f505dd935d
+      internalID: -2001763768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_106
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 81
+        width: 53
+        height: 58
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e8ee485d1b94184baee5cde3aa92963
+      internalID: -1097522839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_107
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 64
+        width: 58
+        height: 96
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bc907f2c8313dd45b0fc2d285c40a58
+      internalID: 1871311800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_109
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 5
+        width: 54
+        height: 53
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95ed8af48f7aef443b333f040a3810d9
+      internalID: 2043382082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_110
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 6
+        width: 51
+        height: 51
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 025dfb3664a107b4c90471393a740ef3
+      internalID: -1560560087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_111
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 9
+        width: 45
+        height: 45
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c20bc776fc5e4c747be6f01a3bbc0ad5
+      internalID: 1986402387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Track_Icons_112
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 7
+        width: 49
+        height: 48
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65325da6f960fbf4f82d5f04507482c6
+      internalID: 374085855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 144c1247df8e18b438490fc220e036c5
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Track_Icons_0: 1105031606
+      Track_Icons_1: 1952004234
+      Track_Icons_10: 1595785643
+      Track_Icons_100: 683915752
+      Track_Icons_101: 492011048
+      Track_Icons_102: 68921815
+      Track_Icons_103: 499480101
+      Track_Icons_104: -1643589043
+      Track_Icons_105: -2001763768
+      Track_Icons_106: -1097522839
+      Track_Icons_107: 1871311800
+      Track_Icons_108: 471505361
+      Track_Icons_109: 2043382082
+      Track_Icons_11: 1076802297
+      Track_Icons_110: -1560560087
+      Track_Icons_111: 1986402387
+      Track_Icons_112: 374085855
+      Track_Icons_12: -1316368793
+      Track_Icons_13: 182406664
+      Track_Icons_14: 2035103928
+      Track_Icons_15: -595099433
+      Track_Icons_16: -1903861144
+      Track_Icons_17: -1641397521
+      Track_Icons_18: 815690841
+      Track_Icons_19: -1067816998
+      Track_Icons_2: 535724735
+      Track_Icons_20: -964698280
+      Track_Icons_21: 1653167083
+      Track_Icons_22: -763715581
+      Track_Icons_23: -1839303527
+      Track_Icons_24: 697523530
+      Track_Icons_25: -859646478
+      Track_Icons_26: 415763009
+      Track_Icons_27: -2078933959
+      Track_Icons_28: -356356734
+      Track_Icons_29: 1950533820
+      Track_Icons_3: 708207306
+      Track_Icons_30: -689741862
+      Track_Icons_31: -195386069
+      Track_Icons_32: 456114792
+      Track_Icons_33: -670782023
+      Track_Icons_34: 993951362
+      Track_Icons_35: 2116279264
+      Track_Icons_36: -733175533
+      Track_Icons_37: -1799176610
+      Track_Icons_38: -698508952
+      Track_Icons_39: -646109270
+      Track_Icons_4: -372109575
+      Track_Icons_40: -790294409
+      Track_Icons_41: -605507734
+      Track_Icons_42: -2120982713
+      Track_Icons_43: 1600027783
+      Track_Icons_44: 941014926
+      Track_Icons_45: 1780919911
+      Track_Icons_46: -194101642
+      Track_Icons_47: 599104095
+      Track_Icons_48: 1527791695
+      Track_Icons_49: -1314196271
+      Track_Icons_5: 982830871
+      Track_Icons_50: 2100580759
+      Track_Icons_51: -822196849
+      Track_Icons_52: -1395389089
+      Track_Icons_53: -1945414848
+      Track_Icons_54: 922850616
+      Track_Icons_55: -1408512788
+      Track_Icons_56: -604714443
+      Track_Icons_57: -248615131
+      Track_Icons_58: 2079306697
+      Track_Icons_59: -1911774622
+      Track_Icons_6: 223055578
+      Track_Icons_60: -763862862
+      Track_Icons_61: -182999916
+      Track_Icons_62: 192771908
+      Track_Icons_63: 5402894
+      Track_Icons_64: -294383660
+      Track_Icons_65: 466383057
+      Track_Icons_66: 1008070415
+      Track_Icons_67: -281723628
+      Track_Icons_68: -2110063567
+      Track_Icons_69: 2129591835
+      Track_Icons_7: -1015350779
+      Track_Icons_70: 1743078032
+      Track_Icons_71: -1639854536
+      Track_Icons_72: -1711795310
+      Track_Icons_73: 2056320171
+      Track_Icons_74: 42616218
+      Track_Icons_75: 988804968
+      Track_Icons_76: -1770945444
+      Track_Icons_77: 28587143
+      Track_Icons_78: -164171513
+      Track_Icons_79: 346200077
+      Track_Icons_8: -1859808575
+      Track_Icons_80: -2041856114
+      Track_Icons_81: -1015869081
+      Track_Icons_82: 88552123
+      Track_Icons_83: 1885263194
+      Track_Icons_84: 1388789446
+      Track_Icons_85: 1898946708
+      Track_Icons_86: 1750721046
+      Track_Icons_87: 2049002620
+      Track_Icons_88: -515440728
+      Track_Icons_89: 935623589
+      Track_Icons_9: 1309286168
+      Track_Icons_90: -707314651
+      Track_Icons_91: -1215807689
+      Track_Icons_92: -283566869
+      Track_Icons_93: 1465530199
+      Track_Icons_94: -1422675347
+      Track_Icons_95: 1060113153
+      Track_Icons_96: 748102414
+      Track_Icons_97: 41658398
+      Track_Icons_98: 2125247815
+      Track_Icons_99: 712380758
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

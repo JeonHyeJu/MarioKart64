@@ -9,7 +9,7 @@ ATitleGameMode::ATitleGameMode()
 	{
 		Logo = GetWorld()->SpawnActor<ATitleLogo>();
 		Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
-		Logo->GetRenderer()->SetSpriteData(4);
+		Logo->GetRenderer()->SetSpriteData(0);
 	}
 	
 	// {
@@ -35,16 +35,14 @@ void ATitleGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	static float Time = 1.0f;
 	static int Index = 0;
 
-	Logo->GetRenderer()->SetSpriteData(Index);
-
-	Time -= 0.0001;
-
-	if (0.0f >= Time)
+	if (Index < 1000)
 	{
-		++Index;
-		Time = 1.0f;
+		Logo->GetRenderer()->SetSpriteData(Index++);
+	}
+	else
+	{
+		Index = 0;
 	}
 }

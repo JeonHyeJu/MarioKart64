@@ -39,7 +39,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		}
 	}
 
-	UEngineSprite::CreateSpriteToMeta("Player.png");
+	UEngineSprite::CreateSpriteToMeta("Mario.png");
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
 	UEngineCore::OpenLevel("Titlelevel");

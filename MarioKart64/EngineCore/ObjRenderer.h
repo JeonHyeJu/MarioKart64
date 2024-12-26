@@ -2,7 +2,7 @@
 #include "SceneComponent.h"
 #include <EngineBase/EngineDefine.h>
 #include <vector>
-#include <assimp/material.h>
+#include <assimp/scene.h>
 #include "Mesh.h"
 
 class UEngineCamera;
@@ -42,10 +42,10 @@ private:
 	void SetPixelShader();
 	void SetOutputMerger();
 
-	void ProcessNode(class aiNode* node, const class aiScene* scene);
-	Mesh ProcessMesh(class aiMesh* mesh, const aiScene* scene);
-	std::vector<AiTexture> LoadMaterialTextures(class aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
-	class ID3D11ShaderResourceView* LoadEmbeddedTexture(const class aiTexture* embeddedTexture);
+	void ProcessNode(aiNode* node, const aiScene* scene);
+	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	std::vector<AiTexture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
+	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";

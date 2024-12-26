@@ -3,13 +3,16 @@
 #include "TitleLogo.h"
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/EngineGUIWindow.h>
+#include <EngineCore/EngineGUI.h>
+#include <EngineCore/imgui.h>
 
 ATitleGameMode::ATitleGameMode()
 {
 	{
 		Logo = GetWorld()->SpawnActor<ATitleLogo>();
 		Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
-		Logo->GetRenderer()->SetSpriteData(0);
+		Logo->GetRenderer()->SetSpriteData(4);
 	}
 	
 	// {
@@ -34,15 +37,4 @@ ATitleGameMode::~ATitleGameMode()
 void ATitleGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-
-	static int Index = 0;
-
-	if (Index < 1000)
-	{
-		Logo->GetRenderer()->SetSpriteData(Index++);
-	}
-	else
-	{
-		Index = 0;
-	}
 }

@@ -10,7 +10,7 @@ UEngineSprite::~UEngineSprite()
 {
 }
 
-std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_view _Name)
+std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_view _Name, std::string_view _DataFileExt)
 {
 	std::shared_ptr<UEngineTexture> Tex = UEngineTexture::Find<UEngineTexture>(_Name);
 
@@ -26,7 +26,7 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 
 	UEnginePath Path = Tex->GetPath();
 	std::string FileName = Path.GetFileName();
-	FileName += ".meta";
+	FileName += _DataFileExt;
 	Path.MoveParent();
 	Path.Append(FileName);
 

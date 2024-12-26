@@ -55,6 +55,30 @@ public:
 	}
 };
 
+class FQuat
+{
+public:
+	union
+	{
+		struct
+		{
+			float X;
+			float Y;
+			float Z;
+			float W;
+		};
+
+		float Arr2D[1][4];
+		float Arr1D[4];
+
+		DirectX::XMVECTOR DirectVector;
+
+	};
+
+	class FVector QuaternionToEulerDeg() const;
+	class FVector QuaternionToEulerRad() const;
+};
+
 class FVector
 {
 public:
@@ -326,6 +350,7 @@ public:
 		FVector Result;
 		Result.X = X * _Value;
 		Result.Y = Y * _Value;
+		Result.Z = Z * _Value;
 		return Result;
 	}
 
@@ -428,6 +453,13 @@ public:
 		Stream += std::to_string(W);
 		Stream += "]";
 		return Stream;
+	}
+
+	FQuat DegAngleToQuaternion()
+	{
+		FQuat Result;
+		Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
+		return Result;
 	}
 
 };
@@ -538,11 +570,35 @@ public:
 		DirectMatrix = DirectX::XMMatrixLookToLH(_Pos.DirectVector, _Dir.DirectVector, _Up.DirectVector);
 		return;
 	}
-               
-	ENGINEAPI void OrthographicLH(float _Width, float _Height, float _Near, float _Far);
-	ENGINEAPI void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far);
-	ENGINEAPI void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far);
 
+	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
+	{
+		Identity();
+		DirectMatrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
+	}
+
+	void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
+	{
+		PerspectiveFovRad(_FovAngle * UEngineMath::D2R, _Width, _Height, _Near, _Far);
+	}
+
+	void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
+	{
+		Identity();
+		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
+	}
+
+	// 화면 확대 -1~1사이의 값이 됐으니까
+	// +좌표축 변경 중점 변경
+	// 화면의 정중앙을 0,0으로 만듭니다
+	// Y축 반전도 여기서 합니다.
+	// 뷰포트는 directx에서는 내가 곱해줄 필요가 없다. 다이렉에 넣어주면 다이렉트가 자동으로 해주는 것이다.
+	// directx::viewportsetting(ViewPort_desc);
+
+	// 위치와 크기 양쪽영향을 주는 행렬이다.
+	// 그것조차도 내마음대로 정할수 있어.
+	
+	//                 1280          720        640           360            누가 앞에 나오고 누가 뒤에 나올거냐
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
 	{
 		Identity();
@@ -585,6 +641,20 @@ public:
 		Arr2D[2][2] = cosf(_Angle);
 	}
 
+	FMatrix InverseReturn()
+	{
+		FMatrix Result;
+
+		Result.DirectMatrix = DirectX::XMMatrixInverse(nullptr, DirectMatrix);
+
+		return Result;
+	}
+
+	void Decompose(FVector& _Scale, FQuat& _RotQuaternion, FVector& _Pos)
+	{
+		DirectX::XMMatrixDecompose(&_Scale.DirectVector, &_RotQuaternion.DirectVector, &_Pos.DirectVector, DirectMatrix);
+	}
+
 	void RotationZDeg(float _Angle)
 	{
 		RotationZRad(_Angle * UEngineMath::D2R);
@@ -618,9 +688,22 @@ struct FTransform
 	float4 Rotation;
 	float4 Location;
 
+	float4 RelativeScale;
+	float4 RelativeRotation;
+	FQuat RelativeQuat;
+	float4 RelativeLocation;
+
+	float4 WorldScale;
+	float4 WorldRotation;
+	FQuat WorldQuat;
+	float4 WorldLocation;
+
 	float4x4 ScaleMat;
 	float4x4 RotationMat;
 	float4x4 LocationMat;
+	float4x4 RevolveMat;
+	float4x4 ParentMat;
+	float4x4 LocalWorld;
 	float4x4 World;
 	float4x4 View;
 	float4x4 Projection;
@@ -633,7 +716,9 @@ struct FTransform
 	}
 
 public:
-	ENGINEAPI void TransformUpdate();
+	ENGINEAPI void TransformUpdate(bool _IsAbsolut = false);
+
+	ENGINEAPI void Decompose();
 
 private:
 	friend class CollisionFunctionInit;

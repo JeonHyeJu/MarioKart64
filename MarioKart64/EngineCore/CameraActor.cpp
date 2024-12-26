@@ -5,10 +5,12 @@
 ACameraActor::ACameraActor()
 {
 	CameraComponent = CreateDefaultSubObject<UEngineCamera>();
+	RootComponent = CameraComponent;
 }
 
 ACameraActor::~ACameraActor()
 {
+	CameraComponent = nullptr;
 }
 
 void ACameraActor::BeginPlay()

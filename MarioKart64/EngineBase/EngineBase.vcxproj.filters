@@ -20,6 +20,8 @@
     </ClCompile>
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="EngineString.cpp" />
+    <ClCompile Include="EngineDelegate.cpp" />
+    <ClCompile Include="EngineTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -42,6 +44,8 @@
     </ClInclude>
     <ClInclude Include="Object.h" />
     <ClInclude Include="EngineString.h" />
+    <ClInclude Include="EngineDelegate.h" />
+    <ClInclude Include="EngineTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">

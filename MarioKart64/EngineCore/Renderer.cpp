@@ -41,6 +41,7 @@ void URenderer::SetOrder(int _Order)
 
 ENGINEAPI void URenderer::BeginPlay()
 {
+	USceneComponent::BeginPlay();
 	SetOrder(0);
 	
 	InputAssembler1Init();

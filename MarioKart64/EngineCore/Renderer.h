@@ -22,7 +22,6 @@ public:
 	ENGINEAPI void SetSprite(UEngineSprite* _Sprite);
 
 	ENGINEAPI void SetSpriteData(size_t _Index);
-	ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
 
 protected:
 	ENGINEAPI void BeginPlay() override;
@@ -69,8 +68,5 @@ protected:
 	ENGINEAPI void OutPutMergeSetting();
 
 	std::vector<URenderUnit> Units;
-
-	// temp
-	ID3D11Texture2D* g_pDepthStencil = nullptr;
 };
 

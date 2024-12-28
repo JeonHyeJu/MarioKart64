@@ -140,7 +140,6 @@ void URenderer::ShaderResSetting()
 		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
 	}
 	
-
 	ID3D11ShaderResourceView* ArrSRV[16] = { Sprite->GetSRV() };
 	UEngineCore::GetDevice().GetContext()->PSSetShaderResources(0, 1, ArrSRV);
 
@@ -444,44 +443,7 @@ void URenderer::OutPutMergeSetting()
 {
 	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
 
-	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
-	ArrRtv[0] = RTV; // SV_Target0
-
-	UINT m4xMsaaQuality;
-	UEngineCore::GetDevice().GetDevice()->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m4xMsaaQuality);
-
-	D3D11_TEXTURE2D_DESC descDepth;
-	ZeroMemory(&descDepth, sizeof(descDepth));
-	descDepth.Width = 1280;
-	descDepth.Height = 720;
-	descDepth.MipLevels = 1;
-	descDepth.ArraySize = 1;
-	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDepth.SampleDesc.Count = 4;
-	descDepth.SampleDesc.Quality = m4xMsaaQuality - 1;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0;
-	descDepth.MiscFlags = 0;
-	HRESULT hr = UEngineCore::GetDevice().GetDevice()->CreateTexture2D(&descDepth, nullptr, &g_pDepthStencil);
-	if (FAILED(hr))
-	{
-		MSGASSERT("Depth Stencil Texture couldn't be created!");
-	}
-
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-	ZeroMemory(&descDSV, sizeof(descDSV));
-	descDSV.Format = descDepth.Format;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0;
-	hr = UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(g_pDepthStencil, 0, &g_pDepthStencilView);
-	if (FAILED(hr))
-	{
-		MSGASSERT("Depth Stencil View couldn't be created!");
-	}
-
-	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], g_pDepthStencilView);
-	//UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
+	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &RTV, nullptr);
 }
 
 void URenderer::SetSpriteData(size_t _Index)

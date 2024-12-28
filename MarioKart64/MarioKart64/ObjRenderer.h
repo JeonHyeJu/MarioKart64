@@ -33,15 +33,10 @@ private:
 	std::vector<TEXTURE> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
 	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
 
-	void ShaderInit();
-	void ShaderResInit() override;
-
 	std::string ObjPath = "";
 	std::string MtlPath = "";
 
 	std::vector<AiMesh> Meshes;
 	std::vector<TEXTURE> Textures;
 	std::string Directory = "";
-
-	ID3D11Buffer* pConstantBuffer = nullptr;
 };

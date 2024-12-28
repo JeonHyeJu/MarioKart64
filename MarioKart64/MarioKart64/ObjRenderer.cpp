@@ -15,118 +15,14 @@ struct ConstantBuffer {
 	DirectX::XMMATRIX mProjection;
 };
 
-ObjRenderer::ObjRenderer()
-{
-}
-
-ObjRenderer::~ObjRenderer()
-{
-}
-
 // temp
 DirectX::XMMATRIX m_World;
 DirectX::XMMATRIX m_View;
 DirectX::XMMATRIX m_Projection;
 
-void ObjRenderer::BeginPlay()
+void Throwanerror(LPCSTR errormessage)
 {
-	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
-	SetOrder(0);
-
-	ShaderInit();
-	ShaderResInit();
-	OutPutMergeSetting();
-	RasterizerInit();
-	RasterizerSetting();
-
-	// for test. temp
-	UEngineDirectory dir;
-	dir.MoveParentToDirectory("MarioKart64\\Resources\\Models\\Courses\\Royal_Raceway");
-	std::string path = dir.GetPathToString();
-	LoadModel(path + "\\Royal_Raceway.obj", path + "\\Royal_Raceway.mtl");
-
-	// Temp
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 5.0f, -300.0f, 0.0f);
-	DirectX::XMVECTOR At = DirectX::XMVectorSet(0.0f, 100.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR Up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	m_View = DirectX::XMMatrixLookAtLH(Eye, At, Up);
-	m_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, 1280/ (float)720, 0.01f, 1000.0f);
-}
-
-void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
-{
-	UEngineCore::GetDevice().GetContext()->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-	FTransform& RendererTrans = GetTransformRef();
-
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
-
-	static float t = 0.0f;
-	static ULONGLONG timeStart = 0;
-	ULONGLONG timeCur = GetTickCount64();
-	if (timeStart == 0)
-		timeStart = timeCur;
-	t = (timeCur - timeStart) / 1000.0f;
-	m_World = DirectX::XMMatrixRotationY(-t);
-	ConstantBuffer cb;
-	cb.mWorld = DirectX::XMMatrixTranspose(m_World);
-	cb.mView = DirectX::XMMatrixTranspose(m_View);
-	cb.mProjection = DirectX::XMMatrixTranspose(m_Projection);
-
-	/*ConstantBuffer cb;
-	cb.mWorld = DirectX::XMMatrixTranspose(RendererTrans.World.DirectMatrix);
-	cb.mView = DirectX::XMMatrixTranspose(RendererTrans.View.DirectMatrix);
-	cb.mProjection = DirectX::XMMatrixTranspose(RendererTrans.Projection.DirectMatrix);*/
-
-	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
-	UEngineCore::GetDevice().GetContext()->UpdateSubresource(pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	VertexShaderSetting();
-	UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, &pConstantBuffer);
-	PixelShaderSetting();
-
-	ID3D11SamplerState* ArrSMP[16] = { SamplerState.Get() };
-	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, ArrSMP);
-
-	for (size_t i = 0; i < Meshes.size(); ++i)
-	{
-		Meshes[i].Draw(UEngineCore::GetDevice().GetContext());
-	}
-}
-
-void ObjRenderer::ShaderResInit()
-{
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.CPUAccessFlags = 0;
-
-	HRESULT hr = UEngineCore::GetDevice().GetDevice()->CreateBuffer(&bd, nullptr, &pConstantBuffer);
-	if (FAILED(hr))
-	{
-		MSGASSERT("Constant buffer couldn't be created");
-	}
-
-	D3D11_SAMPLER_DESC sampDesc;
-	ZeroMemory(&sampDesc, sizeof(sampDesc));
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	sampDesc.MinLOD = 0;
-	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	hr = UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&sampDesc, &SamplerState);
-	if (FAILED(hr))
-	{
-		MSGASSERT("Texture sampler state couldn't be created");
-	}
+	throw std::runtime_error(errormessage);
 }
 
 // Temp
@@ -153,37 +49,86 @@ HRESULT	CompileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefine
 	return result;
 }
 
-void Throwanerror(LPCSTR errormessage)
+ObjRenderer::ObjRenderer()
 {
-	throw std::runtime_error(errormessage);
 }
 
-void ObjRenderer::ShaderInit()
+ObjRenderer::~ObjRenderer()
 {
+}
+
+void ObjRenderer::BeginPlay()
+{
+	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
+	SetOrder(0);
+
+	InputAssembler1Init();
+	VertexShaderInit();
+	InputAssembler2Init();
+	RasterizerInit();
+	PixelShaderInit();
+	ShaderResInit();
+	RasterizerSetting();
+
 	UEngineDirectory dir;
-	dir.MoveParentToDirectory("MarioKart64");
-	UEngineFile fVs = dir.GetFile("VertexShader.fx");
-	UEngineFile fPs = dir.GetFile("PixelShader.fx");
-	std::wstring vsPath = UEngineString::AnsiToUnicode(fVs.GetPathToString());
-	std::wstring psPath = UEngineString::AnsiToUnicode(fPs.GetPathToString());
+	dir.MoveParentToDirectory("MarioKart64\\Resources\\Models\\Courses\\Royal_Raceway");
+	std::string path = dir.GetPathToString();
 
-	ID3DBlob* VS, * PS;
-	if (FAILED(CompileShaderFromFile(vsPath.c_str(), 0, "main", "vs_5_0", &VS)))
-		Throwanerror("Failed to compile shader from file");
-	if (FAILED(CompileShaderFromFile(psPath.c_str(), 0, "main", "ps_5_0", &PS)))
-		Throwanerror("Failed to compile shader from file ");
+	LoadModel(path + "\\Royal_Raceway.obj", path + "\\Royal_Raceway.mtl");
 
-	UEngineCore::GetDevice().GetDevice()->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), nullptr, &VertexShader);
-	UEngineCore::GetDevice().GetDevice()->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), nullptr, &PixelShader);
+	// Temp
+	m_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, 1280 / (float)720, 0.01f, 1000.0f);
+}
 
-	D3D11_INPUT_ELEMENT_DESC ied[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
+void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
 
-	UEngineCore::GetDevice().GetDevice()->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &InputLayOut);
+	FTransform& RendererTrans = GetTransformRef();
+
+	static float t = 0.0f;
+	static ULONGLONG timeStart = 0;
+	ULONGLONG timeCur = GetTickCount64();
+	if (timeStart == 0)
+		timeStart = timeCur;
+	t = (timeCur - timeStart) / 1000.0f;
+
+	m_World = DirectX::XMMatrixRotationY(-t);
+
+	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 5.0f, -3300.0f, 0.0f);
+	DirectX::XMVECTOR At = DirectX::XMVectorSet(0.0f, 100.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR Up = DirectX::XMVectorSet(0.0f, 1.0f, 100.0f, 0.0f);
+	m_View = DirectX::XMMatrixLookAtLH(Eye, At, Up);
+
+	m_World = XMMatrixTranspose(m_World);
+	m_View = XMMatrixTranspose(m_View);
+	m_Projection = XMMatrixTranspose(m_Projection);
+
+	RendererTrans.View.DirectMatrix = m_View;
+	//RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.World.DirectMatrix = m_World;
+	RendererTrans.Projection.DirectMatrix = m_Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+	ShaderResSetting();
+
+	//InputAssembler1Setting();
 	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
+
+	VertexShaderSetting();
+
+	//InputAssembler2Setting();
+	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
+
+	PixelShaderSetting();
+	OutPutMergeSetting();
+
+	for (size_t i = 0; i < Meshes.size(); ++i) {
+		Meshes[i].Draw(UEngineCore::GetDevice().GetContext());
+	}
+
+	//UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
 }
 
 bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath)

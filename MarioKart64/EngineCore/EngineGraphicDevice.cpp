@@ -198,6 +198,7 @@ void UEngineGraphicDevice::RenderStart()
     Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
 }
 
+
 void UEngineGraphicDevice::RenderEnd()
 {
     HRESULT Result = SwapChain->Present(0, 0);

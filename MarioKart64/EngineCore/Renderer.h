@@ -22,6 +22,7 @@ public:
 	ENGINEAPI void SetSprite(UEngineSprite* _Sprite);
 
 	ENGINEAPI void SetSpriteData(size_t _Index);
+	ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
 
 protected:
 	ENGINEAPI void BeginPlay() override;
@@ -33,40 +34,43 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr;
-	void ShaderResInit();
-	void ShaderResSetting();
+	ENGINEAPI virtual void ShaderResInit();
+	ENGINEAPI void ShaderResSetting();
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
-	void InputAssembler1Init();
-	void InputAssembler1Setting();
-	void InputAssembler1LayOut();
+	ENGINEAPI void InputAssembler1Init();
+	ENGINEAPI void InputAssembler1Setting();
+	ENGINEAPI void InputAssembler1LayOut();
 
 	Microsoft::WRL::ComPtr<ID3DBlob> VSShaderCodeBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3DBlob> VSErrorCodeBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> VertexShader = nullptr;
-	void VertexShaderInit();
-	void VertexShaderSetting();
+	ENGINEAPI virtual void VertexShaderInit();
+	ENGINEAPI void VertexShaderSetting();
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
 
 	D3D11_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	void InputAssembler2Init();
-	void InputAssembler2Setting();
+	ENGINEAPI virtual void InputAssembler2Init();
+	ENGINEAPI void InputAssembler2Setting();
 
 	D3D11_VIEWPORT ViewPortInfo;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> RasterizerState = nullptr;
-	void RasterizerInit();
-	void RasterizerSetting();
+	ENGINEAPI void RasterizerInit();
+	ENGINEAPI void RasterizerSetting();
 
 	Microsoft::WRL::ComPtr<ID3DBlob> PSShaderCodeBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3DBlob> PSErrorCodeBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> PixelShader = nullptr;
-	void PixelShaderInit();
-	void PixelShaderSetting();
+	ENGINEAPI virtual void PixelShaderInit();
+	ENGINEAPI void PixelShaderSetting();
 
-	void OutPutMergeSetting();
+	ENGINEAPI void OutPutMergeSetting();
 
 	std::vector<URenderUnit> Units;
+
+	// temp
+	ID3D11Texture2D* g_pDepthStencil = nullptr;
 };
 

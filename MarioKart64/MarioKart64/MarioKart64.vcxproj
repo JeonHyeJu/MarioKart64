@@ -151,7 +151,15 @@
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ObjRenderer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayGameMode.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="TestMap.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\aabb.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ai_assert.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\anim.h" />
@@ -242,16 +250,21 @@
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ObjRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestMap.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="SpriteShader.fx" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Debug\assimp-vc143-mtd.dll">
@@ -276,6 +289,16 @@
   <ItemGroup>
     <Library Include="ThirdParty\Assimp\Lib\Debug\assimp-vc143-mtd.lib" />
     <Library Include="ThirdParty\Assimp\Lib\Release\assimp-vc143-mt.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="PixelShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="VertexShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

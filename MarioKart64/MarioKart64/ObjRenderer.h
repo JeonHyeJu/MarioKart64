@@ -23,15 +23,18 @@ public:
 	bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
 
 protected:
-	ENGINEAPI void BeginPlay() override;
+	void BeginPlay() override;
 
 private:
-	//virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
+	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	AiMesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<TEXTURE> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
 	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
+
+	void ShaderInit();
+	void ShaderResInit() override;
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";
@@ -39,4 +42,6 @@ private:
 	std::vector<AiMesh> Meshes;
 	std::vector<TEXTURE> Textures;
 	std::string Directory = "";
+
+	ID3D11Buffer* pConstantBuffer = nullptr;
 };

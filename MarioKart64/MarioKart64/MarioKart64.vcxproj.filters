@@ -267,6 +267,12 @@
     </ClInclude>
     <ClInclude Include="AiMesh.h" />
     <ClInclude Include="ObjRenderer.h" />
+    <ClInclude Include="PlayGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMap.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -286,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="ObjRenderer.cpp" />
+    <ClCompile Include="PlayGameMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMap.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -335,11 +347,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="SpriteShader.fx">
-      <Filter>Shader</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ThirdParty\Assimp\Inc\assimp\color4.inl">
       <Filter>ThirdParty\Assimp\Inc</Filter>
     </None>
@@ -380,5 +387,13 @@
     <Library Include="ThirdParty\Assimp\Lib\Debug\assimp-vc143-mtd.lib">
       <Filter>ThirdParty\Assimp\Lib\Debug</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

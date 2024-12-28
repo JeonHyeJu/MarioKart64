@@ -184,6 +184,7 @@
     <ClInclude Include="EngineResources.h" />
     <ClInclude Include="EngineSprite.h" />
     <ClInclude Include="EngineTexture.h" />
+    <ClInclude Include="EngineVertex.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="imconfig.h" />

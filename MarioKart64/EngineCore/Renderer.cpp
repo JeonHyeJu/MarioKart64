@@ -94,15 +94,13 @@ void URenderer::ShaderResInit()
 		}
 	}
 
-	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT};
-	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER; // 0~1사이만 유효
-	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER; // y
-	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP; // z // 3중 
-
-	SampInfo.BorderColor[0] = 0.0f;
-	SampInfo.BorderColor[1] = 0.0f;
-	SampInfo.BorderColor[2] = 0.0f;
-	SampInfo.BorderColor[3] = 0.0f;
+	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_LINEAR };
+	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	SampInfo.MinLOD = 0;
+	SampInfo.MaxLOD = D3D11_FLOAT32_MAX;
 
 	UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
 }
@@ -331,6 +329,7 @@ void URenderer::VertexShaderSetting()
 void URenderer::RasterizerInit()
 {
 	D3D11_RASTERIZER_DESC Desc = {};
+	//Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
 	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, RasterizerState.GetAddressOf());
@@ -448,7 +447,41 @@ void URenderer::OutPutMergeSetting()
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
 	ArrRtv[0] = RTV; // SV_Target0
 
-	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
+	UINT m4xMsaaQuality;
+	UEngineCore::GetDevice().GetDevice()->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m4xMsaaQuality);
+
+	D3D11_TEXTURE2D_DESC descDepth;
+	ZeroMemory(&descDepth, sizeof(descDepth));
+	descDepth.Width = 1280;
+	descDepth.Height = 720;
+	descDepth.MipLevels = 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDepth.SampleDesc.Count = 4;
+	descDepth.SampleDesc.Quality = m4xMsaaQuality - 1;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;
+	descDepth.MiscFlags = 0;
+	HRESULT hr = UEngineCore::GetDevice().GetDevice()->CreateTexture2D(&descDepth, nullptr, &g_pDepthStencil);
+	if (FAILED(hr))
+	{
+		MSGASSERT("Depth Stencil Texture couldn't be created!");
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = descDepth.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	hr = UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(g_pDepthStencil, 0, &g_pDepthStencilView);
+	if (FAILED(hr))
+	{
+		MSGASSERT("Depth Stencil View couldn't be created!");
+	}
+
+	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], g_pDepthStencilView);
+	//UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 }
 
 void URenderer::SetSpriteData(size_t _Index)

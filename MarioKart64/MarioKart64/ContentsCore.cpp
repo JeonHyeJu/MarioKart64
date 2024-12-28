@@ -4,6 +4,7 @@
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
 #include "TitleGameMode.h"
+#include "PlayGameMode.h"
 
 CreateContentsCoreDefine(UContentsCore);
 
@@ -41,8 +42,11 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 
-	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
-	UEngineCore::OpenLevel("Titlelevel");
+	/*UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
+	UEngineCore::OpenLevel("Titlelevel");*/
+
+	UEngineCore::CreateLevel<APlayGameMode, APawn>("TestLevel");
+	UEngineCore::OpenLevel("TestLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

@@ -1,20 +1,24 @@
-
-struct VertexIn
+cbuffer ConstantBuffer : register(b0)
 {
-	float4 Pos : POSITION;
-	float4 Color : COLOR;
+    matrix World;
+    matrix View;
+    matrix Projection;
+}
+
+struct VOut
+{
+    float4 pos : SV_POSITION;
+    float2 texcoord : TEXCOORD;
 };
 
-struct VertexOut
+VOut main(float4 pos : POSITION, float2 texcoord : TEXCOORD)
 {
-    float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
-};
+    VOut output;
 
-VertexOut main(VertexIn _vin)
-{
-    VertexOut vout;
-    vout.Pos = _vin.Pos;
-    vout.Color = _vin.Color;
-    return vout;
+    output.pos = mul(pos, World);
+    output.pos = mul(output.pos, View);
+    output.pos = mul(output.pos, Projection);
+    output.texcoord = texcoord;
+
+    return output;
 }

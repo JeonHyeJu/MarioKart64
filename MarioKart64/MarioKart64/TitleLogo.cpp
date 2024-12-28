@@ -18,7 +18,6 @@ ATitleLogo::ATitleLogo()
 	}
 
 	LogoRenderer->CreateAnimation("Move", "Mario.png", 1, 4, 0.3f);
-
 	{
 		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
 		Animation->IsAutoScale = true;
@@ -27,14 +26,8 @@ ATitleLogo::ATitleLogo()
 
 	LogoRenderer->ChangeAnimation("Idle");
 
-	// 부모가 존재하지 않는 root는 Relative든 Local이던 
-	// 결과는 같다. 
-	// 부모의 크기에 내가 영향을 받을수 있기 대문에 함수가 나뉜것이다.
-	// 부모가 없으면
 	LogoRenderer->SetRelativeScale3D({50, 50, 1.0f});
 	LogoRenderer->SetupAttachment(RootComponent);
-
-
 
 	//Child = CreateDefaultSubObject<USpriteRenderer>();
 	//Child->SetSprite("Mario.png", 2);

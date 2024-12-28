@@ -61,5 +61,8 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
+
+	ENGINEAPI void DefaultResourcesInit();
+	ENGINEAPI void MeshInit();
 };
 

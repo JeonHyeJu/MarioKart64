@@ -2,8 +2,6 @@
 #include "ObjRenderer.h"
 #include "TextureLoader.h"
 #include <EngineCore/EngineGraphicDevice.h>
-#include <d3d11_1.h>
-#include <DirectXMath.h>
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -30,6 +28,7 @@ bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath
 
 	// process node
 	ProcessNode(pScene->mRootNode, pScene);
+	return true;
 }
 
 void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
@@ -46,12 +45,12 @@ void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh ObjRenderer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+AiMesh ObjRenderer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	// Data to fill
 	std::vector<VERTEX> vertices;
 	std::vector<UINT> indices;
-	std::vector<AiTexture> textures;
+	std::vector<TEXTURE> textures;
 
 	// Walk through each of the mesh's vertices
 	for (UINT i = 0; i < mesh->mNumVertices; i++)
@@ -84,16 +83,16 @@ Mesh ObjRenderer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-		std::vector<AiTexture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", scene);
+		std::vector<TEXTURE> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", scene);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	}
 
-	return Mesh(UEngineCore::Device.GetDevice(), vertices, indices, textures);
+	return AiMesh(UEngineCore::GetDevice().GetDevice(), vertices, indices, textures);
 }
 
-std::vector<AiTexture> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene)
+std::vector<TEXTURE> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene)
 {
-	std::vector<AiTexture> textures;
+	std::vector<TEXTURE> textures;
 	for (UINT i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -113,11 +112,11 @@ std::vector<AiTexture> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiText
 		if (!skip)	// If texture hasn't been loaded already, load it
 		{
 			HRESULT hr;
-			AiTexture texture;
+			TEXTURE texture;
 
 			const aiTexture* embeddedTexture = scene->GetEmbeddedTexture(str.C_Str());
 			if (embeddedTexture != nullptr) {
-				texture.AiTexture = LoadEmbeddedTexture(embeddedTexture);
+				texture.texture = LoadEmbeddedTexture(embeddedTexture);
 			}
 			else {
 				std::string filename = std::string(str.C_Str());
@@ -131,8 +130,8 @@ std::vector<AiTexture> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiText
 
 				std::wstring filenamews = std::wstring(filename.begin(), filename.end());
 				hr = CreateWICTextureFromFile(
-					UEngineCore::Device.GetDevice(), UEngineCore::Device.GetContext(), 
-					filenamews.c_str(), nullptr, &texture.AiTexture
+					UEngineCore::GetDevice().GetDevice(), UEngineCore::GetDevice().GetContext(),
+					filenamews.c_str(), nullptr, &texture.texture
 				);
 
 				if (FAILED(hr))
@@ -178,13 +177,13 @@ ID3D11ShaderResourceView* ObjRenderer::LoadEmbeddedTexture(const aiTexture* embe
 		subresourceData.SysMemSlicePitch = embeddedTexture->mWidth * embeddedTexture->mHeight * 4;
 
 		ID3D11Texture2D* texture2D = nullptr;
-		hr = UEngineCore::Device.GetDevice()->CreateTexture2D(&desc, &subresourceData, &texture2D);
+		hr = UEngineCore::GetDevice().GetDevice()->CreateTexture2D(&desc, &subresourceData, &texture2D);
 		if (FAILED(hr))
 		{
 			MSGASSERT("CreateTexture2D failed!");
 		}
 
-		hr = UEngineCore::Device.GetDevice()->CreateShaderResourceView(texture2D, nullptr, &texture);
+		hr = UEngineCore::GetDevice().GetDevice()->CreateShaderResourceView(texture2D, nullptr, &texture);
 		if (FAILED(hr))
 		{
 			MSGASSERT("CreateShaderResourceView failed");
@@ -197,7 +196,7 @@ ID3D11ShaderResourceView* ObjRenderer::LoadEmbeddedTexture(const aiTexture* embe
 	const size_t size = embeddedTexture->mWidth;
 
 	hr = CreateWICTextureFromMemory(
-		UEngineCore::Device.GetDevice(), UEngineCore::Device.GetContext(), 
+		UEngineCore::GetDevice().GetDevice(), UEngineCore::GetDevice().GetContext(),
 		reinterpret_cast<const unsigned char*>(embeddedTexture->pcData), size, 
 		nullptr, &texture
 	);
@@ -213,61 +212,6 @@ ID3D11ShaderResourceView* ObjRenderer::LoadEmbeddedTexture(const aiTexture* embe
 
 void ObjRenderer::BeginPlay()
 {
-	USceneComponent::BeginPlay();
+	USceneComponent::BeginPlay();	// Not URenderer::BeginPlay()
 	SetOrder(0);
-
-	InitInputAssembler1();
-	InitVertexShader();
-	InitInputAssembler2();
-	InitRasterizer();
-	InitPixelShader();
-	InitOutputMerger();
-}
-
-void ObjRenderer::InitInputAssembler1()
-{
-}
-
-void ObjRenderer::InitVertexShader()
-{
-}
-
-void ObjRenderer::InitInputAssembler2()
-{
-}
-
-void ObjRenderer::InitRasterizer()
-{
-}
-
-void ObjRenderer::InitPixelShader()
-{
-}
-
-void ObjRenderer::InitOutputMerger()
-{
-}
-
-void ObjRenderer::SetInputAssembler1()
-{
-}
-
-void ObjRenderer::SetVertexShader()
-{
-}
-
-void ObjRenderer::SetInputAssembler2()
-{
-}
-
-void ObjRenderer::SetRasterizer()
-{
-}
-
-void ObjRenderer::SetPixelShader()
-{
-}
-
-void ObjRenderer::SetOutputMerger()
-{
 }

@@ -64,7 +64,7 @@ void UEngineTexture::ResLoad()
 	}
 
 	if (S_OK != DirectX::CreateShaderResourceView(
-		UEngineCore::Device.GetDevice(),
+		UEngineCore::GetDevice().GetDevice(),
 		ImageData.GetImages(),
 		ImageData.GetImageCount(),
 		ImageData.GetMetadata(),

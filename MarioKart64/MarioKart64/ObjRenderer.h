@@ -1,13 +1,13 @@
 #pragma once
-#include "SceneComponent.h"
+#include <EngineCore/Renderer.h>
 #include <EngineBase/EngineDefine.h>
 #include <vector>
 #include <assimp/scene.h>
-#include "Mesh.h"
+#include "AiMesh.h"
 
 class UEngineCamera;
 class ModelLoader;
-class ObjRenderer : public USceneComponent
+class ObjRenderer : public URenderer
 {
 	friend class UEngineCamera;
 
@@ -28,29 +28,15 @@ protected:
 private:
 	//virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
-	void InitInputAssembler1();
-	void InitVertexShader();
-	void InitInputAssembler2();
-	void InitRasterizer();
-	void InitPixelShader();
-	void InitOutputMerger();
-
-	void SetInputAssembler1();
-	void SetVertexShader();
-	void SetInputAssembler2();
-	void SetRasterizer();
-	void SetPixelShader();
-	void SetOutputMerger();
-
 	void ProcessNode(aiNode* node, const aiScene* scene);
-	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<AiTexture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
+	AiMesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	std::vector<TEXTURE> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
 	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";
 
-	std::vector<Mesh> Meshes;
-	std::vector<AiTexture> Textures;
+	std::vector<AiMesh> Meshes;
+	std::vector<TEXTURE> Textures;
 	std::string Directory = "";
 };

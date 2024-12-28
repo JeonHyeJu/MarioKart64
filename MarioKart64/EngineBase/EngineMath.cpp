@@ -53,7 +53,7 @@ CollisionFunctionInit Inst = CollisionFunctionInit();
 
 FVector FQuat::QuaternionToEulerDeg() const
 {
-	return QuaternionToEulerRad() * UEngineMath::PI2;
+	return QuaternionToEulerRad() * UEngineMath::R2D;
 }
 
 FVector FQuat::QuaternionToEulerRad() const
@@ -264,4 +264,5 @@ void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 		LocalWorld = ScaleMat * RotationMat * LocationMat;
 		World = ScaleMat * RotationMat * LocationMat * RevolveMat * ParentMat;
 	}
+	Decompose();
 }

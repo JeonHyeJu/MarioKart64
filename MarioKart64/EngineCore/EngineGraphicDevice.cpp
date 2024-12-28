@@ -143,6 +143,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         MSGASSERT("쓰레드 안정성 적용에 문제가 생겼습니다.");
         return;
     }
+    DefaultResourcesInit();
 }
 
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)

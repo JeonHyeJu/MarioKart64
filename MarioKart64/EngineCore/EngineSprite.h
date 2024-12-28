@@ -7,6 +7,7 @@ struct FSpriteData
 {
 	float4 CuttingPos = { 0.0f, 0.0f };
 	float4 CuttingSize = { 1.0f, 1.0f };
+	float4 Pivot = { 0.5f, 0.5f };
 };
 
 class UEngineSprite : public UEngineResources
@@ -33,6 +34,9 @@ public:
 
 		return SpriteDatas[_Index];
 	}
+
+	ENGINEAPI FVector GetSpriteScaleToReal(size_t _Index);
+
 
 protected:
 

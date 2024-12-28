@@ -17,57 +17,44 @@ struct VERTEX
     DirectX::XMFLOAT2 texcoord;
 };
 
-struct AiTexture
+struct TEXTURE
 {
 	std::string type;
 	std::string path;
-	ID3D11ShaderResourceView *AiTexture;
+	ID3D11ShaderResourceView *texture;
 
 	void Release() {
-		SafeRelease(AiTexture);
+		SafeRelease(texture);
 	}
 };
 
-class Mesh {
+class AiMesh {
 public:
     std::vector<VERTEX> vertices_;
     std::vector<UINT> indices_;
-    std::vector<AiTexture> AiTextures_;
+    std::vector<TEXTURE> textures_;
     ID3D11Device *dev_;
 
-    Mesh(ID3D11Device *dev, const std::vector<VERTEX>& vertices, const std::vector<UINT>& indices, const std::vector<AiTexture>& AiTextures) :
+    AiMesh(ID3D11Device *dev, const std::vector<VERTEX>& vertices, const std::vector<UINT>& indices, const std::vector<TEXTURE>& textures) :
             vertices_(vertices),
             indices_(indices),
-            AiTextures_(AiTextures),
+            textures_(textures),
             dev_(dev),
             VertexBuffer_(nullptr),
             IndexBuffer_(nullptr) {
         this->setupMesh(this->dev_);
     }
 
-    void Draw(HWND _hwnd, ID3D11DeviceContext *devcon) {
+    void Draw(ID3D11DeviceContext *devcon) {
         UINT stride = sizeof(VERTEX);
         UINT offset = 0;
 
-        // MessageBoxA(_hwnd, "1", "TEMP", MB_OK);
-        std::string log = "";
-
         devcon->IASetVertexBuffers(0, 1, &VertexBuffer_, &stride, &offset);
-        // MessageBoxA(_hwnd, "2", "TEMP", MB_OK);
-
         devcon->IASetIndexBuffer(IndexBuffer_, DXGI_FORMAT_R32_UINT, 0);
-        log = "3. AiTextures_: " + std::to_string(AiTextures_.size()) + "\n";
-        // MessageBoxA(_hwnd, log.c_str(), "TEMP", MB_OK);
 
-        if (AiTextures_.size() > 0)
-        {
-            devcon->PSSetShaderResources(0, 1, &AiTextures_[0].AiTexture);
-        }
-        log = "4. indices_: " + std::to_string(indices_.size()) + "\n";
-        // MessageBoxA(_hwnd, log.c_str(), "TEMP", MB_OK);
+        devcon->PSSetShaderResources(0, 1, &textures_[0].texture);
 
         devcon->DrawIndexed(static_cast<UINT>(indices_.size()), 0, 0);
-        // MessageBoxA(_hwnd, "5", "TEMP", MB_OK);
     }
 
     void Close() {

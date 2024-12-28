@@ -42,7 +42,7 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 	while (true)
 	{
 		size_t RectIndex = Text.find("rect:", StartPosition);
-		size_t AligIndex = Text.find("alignment:", RectIndex);
+		size_t AligIndex = Text.find("outline:", RectIndex);
 
 		if (RectIndex == std::string::npos || AligIndex == std::string::npos)
 		{
@@ -86,6 +86,17 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 			SpriteData.CuttingSize.Y = static_cast<float>(atof(Number.c_str()));
 		}
 
+		{
+			std::string Number = UEngineString::InterString(Text, "x:", ",", Start);
+			SpriteData.Pivot.X = static_cast<float>(atof(Number.c_str()));
+		}
+
+		{
+			std::string Number = UEngineString::InterString(Text, "y:", "}", Start);
+			SpriteData.Pivot.Y = static_cast<float>(atof(Number.c_str()));
+		}
+
+
 
 		SpriteData.CuttingPos.Y = TexSize.Y - SpriteData.CuttingPos.Y - SpriteData.CuttingSize.Y;
 
@@ -109,4 +120,19 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 ID3D11ShaderResourceView* UEngineSprite::GetSRV()
 {
 	return Texture->GetSRV();
+}
+
+FVector UEngineSprite::GetSpriteScaleToReal(size_t _Index)
+{
+	if (SpriteDatas.size() <= _Index)
+	{
+		MSGASSERT("스프라이트의 인덱스를 초과하여 사용하려고 했습니다.");
+	}
+
+	FVector Result;
+
+	Result.X = SpriteDatas[_Index].CuttingSize.X * Texture->GetTextureSize().X;
+	Result.Y = SpriteDatas[_Index].CuttingSize.Y * Texture->GetTextureSize().Y;
+
+	return Result;
 }

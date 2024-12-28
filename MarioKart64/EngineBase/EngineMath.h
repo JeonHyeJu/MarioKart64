@@ -686,6 +686,7 @@ struct FTransform
 {
 	float4 Scale;
 	float4 Rotation;
+	FQuat Quat;
 	float4 Location;
 
 	float4 RelativeScale;

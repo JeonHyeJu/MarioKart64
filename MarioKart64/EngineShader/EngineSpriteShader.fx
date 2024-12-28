@@ -16,6 +16,7 @@ cbuffer FTransform : register(b0)
 {
 	float4 Scale;
 	float4 Rotation;
+	float4 Qut;
 	float4 Location;
 
 	float4 RelativeScale;
@@ -44,11 +45,14 @@ cbuffer FSpriteData : register(b1)
 {
 	float4 CuttingPos;
 	float4 CuttingSize;
+	float4 Pivot; // 0.5 0.0f
 };
 
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 {	
 	VertexShaderOutPut OutPut;
+	_Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
+	_Vertex.POSITION.y += (1.0f - Pivot.y) - 0.5f;
 	OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
 	
 	OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
@@ -59,6 +63,13 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 	return OutPut;
 }
 
+cbuffer MatColor : register(b1)
+{
+	float4 Albedo;
+};
+
+
+// 텍스처 1장과 
 Texture2D ImageTexture : register(t0);
 SamplerState ImageSampler : register(s0);
 

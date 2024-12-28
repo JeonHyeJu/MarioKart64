@@ -93,6 +93,11 @@ int UEngineWindow::WindowMessageLoop(std::function<void()> _StartFunction, std::
             DispatchMessage(&msg);
         }
 
+        if (false == LoopActive)
+        {
+            break;
+        }
+
         _FrameFunction();
     }
 

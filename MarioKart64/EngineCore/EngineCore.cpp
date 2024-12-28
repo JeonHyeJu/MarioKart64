@@ -8,6 +8,14 @@
 #include "EngineGUI.h"
 #include "Level.h"
 
+
+UEngineGraphicDevice& UEngineCore::GetDevice()
+{
+	return Device;
+}
+
+// 리얼 본체죠?
+// UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
 UEngineGraphicDevice UEngineCore::Device;
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;

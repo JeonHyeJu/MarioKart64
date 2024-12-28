@@ -20,8 +20,6 @@ UEngineCamera::~UEngineCamera()
 
 void UEngineCamera::Tick(float _DetlaTime)
 {
-	Transform.View;
-	Transform.Projection;
 }
 
 void UEngineCamera::Render(float _DetlaTime)
@@ -49,8 +47,8 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.View.View(Trans.World.ArrVector[3], Trans.World.GetFoward(), Trans.World.GetUp());
 
-	//Trans.Projection.PerspectiveFovDeg(70, ProjectionScale.X, ProjectionScale.Y, Near, Far);
-	Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
+	Trans.Projection.PerspectiveFovRad(DirectX::XM_PIDIV4, ProjectionScale.X, ProjectionScale.Y, Near, Far);
+	//Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
 
 	int a = 0;
 }

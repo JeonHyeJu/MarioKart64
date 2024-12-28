@@ -8,18 +8,6 @@
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
-// Temp
-struct ConstantBuffer {
-	DirectX::XMMATRIX mWorld;
-	DirectX::XMMATRIX mView;
-	DirectX::XMMATRIX mProjection;
-};
-
-// temp
-DirectX::XMMATRIX m_World;
-DirectX::XMMATRIX m_View;
-DirectX::XMMATRIX m_Projection;
-
 void Throwanerror(LPCSTR errormessage)
 {
 	throw std::runtime_error(errormessage);
@@ -28,7 +16,8 @@ void Throwanerror(LPCSTR errormessage)
 // Temp
 HRESULT	CompileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines, LPCSTR pEntryPoint, LPCSTR pShaderModel, ID3DBlob** ppBytecodeBlob)
 {
-	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR;
+	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
+	//UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR;
 
 #ifdef _DEBUG
 	compileFlags |= D3DCOMPILE_DEBUG;
@@ -62,12 +51,9 @@ void ObjRenderer::BeginPlay()
 	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
 	SetOrder(0);
 
-	InputAssembler1Init();
-	VertexShaderInit();
-	InputAssembler2Init();
-	RasterizerInit();
-	PixelShaderInit();
+	InitShader();
 	ShaderResInit();
+	RasterizerInit();
 	RasterizerSetting();
 
 	UEngineDirectory dir;
@@ -75,60 +61,101 @@ void ObjRenderer::BeginPlay()
 	std::string path = dir.GetPathToString();
 
 	LoadModel(path + "\\Royal_Raceway.obj", path + "\\Royal_Raceway.mtl");
-
-	// Temp
-	m_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, 1280 / (float)720, 0.01f, 1000.0f);
 }
 
+// TODO: NemuMat27.. part
 void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
 	FTransform& CameraTrans = _Camera->GetTransformRef();
-
 	FTransform& RendererTrans = GetTransformRef();
 
-	static float t = 0.0f;
-	static ULONGLONG timeStart = 0;
-	ULONGLONG timeCur = GetTickCount64();
-	if (timeStart == 0)
-		timeStart = timeCur;
-	t = (timeCur - timeStart) / 1000.0f;
-
-	m_World = DirectX::XMMatrixRotationY(-t);
-
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 5.0f, -3300.0f, 0.0f);
-	DirectX::XMVECTOR At = DirectX::XMVectorSet(0.0f, 100.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR Up = DirectX::XMVectorSet(0.0f, 1.0f, 100.0f, 0.0f);
-	m_View = DirectX::XMMatrixLookAtLH(Eye, At, Up);
-
-	m_World = XMMatrixTranspose(m_World);
-	m_View = XMMatrixTranspose(m_View);
-	m_Projection = XMMatrixTranspose(m_Projection);
-
-	RendererTrans.View.DirectMatrix = m_View;
-	//RendererTrans.View = CameraTrans.View;
+	RendererTrans.View = CameraTrans.View;
 	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.World.DirectMatrix = m_World;
-	RendererTrans.Projection.DirectMatrix = m_Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * CameraTrans.View * CameraTrans.Projection;
+	OutputDebugStringA((std::to_string(CameraTrans.View.Arr2D[3][2]) + "\n").c_str());
 
-	ShaderResSetting();
-
-	//InputAssembler1Setting();
-	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
-
-	VertexShaderSetting();
-
-	//InputAssembler2Setting();
 	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
 
+	ShaderResSetting();
+	VertexShaderSetting();
 	PixelShaderSetting();
 	OutPutMergeSetting();
 
 	for (size_t i = 0; i < Meshes.size(); ++i) {
 		Meshes[i].Draw(UEngineCore::GetDevice().GetContext());
 	}
+}
 
-	//UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
+void ObjRenderer::InitShader()
+{
+	UEngineDirectory dir;
+	dir.MoveParentToDirectory("MarioKart64");
+	UEngineFile fVs = dir.GetFile("VertexShader.fx");
+	UEngineFile fPs = dir.GetFile("PixelShader.fx");
+	std::wstring vsPath = UEngineString::AnsiToUnicode(fVs.GetPathToString());
+	std::wstring psPath = UEngineString::AnsiToUnicode(fPs.GetPathToString());
+
+	if (FAILED(CompileShaderFromFile(vsPath.c_str(), 0, "main", "vs_5_0", VSShaderCodeBlob.GetAddressOf())))
+	{
+		MSGASSERT("Failed to compile vertex shader from file");
+	}
+	if (FAILED(CompileShaderFromFile(psPath.c_str(), 0, "main", "ps_5_0", PSShaderCodeBlob.GetAddressOf())))
+	{
+		MSGASSERT("Failed to compile pixel shader from file");
+	}
+
+	UEngineCore::GetDevice().GetDevice()->CreateVertexShader(VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), nullptr, VertexShader.GetAddressOf());
+	UEngineCore::GetDevice().GetDevice()->CreatePixelShader(PSShaderCodeBlob->GetBufferPointer(), PSShaderCodeBlob->GetBufferSize(), nullptr, PixelShader.GetAddressOf());
+
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	UEngineCore::GetDevice().GetDevice()->CreateInputLayout(ied, 2, VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), InputLayOut.GetAddressOf());
+	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
+}
+
+void ObjRenderer::ShaderResInit()
+{
+	D3D11_BUFFER_DESC BufferInfo = { 0 };
+	BufferInfo.ByteWidth = sizeof(FTransform);
+	BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferInfo.CPUAccessFlags = 0;
+	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
+
+	HRESULT hr = UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer);
+	if (FAILED(hr))
+	{
+		MSGASSERT("Constant buffer couldn't be created");
+	}
+
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	hr = UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&sampDesc, &SamplerState);
+	if (FAILED(hr))
+	{
+		MSGASSERT("Texture sampler state couldn't be created");
+	}
+}
+
+void ObjRenderer::ShaderResSetting()
+{
+	FTransform& RendererTrans = GetTransformRef();
+	D3D11_MAPPED_SUBRESOURCE Data = {};
+
+	UEngineCore::GetDevice().GetContext()->UpdateSubresource(TransformConstBuffer.Get(), 0, nullptr, &RendererTrans, 0, 0);
+	UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, TransformConstBuffer.GetAddressOf());
+	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, SamplerState.GetAddressOf());
 }
 
 bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath)
@@ -142,7 +169,6 @@ bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath
 
 	Directory = fileName.substr(0, fileName.find_last_of("/\\"));
 
-	// process node
 	ProcessNode(pScene->mRootNode, pScene);
 	return true;
 }
@@ -163,12 +189,10 @@ void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
 
 AiMesh ObjRenderer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
-	// Data to fill
 	std::vector<VERTEX> vertices;
 	std::vector<UINT> indices;
 	std::vector<TEXTURE> textures;
 
-	// Walk through each of the mesh's vertices
 	for (UINT i = 0; i < mesh->mNumVertices; i++)
 	{
 		VERTEX vertex;
@@ -236,9 +260,6 @@ std::vector<TEXTURE> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiTextur
 			}
 			else {
 				std::string filename = Directory + "\\" + std::string(str.C_Str());
-
-				// std::string log = filename;
-				// MessageBoxA(hwnd_, log.c_str(), "TEMP", MB_OK);
 
 				std::wstring filenamews = std::wstring(filename.begin(), filename.end());
 				hr = CreateWICTextureFromFile(

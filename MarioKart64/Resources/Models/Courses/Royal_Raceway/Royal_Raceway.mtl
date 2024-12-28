@@ -28,10 +28,15 @@ Kd 0.984375 0.984375 0.984375
 illum 1
 map_Kd 7EEAA53A_fix.png
 
+newmtl NemuMat26_1
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 7EEAA53A_fix.png
+
 newmtl NemuMat27
 Kd 0.984375 0.984375 0.984375
 illum 1
-map_Kd 922DEA6_c.png
+map_Kd 3A87458D_c.png
 
 newmtl NemuMat50
 Kd 0.984375 0.984375 0.984375

@@ -34,7 +34,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr;
 	ENGINEAPI virtual void ShaderResInit();
-	ENGINEAPI void ShaderResSetting();
+	ENGINEAPI virtual void ShaderResSetting();
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;

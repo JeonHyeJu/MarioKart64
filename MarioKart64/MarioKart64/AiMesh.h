@@ -64,11 +64,8 @@ public:
         SafeRelease(IndexBuffer_);
     }
 private:
-    // Render data
     ID3D11Buffer *VertexBuffer_, *IndexBuffer_;
 
-    // Functions
-    // Initializes all the buffer objects/arrays
     void setupMesh(ID3D11Device *dev) {
         HRESULT hr;
 

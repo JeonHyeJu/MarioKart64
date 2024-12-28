@@ -33,6 +33,10 @@ private:
 	std::vector<TEXTURE> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
 	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
 
+	void InitShader();
+	void ShaderResInit() override;
+	void ShaderResSetting() override;
+
 	std::string ObjPath = "";
 	std::string MtlPath = "";
 

@@ -17,6 +17,8 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
+	float TestLen = 0.f;
+
 	std::shared_ptr<class ATestMap> TestMapPtr = nullptr;
 	std::shared_ptr<class APlayer> Player = nullptr;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;

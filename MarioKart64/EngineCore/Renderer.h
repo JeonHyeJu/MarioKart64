@@ -29,7 +29,7 @@ public:
 
 protected:
 	ENGINEAPI void BeginPlay() override;
-	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
+	ENGINEAPI virtual void Render(class UEngineCamera* _Camera, float _DeltaTime);
 
 private:
 
@@ -61,7 +61,7 @@ public:
 
 	D3D11_VIEWPORT ViewPortInfo;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> RasterizerState = nullptr;
-	ENGINEAPI void RasterizerInit();
+	ENGINEAPI virtual void RasterizerInit();
 	ENGINEAPI void RasterizerSetting();
 
 	Microsoft::WRL::ComPtr<ID3DBlob> PSShaderCodeBlob = nullptr;

@@ -9,18 +9,25 @@ APlayer::APlayer()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
+	Default->SetWorldLocation({ 0.0f, 100.0f, 0.0f });
+
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
+	Renderer->SetRelativeLocation({ 0.f, -200.f, 0.f });
 
 	// Temp
-	Renderer->CreateAnimation("Idle", "Mario.png", 0, 0, 0.1f);
+	const int TURN_SIZE = 31;
+	std::vector<int> idxs(TURN_SIZE, 0);
+	std::vector<float> times(TURN_SIZE, 0.2f);
+	for (size_t i = 0; i < TURN_SIZE; ++i)
 	{
-		USpriteRenderer::FrameAnimation* anim = Renderer->FindAnimation("Idle");
-		anim->IsAutoScale = true;
-		anim->AutoScaleRatio = 4.0f;
+		idxs[i] = static_cast<int>(i * 36);
 	}
 
-	Renderer->ChangeAnimation("Idle");
+	Renderer->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
+	Renderer->CreateAnimation("TurnL", "Mario.png", idxs, times, true);
+	Renderer->CreateAnimation("TurnR", "Mario.png", idxs, times, true);
 
+	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);
 }
 
@@ -33,21 +40,95 @@ void APlayer::Tick(float _deltaTime)
 	AActor::Tick(_deltaTime);
 	APawn::Tick(_deltaTime);
 
+	FVector move;
+	static FVector accMove;
+
 	if (UEngineInput::IsPress(VK_UP))
 	{
-		AddRelativeLocation({ 0.f, 0.f, 100.f * _deltaTime, 1.0f });
+		if (accMove.Z < MAX_SPEED)
+		{
+			accMove.Z += .05f;
+		}
+		move.Z = accMove.Z;
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
-		AddRelativeLocation({ 0.f, 0.f, -100.f * _deltaTime, 1.0f });
+		if (accMove.Z > -MAX_SPEED)
+		{
+			accMove.Z -= .05f;
+		}
+		move.Z = accMove.Z;
+	}
+	else
+	{
+		if (accMove.Z > 0)
+		{
+			accMove.Z -= FRICTIONAL_FORCE;
+		}
+		else if (accMove.Z < 0)
+		{
+			accMove.Z += FRICTIONAL_FORCE;
+		}
+		move.Z = accMove.Z;
 	}
 
+	const float ROT_VAL = 30.f * _deltaTime;
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		AddRelativeLocation({ -100.f * _deltaTime, 0.f, 0.f, 1.0f });
+		Renderer->ChangeAnimation("TurnL");
+		Renderer->SetRotation({ 0.f, 0.f, 0.f });
+		
+		//{
+		//	const FTransform& trfm = GetTransform();
+		//	FVector temp = trfm.Location;
+		//	temp.Z = move.Z;
+
+		//	std::string log = "1. Rot: " + std::to_string(temp.X) + ", " + std::to_string(temp.Y) + ", " + std::to_string(temp.Z) + "\n";
+		//	OutputDebugStringA(log.c_str());
+		//	temp.RotationYRad(-ROT_VAL);
+		//	std::string log2 = "2. Rot: " + std::to_string(temp.X) + ", " + std::to_string(temp.Y) + ", " + std::to_string(temp.Z) + "\n";
+		//	OutputDebugStringA(log2.c_str());
+		//}
+
+		if (accMove.X > -MAX_TURN)
+		{
+			accMove.X -= ROT_VAL;
+		}
+
+		//move.X = accMove.X;
+
+		AddActorRotation({ 0.f, -ROT_VAL, 0.f });
 	}
 	else if (UEngineInput::IsPress(VK_RIGHT))
 	{
-		AddRelativeLocation({ 100.f * _deltaTime, 0.f, 0.f, 1.0f });
+		Renderer->ChangeAnimation("TurnR");
+		Renderer->SetRotation({ 0.f, -180.f, 0.f });
+
+		if (accMove.X < MAX_TURN)
+		{
+			accMove.X += ROT_VAL;
+		}
+
+		//move.X = accMove.X;
+
+		AddActorRotation({ 0.f, ROT_VAL, 0.f });
 	}
+	else
+	{
+		Renderer->ChangeAnimation("Idle");
+
+		accMove.X = 0.f;
+		//move.X = accMove.X;
+	}
+
+	//OutputDebugStringA((std::to_string(accMove.X) + ", " + std::to_string(accMove.Z) + "\n").c_str());
+
+	// temp
+	FTransform trfm = GetTransform();
+	float4x4 world = trfm.World;
+	FVector dir = world.ArrVector[2];
+	dir.Normalize();
+
+	//Renderer->AddRelativeLocation(move);
+	AddRelativeLocation(dir * move.Z);
 }

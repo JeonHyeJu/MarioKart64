@@ -16,6 +16,7 @@ public:
 
 	void AddRelativeLocation(const FVector& _Value)
 	{
+		OutputDebugStringA(("2. Actor.AddRotation: " + std::to_string(Transform.Rotation.X) + ", " + std::to_string(Transform.Rotation.Y) + ", " + std::to_string(Transform.Rotation.Z) + "\n\n").c_str());
 		Transform.Location += _Value;
 		TransformUpdate();
 	}
@@ -33,10 +34,10 @@ public:
 		TransformUpdate();
 	}
 
-
 	void AddRotation(const FVector& _Value)
 	{
 		Transform.Rotation += _Value;
+		OutputDebugStringA(("1. Actor.AddRotation: " + std::to_string(Transform.Rotation.X) + ", " + std::to_string(Transform.Rotation.Y) + ", " + std::to_string(Transform.Rotation.Z) + "\n").c_str());
 		TransformUpdate();
 	}
 
@@ -75,6 +76,11 @@ public:
 	void SetupAttachment(USceneComponent* _Parent);
 
 	ENGINEAPI void TransformUpdate();
+
+	ENGINEAPI USceneComponent* GetParent() const
+	{
+		return Parent;
+	}
 
 protected:
 	bool IsAbsolute = false;

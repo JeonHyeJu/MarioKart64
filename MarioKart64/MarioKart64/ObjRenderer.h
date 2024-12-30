@@ -35,6 +35,7 @@ private:
 	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
 
 	void InitShader();
+	void RasterizerInit() override;
 	void ShaderResInit() override;
 	void ShaderResSetting() override;
 

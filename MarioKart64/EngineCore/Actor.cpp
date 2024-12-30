@@ -37,3 +37,21 @@ void AActor::Tick(float _DeltaTime)
 		ActorComponent->ComponentTick(_DeltaTime);
 	}
 }
+
+void AActor::AttachToActor(AActor* _Parent)
+{
+	if (nullptr == RootComponent)
+	{
+		MSGASSERT("씬 컴포넌트가 루트가 아닌 액터가 부모를 가질수 없습니다.");
+		return;
+	}
+
+	if (nullptr == _Parent->RootComponent)
+	{
+		MSGASSERT("씬 컴포넌트가 루트가 아닌 액터가 부모를 가질수 없습니다.");
+		return;
+	}
+
+	RootComponent->SetupAttachment(_Parent->RootComponent);
+}
+

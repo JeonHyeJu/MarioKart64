@@ -7,7 +7,7 @@ const double UEngineMath::DPI2 = DPI * 2.0;
 const float UEngineMath::PI = 3.14159265358979323846264f;
 const float UEngineMath::PI2 = PI * 2.0f;
 
-const float UEngineMath::D2R = UEngineMath::PI / 180.0f;
+//const float UEngineMath::D2R = UEngineMath::PI / 180.0f;
 const float UEngineMath::R2D = 180.0f / UEngineMath::PI;
 
 const FVector FVector::ZERO = { 0.0f, 0.0f };

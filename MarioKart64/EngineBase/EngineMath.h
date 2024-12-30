@@ -17,7 +17,9 @@ public:
 	static const float PI;
 	static const float PI2;
 
-	static const float D2R;
+	//static const float D2R;
+	// Temp
+	inline static const float D2R = 3.14f / 180.0f;
 	static const float R2D;
 
 	static float Sqrt(float _Value)
@@ -179,7 +181,7 @@ public:
 		return _Value;
 	}
 
-	static FVector AngleToVectorDeg(float _Angle)
+	ENGINEAPI static FVector AngleToVectorDeg(float _Angle)
 	{
 		return AngleToVectorRad(_Angle * UEngineMath::D2R);
 	}

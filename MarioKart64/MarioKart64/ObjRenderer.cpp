@@ -133,6 +133,21 @@ void ObjRenderer::InitShader()
 	UEngineCore::GetDevice().GetDevice()->CreateInputLayout(ied, 2, VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), &InputLayOut);
 }
 
+void ObjRenderer::RasterizerInit()
+{
+	D3D11_RASTERIZER_DESC Desc = {};
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, &RasterizerState);
+
+	ViewPortInfo.Width = 1280.0f;
+	ViewPortInfo.Height = 720.0f;
+	ViewPortInfo.TopLeftX = 0.0f;
+	ViewPortInfo.TopLeftY = 0.0f;
+	ViewPortInfo.MinDepth = 0.0f;
+	ViewPortInfo.MaxDepth = 1.0f;
+}
+
 void ObjRenderer::ShaderResInit()
 {
 	D3D11_BUFFER_DESC BufferInfo = { 0 };

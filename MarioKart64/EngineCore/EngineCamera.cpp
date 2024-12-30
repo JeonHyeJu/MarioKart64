@@ -49,6 +49,4 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.Projection.PerspectiveFovRad(DirectX::XM_PIDIV4, ProjectionScale.X, ProjectionScale.Y, Near, Far);
 	//Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
-
-	int a = 0;
 }

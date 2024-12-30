@@ -296,7 +296,7 @@ void URenderer::VertexShaderSetting()
 void URenderer::RasterizerInit()
 {
 	D3D11_RASTERIZER_DESC Desc = {};
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, &RasterizerState);
 

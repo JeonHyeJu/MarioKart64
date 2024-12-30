@@ -111,6 +111,8 @@ public:
 		return RootComponent->GetTransform();
 	}
 
+	ENGINEAPI void AttachToActor(AActor* _Parent);
+
 protected:
 	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 

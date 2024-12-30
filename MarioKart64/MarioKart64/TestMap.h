@@ -18,6 +18,4 @@ protected:
 
 private:
 	std::shared_ptr<class ObjRenderer> Renderer = nullptr;
-	std::shared_ptr<class USpriteRenderer> LogoRenderer;
-	std::shared_ptr<class ACameraActor> Camera = nullptr;
 };

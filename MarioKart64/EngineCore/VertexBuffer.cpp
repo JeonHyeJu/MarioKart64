@@ -28,6 +28,8 @@ std::shared_ptr<UVertexBuffer> UVertexBuffer::Create(std::string_view _Name, con
 
 void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t _VertexCount)
 {
+	VertexCount = static_cast<UINT>(_VertexCount);
+	VertexSize = static_cast<UINT>(_VertexSize);
 	BufferInfo.ByteWidth = static_cast<UINT>(_VertexSize * _VertexCount);
 	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferInfo.CPUAccessFlags = 0;
@@ -36,9 +38,18 @@ void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t 
 	D3D11_SUBRESOURCE_DATA Data; // 초기값 넣어주는 용도의 구조체
 	Data.pSysMem = _InitData;
 
-	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, VertexBuffer.GetAddressOf()))
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &VertexBuffer))
 	{
 		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
 		return;
 	}
+}
+
+void UVertexBuffer::Setting()
+{
+	UINT Offset = 0;
+	ID3D11Buffer* ArrBuffer[1];
+	ArrBuffer[0] = VertexBuffer.Get();
+	UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
+	
 }

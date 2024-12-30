@@ -160,6 +160,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\aabb.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ai_assert.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\anim.h" />

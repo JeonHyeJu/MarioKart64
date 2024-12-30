@@ -20,12 +20,13 @@ public:
 	ObjRenderer& operator=(const ObjRenderer& _other) = delete;
 	ObjRenderer& operator=(ObjRenderer&& _other) noexcept = delete;
 
-	bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
+	void Init(std::string_view _objPath, std::string_view _mtlPath);
 
 protected:
 	void BeginPlay() override;
 
 private:
+	bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 	void ProcessNode(aiNode* node, const aiScene* scene);

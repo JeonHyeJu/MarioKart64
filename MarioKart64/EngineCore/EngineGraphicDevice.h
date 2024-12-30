@@ -64,5 +64,6 @@ private:
 
 	ENGINEAPI void DefaultResourcesInit();
 	ENGINEAPI void MeshInit();
+	ENGINEAPI void BlendInit();
 };
 

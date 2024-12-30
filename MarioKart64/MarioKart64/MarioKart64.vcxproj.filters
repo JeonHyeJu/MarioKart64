@@ -273,6 +273,7 @@
     <ClInclude Include="TestMap.h">
       <Filter>Actor</Filter>
     </ClInclude>
+    <ClInclude Include="TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -290,7 +291,6 @@
     <ClCompile Include="TitleGameMode.cpp">
       <Filter>GameMode</Filter>
     </ClCompile>
-    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="ObjRenderer.cpp" />
     <ClCompile Include="PlayGameMode.cpp">
       <Filter>GameMode</Filter>
@@ -298,6 +298,7 @@
     <ClCompile Include="TestMap.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

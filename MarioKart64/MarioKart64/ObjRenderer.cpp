@@ -29,11 +29,15 @@ HRESULT	CompileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefine
 	if (FAILED(result))
 	{
 		if (pErrorBlob != nullptr)
+		{
 			OutputDebugStringA((LPCSTR)pErrorBlob->GetBufferPointer());
+		}
 	}
 
 	if (pErrorBlob != nullptr)
+	{
 		pErrorBlob->Release();
+	}
 
 	return result;
 }
@@ -44,6 +48,21 @@ ObjRenderer::ObjRenderer()
 
 ObjRenderer::~ObjRenderer()
 {
+	for (AiMesh& mesh : Meshes)
+	{
+		mesh.Close();
+	}
+
+	for (TEXTURE& tex : Textures)
+	{
+		tex.Release();
+	}
+}
+
+void ObjRenderer::Init(std::string_view _objPath, std::string_view _mtlPath)
+{
+	ObjPath = _objPath;
+	MtlPath = _mtlPath;
 }
 
 void ObjRenderer::BeginPlay()
@@ -54,13 +73,8 @@ void ObjRenderer::BeginPlay()
 	InitShader();
 	ShaderResInit();
 	RasterizerInit();
-	RasterizerSetting();
 
-	UEngineDirectory dir;
-	dir.MoveParentToDirectory("MarioKart64\\Resources\\Models\\Courses\\Royal_Raceway");
-	std::string path = dir.GetPathToString();
-
-	LoadModel(path + "\\Royal_Raceway.obj", path + "\\Royal_Raceway.mtl");
+	LoadModel(ObjPath, MtlPath);
 }
 
 // TODO: NemuMat27.. part
@@ -72,13 +86,16 @@ void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	RendererTrans.View = CameraTrans.View;
 	RendererTrans.Projection = CameraTrans.Projection;
 	RendererTrans.WVP = RendererTrans.World * CameraTrans.View * CameraTrans.Projection;
-	OutputDebugStringA((std::to_string(CameraTrans.View.Arr2D[3][2]) + "\n").c_str());
+	//OutputDebugStringA((std::to_string(CameraTrans.View.Arr2D[3][2]) + "\n").c_str());
 
 	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
 
 	ShaderResSetting();
 	VertexShaderSetting();
 	PixelShaderSetting();
+	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
+
+	RasterizerSetting();
 	OutPutMergeSetting();
 
 	for (size_t i = 0; i < Meshes.size(); ++i) {
@@ -95,17 +112,17 @@ void ObjRenderer::InitShader()
 	std::wstring vsPath = UEngineString::AnsiToUnicode(fVs.GetPathToString());
 	std::wstring psPath = UEngineString::AnsiToUnicode(fPs.GetPathToString());
 
-	if (FAILED(CompileShaderFromFile(vsPath.c_str(), 0, "main", "vs_5_0", VSShaderCodeBlob.GetAddressOf())))
+	if (FAILED(CompileShaderFromFile(vsPath.c_str(), 0, "main", "vs_5_0", &VSShaderCodeBlob)))
 	{
 		MSGASSERT("Failed to compile vertex shader from file");
 	}
-	if (FAILED(CompileShaderFromFile(psPath.c_str(), 0, "main", "ps_5_0", PSShaderCodeBlob.GetAddressOf())))
+	if (FAILED(CompileShaderFromFile(psPath.c_str(), 0, "main", "ps_5_0", &PSShaderCodeBlob)))
 	{
 		MSGASSERT("Failed to compile pixel shader from file");
 	}
 
-	UEngineCore::GetDevice().GetDevice()->CreateVertexShader(VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), nullptr, VertexShader.GetAddressOf());
-	UEngineCore::GetDevice().GetDevice()->CreatePixelShader(PSShaderCodeBlob->GetBufferPointer(), PSShaderCodeBlob->GetBufferSize(), nullptr, PixelShader.GetAddressOf());
+	UEngineCore::GetDevice().GetDevice()->CreateVertexShader(VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), nullptr, &VertexShader);
+	UEngineCore::GetDevice().GetDevice()->CreatePixelShader(PSShaderCodeBlob->GetBufferPointer(), PSShaderCodeBlob->GetBufferSize(), nullptr, &PixelShader);
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -113,8 +130,7 @@ void ObjRenderer::InitShader()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
-	UEngineCore::GetDevice().GetDevice()->CreateInputLayout(ied, 2, VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), InputLayOut.GetAddressOf());
-	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
+	UEngineCore::GetDevice().GetDevice()->CreateInputLayout(ied, 2, VSShaderCodeBlob->GetBufferPointer(), VSShaderCodeBlob->GetBufferSize(), &InputLayOut);
 }
 
 void ObjRenderer::ShaderResInit()
@@ -126,6 +142,7 @@ void ObjRenderer::ShaderResInit()
 	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
 
 	HRESULT hr = UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer);
+
 	if (FAILED(hr))
 	{
 		MSGASSERT("Constant buffer couldn't be created");
@@ -154,8 +171,12 @@ void ObjRenderer::ShaderResSetting()
 	D3D11_MAPPED_SUBRESOURCE Data = {};
 
 	UEngineCore::GetDevice().GetContext()->UpdateSubresource(TransformConstBuffer.Get(), 0, nullptr, &RendererTrans, 0, 0);
-	UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, TransformConstBuffer.GetAddressOf());
-	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, SamplerState.GetAddressOf());
+
+	ID3D11Buffer* arrPtr[16] = { TransformConstBuffer.Get() };
+	UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, arrPtr);
+
+	ID3D11SamplerState* arrSMP[16] = { SamplerState.Get() };
+	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, arrSMP);
 }
 
 bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath)
@@ -165,7 +186,10 @@ bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath
 
 	const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
 
-	if (pScene == nullptr) return false;
+	if (pScene == nullptr)
+	{
+		return false;
+	}
 
 	Directory = fileName.substr(0, fileName.find_last_of("/\\"));
 
@@ -255,10 +279,12 @@ std::vector<TEXTURE> ObjRenderer::LoadMaterialTextures(aiMaterial* mat, aiTextur
 			TEXTURE texture;
 
 			const aiTexture* embeddedTexture = scene->GetEmbeddedTexture(str.C_Str());
-			if (embeddedTexture != nullptr) {
+			if (embeddedTexture != nullptr)
+			{
 				texture.texture = LoadEmbeddedTexture(embeddedTexture);
 			}
-			else {
+			else
+			{
 				std::string filename = Directory + "\\" + std::string(str.C_Str());
 
 				std::wstring filenamews = std::wstring(filename.begin(), filename.end());

@@ -13,6 +13,8 @@ public:
 	APawn& operator=(APawn&& _Other) noexcept = delete;
 
 protected:
+	ENGINEAPI virtual void BeginPlay();
+	ENGINEAPI virtual void Tick(float _DeltaTime);
 
 private:
 

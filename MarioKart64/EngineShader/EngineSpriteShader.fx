@@ -69,13 +69,24 @@ cbuffer MatColor : register(b1)
 };
 
 
-// 텍스처 1장과 
+struct OutTargetColor
+{
+	float4 Target0 : SV_Target0;
+	float4 Target1 : SV_Target1;
+	float4 Target2 : SV_Target2;
+	float4 Target3 : SV_Target3;
+	float4 Target4 : SV_Target4;
+	float4 Target5 : SV_Target5;
+	float4 Target6 : SV_Target6;
+	float4 Target7 : SV_Target7;
+};
+
 Texture2D ImageTexture : register(t0);
 SamplerState ImageSampler : register(s0);
 
-// 이미지를 샘플링해서 이미지를 보이게 만들고
 float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
 	return Color;
+    // return float4(1.f, 0.f, 0.f, 0.5f);
 }

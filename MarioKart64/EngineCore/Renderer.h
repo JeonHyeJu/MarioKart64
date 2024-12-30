@@ -23,9 +23,19 @@ public:
 
 	ENGINEAPI void SetSpriteData(size_t _Index);
 
+	ENGINEAPI void SetMesh(std::string_view _Name);
+
+	ENGINEAPI void SetBlend(std::string_view _Name);
+
 protected:
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
+
+private:
+
+public:
+	class UMesh* Mesh = nullptr;
+	class UEngineBlend* Blend = nullptr;
 
 	FSpriteData SpriteData;
 
@@ -36,9 +46,7 @@ protected:
 	ENGINEAPI virtual void ShaderResInit();
 	ENGINEAPI virtual void ShaderResSetting();
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
-	ENGINEAPI void InputAssembler1Init();
 	ENGINEAPI void InputAssembler1Setting();
 	ENGINEAPI void InputAssembler1LayOut();
 
@@ -48,10 +56,7 @@ protected:
 	ENGINEAPI virtual void VertexShaderInit();
 	ENGINEAPI void VertexShaderSetting();
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
-
 	D3D11_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	ENGINEAPI virtual void InputAssembler2Init();
 	ENGINEAPI void InputAssembler2Setting();
 
 	D3D11_VIEWPORT ViewPortInfo;

@@ -18,4 +18,6 @@ protected:
 
 private:
 	std::shared_ptr<class ATestMap> TestMapPtr = nullptr;
+	std::shared_ptr<class APlayer> Player = nullptr;
+	std::shared_ptr<class ACameraActor> Camera = nullptr;
 };

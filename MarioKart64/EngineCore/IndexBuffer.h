@@ -20,6 +20,7 @@ public:
 
 	static std::shared_ptr<UIndexBuffer> Create(std::string_view _Name, const void* _InitData, size_t _VertexSize, size_t _VertexCount);
 
+	void Setting();
 
 protected:
 	void ResCreate(const void* _InitData, size_t _VertexSize, size_t _VertexCount);
@@ -27,7 +28,8 @@ protected:
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
 	D3D11_BUFFER_DESC BufferInfo = { 0 };
-	int VertexSize = 0;
-	int VertexCount = 0;
+	UINT IndexSize = 0;
+	UINT IndexCount = 0;
+	DXGI_FORMAT Format = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
 };
 

@@ -60,6 +60,11 @@ public:
 		TransformUpdate();
 	}
 
+	const FTransform& GetTransform()
+	{
+		return Transform;
+	}
+
 	FTransform& GetTransformRef()
 	{
 		return Transform;

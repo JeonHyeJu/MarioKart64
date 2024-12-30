@@ -21,6 +21,8 @@ void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 void USpriteRenderer::BeginPlay()
 {
 	URenderer::BeginPlay();
+	SetMesh("Rect");
+	SetBlend("AlphaBlend");
 }
 
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)

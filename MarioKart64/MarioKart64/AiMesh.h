@@ -42,31 +42,39 @@ public:
             textures_(textures),
             dev_(dev),
             VertexBuffer_(nullptr),
-            IndexBuffer_(nullptr) {
+            IndexBuffer_(nullptr)
+    {
         this->setupMesh(this->dev_);
     }
 
-    void Draw(ID3D11DeviceContext *devcon) {
+    void Draw(ID3D11DeviceContext *devcon)
+    {
         UINT stride = sizeof(VERTEX);
         UINT offset = 0;
 
         devcon->IASetVertexBuffers(0, 1, &VertexBuffer_, &stride, &offset);
         devcon->IASetIndexBuffer(IndexBuffer_, DXGI_FORMAT_R32_UINT, 0);
+
         if (textures_.size() > 0)
         {
             devcon->PSSetShaderResources(0, 1, &textures_[0].texture);
         }
+
         devcon->DrawIndexed(static_cast<UINT>(indices_.size()), 0, 0);
     }
 
-    void Close() {
+    void Close()
+    {
         SafeRelease(VertexBuffer_);
         SafeRelease(IndexBuffer_);
     }
-private:
-    ID3D11Buffer *VertexBuffer_, *IndexBuffer_;
 
-    void setupMesh(ID3D11Device *dev) {
+private:
+    ID3D11Buffer* VertexBuffer_ = nullptr;
+    ID3D11Buffer* IndexBuffer_ = nullptr;
+
+    void setupMesh(ID3D11Device *dev)
+    {
         HRESULT hr;
 
         D3D11_BUFFER_DESC vbd;

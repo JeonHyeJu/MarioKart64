@@ -106,6 +106,11 @@ public:
 		RootComponent->AddRotation(_Value);
 	}
 
+	const FTransform& GetTransform()
+	{
+		return RootComponent->GetTransform();
+	}
+
 protected:
 	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 

@@ -173,6 +173,7 @@
     <ClInclude Include="ActorComponent.h" />
     <ClInclude Include="CameraActor.h" />
     <ClInclude Include="DefaultSceneComponent.h" />
+    <ClInclude Include="EngineBlend.h" />
     <ClInclude Include="EngineCamera.h" />
     <ClInclude Include="EngineCore.h">
       <SubType>
@@ -212,6 +213,7 @@
     <ClCompile Include="ActorComponent.cpp" />
     <ClCompile Include="CameraActor.cpp" />
     <ClCompile Include="DefaultSceneComponent.cpp" />
+    <ClCompile Include="EngineBlend.cpp" />
     <ClCompile Include="EngineCamera.cpp" />
     <ClCompile Include="EngineCore.cpp">
       <SubType>

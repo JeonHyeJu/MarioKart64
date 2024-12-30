@@ -20,6 +20,15 @@ public:
 
 	static std::shared_ptr<UMesh> Create(std::string_view _Name, std::string_view _VertexBuffer, std::string_view _IndexBuffer);
 
+	std::shared_ptr<UVertexBuffer> GetVertexBuffer()
+	{
+		return VertexBuffer;
+	}
+
+	std::shared_ptr<UIndexBuffer> GetIndexBuffer()
+	{
+		return IndexBuffer;
+	}
 
 protected:
 

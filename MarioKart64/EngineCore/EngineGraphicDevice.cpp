@@ -143,6 +143,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         MSGASSERT("쓰레드 안정성 적용에 문제가 생겼습니다.");
         return;
     }
+
     DefaultResourcesInit();
 }
 
@@ -181,7 +182,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
         MSGASSERT("스왑체인 제작에 실패했습니다.");
     }
 
-    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(DXBackBufferTexture.GetAddressOf())))
+    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
     };

@@ -53,15 +53,14 @@ void UEngineCore::LoadContents(std::string_view _DllName)
 {
 	UEngineDirectory Dir;
 
-	Dir.MoveParentToDirectory("Build");
-	Dir.Move("bin/x64");
+	Dir.MoveParentToDirectory("Build\\Bin\\x64");
 
 #ifdef _DEBUG
 	Dir.Move("Debug");
 #else
 	Dir.Move("Release");
 #endif
-
+	
 	UEngineFile File = Dir.GetFile(_DllName);
 
 	std::string FullPath = File.GetPathToString();

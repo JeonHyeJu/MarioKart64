@@ -373,11 +373,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Debug\assimp-vc143-mtd.dll">
-      <Filter>ThirdParty\Assimp\Bin\Debug</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Release\assimp-vc143-mt.dll">
       <Filter>ThirdParty\Assimp\Bin\Release</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Debug\assimp-vc143-mtd.dll">
+      <Filter>ThirdParty\Assimp\Bin\Debug</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,7 @@ public:
 
 protected:
 	void BeginPlay() override;
-	void Tick(float _DeltaTime) override;
+	void Tick(float _deltaTime) override;
 
 private:
 	float TestLen = 0.f;

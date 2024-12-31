@@ -195,7 +195,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
 void UEngineGraphicDevice::RenderStart()
 {
-    FVector ClearColor{ 0.0f, 0.0f, 1.0f, 1.0f };
+    FVector ClearColor{ 0.0f, 0.0f, 0.0f, 1.0f };
     Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
 }
 

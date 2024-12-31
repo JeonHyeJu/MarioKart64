@@ -18,6 +18,6 @@ protected:
 	void EngineEnd();
 
 private:
-
+	void InitImages(std::string_view _path);
 };
 

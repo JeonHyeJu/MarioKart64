@@ -1,21 +1,18 @@
 #include "PreCompile.h"
 #include "TestMap.h"
 #include "ObjRenderer.h"
+#include "CGlobal.h"
 #include <EngineCore/DefaultSceneComponent.h>
-#include <EngineCore/SpriteRenderer.h>
 
 ATestMap::ATestMap()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	// Temp
-	UEngineDirectory dir;
-	dir.MoveParentToDirectory("MarioKart64\\Resources\\Models\\Courses\\Royal_Raceway");
-	std::string path = dir.GetPathToString();
+	std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
 
 	Renderer = CreateDefaultSubObject<ObjRenderer>();
-	Renderer->Init(path + "\\Royal_Raceway.obj", path + "\\Royal_Raceway.mtl");
+	Renderer->Init(path);
 	Renderer->SetupAttachment(RootComponent);
 }
 

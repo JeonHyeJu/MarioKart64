@@ -1,10 +1,10 @@
 #include "PreCompile.h"
-#include "TitleLogo.h"
+#include "TestActor.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
 
-ATitleLogo::ATitleLogo()
+TestActor::TestActor()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
@@ -38,16 +38,16 @@ ATitleLogo::ATitleLogo()
 	//Child->SetupAttachment(RootComponent);
 }
 
-ATitleLogo::~ATitleLogo()
+TestActor::~TestActor()
 {
 }
 
-void ATitleLogo::BeginPlay()
+void TestActor::BeginPlay()
 {
 	AActor::BeginPlay();
 }
 
-void ATitleLogo::Tick(float _DeltaTime)
+void TestActor::Tick(float _DeltaTime)
 {
 
 	AActor::Tick(_DeltaTime);

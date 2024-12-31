@@ -20,6 +20,7 @@ public:
 	ObjRenderer& operator=(const ObjRenderer& _other) = delete;
 	ObjRenderer& operator=(ObjRenderer&& _other) noexcept = delete;
 
+	void Init(std::string_view _path);
 	void Init(std::string_view _objPath, std::string_view _mtlPath);
 
 protected:

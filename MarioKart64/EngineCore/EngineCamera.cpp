@@ -30,7 +30,10 @@ void UEngineCamera::Render(float _DetlaTime)
 
 		for (std::shared_ptr<URenderer> Renderer : RenderList)
 		{
-			Renderer->Render(this, _DetlaTime);
+			if (Renderer->IsActive())
+			{
+				Renderer->Render(this, _DetlaTime);
+			}
 		}
 	}
 }

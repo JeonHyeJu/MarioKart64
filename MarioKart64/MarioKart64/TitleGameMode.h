@@ -4,6 +4,14 @@
 class ATitleGameMode : public AActor
 {
 public:
+	enum class SceneNum
+	{
+		IDLE = 0,
+		NINTENDO_LOGO,
+		TITLE,
+		END,
+	};
+
 	ATitleGameMode();
 	~ATitleGameMode();
 
@@ -12,11 +20,17 @@ public:
 	ATitleGameMode& operator=(const ATitleGameMode& _Other) = delete;
 	ATitleGameMode& operator=(ATitleGameMode&& _Other) noexcept = delete;
 
-	void Tick(float _DeltaTime);
-
 protected:
+	void BeginPlay() override;
+	void Tick(float _deltaTime) override;
 
 private:
-	std::shared_ptr<class ATitleLogo> Logo;
+	void CheckKey();
+	void ShowScene(SceneNum _sceneNum);
+
+	std::shared_ptr<class ANintendoLogo> NintendoLogo = nullptr;
+	std::shared_ptr<class ATitle> Title = nullptr;
+
+	SceneNum SceneIdx = SceneNum::IDLE;
 };
 

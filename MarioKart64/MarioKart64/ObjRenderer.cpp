@@ -59,6 +59,12 @@ ObjRenderer::~ObjRenderer()
 	}
 }
 
+void ObjRenderer::Init(std::string_view _path)
+{
+	ObjPath = _path.data() + std::string(".obj");
+	MtlPath = _path.data() + std::string(".mtl");
+}
+
 void ObjRenderer::Init(std::string_view _objPath, std::string_view _mtlPath)
 {
 	ObjPath = _objPath;
@@ -199,7 +205,12 @@ bool ObjRenderer::LoadModel(std::string_view _objPath, std::string_view _mtlPath
 	std::string fileName = _objPath.data();
 	Assimp::Importer importer;
 
-	const aiScene* pScene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
+	unsigned int flag;
+	flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded;
+	//flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenNormals;
+	//flag = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_GenNormals | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
+
+	const aiScene* pScene = importer.ReadFile(fileName, flag);
 
 	if (pScene == nullptr)
 	{

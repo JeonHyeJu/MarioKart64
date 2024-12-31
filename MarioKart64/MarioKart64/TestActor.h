@@ -1,16 +1,16 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-class ATitleLogo : public AActor
+class TestActor : public AActor
 {
 public:
-	ATitleLogo();
-	~ATitleLogo();
+	TestActor();
+	~TestActor();
 
-	ATitleLogo(const ATitleLogo& _Other) = delete;
-	ATitleLogo(ATitleLogo&& _Other) noexcept = delete;
-	ATitleLogo& operator=(const ATitleLogo& _Other) = delete;
-	ATitleLogo& operator=(ATitleLogo&& _Other) noexcept = delete;
+	TestActor(const TestActor& _Other) = delete;
+	TestActor(TestActor&& _Other) noexcept = delete;
+	TestActor& operator=(const TestActor& _Other) = delete;
+	TestActor& operator=(TestActor&& _Other) noexcept = delete;
 
 	std::shared_ptr<class USpriteRenderer> GetRenderer()
 	{

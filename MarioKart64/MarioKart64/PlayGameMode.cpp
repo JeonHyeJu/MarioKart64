@@ -15,8 +15,6 @@ APlayGameMode::APlayGameMode()
 
 	Camera = GetWorld()->GetMainCamera();
 
-	const FTransform& trfmPlayer = Player->GetTransform();
-
 	Camera->AddActorRotation({ 10.f, 0.f, 0.f });
 	Camera->AddRelativeLocation({ 0.f, 0.f, -500.f });
 	Camera->AttachToActor(Player.get());

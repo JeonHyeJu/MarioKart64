@@ -149,6 +149,11 @@
   <ItemGroup>
     <ClInclude Include="AiMesh.h" />
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="CGlobal.h" />
+    <ClInclude Include="NintendoLogo.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ObjRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayGameMode.h">
@@ -156,6 +161,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="TestGameMode.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TestMap.h">
       <SubType>
       </SubType>
@@ -244,11 +253,20 @@
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\Mesh.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\SafeRelease.hpp" />
+    <ClInclude Include="Title.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TitleGameMode.h" />
-    <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TestActor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="CGlobal.cpp" />
+    <ClCompile Include="NintendoLogo.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ObjRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayGameMode.cpp">
@@ -259,13 +277,21 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TestMap.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="Title.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TitleGameMode.cpp" />
-    <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TestActor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Debug\assimp-vc143-mtd.dll">

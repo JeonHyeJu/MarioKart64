@@ -284,6 +284,9 @@
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="CGlobal.h" />
+    <ClInclude Include="SelectGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -319,6 +322,9 @@
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="CGlobal.cpp" />
+    <ClCompile Include="SelectGameMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

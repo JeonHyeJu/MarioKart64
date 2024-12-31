@@ -11,10 +11,10 @@ ATitleGameMode::ATitleGameMode()
 {
 	NintendoLogo = GetWorld()->SpawnActor<ANintendoLogo>();
 	Title = GetWorld()->SpawnActor<ATitle>();
-	
+
 	NintendoLogo->Hide();
 	Title->Hide();
-
+	
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 }
@@ -27,22 +27,30 @@ void ATitleGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	ShowScene(SceneNum::NINTENDO_LOGO);
+	ShowScene(Scene::NINTENDO_LOGO);
 }
 
 void ATitleGameMode::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
+	if (SceneIdx < Scene::END)
+	{
+		CheckKey();
+
+		if (SceneIdx == Scene::NINTENDO_LOGO)
+		{
+			SpinLogoAndTimeCheck(_deltaTime);
+		}
+	}
+}
+
+void ATitleGameMode::SpinLogoAndTimeCheck(float _deltaTime)
+{
 	static float eplasedSec = 0.f;
 	static float angle = 60.f;
 
-	CheckKey();
-
-	if (SceneIdx == SceneNum::NINTENDO_LOGO)
-	{
-		NintendoLogo->AddActorRotation({ 0.f, angle * _deltaTime, 0.f });
-	}
+	NintendoLogo->AddActorRotation({ 0.f, angle * _deltaTime, 0.f });
 
 	eplasedSec += _deltaTime;
 	if (eplasedSec > .5f)
@@ -53,7 +61,7 @@ void ATitleGameMode::Tick(float _deltaTime)
 		}
 		else
 		{
-			ShowScene(SceneNum::TITLE);
+			ShowScene(Scene::TITLE);
 		}
 
 		eplasedSec = 0.f;
@@ -64,46 +72,44 @@ void ATitleGameMode::CheckKey()
 {
 	if (UEngineInput::IsDown(VK_SPACE) || UEngineInput::IsDown(VK_RETURN))
 	{
-		if (SceneIdx < SceneNum::END)
-		{
-			int idx = static_cast<int>(SceneIdx);
-			ShowScene(static_cast<SceneNum>(++idx));
-		}
+		int idx = static_cast<int>(SceneIdx);
+		ShowScene(static_cast<Scene>(++idx));
 	}
 }
 
-void ATitleGameMode::ShowScene(SceneNum _sceneNum)
+void ATitleGameMode::ShowScene(Scene _sceneNum)
 {
 	switch (_sceneNum)
 	{
-		case SceneNum::NINTENDO_LOGO:
+		case Scene::NINTENDO_LOGO:
 		{
-			if (SceneIdx != SceneNum::NINTENDO_LOGO)
+			if (SceneIdx != Scene::NINTENDO_LOGO)
 			{
 				NintendoLogo->Show();
 				Title->Hide();
 				SceneIdx = _sceneNum;
 			}
+
 			break;
 		}
-		case SceneNum::TITLE:
+		case Scene::TITLE:
 		{
-			if (SceneIdx != SceneNum::TITLE)
+			if (SceneIdx != Scene::TITLE)
 			{
 				NintendoLogo->Hide();
 				Title->Show();
 				SceneIdx = _sceneNum;
 			}
+
 			break;
 		}
-		case SceneNum::END:
-			NintendoLogo->Hide();
-			Title->Hide();
-
+		case Scene::END:
 			// TODO: Reset level
 			UEngineCore::OpenLevel("PlayLevel");
-			break;
+			[[fallthrough]];
 		default:	// IDLE
+			NintendoLogo->Hide();
+			Title->Hide();
 			break;
 	}
 }

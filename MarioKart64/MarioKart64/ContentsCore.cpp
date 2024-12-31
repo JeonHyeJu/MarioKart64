@@ -47,6 +47,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	//UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
+	UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
 	UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TestLevel");

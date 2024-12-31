@@ -4,7 +4,7 @@
 class ATitleGameMode : public AActor
 {
 public:
-	enum class SceneNum
+	enum class Scene
 	{
 		IDLE = 0,
 		NINTENDO_LOGO,
@@ -26,11 +26,12 @@ protected:
 
 private:
 	void CheckKey();
-	void ShowScene(SceneNum _sceneNum);
+	void SpinLogoAndTimeCheck(float _deltaTime);
+	void ShowScene(Scene _sceneNum);
 
 	std::shared_ptr<class ANintendoLogo> NintendoLogo = nullptr;
 	std::shared_ptr<class ATitle> Title = nullptr;
 
-	SceneNum SceneIdx = SceneNum::IDLE;
+	Scene SceneIdx = Scene::IDLE;
 };
 

@@ -27,6 +27,8 @@ protected:
 	void BeginPlay() override;
 
 private:
+	void _Init();
+
 	/*bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 

@@ -13,12 +13,12 @@ public:
 	UMesh& operator=(const UMesh& _Other) = delete;
 	UMesh& operator=(UMesh&& _Other) noexcept = delete;
 
-	static std::shared_ptr<UMesh> Create(std::string_view _Name)
+	ENGINEAPI static std::shared_ptr<UMesh> Create(std::string_view _Name)
 	{
 		return Create(_Name, _Name, _Name);
 	}
 
-	static std::shared_ptr<UMesh> Create(std::string_view _Name, std::string_view _VertexBuffer, std::string_view _IndexBuffer);
+	ENGINEAPI static std::shared_ptr<UMesh> Create(std::string_view _Name, std::string_view _VertexBuffer, std::string_view _IndexBuffer);
 
 	std::shared_ptr<UEngineVertexBuffer> GetVertexBuffer()
 	{

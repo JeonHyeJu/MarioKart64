@@ -33,7 +33,7 @@ struct VOut
     float2 texcoord : TEXCOORD;
 };
 
-VOut main(float4 pos : POSITION, float2 texcoord : TEXCOORD)
+VOut main_VS(float4 pos : POSITION, float2 texcoord : TEXCOORD)
 {
     VOut output;
 

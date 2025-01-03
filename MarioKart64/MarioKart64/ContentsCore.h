@@ -20,5 +20,9 @@ protected:
 private:
 	void InitImages(std::string_view _path);
 	void InitGraphics();
+
+	// for test
+	bool LoadModel();
+	std::string Directory = "";
 };
 

@@ -6,6 +6,7 @@ struct FEngineVertex
 {
 	friend class EngineVertexInit;
 	static UEngineInputLayOutInfo Info;
+	ENGINEAPI static UEngineInputLayOutInfo& GetInfo();
 
 	float4 POSITION;
 	float4 TEXCOORD;

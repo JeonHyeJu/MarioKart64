@@ -63,12 +63,24 @@ void ObjRenderer::Init(std::string_view _path)
 {
 	ObjPath = _path.data() + std::string(".obj");
 	MtlPath = _path.data() + std::string(".mtl");
+
+	_Init();
 }
 
 void ObjRenderer::Init(std::string_view _objPath, std::string_view _mtlPath)
 {
 	ObjPath = _objPath;
 	MtlPath = _mtlPath;
+
+	_Init();
+}
+
+void ObjRenderer::_Init()
+{
+	CreateRenderUnit();
+	SetMesh("Royal_Raceway");
+	SetMaterial("Royal_Raceway");
+	//GetRenderUnit().ConstantBufferLinkData("FMyColor", MyColor);
 }
 
 void ObjRenderer::BeginPlay()

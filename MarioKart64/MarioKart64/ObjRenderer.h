@@ -27,7 +27,7 @@ protected:
 	void BeginPlay() override;
 
 private:
-	bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
+	/*bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
@@ -38,7 +38,7 @@ private:
 	void InitShader();
 	void RasterizerInit() override;
 	void ShaderResInit() override;
-	void ShaderResSetting() override;
+	void ShaderResSetting() override;*/
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";

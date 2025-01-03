@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "EngineGraphicDevice.h"
+#include "EngineTexture.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -151,6 +152,27 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 {	
     FVector Size = _Window.GetWindowSize();
 
+	// Depth stencil buffer
+    D3D11_TEXTURE2D_DESC Desc = {0};
+    Desc.ArraySize = 1;
+    Desc.Width = Size.iX();
+    Desc.Height = Size.iY();
+
+    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+    Desc.SampleDesc.Count = 1;
+    Desc.SampleDesc.Quality = 0;
+
+    Desc.MipLevels = 1;
+    Desc.Usage = D3D11_USAGE_DEFAULT;
+    Desc.CPUAccessFlags = 0;
+    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
+
+    DepthTex = std::make_shared<UEngineTexture>();
+
+    DepthTex->ResCreate(Desc);
+
+	// Swap chain
     DXGI_SWAP_CHAIN_DESC ScInfo = {0};
 
     ScInfo.BufferCount = 2;

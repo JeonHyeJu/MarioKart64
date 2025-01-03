@@ -150,6 +150,7 @@
     <ClInclude Include="AiMesh.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="CGlobal.h" />
+    <ClInclude Include="MyCustomRenderer.h" />
     <ClInclude Include="NintendoLogo.h">
       <SubType>
       </SubType>
@@ -267,6 +268,8 @@
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="CGlobal.cpp" />
+    <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="MyCustomRenderer.cpp" />
     <ClCompile Include="NintendoLogo.cpp">
       <SubType>
       </SubType>
@@ -323,6 +326,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="SpriteShader.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

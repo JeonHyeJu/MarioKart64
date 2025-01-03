@@ -16,7 +16,8 @@ ATitle::ATitle()
 	const float SCALE_RATIO = 3.f;
 
 	RBackground = CreateDefaultSubObject<USpriteRenderer>();
-	RBackground->SetSprite("Title_Screen.png", 0, SCALE_RATIO);
+	RBackground->SetSprite("Title_Screen.png", 0);
+	RBackground->SetAutoScaleRatio(SCALE_RATIO);
 	RBackground->SetupAttachment(RootComponent);
 
 	std::string path = CGlobal::GetModelPath("Miscellaneous\\Title_Screen_Flag", "title_screen_flag");
@@ -28,17 +29,20 @@ ATitle::ATitle()
 	RFlag->SetupAttachment(RootComponent);
 	
 	RTitleText = CreateDefaultSubObject<USpriteRenderer>();
-	RTitleText->SetSprite("Title_Screen.png", 4, SCALE_RATIO);
+	RTitleText->SetSprite("Title_Screen.png", 4);
+	RTitleText->SetAutoScaleRatio(SCALE_RATIO);
 	RTitleText->SetRelativeLocation({ 125.f, -300.f, 1.f });
 	RTitleText->SetupAttachment(RootComponent);
 
 	RPushButton = CreateDefaultSubObject<USpriteRenderer>();
-	RPushButton->SetSprite("Title_Screen.png", 2, SCALE_RATIO);
+	RPushButton->SetSprite("Title_Screen.png", 2);
+	RPushButton->SetAutoScaleRatio(SCALE_RATIO);
 	RPushButton->SetRelativeLocation({ 250.f, -600.f, 1.f });
 	RPushButton->SetupAttachment(RootComponent);
 
 	RCopyright = CreateDefaultSubObject<USpriteRenderer>();
-	RCopyright->SetSprite("Title_Screen.png", 3, SCALE_RATIO);
+	RCopyright->SetSprite("Title_Screen.png", 3);
+	RCopyright->SetAutoScaleRatio(SCALE_RATIO);
 	RCopyright->SetRelativeLocation({ 300.f, -800.f, 1.f });
 	RCopyright->SetupAttachment(RootComponent);
 }

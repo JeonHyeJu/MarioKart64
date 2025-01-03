@@ -1,6 +1,6 @@
 #pragma once
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
+#include "EngineIndexBuffer.h"
+#include "EngineVertexBuffer.h"
 
 class UMesh : public UEngineResources
 {
@@ -20,12 +20,12 @@ public:
 
 	static std::shared_ptr<UMesh> Create(std::string_view _Name, std::string_view _VertexBuffer, std::string_view _IndexBuffer);
 
-	std::shared_ptr<UVertexBuffer> GetVertexBuffer()
+	std::shared_ptr<UEngineVertexBuffer> GetVertexBuffer()
 	{
 		return VertexBuffer;
 	}
 
-	std::shared_ptr<UIndexBuffer> GetIndexBuffer()
+	std::shared_ptr<UEngineIndexBuffer> GetIndexBuffer()
 	{
 		return IndexBuffer;
 	}
@@ -33,8 +33,8 @@ public:
 protected:
 
 private:
-	std::shared_ptr<UVertexBuffer> VertexBuffer;
-	std::shared_ptr<UIndexBuffer> IndexBuffer;
+	std::shared_ptr<UEngineVertexBuffer> VertexBuffer;
+	std::shared_ptr<UEngineIndexBuffer> IndexBuffer;
 
 };
 

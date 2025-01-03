@@ -84,17 +84,48 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineVertex.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="EngineBlend.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineConstantBuffer.h">
+      <Filter>DirectX\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineEnums.h" />
+    <ClInclude Include="EngineDeviceBuffer.h">
+      <Filter>DirectX\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineIndexBuffer.h">
+      <Filter>DirectX\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInputLayOutInfo.h">
+      <Filter>DirectX\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePixelShader.h">
+      <Filter>DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMaterial.h">
+      <Filter>DirectX\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineRasterizerState.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSampler.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineShader.h">
+      <Filter>DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineShaderResources.h">
+      <Filter>DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertex.h">
+      <Filter>DirectX\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertexBuffer.h">
+      <Filter>DirectX\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertexShader.h">
+      <Filter>DirectX\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,14 +203,47 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
     <ClCompile Include="EngineBlend.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineConstantBuffer.cpp">
+      <Filter>DirectX\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDeviceBuffer.cpp">
+      <Filter>DirectX\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineIndexBuffer.cpp">
+      <Filter>DirectX\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineInputLayOutInfo.cpp">
+      <Filter>DirectX\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePixelShader.cpp">
+      <Filter>DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMaterial.cpp">
+      <Filter>DirectX\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineRasterizerState.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSampler.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineShader.cpp">
+      <Filter>DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineShaderResources.cpp">
+      <Filter>DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineVertex.cpp">
+      <Filter>DirectX\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineVertexBuffer.cpp">
+      <Filter>DirectX\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineVertexShader.cpp">
+      <Filter>DirectX\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +285,21 @@
     </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{fe5ce624-ae62-4df1-9d8c-c37e908effab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{43d70089-5908-4432-8508-c3abd5796dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Buffer">
+      <UniqueIdentifier>{6566977f-b498-4c3e-ab87-507f6c2dedc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Shader">
+      <UniqueIdentifier>{0985a362-2c0d-48d1-bea1-b38cddb17dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Info">
+      <UniqueIdentifier>{e6993002-e419-4262-9330-876ecddbb406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Resources">
+      <UniqueIdentifier>{78e4d673-7430-4782-b3b2-1c1d693e8690}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

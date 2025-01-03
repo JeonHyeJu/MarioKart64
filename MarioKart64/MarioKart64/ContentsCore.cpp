@@ -3,6 +3,8 @@
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
+#include <EngineCore/EngineShader.h>
+#include <EngineCore/EngineMaterial.h>
 #include "TitleGameMode.h"
 #include "TestGameMode.h"
 #include "PlayGameMode.h"
@@ -44,15 +46,17 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
+	
+	MyGSetting();
 
-	//UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
+	UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
 	UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
 
-	//UEngineCore::OpenLevel("TestLevel");
+	UEngineCore::OpenLevel("TestLevel");
 	//UEngineCore::OpenLevel("TitleLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

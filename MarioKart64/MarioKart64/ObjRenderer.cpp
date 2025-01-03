@@ -76,15 +76,14 @@ void ObjRenderer::BeginPlay()
 	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
 	SetOrder(0);
 
-	InitShader();
+	/*InitShader();
 	ShaderResInit();
 	RasterizerInit();
 
-	LoadModel(ObjPath, MtlPath);
+	LoadModel(ObjPath, MtlPath);*/
 }
 
-// TODO: NemuMat27.. part
-void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
+/*void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
 	FTransform& CameraTrans = _Camera->GetTransformRef();
 	FTransform& RendererTrans = GetTransformRef();
@@ -402,4 +401,4 @@ ID3D11ShaderResourceView* ObjRenderer::LoadEmbeddedTexture(const aiTexture* embe
 
 	return texture;
 }
-
+*/

@@ -11,9 +11,9 @@ ATestGameMode::ATestGameMode()
 {
 	{
 		Logo = GetWorld()->SpawnActor<TestActor>();
-		Logo->SetActorLocation({ 0.0f, 0.0f, 0.0f });
-		Logo->GetRenderer()->SetSpriteData(4);
+		// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
 	}
+
 
 	// {
 	//	std::shared_ptr<ATitleLogo> Logo = GetWorld()->SpawnActor<ATitleLogo>();

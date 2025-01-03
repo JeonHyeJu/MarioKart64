@@ -287,6 +287,9 @@
     <ClInclude Include="SelectGameMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="MyCustomRenderer.h">
+      <Filter>Temp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -324,6 +327,12 @@
     <ClCompile Include="CGlobal.cpp" />
     <ClCompile Include="SelectGameMode.cpp">
       <Filter>GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCustomRenderer.cpp">
+      <Filter>Temp</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore_Resources.cpp">
+      <Filter>Temp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +377,9 @@
     </Filter>
     <Filter Include="ThirdParty\Assimp\Lib\Release">
       <UniqueIdentifier>{9872aee9-b867-4ac9-b4f3-fb20f15bf8f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Temp">
+      <UniqueIdentifier>{f3825dc2-f439-4556-b340-b9f7cdad00b4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +430,9 @@
     </FxCompile>
     <FxCompile Include="PixelShader.fx">
       <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SpriteShader.fx">
+      <Filter>Temp</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

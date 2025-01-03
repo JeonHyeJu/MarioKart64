@@ -77,11 +77,6 @@ public:
 
 	ENGINEAPI void TransformUpdate();
 
-	ENGINEAPI USceneComponent* GetParent() const
-	{
-		return Parent;
-	}
-
 protected:
 	bool IsAbsolute = false;
 

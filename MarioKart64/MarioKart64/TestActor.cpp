@@ -3,39 +3,26 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/CameraActor.h>
+#include "MyCustomRenderer.h"
 
 TestActor::TestActor()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
+
+	Renderer = CreateDefaultSubObject<MyCustomRenderer>();
+	Renderer->SetupAttachment(RootComponent);
+
+	Renderer->SetRelativeScale3D({100.0f, 100.0f, 100.0f});
+
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-
-	LogoRenderer->CreateAnimation("Idle", "Mario.png", 0, 0, 0.1f);
-	/*{
-		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 4.0f;
-	}*/
-
-	LogoRenderer->CreateAnimation("Move", "Mario.png", 1, 4, 0.3f);
-	/*{
-		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 4.0f;
-	}*/
-
-	LogoRenderer->ChangeAnimation("Idle");
-
-	//LogoRenderer->SetRelativeScale3D({1.f, 1.f, 1.0f});
 	LogoRenderer->SetupAttachment(RootComponent);
+	LogoRenderer->SetAutoScaleRatio(5.0f);
 
-	//Child = CreateDefaultSubObject<USpriteRenderer>();
-	//Child->SetSprite("Mario.png", 2);
-	//// 부모의 스케일이 나에게 영향을 주면서 나는 100이 아닐수가 있다
-	//Child->SetRelativeLocation({100.0f, 0.0f, 0.0f});
-	//Child->SetScale3D({ 50.0f, 50.0f, 1.0f });
-	//// Child->SetScale3D({ 50.0f, 50.0f, 1.0f });
-	//Child->SetupAttachment(RootComponent);
+	LogoRenderer->CreateAnimation("Idle", "Mario.png", 0, 3, 0.5f);
+	LogoRenderer->CreateAnimation("Move", "Mario.png", 4, 16, 0.3f);
+	LogoRenderer->ChangeAnimation("Move");
 }
 
 TestActor::~TestActor()
@@ -51,6 +38,10 @@ void TestActor::Tick(float _DeltaTime)
 {
 
 	AActor::Tick(_DeltaTime);
+
+	std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
+
+	UEngineCore::GetMainWindow().GetMousePos();
 
 	if (UEngineInput::IsPress('A'))
 	{
@@ -76,13 +67,22 @@ void TestActor::Tick(float _DeltaTime)
 		AddActorRotation(FVector{ 0.0f, 0.0f , 360.0f * _DeltaTime });
 	}
 
+	if (UEngineInput::IsPress('F'))
+	{
+		LogoRenderer->ColorData.MulColor = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	}
+
 	if (UEngineInput::IsPress('E'))
 	{
-		LogoRenderer->ChangeAnimation("Move");
+		LogoRenderer->ColorData.PlusColor += float4(1.0f, 1.0f, 1.0f, 1.0f) * _DeltaTime;
+		LogoRenderer->ColorData.PlusColor.W += _DeltaTime;
 	}
 
 	if (UEngineInput::IsPress('R'))
 	{
+		LogoRenderer->ColorData.PlusColor -= float4(1.0f, 1.0f, 1.0f, 1.0f) * _DeltaTime;
+		LogoRenderer->ColorData.PlusColor.W -= _DeltaTime;
+
 		// Child->SetWorldLocation(FVector{ 100.0f, 0.0f , 0.0f });
 	}
 }

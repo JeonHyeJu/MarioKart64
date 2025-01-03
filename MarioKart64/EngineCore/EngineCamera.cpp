@@ -11,6 +11,13 @@ void UEngineCamera::BeginPlay()
 	FVector Scale = UEngineCore::GetScreenScale();
 
 	ProjectionScale = Scale;
+
+	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
+	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
+	ViewPortInfo.TopLeftX = 0.0f;
+	ViewPortInfo.TopLeftY = 0.0f;
+	ViewPortInfo.MinDepth = 0.0f;
+	ViewPortInfo.MaxDepth = 1.0f;
 }
 
 UEngineCamera::~UEngineCamera()
@@ -20,10 +27,14 @@ UEngineCamera::~UEngineCamera()
 
 void UEngineCamera::Tick(float _DetlaTime)
 {
+	Transform.View;
+	Transform.Projection;
 }
 
 void UEngineCamera::Render(float _DetlaTime)
 {
+	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
+
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
 	{
 		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
@@ -50,6 +61,17 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.View.View(Trans.World.ArrVector[3], Trans.World.GetFoward(), Trans.World.GetUp());
 
-	Trans.Projection.PerspectiveFovRad(DirectX::XM_PIDIV4, ProjectionScale.X, ProjectionScale.Y, Near, Far);
-	//Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
+	switch (Type)
+	{
+	case EProjectionType::Perspective:
+		Trans.Projection.PerspectiveFovDeg(FOV, ProjectionScale.X, ProjectionScale.Y, Near, Far);
+		break;
+	case EProjectionType::Orthographic:
+		Trans.Projection.OrthographicLH(ProjectionScale.X, ProjectionScale.Y, Near, Far);
+		break;
+	default:
+		break;
+	}
+
+	int a = 0;
 }

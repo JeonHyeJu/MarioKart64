@@ -1,6 +1,7 @@
 #pragma once
 #include "EngineTexture.h"
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/EngineDirectory.h>
 #include "EngineResources.h"
 
 struct FSpriteData 
@@ -21,9 +22,21 @@ public:
 	UEngineSprite& operator=(const UEngineSprite& _Other) = delete;
 	UEngineSprite& operator=(UEngineSprite&& _Other) noexcept = delete;
 
+
+	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToFolder(std::string_view _Path)
+	{
+		UEngineDirectory Dir = _Path;
+
+		return CreateSpriteToFolder(Dir.GetDirectoryName(), _Path);
+	}
+
+	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToFolder(std::string_view _Name, std::string_view _Path);
+
 	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToMeta(std::string_view _Name, std::string_view _DataFileExt);
 
-	ENGINEAPI ID3D11ShaderResourceView* GetSRV();
+	ENGINEAPI UEngineTexture* GetTexture(size_t _Index = 0);
+
+	ENGINEAPI ID3D11ShaderResourceView* GetSRV(size_t _Index = 0);
 
 	ENGINEAPI FSpriteData GetSpriteData(size_t _Index)
 	{
@@ -41,7 +54,7 @@ public:
 protected:
 
 private:
-	UEngineTexture* Texture;
+	std::vector<UEngineTexture*> SpriteTexture;
 	std::vector<FSpriteData> SpriteDatas;
 
 };

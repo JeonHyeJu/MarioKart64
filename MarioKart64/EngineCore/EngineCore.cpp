@@ -5,6 +5,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include "IContentsCore.h"
 #include "EngineResources.h"
+#include "EngineConstantBuffer.h"
 #include "EngineGUI.h"
 #include "Level.h"
 
@@ -12,6 +13,11 @@
 UEngineGraphicDevice& UEngineCore::GetDevice()
 {
 	return Device;
+}
+
+UEngineWindow& UEngineCore::GetMainWindow()
+{
+	return MainWindow;
 }
 
 // 리얼 본체죠?
@@ -173,6 +179,7 @@ void UEngineCore::EngineEnd()
 	Device.Release();
 
 	UEngineResources::Release();
+	UEngineConstantBuffer::Release();
 
 	CurLevel = nullptr;
 	NextLevel = nullptr;

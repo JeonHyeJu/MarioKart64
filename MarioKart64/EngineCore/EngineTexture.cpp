@@ -78,3 +78,47 @@ void UEngineTexture::ResLoad()
 	Size.X = static_cast<float>(Metadata.width);
 	Size.Y = static_cast<float>(Metadata.height);
 }
+
+void UEngineTexture::Setting(EShaderType _Type, UINT _BindIndex)
+{
+	ID3D11ShaderResourceView* ArrPtr[1] = { SRV.Get() };
+
+	switch (_Type)
+	{
+	case EShaderType::VS:
+		UEngineCore::GetDevice().GetContext()->VSSetShaderResources(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::PS:
+		UEngineCore::GetDevice().GetContext()->PSSetShaderResources(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::HS:
+	case EShaderType::DS:
+	case EShaderType::GS:
+	case EShaderType::CS:
+	default:
+		MSGASSERT("아직 존재하지 않는 쉐이더에 세팅하려고 했습니다.");
+		break;
+	}
+}
+
+void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
+{
+	Desc = _Value;
+
+	UEngineCore::GetDevice().GetDevice()->CreateTexture2D(&Desc, nullptr, &Texture2D);
+
+	if (nullptr == Texture2D)
+	{
+		MSGASSERT("텍스처 생성에 실패했습니다.");
+		return;
+	}
+
+	if (Desc.BindFlags & D3D11_BIND_DEPTH_STENCIL)
+	{
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
+		{
+			MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+			return;
+		}
+	}
+}

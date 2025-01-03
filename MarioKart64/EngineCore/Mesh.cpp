@@ -22,8 +22,8 @@ std::shared_ptr<UMesh> UMesh::Create(std::string_view _Name, std::string_view _V
 
 	std::shared_ptr<UMesh> NewRes = std::make_shared<UMesh>();
 	PushRes<UMesh>(NewRes, _Name, "");
-	NewRes->VertexBuffer = UVertexBuffer::Find<UVertexBuffer>(_VertexBuffer);
-	NewRes->IndexBuffer = UIndexBuffer::Find<UIndexBuffer>(_IndexBuffer);
+	NewRes->VertexBuffer = UEngineVertexBuffer::Find<UEngineVertexBuffer>(_VertexBuffer);
+	NewRes->IndexBuffer = UEngineIndexBuffer::Find<UEngineIndexBuffer>(_IndexBuffer);
 
 	return NewRes;
 }

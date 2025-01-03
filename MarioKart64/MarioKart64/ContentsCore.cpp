@@ -166,9 +166,13 @@ void ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	//	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	//}
 
-	UEngineVertexBuffer::Create("Royal_Raceway", vertices);
-	UEngineIndexBuffer::Create("Royal_Raceway", indices);
-	UMesh::Create("Royal_Raceway");
+	// for test
+	static int temp = 0;
+	UEngineVertexBuffer::Create("Royal_Raceway_"+std::to_string(temp), vertices);
+	UEngineIndexBuffer::Create("Royal_Raceway_"+std::to_string(temp), indices);
+	UMesh::Create("Royal_Raceway_"+std::to_string(temp));
+	OutputDebugStringA(("temp: " + std::to_string(temp) + "\n").c_str());
+	temp++;
 }
 
 void ProcessNode(aiNode* node, const aiScene* scene)

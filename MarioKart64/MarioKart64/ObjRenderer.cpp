@@ -77,9 +77,19 @@ void ObjRenderer::Init(std::string_view _objPath, std::string_view _mtlPath)
 
 void ObjRenderer::_Init()
 {
-	CreateRenderUnit();
-	SetMesh("Royal_Raceway");
-	SetMaterial("Royal_Raceway");
+	// for test
+	for (int i = 0; i < 102; ++i)
+	{
+		URenderUnit& unit = CreateRenderUnit();
+		SetMesh("Royal_Raceway_" + std::to_string(i), i);
+		SetMaterial("Royal_Raceway", i);
+
+		// TODO
+		//MyColor.Albedo = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		/*unit.ConstantBufferLinkData();
+		GetRenderUnit().ConstantBufferLinkData("FMyColor", MyColor);*/
+	}
+
 	//GetRenderUnit().ConstantBufferLinkData("FMyColor", MyColor);
 }
 

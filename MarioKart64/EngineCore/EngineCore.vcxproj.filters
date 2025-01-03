@@ -6,7 +6,6 @@
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h" />
     <ClInclude Include="Actor.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -14,13 +13,12 @@
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent.h">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClInclude>
     <ClInclude Include="SceneComponent.h">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h" />
-    <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="CameraActor.h">
       <Filter>Camera</Filter>
     </ClInclude>
@@ -36,39 +34,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="EngineResources.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineTexture.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineSprite.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_truetype.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imconfig.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_dx11.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_win32.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_internal.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_rectpack.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_textedit.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="EngineGUI.h">
       <Filter>Imgui</Filter>
     </ClInclude>
@@ -76,15 +41,9 @@
       <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="DefaultSceneComponent.h">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderUnit.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineBlend.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="EngineConstantBuffer.h">
@@ -106,12 +65,6 @@
     <ClInclude Include="EngineMaterial.h">
       <Filter>DirectX\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="EngineRasterizerState.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineSampler.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
     <ClInclude Include="EngineShader.h">
       <Filter>DirectX\Shader</Filter>
     </ClInclude>
@@ -127,13 +80,63 @@
     <ClInclude Include="EngineVertexShader.h">
       <Filter>DirectX\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx11.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGraphicDevice.h">
+      <Filter>DirectX\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>DirectX\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineResources.h">
+      <Filter>DirectX\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTexture.h">
+      <Filter>DirectX\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSampler.h">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineRasterizerState.h">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBlend.h">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <Filter>Precompile</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Actor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -141,13 +144,12 @@
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClCompile>
     <ClCompile Include="SceneComponent.cpp">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp" />
-    <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="CameraActor.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -160,33 +162,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="EngineResources.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineTexture.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineSprite.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_draw.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_dx11.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_tables.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="EngineGUI.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
@@ -194,16 +169,9 @@
       <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="DefaultSceneComponent.cpp">
-      <Filter>Component</Filter>
+      <Filter>Actor\Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderUnit.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineBlend.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="EngineConstantBuffer.cpp">
@@ -224,12 +192,6 @@
     <ClCompile Include="EngineMaterial.cpp">
       <Filter>DirectX\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="EngineRasterizerState.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineSampler.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
     <ClCompile Include="EngineShader.cpp">
       <Filter>DirectX\Shader</Filter>
     </ClCompile>
@@ -245,6 +207,54 @@
     <ClCompile Include="EngineVertexShader.cpp">
       <Filter>DirectX\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp">
+      <Filter>DirectX\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGraphicDevice.cpp">
+      <Filter>DirectX\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineResources.cpp">
+      <Filter>DirectX\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTexture.cpp">
+      <Filter>DirectX\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>DirectX\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineRasterizerState.cpp">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSampler.cpp">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineBlend.cpp">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -252,9 +262,6 @@
     </Filter>
     <Filter Include="Actor">
       <UniqueIdentifier>{71c5887d-aaaa-4a6c-9003-85c9f486ae9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Component">
-      <UniqueIdentifier>{30bd41ba-dddb-45fc-88a4-a26865146940}</UniqueIdentifier>
     </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{88123aa3-d5e4-4524-9bb1-7880040af938}</UniqueIdentifier>
@@ -277,9 +284,6 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{0d9704b0-edd8-43b3-b0ea-e0ce3adb1e92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{4aaea5b0-b7d4-47ec-9400-11847393edfc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Imgui">
       <UniqueIdentifier>{29f5cf9d-b13d-497a-bb3b-d6b93dad1b55}</UniqueIdentifier>
     </Filter>
@@ -300,6 +304,15 @@
     </Filter>
     <Filter Include="DirectX\Resources">
       <UniqueIdentifier>{78e4d673-7430-4782-b3b2-1c1d693e8690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Device">
+      <UniqueIdentifier>{2f28a6ea-aced-4480-ab44-c960d36f693f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Component">
+      <UniqueIdentifier>{30bd41ba-dddb-45fc-88a4-a26865146940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Rasterize">
+      <UniqueIdentifier>{49ab355a-5358-4934-bf30-4b862ced7089}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

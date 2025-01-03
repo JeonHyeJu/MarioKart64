@@ -5,7 +5,6 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
-#include <EngineCore/imgui.h>
 
 ATestGameMode::ATestGameMode()
 {

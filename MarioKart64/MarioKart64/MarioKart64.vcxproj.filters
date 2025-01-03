@@ -331,9 +331,6 @@
     <ClCompile Include="MyCustomRenderer.cpp">
       <Filter>Temp</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsCore_Resources.cpp">
-      <Filter>Temp</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -347,9 +344,6 @@
     </Filter>
     <Filter Include="GameMode">
       <UniqueIdentifier>{56c335ce-bf49-4b5e-b569-d8317f80ad36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{c953cdd4-eaf8-41b9-a264-ef39d43fd0a7}</UniqueIdentifier>
     </Filter>
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{98cb8b2d-5d5d-4f1d-b778-985cd84dbf71}</UniqueIdentifier>
@@ -380,6 +374,9 @@
     </Filter>
     <Filter Include="Temp">
       <UniqueIdentifier>{f3825dc2-f439-4556-b340-b9f7cdad00b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{c953cdd4-eaf8-41b9-a264-ef39d43fd0a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -425,14 +422,14 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.fx">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader.fx">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="SpriteShader.fx">
+    <FxCompile Include="..\Resources\Shaders\TestShader.fx">
       <Filter>Temp</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\VertexShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\PixelShader.fx">
+      <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

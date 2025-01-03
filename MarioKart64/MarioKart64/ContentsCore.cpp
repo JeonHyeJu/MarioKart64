@@ -46,9 +46,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
-	
-	MyGSetting();
 
+	InitGraphics();
+	
 	UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
@@ -67,4 +67,36 @@ void UContentsCore::EngineTick(float _DeltaTime)
 void UContentsCore::EngineEnd()
 {
 
+}
+
+/* Graphics */
+void UContentsCore::InitGraphics()
+{
+	// for test
+	/*UEngineDirectory CurDir;
+	CurDir.MoveParentToDirectory("MarioKart64");
+
+	std::vector<UEngineFile> ShaderFiles = CurDir.GetAllFile(true, { ".fx", ".hlsl" });
+
+	for (size_t i = 0; i < ShaderFiles.size(); i++)
+	{
+		UEngineShader::ReflectionCompile(ShaderFiles[i]);
+	}
+
+	std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
+	Mat->SetVertexShader("SpriteShader.fx");
+	Mat->SetPixelShader("SpriteShader.fx");*/
+
+	UEngineDirectory dir;
+	dir.MoveParentToDirectory("Resources\\Shaders");
+
+	std::vector<UEngineFile> shaderFiles = dir.GetAllFile(true, { ".fx", ".hlsl" });
+	for (size_t i = 0; i < shaderFiles.size(); i++)
+	{
+		UEngineShader::ReflectionCompile(shaderFiles[i]);
+	}
+
+	std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
+	Mat->SetVertexShader("TestShader.fx");
+	Mat->SetPixelShader("TestShader.fx");
 }

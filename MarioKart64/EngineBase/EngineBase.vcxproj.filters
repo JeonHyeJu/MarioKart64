@@ -18,10 +18,12 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>Precompile</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="EngineString.cpp" />
     <ClCompile Include="EngineDelegate.cpp" />
     <ClCompile Include="EngineTimer.cpp" />
+    <ClCompile Include="Object.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -42,10 +44,12 @@
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h" />
     <ClInclude Include="EngineString.h" />
     <ClInclude Include="EngineDelegate.h" />
     <ClInclude Include="EngineTimer.h" />
+    <ClInclude Include="Object.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">
@@ -53,6 +57,9 @@
     </Filter>
     <Filter Include="Precompile">
       <UniqueIdentifier>{f29c37f1-4038-4d45-b871-65162571b650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{defb6b28-501d-4e16-be2c-b0e85156675e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

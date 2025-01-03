@@ -83,6 +83,8 @@ void ObjRenderer::_Init()
 		URenderUnit& unit = CreateRenderUnit();
 		SetMesh("Royal_Raceway_" + std::to_string(i), i);
 		SetMaterial("Royal_Raceway", i);
+		unit.SetTexture("diffTexture", "1BCEE00B_fix.png");
+		//unit.SetTexture("Royal_Raceway_" + std::to_string(i), "1BCEE00B_fix.png");
 
 		// TODO
 		//MyColor.Albedo = float4(1.0f, 1.0f, 1.0f, 1.0f);

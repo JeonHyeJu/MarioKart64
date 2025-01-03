@@ -90,7 +90,7 @@ void UEngineShaderResources::ConstantBufferLinkData(std::string_view _Name, void
 
 	if (false == ConstantBufferRes.contains(UpperName))
 	{
-		UEngineDebug::OutPutString("ConstantBufferRes.contains " + UpperName);
+		UEngineDebug::OutPutString("ConstantBufferLinkData has no " + UpperName);
 		return;
 	}
 
@@ -103,7 +103,7 @@ void UEngineShaderResources::SamplerSetting(std::string_view _Name, std::string_
 
 	if (false == SamplerRes.contains(UpperName))
 	{
-		UEngineDebug::OutPutString("ConstantBufferRes.contains " + UpperName);
+		UEngineDebug::OutPutString("SamplerSetting has no " + UpperName);
 		return;
 	}
 
@@ -117,10 +117,9 @@ void UEngineShaderResources::TextureSetting(std::string_view _Name, std::string_
 
 	if (false == TextureRes.contains(UpperName))
 	{
-		UEngineDebug::OutPutString("ConstantBufferRes.contains " + UpperName);
+		UEngineDebug::OutPutString("TextureSetting has no " + UpperName);
 		return;
 	}
 
 	TextureRes[UpperName].Res = UEngineTexture::Find<UEngineTexture>(_ResName);
-	;
 }

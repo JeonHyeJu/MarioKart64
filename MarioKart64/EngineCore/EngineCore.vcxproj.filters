@@ -219,6 +219,9 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{29f5cf9d-b13d-497a-bb3b-d6b93dad1b55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{fe5ce624-ae62-4df1-9d8c-c37e908effab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl">
@@ -232,5 +235,10 @@
     <Library Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
       <Filter>ThirdParty\DirectXTex\Debug</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\EngineShader\EngineSpriteShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

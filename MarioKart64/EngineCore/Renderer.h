@@ -34,6 +34,8 @@ protected:
 private:
 
 public:
+	bool IsOriginalScale = true;
+
 	class UMesh* Mesh = nullptr;
 	class UEngineBlend* Blend = nullptr;
 

@@ -66,7 +66,7 @@ public:
 		return Sprite->GetName();
 	}
 
-	ENGINEAPI void SetSprite(std::string_view _Name, size_t _CurIndex = 0);
+	ENGINEAPI void SetSprite(std::string_view _Name, size_t _CurIndex = 0, float _scaleRatio = 1.f);
 
 	bool IsCurAnimationEnd()
 	{

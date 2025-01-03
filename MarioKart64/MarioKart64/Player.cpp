@@ -59,6 +59,14 @@ void APlayer::Tick(float _deltaTime)
 		}
 		move.Z = accMove.Z;
 	}
+	else if (UEngineInput::IsPress('Z'))
+	{
+		move.Y += 1.f;
+	}
+	else if (UEngineInput::IsPress('X'))
+	{
+		move.Y -= 1.f;
+	}
 	else
 	{
 		if (accMove.Z > 0)
@@ -128,7 +136,9 @@ void APlayer::Tick(float _deltaTime)
 	float4x4 world = trfm.World;
 	FVector dir = world.ArrVector[2];
 	dir.Normalize();
+	FVector last = dir* move.Z;
+	last.Y = move.Y;
 
 	//Renderer->AddRelativeLocation(move);
-	AddRelativeLocation(dir * move.Z);
+	AddRelativeLocation(last);
 }

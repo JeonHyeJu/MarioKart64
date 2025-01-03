@@ -11,22 +11,22 @@ TestActor::TestActor()
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	LogoRenderer->CreateAnimation("Idle", "Mario.png", 0, 0, 0.1f);
-	{
+	/*{
 		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 4.0f;
-	}
+	}*/
 
 	LogoRenderer->CreateAnimation("Move", "Mario.png", 1, 4, 0.3f);
-	{
+	/*{
 		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 4.0f;
-	}
+	}*/
 
 	LogoRenderer->ChangeAnimation("Idle");
 
-	LogoRenderer->SetRelativeScale3D({50, 50, 1.0f});
+	//LogoRenderer->SetRelativeScale3D({1.f, 1.f, 1.0f});
 	LogoRenderer->SetupAttachment(RootComponent);
 
 	//Child = CreateDefaultSubObject<USpriteRenderer>();

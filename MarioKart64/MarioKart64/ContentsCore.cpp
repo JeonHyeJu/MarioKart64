@@ -47,12 +47,12 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	//UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
-	UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
+	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
 	UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TestLevel");
-	UEngineCore::OpenLevel("TitleLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("TitleLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

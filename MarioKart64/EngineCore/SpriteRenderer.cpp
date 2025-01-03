@@ -9,13 +9,20 @@ USpriteRenderer::~USpriteRenderer()
 {
 }
 
-void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
+void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index, float _scaleRatio)
 {
 	URenderer::SetSprite(_Name);
 	SetSpriteData(_Index);
 
 	std::string UpperName = UEngineString::ToUpper(_Name);
 	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName).get();
+
+	if (true == IsOriginalScale)
+	{
+		FVector Scale = Sprite->GetSpriteScaleToReal(_Index);
+		Scale.Z = 1.0f;
+		SetRelativeScale3D(Scale * _scaleRatio);
+	}
 }
 
 void USpriteRenderer::BeginPlay()

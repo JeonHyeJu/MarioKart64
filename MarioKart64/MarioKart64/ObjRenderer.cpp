@@ -105,7 +105,10 @@ void ObjRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	OutPutMergeSetting();
 
 	for (size_t i = 0; i < Meshes.size(); ++i) {
-		Meshes[i].Draw(UEngineCore::GetDevice().GetContext());
+		//if (i == 5 || i == 7 || i == 111)
+		//{
+			Meshes[i].Draw(UEngineCore::GetDevice().GetContext());
+		//}
 	}
 }
 
@@ -132,7 +135,7 @@ void ObjRenderer::InitShader()
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
@@ -228,7 +231,11 @@ void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
 	for (UINT i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		Meshes.push_back(ProcessMesh(mesh, scene));
+		AiMesh temp = ProcessMesh(mesh, scene);
+		if (!temp.IsNull)
+		{
+			Meshes.push_back(temp);
+		}
 	}
 
 	for (UINT i = 0; i < node->mNumChildren; i++)
@@ -250,6 +257,7 @@ AiMesh ObjRenderer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.X = mesh->mVertices[i].x;
 		vertex.Y = mesh->mVertices[i].y;
 		vertex.Z = mesh->mVertices[i].z;
+		vertex.W = 1;
 
 		if (mesh->mTextureCoords[0]) {
 			vertex.texcoord.x = (float)mesh->mTextureCoords[0][i].x;

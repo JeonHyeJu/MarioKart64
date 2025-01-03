@@ -88,5 +88,4 @@ float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
 	return Color;
-    // return float4(1.f, 0.f, 0.f, 0.5f);
 }

@@ -13,7 +13,7 @@
 
 struct VERTEX
 {
-	FLOAT X, Y, Z;
+	FLOAT X, Y, Z, W;
     DirectX::XMFLOAT2 texcoord;
 };
 
@@ -35,6 +35,12 @@ public:
     std::vector<UINT> indices_;
     std::vector<TEXTURE> textures_;
     ID3D11Device *dev_;
+    bool IsNull = false;
+
+    AiMesh()
+    {
+        IsNull = true;
+    }
 
     AiMesh(ID3D11Device *dev, const std::vector<VERTEX>& vertices, const std::vector<UINT>& indices, const std::vector<TEXTURE>& textures) :
             vertices_(vertices),

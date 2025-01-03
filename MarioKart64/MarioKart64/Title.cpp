@@ -13,9 +13,10 @@ ATitle::ATitle()
 
 	Default->SetWorldLocation({ -500.0f, 500.f, 0.0f });
 
+	const float SCALE_RATIO = 3.f;
+
 	RBackground = CreateDefaultSubObject<USpriteRenderer>();
-	RBackground->SetSprite("Title_Screen.png");
-	RBackground->SetScale3D({ 1000.f, 1000.f, 1.f });
+	RBackground->SetSprite("Title_Screen.png", 0, SCALE_RATIO);
 	RBackground->SetupAttachment(RootComponent);
 
 	std::string path = CGlobal::GetModelPath("Miscellaneous\\Title_Screen_Flag", "title_screen_flag");
@@ -27,20 +28,17 @@ ATitle::ATitle()
 	RFlag->SetupAttachment(RootComponent);
 	
 	RTitleText = CreateDefaultSubObject<USpriteRenderer>();
-	RTitleText->SetSprite("Title_Screen.png", 4);
-	RTitleText->SetScale3D({ 750.f, 250.f, 1.f });	// TODO
+	RTitleText->SetSprite("Title_Screen.png", 4, SCALE_RATIO);
 	RTitleText->SetRelativeLocation({ 125.f, -300.f, 1.f });
 	RTitleText->SetupAttachment(RootComponent);
 
 	RPushButton = CreateDefaultSubObject<USpriteRenderer>();
-	RPushButton->SetSprite("Title_Screen.png", 2);
-	RPushButton->SetScale3D({ 550.f, 40.f, 1.f });	// TODO
+	RPushButton->SetSprite("Title_Screen.png", 2, SCALE_RATIO);
 	RPushButton->SetRelativeLocation({ 250.f, -600.f, 1.f });
 	RPushButton->SetupAttachment(RootComponent);
 
 	RCopyright = CreateDefaultSubObject<USpriteRenderer>();
-	RCopyright->SetSprite("Title_Screen.png", 3);
-	RCopyright->SetScale3D({ 400.f, 35.f, 1.f });	// TODO
+	RCopyright->SetSprite("Title_Screen.png", 3, SCALE_RATIO);
 	RCopyright->SetRelativeLocation({ 300.f, -800.f, 1.f });
 	RCopyright->SetupAttachment(RootComponent);
 }

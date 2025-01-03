@@ -11,16 +11,14 @@
 class ENGINEAPI UEngineMath
 {
 public:
-	static const double DPI;
-	static const double DPI2;
+	static inline const double DPI = 3.14159265358979323846264338327950288419716939937510;
+	static inline const double DPI2 = DPI * 2.0;
 
-	static const float PI;
-	static const float PI2;
+	static inline const float PI = 3.14159265358979323846264f;
+	static inline const float PI2 = PI * 2.0f;
 
-	//static const float D2R;
-	// Temp
-	inline static const float D2R = 3.14f / 180.0f;
-	static const float R2D;
+	static inline const float D2R = UEngineMath::PI / 180.0f;
+	static inline const float R2D = 180.0f / UEngineMath::PI;
 
 	static float Sqrt(float _Value)
 	{
@@ -181,7 +179,7 @@ public:
 		return _Value;
 	}
 
-	ENGINEAPI static FVector AngleToVectorDeg(float _Angle)
+	static FVector AngleToVectorDeg(float _Angle)
 	{
 		return AngleToVectorRad(_Angle * UEngineMath::D2R);
 	}

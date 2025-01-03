@@ -53,3 +53,13 @@ void USceneComponent::TransformUpdate()
 
 	IsAbsolute = false;
 }
+
+void USceneComponent::ComponentTick(float _DeltaTime)
+{
+	UActorComponent::ComponentTick(_DeltaTime);
+
+	for (std::shared_ptr<USceneComponent> Child : Childs)
+	{
+		Child->ComponentTick(_DeltaTime);
+	}
+}

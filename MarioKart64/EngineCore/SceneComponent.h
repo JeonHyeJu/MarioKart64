@@ -14,6 +14,8 @@ public:
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
 
+	ENGINEAPI void ComponentTick(float _DeltaTime) override;
+
 	void AddRelativeLocation(const FVector& _Value)
 	{
 		Transform.Location += _Value;

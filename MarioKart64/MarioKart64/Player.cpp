@@ -132,10 +132,9 @@ void APlayer::Tick(float _deltaTime)
 	//OutputDebugStringA((std::to_string(accMove.X) + ", " + std::to_string(accMove.Z) + "\n").c_str());
 
 	// temp
-	FTransform trfm = GetTransform();
-	float4x4 world = trfm.World;
-	FVector dir = world.ArrVector[2];
+	FVector dir = GetActorForwardVector();
 	dir.Normalize();
+
 	FVector last = dir* move.Z;
 	last.Y = move.Y;
 

@@ -270,7 +270,6 @@
     <ClInclude Include="TestMap.h">
       <Filter>Actor</Filter>
     </ClInclude>
-    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="TestActor.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -290,6 +289,7 @@
     <ClInclude Include="MyCustomRenderer.h">
       <Filter>Temp</Filter>
     </ClInclude>
+    <ClInclude Include="ObjImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -311,7 +311,6 @@
     <ClCompile Include="TestMap.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
-    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="TestActor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -331,6 +330,7 @@
     <ClCompile Include="MyCustomRenderer.cpp">
       <Filter>Temp</Filter>
     </ClCompile>
+    <ClCompile Include="ObjImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

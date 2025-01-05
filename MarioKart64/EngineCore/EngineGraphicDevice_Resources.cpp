@@ -116,7 +116,8 @@ void UEngineGraphicDevice::BlendInit()
 void UEngineGraphicDevice::RasterizerStateInit()
 {
 	D3D11_RASTERIZER_DESC Desc = {};
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+	//Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
 	UEngineRasterizerState::Create("EngineBase", Desc);

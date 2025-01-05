@@ -3,6 +3,7 @@
 #include "ObjRenderer.h"
 #include "CGlobal.h"
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/CameraActor.h>
 
 ATestMap::ATestMap()
 {

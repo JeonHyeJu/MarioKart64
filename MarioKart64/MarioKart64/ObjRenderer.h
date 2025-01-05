@@ -25,6 +25,7 @@ public:
 
 protected:
 	void BeginPlay() override;
+	void Render(UEngineCamera* _camera, float _deltaTime) override;
 
 private:
 	void _Init();

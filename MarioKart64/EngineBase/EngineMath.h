@@ -710,8 +710,7 @@ struct FTransform
 	float4x4 Projection;
 	float4x4 WVP;
 
-	FTransform()
-		: Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
+	FTransform() : Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
 	{
 
 	}

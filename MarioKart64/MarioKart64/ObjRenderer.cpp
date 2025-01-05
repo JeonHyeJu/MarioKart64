@@ -3,6 +3,7 @@
 #include "CGlobal.h"
 #include <EngineCore/EngineGraphicDevice.h>
 #include <EngineCore/EngineCamera.h>
+#include <EngineCore/EngineCore.h>
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -12,11 +13,9 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 {
 	std::vector<FEngineVertex> vertices;
 	std::vector<UINT> indices;
-	std::vector<UEngineTexture> textures;
 
 	vertices.reserve(10000);
 	indices.reserve(10000);
-	//textures.reserve(10);
 
 	for (UINT i = 0; i < _mesh->mNumVertices; ++i)
 	{
@@ -45,14 +44,16 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		}
 	}
 
-	//OutputDebugStringA(("_mesh->mMaterialIndex: " + std::to_string(_mesh->mMaterialIndex) + "\n").c_str());
 	if (_mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* mat = _scene->mMaterials[_mesh->mMaterialIndex];
+		aiString name = mat->GetName();
 		UINT size = mat->GetTextureCount(aiTextureType_DIFFUSE);
 
 		if (size == 0)
 		{
+			OutputDebugStringA(("_mesh->mMaterialIndex: " + std::to_string(_mesh->mMaterialIndex) + "\n").c_str());
+			OutputDebugStringA((name.C_Str() + std::string(", size: ") + std::to_string(size) + "\n").c_str());
 			Textures.push_back("NSBase.png");
 		}
 		else
@@ -151,4 +152,24 @@ void ObjRenderer::BeginPlay()
 {
 	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
 	SetOrder(0);
+}
+
+void ObjRenderer::Render(UEngineCamera* _camera, float _deltaTime)
+{
+	/*if (nullptr != CurAnimation)
+	{
+		Sprite = CurAnimation->Sprite;
+
+		GetRenderUnit().SetTexture("ImageTexture", Sprite->GetTexture(CurIndex)->GetName());
+		SpriteData = Sprite->GetSpriteData(CurIndex);
+	}
+
+	if (true == IsAutoScale)
+	{
+		FVector Scale = Sprite->GetSpriteScaleToReal(CurIndex);
+		Scale.Z = 1.0f;
+		SetRelativeScale3D(Scale * AutoScaleRatio);
+	}*/
+
+	URenderer::Render(_camera, _deltaTime);
 }

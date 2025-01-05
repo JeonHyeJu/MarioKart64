@@ -43,6 +43,11 @@ Kd 0.984375 0.984375 0.984375
 illum 1
 map_Kd 427F263_c.png
 
+newmtl NemuMat50_1
+Kd 0.984375 0.984375 0.984375
+illum 1
+map_Kd 3A87458D_c.png
+
 newmtl NemuMat67
 Kd 0.996094 0.996094 0.992188
 illum 1
@@ -76,6 +81,11 @@ Kd 0.750000 0.750000 0.750000
 illum 1
 map_Kd 491C24FB_c.png
 
+newmtl NemuMat17_1
+Kd 0.750000 0.750000 0.750000
+illum 1
+map_Kd 491C24FB_c.png
+
 newmtl NemuMat16
 Kd 0.984375 0.984375 0.984375
 illum 1
@@ -84,6 +94,7 @@ map_Kd 6187BBB7_c.png
 newmtl NemuMat80
 Kd 0.984375 0.984375 0.984375
 illum 1
+map_Kd 6187BBB7_c.png
 
 newmtl NemuMat23
 Kd 0.984375 0.984375 0.984375

@@ -39,7 +39,10 @@ void URenderUnit::MaterialResourcesCheck()
 			}
 
 			FTransform& Ref = ParentRenderer->GetTransformRef();
-			Resources[i].ConstantBufferLinkData("FTransform", Ref);
+			if (i == EShaderType::VS)	// temp
+			{
+				Resources[i].ConstantBufferLinkData("FTransform", Ref);
+			}
 		}
 		
 	}

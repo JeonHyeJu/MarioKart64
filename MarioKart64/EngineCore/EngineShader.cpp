@@ -145,14 +145,5 @@ void UEngineShader::ShaderResCheck()
 		default:
 			break;
 		}
-
-		int a = 0;
 	}
-
-	EntryName;
-	ShaderResources;
-
 }
-
-
-

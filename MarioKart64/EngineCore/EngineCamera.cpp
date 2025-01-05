@@ -27,8 +27,6 @@ UEngineCamera::~UEngineCamera()
 
 void UEngineCamera::Tick(float _DetlaTime)
 {
-	Transform.View;
-	Transform.Projection;
 }
 
 void UEngineCamera::Render(float _DetlaTime)

@@ -9,11 +9,11 @@
 #include <EngineCore/EngineSprite.h>
 #include <EngineCore/EngineShader.h>
 #include <EngineCore/EngineMaterial.h>
+#include "CGlobal.h"
 #include "TitleGameMode.h"
 #include "PlayGameMode.h"
 
 #include "TestGameMode.h"	// for test
-#include "CGlobal.h"
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -98,121 +98,20 @@ void UContentsCore::InitGraphics()
 	Mat->SetPixelShader("SpriteShader.fx");*/
 
 	// init materials
-	UEngineDirectory dir;
-	dir.MoveParentToDirectory("Resources\\Shaders");
-
-	std::vector<UEngineFile> shaderFiles = dir.GetAllFile(true, { ".fx", ".hlsl" });
-	for (size_t i = 0; i < shaderFiles.size(); i++)
 	{
-		UEngineShader::ReflectionCompile(shaderFiles[i]);
-	}
+		UEngineDirectory dir;
+		dir.MoveParentToDirectory("Resources\\Shaders");
 
-	const std::string objName = "Royal_Raceway";
-	std::shared_ptr<UEngineMaterial> material = UEngineMaterial::Create(objName);
-
-	material->SetVertexShader("VertexShader.fx");
-	material->SetPixelShader("PixelShader.fx");
-
-	// init meshes
-	LoadModel();	// for test
-}
-
-// Temp
-void ProcessMesh(aiMesh* mesh, const aiScene* scene)
-{
-	std::vector<FEngineVertex> vertices;
-	std::vector<UINT> indices;
-	std::vector<UEngineTexture> textures;
-
-	vertices.reserve(10000);
-	indices.reserve(10000);
-	//textures.reserve(10);
-
-	for (UINT i = 0; i < mesh->mNumVertices; i++)
-	{
-		FEngineVertex vertex;
-
-		vertex.POSITION = {
-			mesh->mVertices[i].x,
-			mesh->mVertices[i].y,
-			mesh->mVertices[i].z,
-			1.0f
-		};
-
-		if (mesh->mTextureCoords[0])
+		std::vector<UEngineFile> shaderFiles = dir.GetAllFile(true, { ".fx", ".hlsl" });
+		for (size_t i = 0; i < shaderFiles.size(); i++)
 		{
-			vertex.TEXCOORD.X = (float)mesh->mTextureCoords[0][i].x;
-			vertex.TEXCOORD.Y = (float)mesh->mTextureCoords[0][i].y;
+			UEngineShader::ReflectionCompile(shaderFiles[i]);
 		}
 
-		vertices.push_back(vertex);
-	}
-
-	for (UINT i = 0; i < mesh->mNumFaces; i++)
-	{
-		aiFace face = mesh->mFaces[i];
-
-		for (UINT j = 0; j < face.mNumIndices; j++)
-		{
-			indices.push_back(face.mIndices[j]);
-		}
-	}
-
-	//if (mesh->mMaterialIndex >= 0)
-	//{
-	//	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-	//	std::vector<UEngineTexture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", scene);
-	//	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	//}
-
-	// for test
-	static int temp = 0;
-	UEngineVertexBuffer::Create("Royal_Raceway_"+std::to_string(temp), vertices);
-	UEngineIndexBuffer::Create("Royal_Raceway_"+std::to_string(temp), indices);
-	UMesh::Create("Royal_Raceway_"+std::to_string(temp));
-	OutputDebugStringA(("temp: " + std::to_string(temp) + "\n").c_str());
-	temp++;
-}
-
-void ProcessNode(aiNode* node, const aiScene* scene)
-{
-	for (UINT i = 0; i < node->mNumMeshes; i++)
-	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		ProcessMesh(mesh, scene);
-	}
-
-	for (UINT i = 0; i < node->mNumChildren; i++)
-	{
-		ProcessNode(node->mChildren[i], scene);
+		std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SHADER_NAME);
+		mat->SetVertexShader("VertexShader.fx");
+		mat->SetPixelShader("PixelShader.fx");
 	}
 }
 
-bool UContentsCore::LoadModel()
-{
-	std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
-	std::string _objPath = path + ".obj";
-	std::string _mtlPath = path + ".mtl";
-
-	std::string fileName = _objPath.data();
-	Assimp::Importer importer;
-
-	unsigned int flag;
-	flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded;
-	//flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenNormals;
-	//flag = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_GenNormals | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
-
-	const aiScene* pScene = importer.ReadFile(fileName, flag);
-
-	if (pScene == nullptr)
-	{
-		return false;
-	}
-
-	Directory = fileName.substr(0, fileName.find_last_of("/\\"));
-
-	ProcessNode(pScene->mRootNode, pScene);
-	return true;
-}
 

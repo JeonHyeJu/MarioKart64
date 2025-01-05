@@ -51,11 +51,10 @@ protected:
 
 private:
 	float Near = 1.0f;
-	float Far = 5000.0f;
-	float FOV = DirectX::XM_PIDIV4;
-	//float FOV = 60.0f;
+	float Far = 1000.0f;
+	float FOV = 60.0f;
 
-	EProjectionType Type = EProjectionType::Orthographic;
+	EProjectionType Type = EProjectionType::Perspective;
 	D3D11_VIEWPORT ViewPortInfo;
 
 	FVector ProjectionScale = {0.0f, 0.0f};

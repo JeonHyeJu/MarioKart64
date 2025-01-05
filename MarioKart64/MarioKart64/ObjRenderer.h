@@ -28,6 +28,9 @@ protected:
 
 private:
 	void _Init();
+	bool LoadModel();
+	void ProcessMesh(struct aiMesh* _mesh, const struct aiScene* _scene);
+	void ProcessNode(struct aiNode* node, const struct aiScene* scene);
 
 	/*bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
 	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
@@ -44,8 +47,9 @@ private:
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";
-
-	std::vector<AiMesh> Meshes;
-	std::vector<TEXTURE> Textures;
 	std::string Directory = "";
+	std::string FileName = "";
+
+	std::vector<std::string> Textures;
+	int MeshCount = 0;
 };

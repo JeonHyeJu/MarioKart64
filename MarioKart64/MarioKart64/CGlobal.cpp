@@ -3,6 +3,7 @@
 #include <EngineBase/EngineDirectory.h>
 
 const char* CGlobal::ModelPath = "MarioKart64\\Resources\\Models";
+const char* CGlobal::OBJ_SHADER_NAME = "Object";
 
 std::string CGlobal::GetModelPath(std::string_view _append="", std::string_view _fileName="")
 {

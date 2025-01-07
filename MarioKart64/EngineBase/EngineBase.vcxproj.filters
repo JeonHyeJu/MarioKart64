@@ -24,6 +24,7 @@
     <ClCompile Include="Object.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="EngineRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Object.h">
       <Filter>Actor</Filter>
     </ClInclude>
+    <ClInclude Include="EngineRandom.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">

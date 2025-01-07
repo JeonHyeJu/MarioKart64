@@ -137,6 +137,7 @@
     <ClInclude Include="TimeEventComponent.h">
       <Filter>Event</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -267,6 +268,7 @@
     <ClCompile Include="TimeEventComponent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

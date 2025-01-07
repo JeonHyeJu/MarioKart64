@@ -5,6 +5,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/TimeEventComponent.h>
+#include <EngineCore/Collision.h>
 #include "ColorRenderer.h"
 
 TestActor::TestActor()

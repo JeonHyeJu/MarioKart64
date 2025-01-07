@@ -38,4 +38,9 @@ ATestGameMode::~ATestGameMode()
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+//	if (nullptr == Logo && true == Logo->IsDestroy())
+//	{
+//		Logo = nullptr;
+//	}
 }

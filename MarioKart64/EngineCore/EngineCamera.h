@@ -48,6 +48,8 @@ public:
 
 	ENGINEAPI void SetZSort(int _Order, bool _Value);
 
+	ENGINEAPI void Release(float _DeltaTime);
+
 protected:
 
 

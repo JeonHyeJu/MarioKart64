@@ -34,6 +34,11 @@ void AActor::Tick(float _DeltaTime)
 
 	for (std::shared_ptr<class UActorComponent> ActorComponent : ActorComponentList)
 	{
+		if (false == ActorComponent->IsActive())
+		{
+			continue;
+		}
+
 		ActorComponent->ComponentTick(_DeltaTime);
 	}
 }

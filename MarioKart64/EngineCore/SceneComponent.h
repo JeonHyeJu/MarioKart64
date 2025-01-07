@@ -60,6 +60,11 @@ public:
 		Transform.Scale.W = 0.0f;
 		TransformUpdate();
 	}
+	
+	FVector GetWorldScale3D()
+	{
+		return Transform.WorldScale;
+	}
 
 	const FTransform& GetTransform()
 	{

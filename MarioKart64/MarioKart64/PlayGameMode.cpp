@@ -2,11 +2,14 @@
 #include "PlayGameMode.h"
 #include "TestMap.h"
 #include "Player.h"
+#include "Skybox.h"
 #include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
+#include <EngineCore/EngineCamera.h>
 
 APlayGameMode::APlayGameMode()
 {
+	Skybox = GetWorld()->SpawnActor<ASkybox>();
 	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 
@@ -14,6 +17,7 @@ APlayGameMode::APlayGameMode()
 	TestMapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
 	Camera = GetWorld()->GetMainCamera();
+	Camera->GetCameraComponent()->SetZSort(1, true);
 
 	Camera->AddActorRotation({ 10.f, 0.f, 0.f });
 	Camera->AddRelativeLocation({ 0.f, 0.f, -500.f });
@@ -42,6 +46,7 @@ void APlayGameMode::Tick(float _deltaTime)
 		OutputDebugStringA((playerLog + "\n" + cameraLog + "\n").c_str());
 	}*/
 
+	float speed = 1000.f;
 	if (UEngineInput::IsPress('R'))
 	{
 		Camera->AddActorRotation(FVector{ -180.f * _deltaTime, 0.f, 0.f });
@@ -52,26 +57,26 @@ void APlayGameMode::Tick(float _deltaTime)
 	}
 	if (UEngineInput::IsPress('W'))
 	{
-		Camera->AddRelativeLocation({ 0.f, 0.f, 100.f * _deltaTime, 1.0f });
+		Camera->AddRelativeLocation({ 0.f, 0.f, speed * _deltaTime, 1.0f });
 	}
 	if (UEngineInput::IsPress('S'))
 	{
-		Camera->AddRelativeLocation({ 0.f, 0.f, -100.f * _deltaTime, 1.0f });
+		Camera->AddRelativeLocation({ 0.f, 0.f, -speed * _deltaTime, 1.0f });
 	}
 	if (UEngineInput::IsPress('A'))
 	{
-		Camera->AddRelativeLocation({ -100.f * _deltaTime, 0.0f, 0.f, 1.0f });
+		Camera->AddRelativeLocation({ -speed * _deltaTime, 0.0f, 0.f, 1.0f });
 	}
 	if (UEngineInput::IsPress('D'))
 	{
-		Camera->AddRelativeLocation({ 100.f * _deltaTime, 0.0f, 0.f, 1.0f });
+		Camera->AddRelativeLocation({ speed * _deltaTime, 0.0f, 0.f, 1.0f });
 	}
 	if (UEngineInput::IsPress('Q'))
 	{
-		Camera->AddActorRotation({ 0.f, -100.f * _deltaTime, 0.f, 1.0f });
+		Camera->AddActorRotation({ 0.f, -speed * _deltaTime, 0.f, 1.0f });
 	}
 	if (UEngineInput::IsPress('E'))
 	{
-		Camera->AddActorRotation({ 0.f, 100.f * _deltaTime, 0.f, 1.0f });
+		Camera->AddActorRotation({ 0.f, speed * _deltaTime, 0.f, 1.0f });
 	}
 }

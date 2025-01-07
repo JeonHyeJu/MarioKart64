@@ -150,7 +150,7 @@
     <ClInclude Include="AiMesh.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="CGlobal.h" />
-    <ClInclude Include="MyCustomRenderer.h" />
+    <ClInclude Include="ColorRenderer.h" />
     <ClInclude Include="NintendoLogo.h">
       <SubType>
       </SubType>
@@ -167,6 +167,10 @@
     </ClInclude>
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="SelectGameMode.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -271,7 +275,7 @@
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="CGlobal.cpp" />
-    <ClCompile Include="MyCustomRenderer.cpp" />
+    <ClCompile Include="ColorRenderer.cpp" />
     <ClCompile Include="NintendoLogo.cpp">
       <SubType>
       </SubType>
@@ -291,6 +295,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SelectGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -330,11 +338,11 @@
     <Library Include="ThirdParty\Assimp\Lib\Release\assimp-vc143-mt.lib" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Resources\Shaders\PixelShader.fx">
+    <FxCompile Include="..\Resources\Shaders\ColorShader.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="..\Resources\Shaders\TestShader.fx">
+    <FxCompile Include="..\Resources\Shaders\PixelShader.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

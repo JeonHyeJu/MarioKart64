@@ -46,12 +46,14 @@ public:
 		Type = _Type;
 	}
 
+	ENGINEAPI void SetZSort(int _Order, bool _Value);
+
 protected:
 
 
 private:
 	float Near = 1.0f;
-	float Far = 1000.0f;
+	float Far = 20000.0f;
 	float FOV = 60.0f;
 
 	EProjectionType Type = EProjectionType::Perspective;
@@ -60,6 +62,7 @@ private:
 	FVector ProjectionScale = {0.0f, 0.0f};
 
 	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
+	std::map<int, bool> RendererZSort;
 
 	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer);
 };

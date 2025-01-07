@@ -12,6 +12,14 @@ class ObjRenderer : public URenderer
 	friend class UEngineCamera;
 
 public:
+	struct RenderInfo
+	{
+		std::string Name = "";	// Vertex buffer, Pixel buffer, Mesh
+		std::string MatName = "";	// Material
+		std::string TexName = "";	// Texture
+		float Z = 0.f;
+	};
+
 	ObjRenderer();
 	~ObjRenderer();
 
@@ -29,6 +37,7 @@ protected:
 
 private:
 	void _Init();
+	void Sort();
 	bool LoadModel();
 	void ProcessMesh(struct aiMesh* _mesh, const struct aiScene* _scene);
 	void ProcessNode(struct aiNode* node, const struct aiScene* scene);
@@ -51,6 +60,6 @@ private:
 	std::string Directory = "";
 	std::string FileName = "";
 
-	std::vector<std::string> Textures;
+	std::vector<RenderInfo> RenderInfos;
 	int MeshCount = 0;
 };

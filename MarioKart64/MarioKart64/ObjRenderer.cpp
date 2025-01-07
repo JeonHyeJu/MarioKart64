@@ -17,6 +17,7 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	vertices.reserve(10000);
 	indices.reserve(10000);
 
+	float minZ = 999999.f;
 	for (UINT i = 0; i < _mesh->mNumVertices; ++i)
 	{
 		FEngineVertex vertex;
@@ -24,6 +25,11 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		vertex.POSITION.Y = _mesh->mVertices[i].y;
 		vertex.POSITION.Z = _mesh->mVertices[i].z;
 		vertex.POSITION.W = 1.f;
+
+		if (vertex.POSITION.Z < minZ)
+		{
+			minZ = vertex.POSITION.Z;
+		}
 
 		if (_mesh->mTextureCoords[0])
 		{
@@ -44,17 +50,23 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		}
 	}
 
+	std::string matName = CGlobal::OBJ_SHADER_NAME;
+	std::string texName = "NSBase.png";
+	if (_mesh->mNumVertices == 6)	// temp
+	{
+		matName = CGlobal::OBJ_SPRITE_SHADER_NAME;
+	}
+
 	if (_mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* mat = _scene->mMaterials[_mesh->mMaterialIndex];
-		aiString name = mat->GetName();
-		UINT size = mat->GetTextureCount(aiTextureType_DIFFUSE);
+		std::string name = std::string(mat->GetName().C_Str());
 
+		UINT size = mat->GetTextureCount(aiTextureType_DIFFUSE);
 		if (size == 0)
 		{
 			OutputDebugStringA(("_mesh->mMaterialIndex: " + std::to_string(_mesh->mMaterialIndex) + "\n").c_str());
-			OutputDebugStringA((name.C_Str() + std::string(", size: ") + std::to_string(size) + "\n").c_str());
-			Textures.push_back("NSBase.png");
+			OutputDebugStringA((name + std::string(", size: ") + std::to_string(size) + "\n").c_str());
 		}
 		else
 		{
@@ -62,7 +74,7 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 			{
 				aiString str;
 				mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
-				Textures.push_back(str.C_Str());
+				texName = str.C_Str();
 			}
 		}
 	}
@@ -71,6 +83,14 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	UEngineVertexBuffer::Create(name, vertices);
 	UEngineIndexBuffer::Create(name, indices);
 	UMesh::Create(name);
+
+	RenderInfo info;
+	info.Name = name;
+	info.MatName = matName;
+	info.TexName = texName;
+	info.Z = minZ;
+
+	RenderInfos.push_back(info);
 }
 
 void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
@@ -110,7 +130,7 @@ bool ObjRenderer::LoadModel()
 
 ObjRenderer::ObjRenderer()
 {
-	Textures.reserve(10000);
+	RenderInfos.reserve(10000);
 }
 
 ObjRenderer::~ObjRenderer()
@@ -137,21 +157,30 @@ void ObjRenderer::_Init()
 		OutputDebugStringA(("[WARN] " + ObjPath + " is not set.").c_str());
 	}
 
-	for (int i = 0; i < MeshCount; ++i)
-	{
-		std::string name = FileName + "_" + std::to_string(i);
+	//Sort();
 
+	int size = static_cast<int>(RenderInfos.size());
+	for (int i = 0; i < size; ++i)
+	{
+		const RenderInfo& unitInfo = RenderInfos[i];
 		URenderUnit& unit = CreateRenderUnit();
-		SetMesh(name, i);
-		SetMaterial(CGlobal::OBJ_SHADER_NAME, i);
-		unit.SetTexture("diffTexture", Textures[i]);
+		SetMesh(unitInfo.Name, i);
+		SetMaterial(unitInfo.MatName, i);
+		unit.SetTexture("diffTexture", unitInfo.TexName);
 	}
+}
+
+void ObjRenderer::Sort()
+{
+	std::sort(RenderInfos.begin(), RenderInfos.end(), [](const RenderInfo& _left, const RenderInfo& _right)
+	{
+		return _left.Z < _right.Z;
+	});
 }
 
 void ObjRenderer::BeginPlay()
 {
 	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
-	SetOrder(0);
 }
 
 void ObjRenderer::Render(UEngineCamera* _camera, float _deltaTime)

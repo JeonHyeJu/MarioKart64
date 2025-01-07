@@ -38,11 +38,13 @@ void URenderUnit::MaterialResourcesCheck()
 				continue;
 			}
 
-			FTransform& Ref = ParentRenderer->GetTransformRef();
-			if (i == EShaderType::VS)	// temp
+			if (false == Resources[i].IsConstantBuffer("FTransform"))
 			{
-				Resources[i].ConstantBufferLinkData("FTransform", Ref);
+				continue;
 			}
+
+			FTransform& Ref = ParentRenderer->GetTransformRef();
+			Resources[i].ConstantBufferLinkData("FTransform", Ref);
 		}
 		
 	}
@@ -70,7 +72,6 @@ void URenderUnit::SetTexture(std::string_view _Name, std::string_view _ResName)
 {
 	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
 	{
-		i;
 		if (false == Resources.contains(i))
 		{
 			continue;
@@ -163,10 +164,6 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 	//	OutPutMergeSetting();
 	
 	Material->GetBlend()->Setting();
-	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
-	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
-	ArrRtv[0] = RTV; // SV_Target0
-	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 
 	UEngineCore::GetDevice().GetContext()->DrawIndexed(Mesh->GetIndexBuffer()->GetIndexCount(), 0, 0);
 }

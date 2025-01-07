@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EnginePlatform/EngineWinImage.h>
 
 class TestActor : public AActor
 {
@@ -23,11 +24,15 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
+
+
 	std::shared_ptr<class USpriteRenderer> LogoRenderer;
 	std::shared_ptr<class USpriteRenderer> Child;
 
 	std::shared_ptr<class URenderer> Renderer;
 
+	UEngineWinImage ColImage;
 
 };
 

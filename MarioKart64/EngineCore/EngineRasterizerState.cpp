@@ -34,7 +34,6 @@ void UEngineRasterizerState::ResCreate(const D3D11_RASTERIZER_DESC& _Value)
 		MSGASSERT("블랜드 스테이트 생성에 실패했습니다");
 		return;
 	}
-
 }
 
 void UEngineRasterizerState::Setting()

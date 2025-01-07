@@ -52,7 +52,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	_Data.WindowSize = { 1280, 720 };
 
 	InitImages("Resources\\Sprites\\Characters");
+	InitImages("Resources\\Sprites\\Background");
 	InitImages("Resources\\Sprites\\Title");
+	InitImages("Resources\\Sprites\\Clouds");
 	InitImages("Resources\\Models\\Courses\\Royal_Raceway");
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
@@ -82,23 +84,22 @@ void UContentsCore::EngineEnd()
 /* Graphics */
 void UContentsCore::InitGraphics()
 {
-	// for test
-	/*UEngineDirectory CurDir;
-	CurDir.MoveParentToDirectory("MarioKart64");
-
-	std::vector<UEngineFile> ShaderFiles = CurDir.GetAllFile(true, { ".fx", ".hlsl" });
-
-	for (size_t i = 0; i < ShaderFiles.size(); i++)
+	// Rasterizer state
 	{
-		UEngineShader::ReflectionCompile(ShaderFiles[i]);
+		D3D11_RASTERIZER_DESC desc = {};
+		desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		UEngineRasterizerState::Create("CullBack", desc);
 	}
-
-	std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
-	Mat->SetVertexShader("SpriteShader.fx");
-	Mat->SetPixelShader("SpriteShader.fx");*/
 
 	// init materials
 	{
+		D3D11_RASTERIZER_DESC desc = {};
+		desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		UEngineRasterizerState::Create("CullBack", desc);
+
+		// Shaders
 		UEngineDirectory dir;
 		dir.MoveParentToDirectory("Resources\\Shaders");
 
@@ -109,9 +110,17 @@ void UContentsCore::InitGraphics()
 		}
 
 		std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SHADER_NAME);
+		std::shared_ptr<UEngineMaterial> matSprite = UEngineMaterial::Create(CGlobal::OBJ_SPRITE_SHADER_NAME);
+		std::shared_ptr<UEngineMaterial> matSky = UEngineMaterial::Create(CGlobal::OBJ_SKY_SHADER_NAME);
+
+		mat->SetRasterizerState("CullBack");
 		mat->SetVertexShader("VertexShader.fx");
 		mat->SetPixelShader("PixelShader.fx");
+
+		matSprite->SetVertexShader("VertexShader.fx");
+		matSprite->SetPixelShader("PixelShader.fx");
+
+		matSky->SetVertexShader("ColorShader.fx");
+		matSky->SetPixelShader("ColorShader.fx");
 	}
 }
-
-

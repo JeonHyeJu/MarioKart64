@@ -12,7 +12,7 @@ public:
 	UEngineRasterizerState& operator=(const UEngineRasterizerState& _Other) = delete;
 	UEngineRasterizerState& operator=(UEngineRasterizerState&& _Other) noexcept = delete;
 
-	static std::shared_ptr<UEngineRasterizerState> Create(std::string_view _Name, const D3D11_RASTERIZER_DESC& _Value);
+	ENGINEAPI static std::shared_ptr<UEngineRasterizerState> Create(std::string_view _Name, const D3D11_RASTERIZER_DESC& _Value);
 
 	void Setting();
 

@@ -112,7 +112,7 @@ public:
 	{
 		if (nullptr == RootComponent)
 		{
-			return FTransform();
+			return Base;
 		}
 
 		return RootComponent->GetTransformRef();
@@ -122,7 +122,7 @@ public:
 	{
 		if (nullptr == RootComponent)
 		{
-			return FTransform();
+			return Base;
 		}
 
 		return RootComponent->GetTransform();
@@ -135,6 +135,7 @@ public:
 
 protected:
 	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
+	FTransform Base;
 
 private:
 	ULevel* World;

@@ -31,7 +31,7 @@ void UEngineIndexBuffer::ResCreate(const void* _InitData, size_t _Size, size_t _
 	IndexSize = static_cast<UINT>(_Size);
 	IndexCount = static_cast<UINT>(_Count);
 
-	if (4 == IndexSize) // 42억
+	if (4 == IndexSize) // about 4,200,000,000
 	{
 		Format = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
 	}
@@ -49,7 +49,7 @@ void UEngineIndexBuffer::ResCreate(const void* _InitData, size_t _Size, size_t _
 	BufferInfo.CPUAccessFlags = 0;
 	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
 
-	D3D11_SUBRESOURCE_DATA Data; // 초기값 넣어주는 용도의 구조체
+	D3D11_SUBRESOURCE_DATA Data;
 	Data.pSysMem = _InitData;
 
 	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &Buffer))

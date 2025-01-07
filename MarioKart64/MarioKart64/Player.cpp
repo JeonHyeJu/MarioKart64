@@ -12,7 +12,8 @@ APlayer::APlayer()
 	Default->SetWorldLocation({ 0.0f, 100.0f, 0.0f });
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
-	Renderer->SetRelativeLocation({ 0.f, -200.f, 0.f });
+	Renderer->SetRelativeLocation({ 0.f, -90.f, -200.f });
+	Renderer->SetOrder(0);
 
 	// Temp
 	const int TURN_SIZE = 31;
@@ -42,10 +43,15 @@ void APlayer::Tick(float _deltaTime)
 
 	FVector move;
 	static FVector accMove;
+	bool isInverted = false;
 
 	if (UEngineInput::IsPress(VK_UP))
 	{
-		if (accMove.Z < MAX_SPEED)
+		if (accMove.Z < 0)
+		{
+			accMove.Z += .15f;
+		}
+		else if (accMove.Z < MAX_SPEED)
 		{
 			accMove.Z += .05f;
 		}
@@ -53,8 +59,13 @@ void APlayer::Tick(float _deltaTime)
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
-		if (accMove.Z > -MAX_SPEED)
+		if (accMove.Z > 0)
 		{
+			accMove.Z -= .15f;
+		}
+		else if (accMove.Z > -MAX_SPEED)
+		{
+			isInverted = true;
 			accMove.Z -= .05f;
 		}
 		move.Z = accMove.Z;
@@ -83,9 +94,6 @@ void APlayer::Tick(float _deltaTime)
 	const float ROT_VAL = 30.f * _deltaTime;
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		Renderer->ChangeAnimation("TurnL");
-		Renderer->SetRotation({ 0.f, 0.f, 0.f });
-		
 		//{
 		//	const FTransform& trfm = GetTransform();
 		//	FVector temp = trfm.Location;
@@ -98,20 +106,23 @@ void APlayer::Tick(float _deltaTime)
 		//	OutputDebugStringA(log2.c_str());
 		//}
 
-		if (accMove.X > -MAX_TURN)
-		{
-			accMove.X -= ROT_VAL;
-		}
-
 		//move.X = accMove.X;
 
-		AddActorRotation({ 0.f, -ROT_VAL, 0.f });
+		if (isInverted)
+		{
+			Renderer->ChangeAnimation("TurnR");
+			Renderer->SetRotation({ 0.f, -180.f, 0.f });
+			AddActorRotation({ 0.f, ROT_VAL, 0.f });
+		}
+		else
+		{
+			Renderer->ChangeAnimation("TurnL");
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			AddActorRotation({ 0.f, -ROT_VAL, 0.f });
+		}
 	}
 	else if (UEngineInput::IsPress(VK_RIGHT))
 	{
-		Renderer->ChangeAnimation("TurnR");
-		Renderer->SetRotation({ 0.f, -180.f, 0.f });
-
 		if (accMove.X < MAX_TURN)
 		{
 			accMove.X += ROT_VAL;
@@ -119,7 +130,18 @@ void APlayer::Tick(float _deltaTime)
 
 		//move.X = accMove.X;
 
-		AddActorRotation({ 0.f, ROT_VAL, 0.f });
+		if (isInverted)
+		{
+			Renderer->ChangeAnimation("TurnL");
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			AddActorRotation({ 0.f, -ROT_VAL, 0.f });
+		}
+		else
+		{
+			Renderer->ChangeAnimation("TurnR");
+			Renderer->SetRotation({ 0.f, -180.f, 0.f });
+			AddActorRotation({ 0.f, ROT_VAL, 0.f });
+		}
 	}
 	else
 	{

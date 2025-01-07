@@ -8,9 +8,11 @@
 #include "EngineShader.h"
 #include "EngineMaterial.h"
 #include "EngineTexture.h"
+#include "EngineDepthStencilState.h"
 
 void UEngineGraphicDevice::DefaultResourcesInit()
 {
+	DepthStencilInit();
 	TextureInit();
 	MeshInit();
 	BlendInit();
@@ -19,12 +21,27 @@ void UEngineGraphicDevice::DefaultResourcesInit()
 	MaterialInit();
 }
 
+void UEngineGraphicDevice::DepthStencilInit()
+{
+	D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+	Desc.DepthEnable = true;
+	Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	Desc.DepthFunc = D3D11_COMPARISON_LESS;
+	Desc.StencilEnable = false;
+
+	UEngineDepthStencilState::Create("BaseDepth", Desc);
+}
+
 void UEngineGraphicDevice::TextureInit()
 {
 	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT };
 	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	/*SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP;*/
 
 	SampInfo.BorderColor[0] = 0.0f;
 	SampInfo.BorderColor[1] = 0.0f;
@@ -116,8 +133,7 @@ void UEngineGraphicDevice::BlendInit()
 void UEngineGraphicDevice::RasterizerStateInit()
 {
 	D3D11_RASTERIZER_DESC Desc = {};
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-	//Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
 	UEngineRasterizerState::Create("EngineBase", Desc);

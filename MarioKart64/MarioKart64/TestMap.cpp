@@ -13,6 +13,7 @@ ATestMap::ATestMap()
 	std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
 
 	Renderer = CreateDefaultSubObject<ObjRenderer>();
+	Renderer->SetOrder(0);
 	Renderer->Init(path);
 	Renderer->SetupAttachment(RootComponent);
 }

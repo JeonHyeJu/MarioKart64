@@ -34,7 +34,6 @@ void UEngineSampler::ResCreate(const D3D11_SAMPLER_DESC& _Value)
 		MSGASSERT("블랜드 스테이트 생성에 실패했습니다");
 		return;
 	}
-	
 }
 
 void UEngineSampler::Setting(EShaderType _Type, UINT _BindIndex)

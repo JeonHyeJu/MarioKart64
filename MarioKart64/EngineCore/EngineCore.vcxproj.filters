@@ -131,6 +131,12 @@
     <ClInclude Include="EngineBlend.h">
       <Filter>DirectX\Rasterize</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDepthStencilState.h">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeEventComponent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -255,6 +261,12 @@
     <ClCompile Include="EngineBlend.cpp">
       <Filter>DirectX\Rasterize</Filter>
     </ClCompile>
+    <ClCompile Include="EngineDepthStencilState.cpp">
+      <Filter>DirectX\Rasterize</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeEventComponent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -313,6 +325,9 @@
     </Filter>
     <Filter Include="DirectX\Rasterize">
       <UniqueIdentifier>{49ab355a-5358-4934-bf30-4b862ced7089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{d7c754c5-44e0-46ee-b497-ef15bbeb6bae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

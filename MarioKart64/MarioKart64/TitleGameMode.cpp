@@ -12,6 +12,8 @@ ATitleGameMode::ATitleGameMode()
 	NintendoLogo = GetWorld()->SpawnActor<ANintendoLogo>();
 	Title = GetWorld()->SpawnActor<ATitle>();
 
+	Title->SetActorLocation({ -500.0f, 500.f, 0.0f });
+
 	NintendoLogo->Hide();
 	Title->Hide();
 	

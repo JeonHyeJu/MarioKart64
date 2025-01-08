@@ -28,6 +28,11 @@ void ACameraActor::Tick(float _DeltaTime)
 	ScreenDir.Normalize();
 	PrevScreenPos = ScreenPos;
 
+	if (UEngineInput::IsDown('C'))
+	{
+		FreeCameraSwitch();
+	}
+
 	if (true == IsFreeCameraValue)
 	{
 		if (UEngineInput::IsDown('O'))

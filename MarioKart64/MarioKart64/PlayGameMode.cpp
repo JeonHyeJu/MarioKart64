@@ -55,7 +55,7 @@ void APlayGameMode::Tick(float _deltaTime)
 		
 		const std::vector<FEngineVertex>& road = TestMapPtr->GetRoadVertecies();
 
-		OutputDebugStringA(("road size: " + std::to_string(road.size()) + "\n").c_str());
+		//OutputDebugStringA(("road size: " + std::to_string(road.size()) + "\n").c_str());
 
 		// asume orginized meshes..
 		bool isCollided = false;
@@ -70,11 +70,11 @@ void APlayGameMode::Tick(float _deltaTime)
 
 		if (isCollided)
 		{
-			OutputDebugStringA(("isCollided : TRUE.. fDist: " + std::to_string(fDist) + "\n").c_str());
+			//OutputDebugStringA(("isCollided : TRUE.. fDist: " + std::to_string(fDist) + "\n").c_str());
 		}
 		else
 		{
-			OutputDebugStringA(("isCollided : FALSE.. fDist: " + std::to_string(fDist) + "\n").c_str());
+			//OutputDebugStringA(("isCollided : FALSE.. fDist: " + std::to_string(fDist) + "\n").c_str());
 		}
 	}
 
@@ -88,6 +88,7 @@ void APlayGameMode::Tick(float _deltaTime)
 	}*/
 
 	float speed = 1000.f;
+
 	if (UEngineInput::IsPress('R'))
 	{
 		Camera->AddActorRotation(FVector{ -180.f * _deltaTime, 0.f, 0.f });

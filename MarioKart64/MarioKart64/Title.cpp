@@ -11,8 +11,6 @@ ATitle::ATitle()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	Default->SetWorldLocation({ -500.0f, 500.f, 0.0f });
-
 	const float SCALE_RATIO = 3.f;
 
 	RBackground = CreateDefaultSubObject<USpriteRenderer>();

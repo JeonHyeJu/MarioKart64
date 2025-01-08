@@ -39,11 +39,6 @@ void ATestGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	if (UEngineInput::IsPress('C'))
-	{
-		GetWorld()->GetMainCamera()->FreeCameraSwitch();
-	}
-
 //	if (nullptr == Logo && true == Logo->IsDestroy())
 //	{
 //		Logo = nullptr;

@@ -349,5 +349,8 @@
     <FxCompile Include="..\EngineShader\EngineSpriteShader.fx">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineDebugCollisionShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

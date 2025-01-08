@@ -13,10 +13,13 @@ APlayer::APlayer()
 	Renderer->SetRelativeLocation({ 0.f, -90.f, -200.f });
 	Renderer->SetOrder(0);
 
-	Renderer->SetAutoScale(false);
-	Renderer->ColorData.PlusColor = {1.f, 1.f, 1.f};	// Temp
-	Renderer->SetRelativeScale3D({1.f, 39.f, 1.f});
-
+	// Temp. for test nav-mesh
+	/*{
+		Renderer->SetAutoScale(false);
+		Renderer->ColorData.PlusColor = { 1.f, 1.f, 1.f };
+		Renderer->SetRelativeScale3D({ 1.f, 39.f, 1.f });
+	}*/
+	
 	// Temp
 	const int TURN_SIZE = 31;
 	std::vector<int> idxs(TURN_SIZE, 0);

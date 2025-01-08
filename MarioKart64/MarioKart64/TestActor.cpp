@@ -30,7 +30,7 @@ TestActor::TestActor()
 	Triangle = CreateDefaultSubObject<TriangleRenderer>();
 	Triangle->SetupAttachment(RootComponent);
 	Triangle->SetRelativeScale3D({1000.0f, 1000.0f, 1.0f});
-	Triangle->SetRotation({ 90.f, 0.f, 20.f });
+	Triangle->SetRotation({ 70.f, 0.f, 20.f });
 
 	FVector playerScale = Player->GetWorldScale3D();
 	Line = CreateDefaultSubObject<LineRenderer>();
@@ -82,7 +82,11 @@ void TestActor::Tick(float _DeltaTime)
 	DirectX::XMVECTOR v3 = (vertices[2].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
 
 	DirectX::XMVECTOR PlayerLay = DirectX::XMVectorSubtract(layDst, layOrg);
-	DirectX::XMVECTOR normalVec = DirectX::XMVector4Cross(v3, v2, v1);
+	DirectX::XMVECTOR normalVec = DirectX::XMVector4Cross(v1, v2, v3);
+
+	DirectX::XMFLOAT3 normalDat;
+	DirectX::XMStoreFloat3(&normalDat, normalVec);
+
 	DirectX::XMVECTOR angle = DirectX::XMVector2AngleBetweenVectors(PlayerLay, normalVec);
 	DirectX::XMFLOAT3 angleData;
 	DirectX::XMStoreFloat3(&angleData, angle);
@@ -90,7 +94,10 @@ void TestActor::Tick(float _DeltaTime)
 	const float R2D = 180.f / 3.14f;
 	//OutputDebugStringA(("angleData.x: " + std::to_string(angleData.x * R2D) + ", " + std::to_string(angleData.y * R2D) + ", " + std::to_string(angleData.z * R2D) + "\n").c_str());
 
-	bool isCollided = DirectX::TriangleTests::Intersects(layOrg, layDst, v1, v2, v3, fDist);
+	FVector Vector = layOrg;
+	//Vector.Z = 0.0f;
+
+	bool isCollided = DirectX::TriangleTests::Intersects(Vector.DirectVector, FVector::DOWN.DirectVector, v1, v2, v3, fDist);
 
 	std::string log = "";
 	if (isCollided)
@@ -175,6 +182,9 @@ void TestActor::Tick(float _DeltaTime)
 	{
 		Player->AddRelativeLocation({ 0.f, GRAVITY_FORCE * _DeltaTime, 0.f });
 	}
+
+	/*Player->SetRelativeLocation(pos);
+	Player->AddRelativeLocation({ 0.f, GRAVITY_FORCE * _DeltaTime, 0.f });*/
 
 	float dirHalf = (playerScale.Y * .25f + 1.f * dirVec.Y) * -1.f;
 	Line->SetScale3D({ 1.f, playerScale.Y * .5f, 0.0f });

@@ -354,6 +354,7 @@ public:
 		TVector Result;
 		Result.X = X + _Other.X;
 		Result.Y = Y + _Other.Y;
+		Result.Z = Z + _Other.Z;
 		return Result;
 	}
 

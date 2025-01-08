@@ -14,25 +14,20 @@ public:
 	TestActor& operator=(const TestActor& _Other) = delete;
 	TestActor& operator=(TestActor&& _Other) noexcept = delete;
 
-	std::shared_ptr<class USpriteRenderer> GetRenderer()
+	/*std::shared_ptr<class USpriteRenderer> GetRenderer()
 	{
-		return LogoRenderer;
-	}
+		return Player;
+	}*/
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
+	//std::shared_ptr<class USpriteRenderer> Player;
+	std::shared_ptr<class ColorRenderer> Player;
 
-
-	std::shared_ptr<class USpriteRenderer> LogoRenderer;
-	std::shared_ptr<class USpriteRenderer> Child;
-
-	std::shared_ptr<class URenderer> Renderer;
-
-	UEngineWinImage ColImage;
-
+	std::shared_ptr<class TriangleRenderer> Triangle;
+	std::shared_ptr<class LineRenderer> Line;
 };
 

@@ -61,6 +61,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
 
 	InitGraphics();
+	InitTest();
 	
 	//UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
@@ -109,6 +110,7 @@ void UContentsCore::InitGraphics()
 		std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SHADER_NAME);
 		std::shared_ptr<UEngineMaterial> matSprite = UEngineMaterial::Create(CGlobal::OBJ_SPRITE_SHADER_NAME);
 		std::shared_ptr<UEngineMaterial> matSky = UEngineMaterial::Create(CGlobal::OBJ_SKY_SHADER_NAME);
+		std::shared_ptr<UEngineMaterial> matLine = UEngineMaterial::Create(CGlobal::OBJ_LINE_SHADER_NAME);
 
 		mat->SetRasterizerState("CullBack");
 		mat->SetVertexShader("VertexShader.fx");
@@ -119,5 +121,52 @@ void UContentsCore::InitGraphics()
 
 		matSky->SetVertexShader("ColorShader.fx");
 		matSky->SetPixelShader("ColorShader.fx");
+		
+		matLine->SetVertexShader("ColorShader.fx");
+		matLine->SetPixelShader("ColorShader.fx");
+		matLine->SetTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	}
+}
+
+void UContentsCore::InitTest()
+{
+	// Triangle
+	{
+		std::vector<FEngineVertex> vertices;
+		std::vector<UINT> indices;
+
+		vertices.resize(3);
+		indices.reserve(3);
+
+		vertices[0] = FEngineVertex{ FVector(-0.5f, -0.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+		vertices[1] = FEngineVertex{ FVector(-0.5f, 0.5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+		vertices[2] = FEngineVertex{ FVector(0.5f, 0.5f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
+
+		indices.push_back(0);
+		indices.push_back(1);
+		indices.push_back(2);
+
+		UEngineVertexBuffer::Create("Triangle", vertices);
+		UEngineIndexBuffer::Create("Triangle", indices);
+		UMesh::Create("Triangle");
+	}
+
+	// Line
+	{
+		std::vector<FEngineVertex> vertices;
+		std::vector<UINT> indices;
+
+		vertices.resize(2);
+		indices.reserve(2);
+
+		vertices[0] = FEngineVertex{ FVector(0.f, -.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+		vertices[1] = FEngineVertex{ FVector(0.f, .5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+
+		indices.push_back(0);
+		indices.push_back(1);
+
+		UEngineVertexBuffer::Create("Line", vertices);
+		UEngineIndexBuffer::Create("Line", indices);
+		UMesh::Create("Line");
 	}
 }

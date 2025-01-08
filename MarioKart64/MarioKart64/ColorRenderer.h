@@ -1,10 +1,6 @@
 #pragma once
 #include <EngineCore/Renderer.h>
-
-struct FColor
-{
-	float4 Albedo;
-};
+#include "CData.h"
 
 class ColorRenderer : public URenderer
 {

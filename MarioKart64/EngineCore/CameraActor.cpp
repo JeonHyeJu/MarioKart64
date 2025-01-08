@@ -147,7 +147,7 @@ void ACameraActor::FreeCameraCheck()
 	}
 	else 
 	{
-		SetActorTransform(PrevTrans);
-		GetCameraComponent()->ProjectionType = PrevProjectionType;
+		/*SetActorTransform(PrevTrans);
+		GetCameraComponent()->ProjectionType = PrevProjectionType;*/
 	}
 }

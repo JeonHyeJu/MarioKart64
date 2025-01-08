@@ -148,9 +148,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AiMesh.h" />
+    <ClInclude Include="CData.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="CGlobal.h" />
     <ClInclude Include="ColorRenderer.h" />
+    <ClInclude Include="LineRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="NintendoLogo.h">
       <SubType>
       </SubType>
@@ -271,11 +279,19 @@
     </ClInclude>
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TestActor.h" />
+    <ClInclude Include="TriangleRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="CGlobal.cpp" />
     <ClCompile Include="ColorRenderer.cpp" />
+    <ClCompile Include="LineRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="NintendoLogo.cpp">
       <SubType>
       </SubType>
@@ -316,6 +332,10 @@
     </ClCompile>
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TestActor.cpp" />
+    <ClCompile Include="TriangleRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\Assimp\Bin\Debug\assimp-vc143-mtd.dll">

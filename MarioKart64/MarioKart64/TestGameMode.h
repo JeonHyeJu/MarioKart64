@@ -17,6 +17,6 @@ public:
 protected:
 
 private:
-	std::shared_ptr<class TestActor> Logo;
+	std::shared_ptr<class TestActor> mTestActor;
 };
 

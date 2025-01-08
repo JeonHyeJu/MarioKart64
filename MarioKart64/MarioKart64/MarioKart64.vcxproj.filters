@@ -295,6 +295,13 @@
     <ClInclude Include="ColorRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="TriangleRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="LineRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="CData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -339,6 +346,12 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="ColorRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="LineRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>

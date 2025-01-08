@@ -48,6 +48,11 @@ public:
 	}
 	ENGINEAPI void SetDepthStencilState(std::string_view _Name);
 
+	ENGINEAPI void SetTopology(const D3D11_PRIMITIVE_TOPOLOGY& _topology)
+	{
+		TOPOLOGY = _topology;
+	}
+
 	ENGINEAPI void PrimitiveTopologySetting();
 
 protected:

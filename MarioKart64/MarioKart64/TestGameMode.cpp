@@ -11,16 +11,12 @@
 
 ATestGameMode::ATestGameMode()
 {
-	{
-		mTestActor = GetWorld()->SpawnActor<TestActor>();
-	}
+	mTestActor = GetWorld()->SpawnActor<TestActor>();
 	
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	//Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 
-	Camera->SetActorLocation({ 0.0f, 200.0f, -1000.0f, 1.0f });
-	Camera->AddActorRotation({ 45.0f, 0.0f, 0.0f, 1.0f });
-
+	Camera->SetActorLocation({ 0.0f, 100.0f, -1000.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
 }
 

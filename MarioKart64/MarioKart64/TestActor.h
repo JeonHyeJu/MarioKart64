@@ -24,6 +24,11 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
+	void InitTestSingleTriangle();
+	void RunTestSingleTriangle(float _DeltaTime);
+	void InitTestMultipleTriangle();
+	void RunTestMultipleTriangle(float _DeltaTime);
+
 	//std::shared_ptr<class USpriteRenderer> Player;
 	std::shared_ptr<class ColorRenderer> Player;
 

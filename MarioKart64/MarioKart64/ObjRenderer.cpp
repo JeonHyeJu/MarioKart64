@@ -93,6 +93,16 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	// Temp
 	if (texName == "7EEAA53A_fix.png")
 	{
+		std::string log = "";
+		for (int i = 0; i < 30; ++i)
+		{
+			int idx = indices[i];
+			log += "{" + std::to_string(vertices[idx].POSITION.X) + ", " + std::to_string(vertices[idx].POSITION.Y) + ", " + std::to_string(vertices[idx].POSITION.Z) + "},";
+		}
+
+		log += "\n";
+		OutputDebugStringA(log.c_str());
+
 		Road = vertices;
 		RenderInfos.push_back(info);
 	}

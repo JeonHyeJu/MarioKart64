@@ -190,6 +190,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TestVertex.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\aabb.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ai_assert.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\anim.h" />

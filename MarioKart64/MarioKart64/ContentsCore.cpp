@@ -14,6 +14,7 @@
 #include "PlayGameMode.h"
 
 #include "TestGameMode.h"	// for test
+#include "TestVertex.h"	// for test
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -121,6 +122,7 @@ void UContentsCore::InitGraphics()
 
 		matSky->SetVertexShader("ColorShader.fx");
 		matSky->SetPixelShader("ColorShader.fx");
+		matSky->SetRasterizerState("CullBack");	// Temp
 		
 		matLine->SetVertexShader("ColorShader.fx");
 		matLine->SetPixelShader("ColorShader.fx");
@@ -132,41 +134,45 @@ void UContentsCore::InitTest()
 {
 	// Triangle
 	{
-		std::vector<FEngineVertex> vertices;
 		std::vector<UINT> indices;
 
-		vertices.resize(3);
 		indices.reserve(3);
-
-		vertices[0] = FEngineVertex{ FVector(-0.5f, -0.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
-		vertices[1] = FEngineVertex{ FVector(-0.5f, 0.5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
-		vertices[2] = FEngineVertex{ FVector(0.5f, 0.5f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
 
 		indices.push_back(0);
 		indices.push_back(1);
 		indices.push_back(2);
 
-		UEngineVertexBuffer::Create("Triangle", vertices);
+		UEngineVertexBuffer::Create("Triangle", SingleTriangle);
 		UEngineIndexBuffer::Create("Triangle", indices);
 		UMesh::Create("Triangle");
 	}
 
 	// Line
 	{
-		std::vector<FEngineVertex> vertices;
 		std::vector<UINT> indices;
 
-		vertices.resize(2);
 		indices.reserve(2);
-
-		vertices[0] = FEngineVertex{ FVector(0.f, -.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
-		vertices[1] = FEngineVertex{ FVector(0.f, .5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
 
 		indices.push_back(0);
 		indices.push_back(1);
 
-		UEngineVertexBuffer::Create("Line", vertices);
+		UEngineVertexBuffer::Create("Line", SingleLine);
 		UEngineIndexBuffer::Create("Line", indices);
 		UMesh::Create("Line");
+	}
+
+	// Multiple triangles
+	{
+		// Temp.. no reserve or resize
+		std::vector<UINT> indices;
+		
+		for (int i = 0; i < MultipleTriangles.size(); ++i)
+		{
+			indices.push_back(i);
+		}
+
+		UEngineVertexBuffer::Create("MultiTriangle", MultipleTriangles);
+		UEngineIndexBuffer::Create("MultiTriangle", indices);
+		UMesh::Create("MultiTriangle");
 	}
 }

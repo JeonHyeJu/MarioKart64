@@ -302,6 +302,7 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="CData.h" />
+    <ClInclude Include="TestVertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">

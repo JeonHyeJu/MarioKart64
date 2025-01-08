@@ -5,7 +5,8 @@
 TriangleRenderer::TriangleRenderer()
 {
 	URenderUnit& unit = CreateRenderUnit();
-	unit.SetMesh("Triangle");
+	//unit.SetMesh("Triangle");
+	unit.SetMesh("MultiTriangle");
 	unit.SetMaterial(CGlobal::OBJ_SKY_SHADER_NAME);
 
 	RenderColor.Albedo = float4(0.f, 0.f, 1.f, 1.f);

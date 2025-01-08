@@ -62,6 +62,42 @@ bool UCollision::CollisionCheck(std::string_view _OtherName, std::vector<UCollis
 	return 0 != _Vector.size();
 }
 
+bool UCollision::CollisionCheck(std::string_view _OtherName, FVector _NextPos, std::vector<UCollision*>& _Vector)
+{
+	std::string UpperName = UEngineString::ToUpper(_OtherName);
+
+	std::map<std::string, std::list<std::shared_ptr<class UCollision>>>& Collision = GetWorld()->Collisions;
+
+	if (false == Collision.contains(UpperName))
+	{
+		MSGASSERT("존재하지 않는 그룹과 충돌할수 없습니다" + std::string(UpperName));
+		return false;
+	}
+
+	FTransform NextTransform = Transform;
+
+	NextTransform.Location += _NextPos;
+	NextTransform.TransformUpdate();
+
+	std::list<std::shared_ptr<class UCollision>>& Group = Collision[UpperName];
+
+	for (std::shared_ptr<class UCollision>& OtherCol : Group)
+	{
+		if (false == OtherCol->IsActive())
+		{
+			continue;
+		}
+
+		if (true == FTransform::Collision(CollisionType, NextTransform, OtherCol->CollisionType, OtherCol->Transform))
+		{
+			_Vector.push_back(OtherCol.get());
+		}
+	}
+
+	return 0 != _Vector.size();
+}
+
+
 void UCollision::BeginPlay()
 {
 	USceneComponent::BeginPlay();
@@ -170,4 +206,27 @@ void UCollision::CollisionEventCheck(std::shared_ptr<UCollision> _Other)
 			_Other->CollisionCheckSet.erase(this);
 		}
 	}
+}
+
+void UCollision::DebugRender(UEngineCamera* _Camera, float _DeltaTime)
+{
+	URenderUnit Unit;
+
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+	Unit.SetMesh("Rect");
+	Unit.SetMaterial("CollisionDebugMaterial");
+
+
+	Unit.ConstantBufferLinkData("FTransform", GetTransformRef());
+	FVector Color = {0.0f, 1.0f, 0.0f};
+	Unit.ConstantBufferLinkData("OutColor", Color);
+
+	Unit.Render(_Camera, _DeltaTime);
+
 }

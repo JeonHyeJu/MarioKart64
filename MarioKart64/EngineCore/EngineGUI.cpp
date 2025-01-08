@@ -120,12 +120,13 @@ void UEngineGUI::PushGUIWindow(std::shared_ptr<class UEngineGUIWindow> _Window)
     Windows.insert({ _Window->GetName(), _Window });
 }
 
-void UEngineGUI::GUIRender()
+void UEngineGUI::GUIRender(ULevel* _Level)
 {
     UEngineGUI::GUIRenderStart();
-    for (std::pair<const std::string, std::shared_ptr<class UEngineGUIWindow>>& Window : Windows)
+    for (std::pair<const std::string, std::shared_ptr<UEngineGUIWindow>>& Window : Windows)
     {
         ImGui::Begin(Window.first.c_str());
+        Window.second->World = _Level;
         Window.second->OnGUI();
         ImGui::End();
     }

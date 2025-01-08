@@ -96,7 +96,7 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.View.View(Trans.World.ArrVector[3], Trans.World.GetFoward(), Trans.World.GetUp());
 
-	switch (Type)
+	switch (ProjectionType)
 	{
 	case EProjectionType::Perspective:
 		Trans.Projection.PerspectiveFovDeg(FOV, ProjectionScale.X, ProjectionScale.Y, Near, Far);

@@ -90,7 +90,15 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	info.TexName = texName;
 	info.Z = minZ;
 
-	RenderInfos.push_back(info);
+	// Temp
+	if (texName == "7EEAA53A_fix.png")
+	{
+		Road = vertices;
+		RenderInfos.push_back(info);
+	}
+
+	// TODO: uncomment
+	//RenderInfos.push_back(info);
 }
 
 void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
@@ -130,6 +138,7 @@ bool ObjRenderer::LoadModel()
 
 ObjRenderer::ObjRenderer()
 {
+	Road.reserve(10000);
 	RenderInfos.reserve(10000);
 }
 

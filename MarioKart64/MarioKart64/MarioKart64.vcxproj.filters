@@ -441,5 +441,8 @@
     <FxCompile Include="..\Resources\Shaders\ColorShader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\TestShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -47,6 +47,11 @@ void ULevel::LevelChangeEnd()
 
 void ULevel::Tick(float _DeltaTime)
 {
+	if (GetMainCamera()->IsFreeCamera())
+	{
+		return;
+	}
+
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
 	for ( ; StartIter != EndIter; )
@@ -86,9 +91,29 @@ void ULevel::Render(float _DeltaTime)
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 	}
 
+
+	{
+		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
+
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
+		{
+			std::list<std::shared_ptr<UCollision>>& List = Group.second;
+
+			for (std::shared_ptr<UCollision>& _Collision : List)
+			{
+				if (false == _Collision->IsActive())
+				{
+					continue;
+				}
+
+				_Collision->DebugRender(Camera->GetCameraComponent().get(), _DeltaTime);
+			}
+		}
+	}
+
 	if (true == UEngineWindow::IsApplicationOn())
 	{
-		UEngineGUI::GUIRender();
+		UEngineGUI::GUIRender(this);
 	}
 
 	UEngineCore::GetDevice().RenderEnd();

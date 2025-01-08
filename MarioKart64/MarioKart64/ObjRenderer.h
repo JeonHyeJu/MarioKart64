@@ -30,6 +30,10 @@ public:
 
 	void Init(std::string_view _path);
 	void Init(std::string_view _objPath, std::string_view _mtlPath);
+	const std::vector<FEngineVertex>& GetRoadVertecies() const
+	{
+		return Road;
+	}
 
 protected:
 	void BeginPlay() override;
@@ -61,5 +65,6 @@ private:
 	std::string FileName = "";
 
 	std::vector<RenderInfo> RenderInfos;
+	std::vector<FEngineVertex> Road;
 	int MeshCount = 0;
 };

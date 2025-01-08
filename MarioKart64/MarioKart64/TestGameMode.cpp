@@ -6,6 +6,7 @@
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/EngineCamera.h>
+#include <EnginePlatform/EngineInput.h>
 
 ATestGameMode::ATestGameMode()
 {
@@ -13,8 +14,7 @@ ATestGameMode::ATestGameMode()
 		Logo = GetWorld()->SpawnActor<TestActor>();
 		// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
 	}
-
-
+	
 	// {
 	//	std::shared_ptr<ATitleLogo> Logo = GetWorld()->SpawnActor<ATitleLogo>();
 	//	Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
@@ -38,6 +38,11 @@ ATestGameMode::~ATestGameMode()
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	if (UEngineInput::IsPress('C'))
+	{
+		GetWorld()->GetMainCamera()->FreeCameraSwitch();
+	}
 
 //	if (nullptr == Logo && true == Logo->IsDestroy())
 //	{

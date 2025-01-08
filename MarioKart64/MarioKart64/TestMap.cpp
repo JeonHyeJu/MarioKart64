@@ -7,6 +7,8 @@
 
 ATestMap::ATestMap()
 {
+	Base.reserve(1);
+
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
@@ -30,4 +32,14 @@ void ATestMap::BeginPlay()
 void ATestMap::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
+}
+
+const std::vector<FEngineVertex>& ATestMap::GetRoadVertecies()
+{
+	if (Renderer == nullptr)
+	{
+		return Base;
+	}
+	
+	return Renderer->GetRoadVertecies();
 }

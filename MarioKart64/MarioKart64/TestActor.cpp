@@ -91,16 +91,12 @@ void TestActor::Tick(float _DeltaTime)
 
 	if (UEngineInput::IsPress('W'))
 	{
-		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
-
-		// AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
-		LogoRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
-
-		// AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		AddRelativeLocation(FVector{ 0.0f, -100.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('Q'))

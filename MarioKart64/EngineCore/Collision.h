@@ -17,6 +17,7 @@ public:
 
 	ENGINEAPI void SetCollisionProfileName(std::string_view _ProfileName);
 	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI void DebugRender(UEngineCamera* _Camera, float _DeltaTime);
 
 	std::string GetCollisionProfileName()
 	{
@@ -26,6 +27,7 @@ public:
 	void SetRadius(float _Value);
 
 	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, std::vector<UCollision*>& _Vector);
+	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, FVector _NextPos, std::vector<UCollision*>& _Vector);
 
 	void SetCollisionType(ECollisionType _Type)
 	{

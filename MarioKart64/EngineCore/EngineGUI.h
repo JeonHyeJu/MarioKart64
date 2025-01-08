@@ -33,7 +33,7 @@ public:
 		return Window;
 	}
 
-	static void GUIRender();
+	static void GUIRender(ULevel* _Level);
 
 protected:
 

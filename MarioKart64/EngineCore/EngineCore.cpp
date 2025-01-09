@@ -20,6 +20,13 @@ UEngineWindow& UEngineCore::GetMainWindow()
 	return MainWindow;
 }
 
+std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::GetAllLevelMap()
+{
+	return LevelMap;
+}
+
+// 리얼 본체죠?
+// UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
 UEngineGraphicDevice UEngineCore::Device;
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
@@ -124,10 +131,17 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 // To prevent recursive importing
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
-	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
-	Ptr->SetName(_Name);
+	std::string UpperName = UEngineString::ToUpper(_Name);
+	if (true == LevelMap.contains(UpperName))
+	{
+		MSGASSERT("같은 이름의 레벨을 또 만들수는 없습니다." + std::string(UpperName));
+		return nullptr;
+	}
 
-	LevelMap.insert({ _Name.data(), Ptr});
+	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
+	Ptr->SetName(UpperName);
+
+	LevelMap.insert({ UpperName, Ptr});
 
 	std::cout << "NewLevelCreate" << std::endl;
 
@@ -136,13 +150,15 @@ std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 
 void UEngineCore::OpenLevel(std::string_view _Name)
 {
-	if (false == LevelMap.contains(_Name.data()))
+	std::string UpperString = UEngineString::ToUpper(_Name);
+
+	if (false == LevelMap.contains(UpperString))
 	{
-		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + std::string(_Name));
+		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + UpperString);
 		return;
 	}
 
-	NextLevel = LevelMap[_Name.data()];
+	NextLevel = LevelMap[UpperString];
 }
 
 void UEngineCore::EngineFrame()
@@ -163,7 +179,13 @@ void UEngineCore::EngineFrame()
 
 	Timer.TimeCheck();
 	float DeltaTime = Timer.GetDeltaTime();
-	UEngineInput::KeyCheck(DeltaTime);
+	if (true == MainWindow.IsFocus())
+	{
+		UEngineInput::KeyCheck(DeltaTime);
+	}
+	else {
+		UEngineInput::KeyReset();
+	}
 	
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render(DeltaTime);

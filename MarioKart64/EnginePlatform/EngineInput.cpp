@@ -217,6 +217,18 @@ void UEngineInput::EventCheck(float _DeltaTime)
 	}
 }
 
+void UEngineInput::KeyReset()
+{
+	std::map<int, UEngineKey>::iterator StartIter = GetInst().Keys.begin();
+	std::map<int, UEngineKey>::iterator EndIter = GetInst().Keys.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		UEngineKey& CurKey = StartIter->second;
+		CurKey.Reset();
+	}
+}
+
 void UEngineInput::KeyCheck(float _DeltaTime)
 {
 	std::map<int, UEngineKey>::iterator StartIter = GetInst().Keys.begin();

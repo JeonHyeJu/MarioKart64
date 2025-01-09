@@ -77,7 +77,7 @@ void UEngineGUI::Init()
                 return true;
             }
 
-            return true;
+            return false;
         }
     );
 }
@@ -120,12 +120,47 @@ void UEngineGUI::PushGUIWindow(std::shared_ptr<class UEngineGUIWindow> _Window)
     Windows.insert({ _Window->GetName(), _Window });
 }
 
+std::shared_ptr<UEngineGUIWindow> UEngineGUI::FindGUIWindow(std::string_view _Text)
+{
+    std::string UpperName = UEngineString::ToUpper(_Text);
+
+    if (false == Windows.contains(UpperName))
+    {
+        return nullptr;
+    }
+
+    return Windows[UpperName];
+}
+
+void UEngineGUI::AllWindowOn()
+{
+    for (std::pair<const std::string, std::shared_ptr<UEngineGUIWindow>>& Window : Windows)
+    {
+        Window.second->SetActive(true);
+    }
+}
+
+void UEngineGUI::AllWindowOff()
+{
+    for (std::pair<const std::string, std::shared_ptr<UEngineGUIWindow>>& Window : Windows)
+    {
+        Window.second->SetActive(false);
+    }
+}
+
 void UEngineGUI::GUIRender(ULevel* _Level)
 {
     UEngineGUI::GUIRenderStart();
     for (std::pair<const std::string, std::shared_ptr<UEngineGUIWindow>>& Window : Windows)
     {
-        ImGui::Begin(Window.first.c_str());
+        if (false == Window.second->IsActive())
+        {
+            continue;
+        }
+
+        bool* ActivePtr = &Window.second->GetIsActiveValueRef();
+        bool Result = ImGui::Begin(Window.first.c_str(), ActivePtr);
+
         Window.second->World = _Level;
         Window.second->OnGUI();
         ImGui::End();

@@ -107,6 +107,16 @@ public:
 		AutoScaleRatio = _Scale;
 	}
 
+	void BillboardOn()
+	{
+		IsBillboard = true;
+	}
+
+	void BillboardOff()
+	{
+		IsBillboard = false;
+	}
+
 
 	void SetSprite(UEngineSprite* _Sprite);
 
@@ -118,8 +128,11 @@ protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
 	void BeginPlay() override;
 	void ComponentTick(float _DeltaTime) override;
+	ENGINEAPI void RenderTransUpdate(UEngineCamera* _Camera) override;
 
 private:
+	bool IsBillboard = false;
+
 	URenderUnit* MainUnit;
 
 	int CurIndex = 0;

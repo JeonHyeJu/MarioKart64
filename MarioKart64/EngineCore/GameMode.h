@@ -4,8 +4,8 @@
 class AGameMode : public AActor
 {
 public:
-	AGameMode();
-	~AGameMode();
+	ENGINEAPI AGameMode();
+	ENGINEAPI ~AGameMode();
 
 	AGameMode(const AGameMode& _Other) = delete;
 	AGameMode(AGameMode&& _Other) noexcept = delete;

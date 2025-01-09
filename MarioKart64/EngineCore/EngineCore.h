@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineBase/EngineDefine.h>
 #include <EngineBase/EngineTimer.h>
+#include <EngineBase/EngineString.h>
 #include <EnginePlatform/EngineWindow.h>
 #include "EngineGraphicDevice.h"
 #include "IContentsCore.h"
@@ -18,10 +19,14 @@ public:
 	template<typename GameModeType, typename MainPawnType>
 	static class std::shared_ptr<class ULevel> CreateLevel(std::string_view _Name)
 	{
-		std::shared_ptr<ULevel> NewLevel = NewLevelCreate(_Name);
+		std::string UpperString = UEngineString::ToUpper(_Name);
 
-		NewLevel->SpawnActor<GameModeType>();
-		NewLevel->SpawnActor<MainPawnType>();
+		std::shared_ptr<ULevel> NewLevel = NewLevelCreate(UpperString);
+
+		std::shared_ptr<GameModeType> GameMode = NewLevel->SpawnActor<GameModeType>();
+		std::shared_ptr<MainPawnType> Pawn = NewLevel->SpawnActor<MainPawnType>();
+
+		NewLevel->InitLevel(GameMode.get(), Pawn.get());
 
 		return NewLevel;
 	}
@@ -34,6 +39,8 @@ public:
 	ENGINEAPI static UEngineGraphicDevice& GetDevice();
 
 	ENGINEAPI static UEngineWindow& GetMainWindow();
+
+	ENGINEAPI static std::map<std::string, std::shared_ptr<class ULevel>> GetAllLevelMap();
 
 protected:
 

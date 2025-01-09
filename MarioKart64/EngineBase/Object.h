@@ -29,7 +29,7 @@ public:
 		return Name.c_str();
 	}
 
-	virtual void SetName(std::string_view _Name)
+	ENGINEAPI virtual void SetName(std::string_view _Name)
 	{
 		Name = _Name.data();
 	}
@@ -115,6 +115,11 @@ public:
 	virtual void SetOrder(int _Order)
 	{
 		Order = _Order;
+	}
+
+	bool& GetIsActiveValueRef()
+	{
+		return IsActiveValue;
 	}
 
 protected:

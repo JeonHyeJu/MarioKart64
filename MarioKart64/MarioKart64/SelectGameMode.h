@@ -1,7 +1,7 @@
 #pragma once
-#include <EngineCore/Actor.h>
+#include <EngineCore/GameMode.h>
 
-class SelectGameMode : public AActor
+class SelectGameMode : public AGameMode
 {
 public:
 	enum class Scene

@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "SpriteRenderer.h"
+#include "EngineCamera.h"
 
 USpriteRenderer::USpriteRenderer()
 {
@@ -87,6 +88,27 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);
+}
+
+void USpriteRenderer::RenderTransUpdate(UEngineCamera* _Camera) 
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	FMatrix CurWorld = RendererTrans.World;
+
+	if (true == IsBillboard)
+	{
+		FMatrix Bill = CameraTrans.View;
+		Bill.ArrVector[3] = FVector(0.0f, 0.0f, 0.0f, 1.0f);
+		Bill.Transpose();
+
+		CurWorld = RendererTrans.ScaleMat * Bill * RendererTrans.LocationMat * RendererTrans.RevolveMat * RendererTrans.ParentMat;
+	}
+
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = CurWorld * RendererTrans.View * RendererTrans.Projection;
 }
 
 void USpriteRenderer::ComponentTick(float _DeltaTime)

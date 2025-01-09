@@ -337,8 +337,12 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 	
 	if (isCollided)
 	{
+		FTransform& tempTfrm = Player->GetTransformRef();
+		OutputDebugStringA(("before collision set: " + std::to_string(tempTfrm.Location.Y) + "\n").c_str());
 		playerTrfm.Location.Y += fDist;
 		Player->SetRelativeLocation(playerTrfm.Location);
+
+		OutputDebugStringA(("after collision set: " + std::to_string(tempTfrm.Location.Y) + "\n").c_str());
 
 		/*if (fDist > BASE_DIST)
 		{
@@ -360,11 +364,41 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 	}
 	else
 	{
-		Player->AddRelativeLocation({ 0.f, GRAVITY_FORCE * _DeltaTime, 0.f });
-	}
+		const FTransform& _tempFfrm = Player->GetTransform();
+		OutputDebugStringA(("org player set: " + std::to_string(_tempFfrm.Location.Y) + "\n").c_str());
 
-	OutputDebugStringA((std::to_string(playerTrfm.Location.Y) + "\n").c_str());
-	
+		FTransform asumeTfrm = _tempFfrm;
+		float gravityForce = GRAVITY_FORCE * _DeltaTime;
+		asumeTfrm.Location.Y += gravityForce;
+		OutputDebugStringA(("asumeTfrm set: " + std::to_string(asumeTfrm.Location.Y) + "\n").c_str());
+
+		float fDistTemp = 0.f;
+		bool isCollided = false;
+		for (size_t i = 0, size = MultipleTriangles.size(); i < size; i += 3)
+		{
+			DirectX::XMVECTOR v1 = (MultipleTriangles[i].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
+			DirectX::XMVECTOR v2 = (MultipleTriangles[i + 1].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
+			DirectX::XMVECTOR v3 = (MultipleTriangles[i + 2].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
+			isCollided = DirectX::TriangleTests::Intersects(asumeTfrm.Location.DirectVector, FVector::UP.DirectVector, v1, v2, v3, fDistTemp);
+
+			if (isCollided)
+			{
+				break;
+			}
+		}
+
+		if (isCollided)
+		{
+			Player->AddRelativeLocation({ 0.f, gravityForce + fDistTemp, 0.f});
+		}
+		else
+		{
+			Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
+		}
+
+		FTransform& tempTfrm = Player->GetTransformRef();
+		OutputDebugStringA(("gravity set: " + std::to_string(tempTfrm.Location.Y) + ".. gravityForce: " + std::to_string(gravityForce) +", fDist: " + std::to_string(fDistTemp) + "\n").c_str());
+	}
 
 	float dirHalf = (playerScale.Y * .25f + 1.f * dirVec.Y) * -1.f;
 	Line->SetScale3D({ 1.f, playerScale.Y * .5f, 0.0f });

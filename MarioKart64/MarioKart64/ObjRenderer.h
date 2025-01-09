@@ -4,6 +4,7 @@
 #include <vector>
 #include <assimp/scene.h>
 #include "AiMesh.h"
+#include "CData.h"
 
 class UEngineCamera;
 class ModelLoader;
@@ -30,9 +31,18 @@ public:
 
 	void Init(std::string_view _path);
 	void Init(std::string_view _objPath, std::string_view _mtlPath);
-	const std::vector<FEngineVertex>& GetRoadVertecies() const
+
+	const std::vector<NavData>& GetNavData() const
 	{
-		return Road;
+		return NavDatas;
+	}
+	int GetNavIndex() const
+	{
+		return CollidedNavIndex;
+	}
+	void SetNavIndex(int _idx)
+	{
+		CollidedNavIndex = _idx;
 	}
 
 protected:
@@ -65,6 +75,10 @@ private:
 	std::string FileName = "";
 
 	std::vector<RenderInfo> RenderInfos;
-	std::vector<FEngineVertex> Road;
 	int MeshCount = 0;
+
+	int CollidedNavIndex = -1;
+	std::vector<NavData> NavDatas;
+
+	void InitNavMesh(const std::vector<FEngineVertex>& _vec);
 };

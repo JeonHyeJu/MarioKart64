@@ -34,12 +34,32 @@ void ATestMap::Tick(float _deltaTime)
 	AActor::Tick(_deltaTime);
 }
 
-const std::vector<FEngineVertex>& ATestMap::GetRoadVertecies()
+const std::vector<NavData>& ATestMap::GetNavData() const
 {
 	if (Renderer == nullptr)
 	{
-		return Base;
+		return BaseNav;
 	}
-	
-	return Renderer->GetRoadVertecies();
+
+	return Renderer->GetNavData();
+}
+
+int ATestMap::GetNavIndex() const
+{
+	if (Renderer == nullptr)
+	{
+		return -1;
+	}
+
+	return Renderer->GetNavIndex();
+}
+
+void ATestMap::SetNavIndex(int _idx)
+{
+	if (Renderer == nullptr)
+	{
+		return;
+	}
+
+	return Renderer->SetNavIndex(_idx);
 }

@@ -93,17 +93,7 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	// Temp
 	if (texName == "7EEAA53A_fix.png")
 	{
-		std::string log = "";
-		for (int i = 0; i < 30; ++i)
-		{
-			int idx = indices[i];
-			log += "{" + std::to_string(vertices[idx].POSITION.X) + ", " + std::to_string(vertices[idx].POSITION.Y) + ", " + std::to_string(vertices[idx].POSITION.Z) + "},";
-		}
-
-		log += "\n";
-		OutputDebugStringA(log.c_str());
-
-		Road = vertices;
+		InitNavMesh(vertices);	// Test
 		RenderInfos.push_back(info);
 	}
 
@@ -146,9 +136,38 @@ bool ObjRenderer::LoadModel()
 	return true;
 }
 
+void ObjRenderer::InitNavMesh(const std::vector<FEngineVertex>& _vec)
+{
+	NavDatas.reserve(2000);		// TODO: set with mesh size
+
+	int idx = 0;
+	for (size_t i = 0, size = _vec.size(); i < size; i += 3)
+	{
+		NavData nd;
+		nd.Vertex[0] = _vec[i].POSITION;
+		nd.Vertex[1] = _vec[i + 1].POSITION;
+		nd.Vertex[2] = _vec[i + 2].POSITION;
+		nd.Index = idx++;
+
+		NavDatas.push_back(nd);
+	}
+
+	for (size_t i = 0, size = NavDatas.size(); i < size - 1; ++i)
+	{
+		for (size_t j = i + 1; j < size; j++)
+		{
+			NavData& leftNd = NavDatas[i];
+			NavData& rightNd = NavDatas[j];
+			if (leftNd.IsAttached(rightNd))
+			{
+				leftNd.LinkBoth(rightNd);
+			}
+		}
+	}
+}
+
 ObjRenderer::ObjRenderer()
 {
-	Road.reserve(10000);
 	RenderInfos.reserve(10000);
 }
 

@@ -66,13 +66,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	
 	//UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
-	//UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
+	UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 
-	UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
-	UEngineCore::OpenLevel("TestLevel");
+	/*UEngineCore::CreateLevel<ATestGameMode, APawn>("TestLevel");
+	UEngineCore::OpenLevel("TestLevel");*/
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)
@@ -89,10 +89,11 @@ void UContentsCore::InitGraphics()
 	// Rasterizer state
 	{
 		D3D11_RASTERIZER_DESC desc = {};
-		desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-		desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;	// Temp. for test
-		//desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-		//desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		// Temp. for test
+		//desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		//desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+		desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		UEngineRasterizerState::Create("CullBack", desc);
 	}
 

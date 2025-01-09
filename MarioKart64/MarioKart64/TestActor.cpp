@@ -211,7 +211,7 @@ void TestActor::InitTestMultipleTriangle()
 	Player->SetupAttachment(RootComponent);
 	//Player->SetAutoScaleRatio(5.0f);
 	Player->SetScale3D({ 100.f, 100.f, 1.f });
-	Player->AddWorldLocation({ 0.f, 200.f, 1.f });
+	Player->AddWorldLocation({ 0.f, 500.f, 1.f });
 
 	Triangle = CreateDefaultSubObject<TriangleRenderer>();
 	Triangle->SetupAttachment(RootComponent);

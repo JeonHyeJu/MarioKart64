@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineCore/EngineVertex.h>
+#include "CData.h"
 
 class ATestMap : public AActor
 {
@@ -13,7 +14,9 @@ public:
 	ATestMap& operator=(const ATestMap& _other) = delete;
 	ATestMap& operator=(ATestMap&& _other) noexcept = delete;
 
-	const std::vector<FEngineVertex>& GetRoadVertecies();
+	const std::vector<NavData>& GetNavData() const;
+	int GetNavIndex() const;
+	void SetNavIndex(int _idx);
 
 protected:
 	void BeginPlay() override;
@@ -21,5 +24,6 @@ protected:
 
 private:
 	std::vector<FEngineVertex> Base;
+	std::vector<NavData> BaseNav;
 	std::shared_ptr<class ObjRenderer> Renderer = nullptr;
 };

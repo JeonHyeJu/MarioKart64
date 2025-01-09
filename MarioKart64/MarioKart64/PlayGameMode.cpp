@@ -13,7 +13,7 @@ APlayGameMode::APlayGameMode()
 	Skybox = GetWorld()->SpawnActor<ASkybox>();
 	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
 	Player = GetWorld()->SpawnActor<APlayer>();
-	Player->SetActorLocation({ 0.0f, 100.0f, 0.0f });
+	Player->SetActorLocation({ 0.0f, 100.0f, 1000.0f });
 
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
 	TestMapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
@@ -21,9 +21,11 @@ APlayGameMode::APlayGameMode()
 	Camera = GetWorld()->GetMainCamera();
 	Camera->GetCameraComponent()->SetZSort(1, true);
 
-	Camera->AddActorRotation({ 10.f, 0.f, 0.f });
-	Camera->AddRelativeLocation({ 0.f, 0.f, -500.f });
+	Camera->AddActorRotation({ 0.f, 0.f, 0.f });
+	Camera->AddRelativeLocation({ 0.f, 200.f, -500.f });
 	Camera->AttachToActor(Player.get());
+
+	CheckCollisionOfAllMap();
 }
 
 APlayGameMode::~APlayGameMode()
@@ -37,88 +39,105 @@ void APlayGameMode::BeginPlay()
 
 void APlayGameMode::Tick(float _deltaTime)
 {
+	//OutputDebugStringA(("fps: " + std::to_string(1.f / _deltaTime) + "\n").c_str());
+
 	AActor::Tick(_deltaTime);
 
-	int testNum = 0;
-	if (testNum++ % 100 == 0)
+	const FTransform& trfmPlayer = Player->GetTransform();
+	const FTransform& trfmObj = TestMapPtr->GetTransform();
+
+	const float GRAVITY_FORCE = -500.f;
+	float gravityForce = GRAVITY_FORCE * _deltaTime;
+
+	int navIdx = TestMapPtr->GetNavIndex();
+	if (navIdx == -1)
 	{
-		testNum = 0;
+		Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
+		CheckCollisionOfAllMap();
+		return;
+	}
 
-		float fDist = 0.f;
-		const FTransform& trfm = Player->GetTransform();
-		DirectX::XMVECTOR layOrg = trfm.Location.DirectVector;
+	bool isCollided = false;
+	float fDist = 0.f;
+	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
+	const NavData& nd = navDatas[navIdx];
+	isCollided = nd.Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 
-		float width = 39.f;	// temp
-		FVector dirVec = Player->GetActorUpVector();
-		dirVec.Y *= -1;
-		DirectX::XMVECTOR layDst = dirVec.DirectVector;
-		
-		const std::vector<FEngineVertex>& road = TestMapPtr->GetRoadVertecies();
-
-		//OutputDebugStringA(("road size: " + std::to_string(road.size()) + "\n").c_str());
-
-		// asume orginized meshes..
-		bool isCollided = false;
-		for (size_t i = 0, size = road.size()-3; i < size; i+=3)
+	if (!isCollided)
+	{
+		for (int linkedIdx : nd.LinkData)
 		{
-			DirectX::XMVECTOR v1 = road[i].POSITION.DirectVector;
-			DirectX::XMVECTOR v2 = road[i+1].POSITION.DirectVector;
-			DirectX::XMVECTOR v3 = road[i+2].POSITION.DirectVector;
-			bool res = DirectX::TriangleTests::Intersects(layOrg, layDst, v1, v2, v3, fDist);
-			isCollided |= res;
+			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+			if (isCollided)
+			{
+				OutputDebugStringA(("######## Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+				TestMapPtr->SetNavIndex(linkedIdx);
+				navIdx = linkedIdx;
+				break;
+			}
+		}
+	}
+
+	if (isCollided)
+	{
+		Player->AddActorLocation({ 0.f, fDist, 0.f });
+	}
+	else
+	{
+		FTransform trfmFuture = trfmPlayer;
+		trfmFuture.Location.Y += gravityForce;
+
+		float fDistTemp = 0.f;
+		isCollided = navDatas[navIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+		if (isCollided)
+		{
+			OutputDebugStringA(("!!!!!!!!!! Seconds coliided idx: " + std::to_string(navIdx) + "\n").c_str());
+		}
+		else
+		{
+			for (int linkedIdx : nd.LinkData)
+			{
+				isCollided = navDatas[linkedIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+				if (isCollided)
+				{
+					OutputDebugStringA(("@@@@@@@@@ Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+					TestMapPtr->SetNavIndex(linkedIdx);
+					navIdx = linkedIdx;
+					break;
+				}
+			}
 		}
 
 		if (isCollided)
 		{
-			//OutputDebugStringA(("isCollided : TRUE.. fDist: " + std::to_string(fDist) + "\n").c_str());
+			OutputDebugStringA(("gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
+			Player->AddRelativeLocation({ 0.f, gravityForce + fDistTemp, 0.f });
 		}
 		else
 		{
-			//OutputDebugStringA(("isCollided : FALSE.. fDist: " + std::to_string(fDist) + "\n").c_str());
+			Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
 		}
 	}
+}
 
-	const FTransform& trfmPlayer = Player->GetTransform();
-	const FTransform& trfmCamera = Camera->GetTransform();
+void APlayGameMode::CheckCollisionOfAllMap()
+{
+	const FTransform& tfrmPlayer = Player->GetTransform();
+	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
 
-	/*{
-		std::string playerLog = "Player Loc: " + std::to_string(trfmPlayer.Location.X) + ", " + std::to_string(trfmPlayer.Location.Y) + ", " + std::to_string(trfmPlayer.Location.Z);
-		std::string cameraLog = "Camera Loc: " + std::to_string(trfmCamera.Location.X) + ", " + std::to_string(trfmCamera.Location.Y) + ", " + std::to_string(trfmCamera.Location.Z);
-		OutputDebugStringA((playerLog + "\n" + cameraLog + "\n").c_str());
-	}*/
+	// TODO: Important.. This doesn't take into account children
+	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
+	{
+		const FTransform& trfmObj = TestMapPtr->GetTransform();
+		const NavData& nd = navDatas[i];
 
-	float speed = 1000.f;
-
-	if (UEngineInput::IsPress('R'))
-	{
-		Camera->AddActorRotation(FVector{ -180.f * _deltaTime, 0.f, 0.f });
-	}
-	if (UEngineInput::IsPress('F'))
-	{
-		Camera->AddActorRotation(FVector{ 180.f * _deltaTime, 0.f, 0.f });
-	}
-	if (UEngineInput::IsPress('W'))
-	{
-		Camera->AddRelativeLocation({ 0.f, 0.f, speed * _deltaTime, 1.0f });
-	}
-	if (UEngineInput::IsPress('S'))
-	{
-		Camera->AddRelativeLocation({ 0.f, 0.f, -speed * _deltaTime, 1.0f });
-	}
-	if (UEngineInput::IsPress('A'))
-	{
-		Camera->AddRelativeLocation({ -speed * _deltaTime, 0.0f, 0.f, 1.0f });
-	}
-	if (UEngineInput::IsPress('D'))
-	{
-		Camera->AddRelativeLocation({ speed * _deltaTime, 0.0f, 0.f, 1.0f });
-	}
-	if (UEngineInput::IsPress('Q'))
-	{
-		Camera->AddActorRotation({ 0.f, -speed * _deltaTime, 0.f, 1.0f });
-	}
-	if (UEngineInput::IsPress('E'))
-	{
-		Camera->AddActorRotation({ 0.f, speed * _deltaTime, 0.f, 1.0f });
+		float fDist = 0.f;
+		bool isCollided = nd.Intersects(tfrmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+		if (isCollided)
+		{
+			TestMapPtr->SetNavIndex(nd.Index);
+			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(nd.Index) + "\n").c_str());
+			break;
+		}
 	}
 }

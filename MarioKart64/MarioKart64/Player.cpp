@@ -10,16 +10,8 @@ APlayer::APlayer()
 	RootComponent = Default;
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
-	Renderer->SetRelativeLocation({ 0.f, -90.f, -200.f });
 	Renderer->SetOrder(0);
 
-	// Temp. for test nav-mesh
-	/*{
-		Renderer->SetAutoScale(false);
-		Renderer->ColorData.PlusColor = { 1.f, 1.f, 1.f };
-		Renderer->SetRelativeScale3D({ 1.f, 39.f, 1.f });
-	}*/
-	
 	// Temp
 	const int TURN_SIZE = 31;
 	std::vector<int> idxs(TURN_SIZE, 0);
@@ -43,7 +35,6 @@ APlayer::~APlayer()
 
 void APlayer::Tick(float _deltaTime)
 {
-	AActor::Tick(_deltaTime);
 	APawn::Tick(_deltaTime);
 
 	FVector move;

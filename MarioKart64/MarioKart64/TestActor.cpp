@@ -16,6 +16,7 @@ TestActor::TestActor()
 {
 	//InitTestSingleTriangle();
 	InitTestMultipleTriangle();
+	InitNavMesh();
 }
 
 TestActor::~TestActor()
@@ -57,7 +58,6 @@ void TestActor::InitTestSingleTriangle()
 	Triangle->SetRelativeScale3D({ 1000.0f, 1000.0f, 1.0f });
 	Triangle->SetRotation({ 70.f, 0.f, 20.f });
 
-	FVector playerScale = Player->GetWorldScale3D();
 	Line = CreateDefaultSubObject<LineRenderer>();
 	Line->SetupAttachment(RootComponent);
 
@@ -232,49 +232,37 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 	FVector playerScale = Player->GetWorldScale3D();
 	float halfY = playerScale.Y * .5f + 1.f;
 	FTransform& playerTrfm = Player->GetTransformRef();
-	DirectX::XMVECTOR layOrg = playerTrfm.Location.DirectVector;
-
-	FVector dirVec = playerTrfm.GetWorldUp();
-	dirVec.Y *= -1;
-	DirectX::XMVECTOR layDst = dirVec.DirectVector;
-
-	// Temp
 	FTransform& triTrfm = Triangle->GetTransformRef();
 
-	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-	FTransform camTrfm = Camera->GetTransform();
-
-	FVector Vector = layOrg;
-
-	bool isCollided = false;
-	for (size_t i = 0, size = MultipleTriangles.size(); i < size; i+=3)
+	//bool isCollided = false;
+	/*for (size_t i = 0, size = MultipleTriangles.size(); i < size; i+=3)
 	{
 		DirectX::XMVECTOR v1 = (MultipleTriangles[i].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
 		DirectX::XMVECTOR v2 = (MultipleTriangles[i+1].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
 		DirectX::XMVECTOR v3 = (MultipleTriangles[i+2].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
-		isCollided = DirectX::TriangleTests::Intersects(Vector.DirectVector, FVector::UP.DirectVector, v1, v2, v3, fDist);
+		isCollided = DirectX::TriangleTests::Intersects(playerTrfm.Location.DirectVector, FVector::UP.DirectVector, v1, v2, v3, fDist);
 
 		if (isCollided)
 		{
 			break;
 		}
+	}*/
+
+	const float BASE_DIST = halfY;
+	const float GRAVITY_FORCE = -500.f;
+	float gravityForce = GRAVITY_FORCE * _DeltaTime;
+
+	if (CollidedNavIndex == -1)
+	{
+		Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
+		CheckAllMesh();
+		return;
 	}
 
-	//DirectX::XMVECTOR PlayerLay = DirectX::XMVectorSubtract(layDst, layOrg);
-	//DirectX::XMVECTOR normalVec = DirectX::XMVector4Cross(v1, v2, v3);
+	const NavData& nd = NavDatas[CollidedNavIndex];
+	bool isCollided = nd.Intersects(playerTrfm.Location, FVector::UP, triTrfm.ScaleMat, triTrfm.RotationMat, triTrfm.LocationMat, fDist);
 
-	//DirectX::XMFLOAT3 normalDat;
-	//DirectX::XMStoreFloat3(&normalDat, normalVec);
-
-	//DirectX::XMVECTOR angle = DirectX::XMVector2AngleBetweenVectors(PlayerLay, normalVec);
-	//DirectX::XMFLOAT3 angleData;
-	//DirectX::XMStoreFloat3(&angleData, angle);
-
-	//const float R2D = 180.f / 3.14f;
-	//OutputDebugStringA(("angleData.x: " + std::to_string(angleData.x * R2D) + ", " + std::to_string(angleData.y * R2D) + ", " + std::to_string(angleData.z * R2D) + "\n").c_str());
-
-	//Vector.Z = 0.0f;
-
+	// for logging
 	std::string log = "";
 	if (isCollided)
 	{
@@ -284,9 +272,21 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 	{
 		log = "isCollided : FALSE.. fDist: " + std::to_string(fDist) + "\n";
 	}
-	OutputDebugStringA(log.c_str());
+	//OutputDebugStringA(log.c_str());
 
-	UEngineCore::GetMainWindow().GetMousePos();
+	if (!isCollided)
+	{
+		for (int linkedIdx : nd.LinkData)
+		{
+			isCollided = NavDatas[linkedIdx].Intersects(playerTrfm.Location, FVector::UP, triTrfm.ScaleMat, triTrfm.RotationMat, triTrfm.LocationMat, fDist);
+			if (isCollided)
+			{
+				OutputDebugStringA(("######## Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+				CollidedNavIndex = linkedIdx;
+				break;
+			}
+		}
+	}
 
 	if (UEngineInput::IsPress('A'))
 	{
@@ -314,93 +314,109 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 		Player->AddRelativeLocation({ 0.f, -100.f * _DeltaTime, 0.f });
 	}
 
-	if (UEngineInput::IsPress('F'))
-	{
-		//LogoRenderer->ColorData.MulColor = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	}
-
 	if (UEngineInput::IsPress('E'))
 	{
 		Player->AddRelativeLocation({ 0.f, 100.f * _DeltaTime, 0.f });
 	}
 
-	if (UEngineInput::IsPress('R'))
-	{
-		/*LogoRenderer->ColorData.PlusColor -= float4(1.0f, 1.0f, 1.0f, 1.0f) * _DeltaTime;
-		LogoRenderer->ColorData.PlusColor.W -= _DeltaTime;*/
-
-		// Child->SetWorldLocation(FVector{ 100.0f, 0.0f , 0.0f });
-	}
-
-	const float BASE_DIST = halfY;
-	const float GRAVITY_FORCE = -500.f;
-	
 	if (isCollided)
 	{
 		FTransform& tempTfrm = Player->GetTransformRef();
-		OutputDebugStringA(("before collision set: " + std::to_string(tempTfrm.Location.Y) + "\n").c_str());
 		playerTrfm.Location.Y += fDist;
 		Player->SetRelativeLocation(playerTrfm.Location);
-
-		OutputDebugStringA(("after collision set: " + std::to_string(tempTfrm.Location.Y) + "\n").c_str());
-
-		/*if (fDist > BASE_DIST)
-		{
-			float downVal = fDist - BASE_DIST;
-			if (downVal < GRAVITY_FORCE)
-			{
-				Player->AddRelativeLocation({ 0.f, downVal, 0.f });
-			}
-			else
-			{
-				Player->AddRelativeLocation({ 0.f, GRAVITY_FORCE * _DeltaTime, 0.f });
-			}
-		}
-		else
-		{
-			float upVal = BASE_DIST - fDist;
-			Player->AddRelativeLocation({ 0.f, upVal * _DeltaTime, 0.f });
-		}*/
 	}
 	else
 	{
 		const FTransform& _tempFfrm = Player->GetTransform();
-		OutputDebugStringA(("org player set: " + std::to_string(_tempFfrm.Location.Y) + "\n").c_str());
-
 		FTransform asumeTfrm = _tempFfrm;
-		float gravityForce = GRAVITY_FORCE * _DeltaTime;
 		asumeTfrm.Location.Y += gravityForce;
-		OutputDebugStringA(("asumeTfrm set: " + std::to_string(asumeTfrm.Location.Y) + "\n").c_str());
 
 		float fDistTemp = 0.f;
-		bool isCollided = false;
-		for (size_t i = 0, size = MultipleTriangles.size(); i < size; i += 3)
-		{
-			DirectX::XMVECTOR v1 = (MultipleTriangles[i].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
-			DirectX::XMVECTOR v2 = (MultipleTriangles[i + 1].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
-			DirectX::XMVECTOR v3 = (MultipleTriangles[i + 2].POSITION * triTrfm.ScaleMat * triTrfm.RotationMat * triTrfm.LocationMat).DirectVector;
-			isCollided = DirectX::TriangleTests::Intersects(asumeTfrm.Location.DirectVector, FVector::UP.DirectVector, v1, v2, v3, fDistTemp);
 
-			if (isCollided)
+		isCollided = NavDatas[CollidedNavIndex].Intersects(asumeTfrm.Location, FVector::UP, triTrfm.ScaleMat, triTrfm.RotationMat, triTrfm.LocationMat, fDistTemp);
+		if (isCollided)
+		{
+			OutputDebugStringA(("!!!!!!!!!! Seconds coliided idx: " + std::to_string(CollidedNavIndex) + "\n").c_str());
+		}
+		else
+		{
+			for (int linkedIdx : nd.LinkData)
 			{
-				break;
+				isCollided = NavDatas[linkedIdx].Intersects(asumeTfrm.Location, FVector::UP, triTrfm.ScaleMat, triTrfm.RotationMat, triTrfm.LocationMat, fDistTemp);
+				if (isCollided)
+				{
+					OutputDebugStringA(("@@@@@@@@@ Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+					CollidedNavIndex = linkedIdx;
+					break;
+				}
 			}
 		}
 
 		if (isCollided)
 		{
+			OutputDebugStringA(("gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
 			Player->AddRelativeLocation({ 0.f, gravityForce + fDistTemp, 0.f});
 		}
 		else
 		{
 			Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
 		}
-
-		FTransform& tempTfrm = Player->GetTransformRef();
-		OutputDebugStringA(("gravity set: " + std::to_string(tempTfrm.Location.Y) + ".. gravityForce: " + std::to_string(gravityForce) +", fDist: " + std::to_string(fDistTemp) + "\n").c_str());
 	}
 
+	FVector dirVec = playerTrfm.GetWorldUp();
 	float dirHalf = (playerScale.Y * .25f + 1.f * dirVec.Y) * -1.f;
 	Line->SetScale3D({ 1.f, playerScale.Y * .5f, 0.0f });
 	Line->SetRelativeLocation(playerTrfm.Location + FVector{ 0.f, dirHalf, -1.f });
+}
+
+void TestActor::InitNavMesh()
+{
+	NavDatas.reserve(2000);		// TODO: set with mesh size
+
+	int idx = 0;
+	for (size_t i = 0, size = MultipleTriangles.size(); i < size; i += 3)
+	{
+		NavData nd;
+		nd.Vertex[0] = MultipleTriangles[i].POSITION;
+		nd.Vertex[1] = MultipleTriangles[i+1].POSITION;
+		nd.Vertex[2] = MultipleTriangles[i+2].POSITION;
+		nd.Index = idx++;
+
+		NavDatas.push_back(nd);
+	}
+
+	for (size_t i = 0, size = NavDatas.size(); i < size-1; ++i)
+	{
+		for (size_t j = i+1; j < size; j++)
+		{
+			NavData& leftNd = NavDatas[i];
+			NavData& rightNd = NavDatas[j];
+			if (leftNd.IsAttached(rightNd))
+			{
+				leftNd.LinkBoth(rightNd);
+			}
+		}
+	}
+
+	// find very first collided mesh
+	CheckAllMesh();
+}
+
+void TestActor::CheckAllMesh()
+{
+	for (size_t i = 0, size = NavDatas.size(); i < size; ++i)
+	{
+		const FTransform& playerTfrm = Player->GetTransform();
+		const FTransform& triangleTfrm = Triangle->GetTransform();
+		const NavData& nd = NavDatas[i];
+
+		float fDist = 0.f;
+		bool isCollided = nd.Intersects(playerTfrm.Location, FVector::UP, triangleTfrm.ScaleMat, triangleTfrm.RotationMat, triangleTfrm.LocationMat, fDist);
+		if (isCollided)
+		{
+			CollidedNavIndex = nd.Index;
+			OutputDebugStringA(("First collided index: " + std::to_string(nd.Index) + "\n").c_str());
+			break;
+		}
+	}
 }

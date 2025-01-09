@@ -2,6 +2,7 @@
 #include <EngineCore/Actor.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineWinImage.h>
+#include "CData.h"
 
 class TestActor : public AActor
 {
@@ -28,11 +29,16 @@ private:
 	void RunTestSingleTriangle(float _DeltaTime);
 	void InitTestMultipleTriangle();
 	void RunTestMultipleTriangle(float _DeltaTime);
+	void InitNavMesh();
+	void CheckAllMesh();
 
 	//std::shared_ptr<class USpriteRenderer> Player;
 	std::shared_ptr<class ColorRenderer> Player;
 
 	std::shared_ptr<class TriangleRenderer> Triangle;
 	std::shared_ptr<class LineRenderer> Line;
+
+	int CollidedNavIndex = -1;
+	std::vector<NavData> NavDatas;
 };
 

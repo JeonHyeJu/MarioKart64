@@ -220,6 +220,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="ThirdParty\DirectXTex\Inc\DirectXTex.h" />
+    <ClInclude Include="TileMapRenderer.h" />
     <ClInclude Include="TimeEventComponent.h" />
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +274,7 @@
     <ClCompile Include="RenderUnit.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TileMapRenderer.cpp" />
     <ClCompile Include="TimeEventComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +293,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\EngineShader\EngineSpriteShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineTileMapShader.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

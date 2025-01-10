@@ -35,6 +35,8 @@ public:
 	ENGINEAPI void SetTexture(std::string_view _Name, std::string_view _ResName);
 	ENGINEAPI void SetSampler(std::string_view Name, std::string_view _ResName);
 
+	ENGINEAPI void SetTexture(std::string_view _Name, UEngineTexture* _Texture);
+
 private:
 	std::map<EShaderType, UEngineShaderResources> Resources;
 

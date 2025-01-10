@@ -121,5 +121,18 @@ void UEngineShaderResources::TextureSetting(std::string_view _Name, std::string_
 		return;
 	}
 
-	TextureRes[UpperName].Res = UEngineTexture::Find<UEngineTexture>(_ResName);
+	TextureRes[UpperName].Res = UEngineTexture::Find<UEngineTexture>(_ResName).get();
+}
+
+void UEngineShaderResources::TextureSetting(std::string_view _Name, UEngineTexture* _Texture)
+{
+	std::string UpperName = UEngineString::ToUpper(_Name);
+
+	if (false == TextureRes.contains(UpperName))
+	{
+		UEngineDebug::OutPutString("TextureRes.contains " + UpperName);
+		return;
+	}
+
+	TextureRes[UpperName].Res = _Texture;
 }

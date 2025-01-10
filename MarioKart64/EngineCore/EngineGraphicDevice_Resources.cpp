@@ -177,4 +177,11 @@ void UEngineGraphicDevice::MaterialInit()
 		Mat->SetDepthStencilState("CollisionDebugDepth");
 		Mat->SetRasterizerState("CollisionDebugRas");
 	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("TileMap");
+		Mat->SetVertexShader("EngineTileMapShader.fx");
+		Mat->SetPixelShader("EngineTileMapShader.fx");
+	}
+
 }

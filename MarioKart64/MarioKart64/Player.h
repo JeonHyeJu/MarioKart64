@@ -33,6 +33,5 @@ private:
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
 	const float MAX_VELOCITY = 1000.f;
 	float Velocity = 0.f;
-	float4 PrevLoc = { 0.f, 0.f, 0.f, 1.f };
 };
 

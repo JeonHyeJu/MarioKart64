@@ -138,6 +138,9 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="TileMapRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -269,6 +272,9 @@
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="TileMapRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -350,6 +356,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\EngineShader\EngineDebugCollisionShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineTileMapShader.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

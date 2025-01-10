@@ -18,11 +18,11 @@ public:
 	ENGINEAPI UEngineFile(const UEnginePath& _Path);
 	ENGINEAPI ~UEngineFile();
 
-	void Write(class UEngineSerializer& _Ser);
-	void Read(class UEngineSerializer& _Ser);
+	ENGINEAPI void Write(class UEngineSerializer& _Ser);
+	ENGINEAPI void Read(class UEngineSerializer& _Ser);
 
-	void Write(const void* _Ptr, size_t _Size);
-	void Read(void* _Ptr, size_t _Size);
+	ENGINEAPI void Write(const void* _Ptr, size_t _Size);
+	ENGINEAPI void Read(void* _Ptr, size_t _Size);
 
 	ENGINEAPI void FileOpen(const char* _Mode);
 	void Close();

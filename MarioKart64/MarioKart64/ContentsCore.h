@@ -18,7 +18,8 @@ protected:
 	void EngineEnd();
 
 private:
-	void InitImages(std::string_view _path);
+	void InitTextures(std::string_view _path);
+	void InitSprites(std::string_view _path);
 	void InitGraphics();
 	void InitTest();
 };

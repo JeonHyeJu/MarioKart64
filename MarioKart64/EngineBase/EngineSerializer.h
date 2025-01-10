@@ -6,37 +6,37 @@
 class UEngineSerializer
 {
 public:
-	UEngineSerializer();
-	~UEngineSerializer();
+	ENGINEAPI UEngineSerializer();
+	ENGINEAPI ~UEngineSerializer();
 
 	UEngineSerializer(const UEngineSerializer& _Other) = delete;
 	UEngineSerializer(UEngineSerializer&& _Other) noexcept = delete;
 	UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
 	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
-	void Write(void* _Data, unsigned int _Size);
+	ENGINEAPI void Write(const void* _Data, unsigned int _Size);
 
-	void operator<<(int& _Data)
+	void operator<<(const int& _Data)
 	{
 		Write(&_Data, sizeof(int));
 	}
 
-	void operator<<(bool& _Data)
+	void operator<<(const bool& _Data)
 	{
 		Write(&_Data, sizeof(bool));
 	}
 
-	void operator<<(FVector& _Data)
+	void operator<<(const FVector& _Data)
 	{
 		Write(&_Data, sizeof(FVector));
 	}
 
-	void operator<<(FIntPoint& _Data)
+	void operator<<(const FIntPoint& _Data)
 	{
 		Write(&_Data, sizeof(FIntPoint));
 	}
 
-	void operator<<(std::string& _Data)
+	void operator<<(const std::string& _Data)
 	{
 		int Size = static_cast<int>(_Data.size());
 		operator<<(Size);
@@ -60,7 +60,7 @@ public:
 		}
 	}
 
-	void Read(void* _Data, unsigned int _Size);
+	ENGINEAPI void Read(void* _Data, unsigned int _Size);
 
 	void operator>>(int& _Data)
 	{
@@ -137,7 +137,13 @@ private:
 class ISerializObject
 {
 public:
-	virtual void Serialize(UEngineSerializer& _Ser) = 0;
-	virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual ~ISerializObject() = 0
+	{
+
+	}
+
+public:
+	ENGINEAPI virtual void Serialize(UEngineSerializer& _Ser);
+	ENGINEAPI virtual void DeSerialize(UEngineSerializer& _Ser);
 };
 

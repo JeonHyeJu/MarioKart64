@@ -30,16 +30,16 @@ UContentsCore::~UContentsCore()
 {
 }
 
-void UContentsCore::InitImages(std::string_view _path)
+void UContentsCore::InitTextures(std::string_view _path)
 {
-	UEngineDirectory Dir;
-	if (false == Dir.MoveParentToDirectory(_path.data()))
+	UEngineDirectory dir;
+	if (false == dir.MoveParentToDirectory(_path.data()))
 	{
 		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
 		return;
 	}
 
-	std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
+	std::vector<UEngineFile> ImageFiles = dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
 	for (size_t i = 0; i < ImageFiles.size(); i++)
 	{
 		std::string FilePath = ImageFiles[i].GetPathToString();
@@ -47,17 +47,30 @@ void UContentsCore::InitImages(std::string_view _path)
 	}
 }
 
+void UContentsCore::InitSprites(std::string_view _path)
+{
+	UEngineDirectory dir;
+	if (false == dir.MoveParentToDirectory(_path.data()))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+
+	UEngineSprite::CreateSpriteToFolder(dir.GetPathToString());
+}
+
 void UContentsCore::EngineStart(UEngineInitData& _Data)
 {
 	_Data.WindowPos = { 100, 100 };
 	_Data.WindowSize = { 1280, 720 };
 
-	InitImages("Resources\\Sprites\\Characters");
-	InitImages("Resources\\Sprites\\Background");
-	InitImages("Resources\\Sprites\\Title");
-	InitImages("Resources\\Sprites\\Clouds");
-	InitImages("Resources\\Models\\Courses\\Royal_Raceway");
+	InitTextures("Resources\\Sprites\\Characters");
+	InitTextures("Resources\\Sprites\\Background");
+	InitTextures("Resources\\Sprites\\Title");
+	InitTextures("Resources\\Sprites\\Clouds");
+	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 
+	InitSprites("Resources\\Sprites\\Background");
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
 

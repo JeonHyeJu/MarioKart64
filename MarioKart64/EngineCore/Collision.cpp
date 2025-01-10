@@ -174,6 +174,11 @@ void UCollision::SetCollisionEnd(std::function<void(UCollision*, UCollision*)> _
 
 void UCollision::CollisionEventCheck(std::shared_ptr<UCollision> _Other)
 {
+	if (false == _Other->IsActive())
+	{
+		return;
+	}
+
 	if (true == FTransform::Collision(CollisionType, Transform, _Other->CollisionType, _Other->Transform))
 	{
 		if (false ==  CollisionCheckSet.contains(_Other.get()))

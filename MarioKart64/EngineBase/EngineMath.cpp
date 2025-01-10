@@ -29,9 +29,6 @@ const FIntPoint FIntPoint::RIGHT = { 1, 0 };
 const FIntPoint FIntPoint::UP = { 0, -1 };
 const FIntPoint FIntPoint::DOWN = { 0, 1 };
 
-const UColor UColor::WHITE = { 255, 255, 255, 0 };
-const UColor UColor::BLACK = { 0, 0, 0, 0 };
-
 FIntPoint FVector::ConvertToPoint() const
 {
 	return { iX(), iY() };
@@ -51,8 +48,20 @@ public:
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::Rect)] = FTransform::CirCleToRect;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::OBB2D)] = FTransform::OBB2DToOBB2D;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Rect)] = FTransform::OBB2DToRect;
-		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::CirCle)] = FTransform::OBB2DToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::CirCle)] = FTransform::OBB2DToCirCle;
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB2D)][static_cast<int>(ECollisionType::Point)] = FTransform::OBB2DToPoint;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::Sphere)] = FTransform::OBBToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::AABB)] = FTransform::OBBToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::OBB)][static_cast<int>(ECollisionType::OBB)] = FTransform::OBBToOBB;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::Sphere)] = FTransform::SphereToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::AABB)] = FTransform::SphereToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Sphere)][static_cast<int>(ECollisionType::OBB)] = FTransform::SphereToOBB;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::Sphere)] = FTransform::AABBToSphere;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::AABB)] = FTransform::AABBToAABB;
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::AABB)][static_cast<int>(ECollisionType::OBB)] = FTransform::AABBToOBB;
 
 	}
 };
@@ -97,104 +106,6 @@ FVector FQuat::QuaternionToEulerRad() const
 	return result;
 }
 
-bool FTransform::Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right)
-{
-	if (nullptr == FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)])
-	{
-		MSGASSERT("아직 구현하지 않은 충돌 타입간의 충돌 체크를 하려고 했습니다.");
-		return false;
-	}
-
-	return FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)](_Left, _Right);
-}
-
-bool FTransform::PointToCirCle(const FTransform& _Left, const FTransform& _Right)
-{
-	FTransform LeftTrans = _Left;
-	LeftTrans.Scale = FVector::ZERO;
-	return CirCleToCirCle(LeftTrans, _Right);
-}
-
-bool FTransform::PointToRect(const FTransform& _Left, const FTransform& _Right)
-{
-	FTransform LeftTrans = _Left;
-	LeftTrans.Scale = FVector::ZERO;
-	return RectToRect(LeftTrans, _Right);
-}
-
-bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Right)
-{
-
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.Sphere.Intersects(RightCol.Sphere);
-
-}
-
-bool FTransform::RectToRect(const FTransform& _Left, const FTransform& _Right)
-{
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.AABB.Intersects(RightCol.AABB);
-}
-
-bool FTransform::RectToCirCle(const FTransform& _Left, const FTransform& _Right)
-{
-	return CirCleToRect(_Right, _Left);
-}
-
-
-bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
-{
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.Sphere.Intersects(RightCol.AABB);
-
-}
-
-bool FTransform::OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right)
-{
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.OBB.Intersects(RightCol.OBB);
-}
-
-bool FTransform::OBB2DToRect(const FTransform& _Left, const FTransform& _Right)
-{
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.OBB.Intersects(RightCol.AABB);
-}
-
-bool FTransform::OBB2DToSphere(const FTransform& _Left, const FTransform& _Right)
-{
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	return LeftCol.OBB.Intersects(RightCol.Sphere);
-}
-
-bool FTransform::OBB2DToPoint(const FTransform& _Left, const FTransform& _Right)
-{
-	// TODO: check
-	FCollisionData LeftCol = _Left.GetCollisionData();
-	FCollisionData RightCol = _Right.GetCollisionData();
-	LeftCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Center.z = 0.0f;
-	RightCol.OBB.Extents = {0.0f, 0.0f, 0.0f};
-	return LeftCol.OBB.Intersects(RightCol.AABB);
-}
 
 FVector FVector::Transform(const FVector& _Vector, const class FMatrix& _Matrix)
 {
@@ -277,4 +188,162 @@ void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 		World = CheckWorld * RevolveMat * ParentMat;
 	}
 	Decompose();
+}
+
+bool FTransform::Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right)
+{
+	if (nullptr == FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)])
+	{
+		MSGASSERT("아직 구현하지 않은 충돌 타입간의 충돌 체크를 하려고 했습니다.");
+		return false;
+	}
+
+	return FTransform::AllCollisionFunction[static_cast<int>(_LeftType)][static_cast<int>(_RightType)](_Left, _Right);
+}
+
+bool FTransform::PointToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+	FTransform LeftTrans = _Left;
+	LeftTrans.Scale = FVector::ZERO;
+	return CirCleToCirCle(LeftTrans, _Right);
+}
+
+bool FTransform::PointToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FTransform LeftTrans = _Left;
+	LeftTrans.Scale = FVector::ZERO;
+	return RectToRect(LeftTrans, _Right);
+}
+
+bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.Sphere.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::RectToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.AABB.Intersects(RightCol.AABB);
+}
+
+bool FTransform::RectToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+	return CirCleToRect(_Right, _Left);
+}
+
+bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.Sphere.Intersects(RightCol.AABB);
+}
+
+bool FTransform::OBB2DToOBB2D(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.OBB);
+}
+
+bool FTransform::OBB2DToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.AABB);
+}
+
+bool FTransform::OBB2DToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	return LeftCol.OBB.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::OBB2DToPoint(const FTransform& _Left, const FTransform& _Right)
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	LeftCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Center.z = 0.0f;
+	RightCol.OBB.Extents = { 0.0f, 0.0f, 0.0f };
+	return LeftCol.OBB.Intersects(RightCol.AABB);
+}
+
+bool FTransform::OBBToSphere(const FTransform& _Left, const FTransform& _Right) 
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::OBBToOBB(const FTransform& _Left, const FTransform& _Right) 
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.OBB);
+}
+
+bool FTransform::OBBToAABB(const FTransform& _Left, const FTransform& _Right) 
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.OBB.Intersects(RightCol.AABB);
+}
+
+bool FTransform::SphereToSphere(const FTransform& _Left, const FTransform& _Right) 
+{
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::SphereToOBB(const FTransform & _Left, const FTransform & _Right) 
+{ 
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.OBB);
+}
+
+bool FTransform::SphereToAABB(const FTransform & _Left, const FTransform & _Right) 
+{ 
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.Sphere.Intersects(RightCol.AABB);
+}
+
+bool FTransform::AABBToSphere(const FTransform & _Left, const FTransform & _Right) 
+{ 
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.Sphere);
+}
+
+bool FTransform::AABBToOBB(const FTransform & _Left, const FTransform & _Right) 
+{ 
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.OBB);
+}
+
+bool FTransform::AABBToAABB(const FTransform& _Left, const FTransform& _Right) 
+{ 
+	FCollisionData LeftCol = _Left.GetCollisionData();
+	FCollisionData RightCol = _Right.GetCollisionData();
+	return LeftCol.AABB.Intersects(RightCol.AABB);
 }

@@ -42,7 +42,7 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToFolder(std::string_v
 		FSpriteData SpriteData;
 		SpriteData.CuttingPos = { 0.0f, 0.0f };
 		SpriteData.CuttingSize = { 1.0f, 1.0f };
-		SpriteData.Pivot = { 0.5f, 0.0f };
+		SpriteData.Pivot = { 0.5f, 0.5f };
 		NewRes->SpriteDatas.push_back(SpriteData);
 	}
 

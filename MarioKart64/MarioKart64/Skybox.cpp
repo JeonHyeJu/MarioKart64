@@ -10,13 +10,14 @@ ASkybox::ASkybox()
 	RootComponent = Default;
 
 	// TODO: check camera's value
-	FVector size{ 50000.f, 20000.f, 1.f };
 
-	Front = CreateDefaultSubObject<ColorRenderer>();
+	Front = CreateDefaultSubObject<USpriteRenderer>();
+	//Front->SetTexture("PinkSky.png");
+	Front->SetSprite("Background", 0);
+	Front->SetAutoScaleRatio(10.f);
+	//Front->BillboardOn();	// TODO: ..?
 	Front->SetupAttachment(RootComponent);
-	Front->SetRelativeScale3D(size);
-	Front->SetRelativeLocation({0.f, 1000.f, 9000.f});
-	Front->SetColor({1.f, 0.f, 1.f, 1.f});
+	Front->SetRelativeLocation({0.f, 0.f, 10000.f});
 	Front->SetOrder(1);
 
 	/*Left = CreateDefaultSubObject<ColorRenderer>();
@@ -41,13 +42,10 @@ ASkybox::ASkybox()
 	Back->SetRelativeLocation({ 0.f, 0.f, -9000.f });
 	Back->SetColor({ 1.f, 0.f, 1.f, 1.f });
 	Back->SetOrder(1);*/
-
-	MakeClouds();
 }
 
 ASkybox::~ASkybox()
 {
-
 }
 
 void ASkybox::BeginPlay()
@@ -58,28 +56,4 @@ void ASkybox::BeginPlay()
 void ASkybox::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
-}
-
-// Temp
-void ASkybox::MakeClouds()
-{
-	srand(static_cast<int>(time(NULL)));
-	int cnt = rand() % 10 + 3;
-
-	for (int i = 0; i < cnt; ++i)
-	{
-		int x = rand() % 10000;
-		int y = rand() % 10000;
-		int v = rand() % 2;
-		if (v == 1)
-		{
-			x *= -1;
-		}
-
-		std::shared_ptr<USpriteRenderer> cloud = CreateDefaultSubObject<USpriteRenderer>();
-		cloud->SetTexture("Cloud_1.png", true, 10.0f);
-		cloud->SetupAttachment(RootComponent);
-		cloud->SetRelativeLocation({ static_cast<float>(x), static_cast<float>(y), 9000.f - 100.f - i * 10.f});	// Temp
-		cloud->SetOrder(1);
-	}
 }

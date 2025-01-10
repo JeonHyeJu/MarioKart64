@@ -13,6 +13,7 @@ APlayGameMode::APlayGameMode()
 	Skybox = GetWorld()->SpawnActor<ASkybox>();
 	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
 	Player = GetWorld()->SpawnActor<APlayer>();
+
 	Player->SetActorLocation({ 0.0f, 100.0f, 1000.0f });
 
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
@@ -58,6 +59,7 @@ void APlayGameMode::Tick(float _deltaTime)
 
 void APlayGameMode::CheckCollision(float _deltaTime)
 {
+	bool isCollisionLog = false;
 	FTransform trfmPlayer = Player->GetActorTransform();
 	FTransform trfmObj = TestMapPtr->GetActorTransform();
 
@@ -85,7 +87,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 			if (isCollided)
 			{
-				OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
+				if (isCollisionLog) OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
 				TestMapPtr->SetNavIndex(linkedIdx);
 				navIdx = linkedIdx;
 				break;
@@ -108,7 +110,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 		isCollided = nd.Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 		if (isCollided)
 		{
-			OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
+			if (isCollisionLog) OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
 		}
 		else
 		{
@@ -117,7 +119,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 				isCollided = navDatas[linkedIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 				if (isCollided)
 				{
-					OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
+					if (isCollisionLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
 					TestMapPtr->SetNavIndex(linkedIdx);
 					navIdx = linkedIdx;
 					break;
@@ -127,7 +129,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 
 		if (isCollided)
 		{
-			OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
+			if (isCollisionLog) OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
 			Player->AddActorLocation({ 0.f, gravityForce + fDistTemp, 0.f });
 		}
 		else
@@ -156,7 +158,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 		FVector dirV = playerUp - normalV;
 		float angle = FVector::GetVectorAngleDeg(normalV, playerUp);
 
-		OutputDebugStringA(("- angle: " + std::to_string(angle) + "\n").c_str());
+		if (isCollisionLog) OutputDebugStringA(("- angle: " + std::to_string(angle) + "\n").c_str());
 
 		if (angle > 1)
 		{

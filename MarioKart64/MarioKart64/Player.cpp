@@ -28,8 +28,6 @@ APlayer::APlayer()
 
 	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);
-
-	PrevLoc = GetTransform().Location;
 }
 
 APlayer::~APlayer()
@@ -51,9 +49,6 @@ void APlayer::Move(float _deltaTime)
 	FTransform trfmPlayer = GetActorTransform();
 	float4 orgLoc = trfmPlayer.Location;
 
-	// 오르막길: 가속도 - 중력가속도
-	// 내리막길: 가속도 + 중력가속도
-	// 평지: 중력가속도 = 마찰력?
 	if (UEngineInput::IsPress(VK_UP))
 	{
 		Velocity = FPhysics::GetVf(Velocity, ACCELERATION - FRICTION_FORCE, _deltaTime);

@@ -147,7 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AiMesh.h" />
     <ClInclude Include="CData.h">
       <SubType>
       </SubType>

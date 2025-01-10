@@ -1,6 +1,8 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
 
+#define GRAVITY_ACC 9.8f
+
 struct FColor
 {
 	float4 Albedo;
@@ -26,7 +28,7 @@ struct NavData
 		return DirectX::TriangleTests::Intersects(_loc.DirectVector, _dir.DirectVector, v1, v2, v3, _refDist);
 	}
 
-	bool IsSameF(float4 _v1, float4 _v2, float _eps=1e-4)
+	bool IsSameF(float4 _v1, float4 _v2, float _eps = 1e-4)
 	{
 		// different sign
 		if (_v1.X * _v2.X < 0 || _v1.Y * _v2.Y < 0 || _v1.Z * _v2.Z < 0)
@@ -66,5 +68,25 @@ struct NavData
 	void Link(const NavData& _other)
 	{
 		LinkData.push_back(_other.Index);
+	}
+};
+
+struct FPhysics
+{
+	/*
+	* Vi : Initial velocity
+	* Vf : Final velocity
+	* Dx : Delta X
+	* Acc : Acceleration
+	* Time : Time
+	*/
+	static float GetVf(float _vi, float _acc, float _t)
+	{
+		return _vi + _acc * _t;
+	}
+
+	static float GetDeltaX(float _vi, float _acc, float _t)
+	{
+		return (_vi * _t) + (.5f * _acc * (_t * _t));
 	}
 };

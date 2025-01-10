@@ -204,6 +204,11 @@ public:
 		return static_cast<int>(Y);
 	}
 
+	int iZ() const
+	{
+		return static_cast<int>(Z);
+	}
+
 	float hX() const
 	{
 		return X * 0.5f;
@@ -216,7 +221,7 @@ public:
 
 	bool IsZeroed() const
 	{
-		return X == 0.0f || Y == 0.0f;
+		return X == 0.0f || Y == 0.0f || Z == 0.0f;
 	}
 
 	TVector Half() const
@@ -245,7 +250,6 @@ public:
 			Y = Y / Len;
 			Z = Z / Len;
 		}
-		return;
 	}
 
 	TVector NormalizeReturn() const
@@ -365,6 +369,7 @@ public:
 	{
 		X -= _Other.X;
 		Y -= _Other.Y;
+		Z -= _Other.Z;
 		return *this;
 	}
 
@@ -374,6 +379,7 @@ public:
 		TVector Result;
 		Result.X = X - _Other.X;
 		Result.Y = Y - _Other.Y;
+		Result.Z = Z - _Other.Z;
 		return Result;
 	}
 
@@ -391,6 +397,7 @@ public:
 		TVector Result;
 		Result.X = X / _Value;
 		Result.Y = Y / _Value;
+		Result.Z = Z / _Value;
 		return Result;
 	}
 
@@ -399,17 +406,18 @@ public:
 		TVector Result;
 		Result.X = X / Other.X;
 		Result.Y = Y / Other.Y;
+		Result.Z = Z / Other.Z;
 		return Result;
 	}
 
 	bool operator==(const TVector& _Other) const
 	{
-		return X == _Other.X && Y == _Other.Y;
+		return X == _Other.X && Y == _Other.Y && Z == _Other.Z;
 	}
 
 	bool EqualToInt(TVector _Other) const
 	{
-		return iX() == _Other.iX() && iY() == _Other.iY();
+		return iX() == _Other.iX() && iY() == _Other.iY() && iZ() == _Other.iZ();
 	}
 
 	TVector& operator+=(const TVector& _Other)

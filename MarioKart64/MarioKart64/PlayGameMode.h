@@ -17,6 +17,7 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
+	void CheckCollision(float _deltaTime);
 	void CheckCollisionOfAllMap();
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;

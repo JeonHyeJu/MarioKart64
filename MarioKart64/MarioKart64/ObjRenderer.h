@@ -3,7 +3,6 @@
 #include <EngineBase/EngineDefine.h>
 #include <vector>
 #include <assimp/scene.h>
-#include "AiMesh.h"
 #include "CData.h"
 
 class UEngineCamera;
@@ -55,19 +54,6 @@ private:
 	bool LoadModel();
 	void ProcessMesh(struct aiMesh* _mesh, const struct aiScene* _scene);
 	void ProcessNode(struct aiNode* node, const struct aiScene* scene);
-
-	/*bool LoadModel(std::string_view _objPath, std::string_view _mtlPath);
-	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
-
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	AiMesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<TEXTURE> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
-	ID3D11ShaderResourceView* LoadEmbeddedTexture(const aiTexture* embeddedTexture);
-
-	void InitShader();
-	void RasterizerInit() override;
-	void ShaderResInit() override;
-	void ShaderResSetting() override;*/
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";

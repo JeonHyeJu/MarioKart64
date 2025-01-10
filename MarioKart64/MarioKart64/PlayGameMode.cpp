@@ -43,8 +43,23 @@ void APlayGameMode::Tick(float _deltaTime)
 
 	AActor::Tick(_deltaTime);
 
-	const FTransform& trfmPlayer = Player->GetTransform();
-	const FTransform& trfmObj = TestMapPtr->GetTransform();
+	CheckCollision(_deltaTime);
+
+	// temp. for test
+	if (UEngineInput::IsPress('R'))
+	{
+		TestMapPtr->AddActorRotation({ -1.f, 0.f, 0.f });
+	}
+	else if (UEngineInput::IsPress('T'))
+	{
+		TestMapPtr->AddActorRotation({ 1.f, 0.f, 0.f });
+	}
+}
+
+void APlayGameMode::CheckCollision(float _deltaTime)
+{
+	FTransform trfmPlayer = Player->GetActorTransform();
+	FTransform trfmObj = TestMapPtr->GetActorTransform();
 
 	const float GRAVITY_FORCE = -500.f;
 	float gravityForce = GRAVITY_FORCE * _deltaTime;
@@ -52,7 +67,7 @@ void APlayGameMode::Tick(float _deltaTime)
 	int navIdx = TestMapPtr->GetNavIndex();
 	if (navIdx == -1)
 	{
-		Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
+		Player->AddActorLocation({ 0.f, gravityForce, 0.f });
 		CheckCollisionOfAllMap();
 		return;
 	}
@@ -60,7 +75,7 @@ void APlayGameMode::Tick(float _deltaTime)
 	bool isCollided = false;
 	float fDist = 0.f;
 	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
-	const NavData& nd = navDatas[navIdx];
+	NavData nd = navDatas[navIdx];
 	isCollided = nd.Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 
 	if (!isCollided)
@@ -70,7 +85,7 @@ void APlayGameMode::Tick(float _deltaTime)
 			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 			if (isCollided)
 			{
-				OutputDebugStringA(("######## Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+				OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
 				TestMapPtr->SetNavIndex(linkedIdx);
 				navIdx = linkedIdx;
 				break;
@@ -78,6 +93,7 @@ void APlayGameMode::Tick(float _deltaTime)
 		}
 	}
 
+	// Temporary gravity
 	if (isCollided)
 	{
 		Player->AddActorLocation({ 0.f, fDist, 0.f });
@@ -88,10 +104,11 @@ void APlayGameMode::Tick(float _deltaTime)
 		trfmFuture.Location.Y += gravityForce;
 
 		float fDistTemp = 0.f;
-		isCollided = navDatas[navIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+		nd = navDatas[navIdx];
+		isCollided = nd.Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 		if (isCollided)
 		{
-			OutputDebugStringA(("!!!!!!!!!! Seconds coliided idx: " + std::to_string(navIdx) + "\n").c_str());
+			OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
 		}
 		else
 		{
@@ -100,7 +117,7 @@ void APlayGameMode::Tick(float _deltaTime)
 				isCollided = navDatas[linkedIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 				if (isCollided)
 				{
-					OutputDebugStringA(("@@@@@@@@@ Seconds coliided idx: " + std::to_string(linkedIdx) + "\n").c_str());
+					OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
 					TestMapPtr->SetNavIndex(linkedIdx);
 					navIdx = linkedIdx;
 					break;
@@ -110,12 +127,44 @@ void APlayGameMode::Tick(float _deltaTime)
 
 		if (isCollided)
 		{
-			OutputDebugStringA(("gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
-			Player->AddRelativeLocation({ 0.f, gravityForce + fDistTemp, 0.f });
+			OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
+			Player->AddActorLocation({ 0.f, gravityForce + fDistTemp, 0.f });
 		}
 		else
 		{
-			Player->AddRelativeLocation({ 0.f, gravityForce, 0.f });
+			Player->AddActorLocation({ 0.f, gravityForce, 0.f });
+		}
+	}
+
+	// Temporary physics of slope
+	if (isCollided)
+	{
+		nd = navDatas[navIdx];
+
+		TestMapPtr->GetActorTransform();
+		nd.Vertex[0] = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		nd.Vertex[1] = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		nd.Vertex[2] = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		float4 v1 = nd.Vertex[2] - nd.Vertex[0];
+		float4 v2 = nd.Vertex[1] - nd.Vertex[0];
+		v1.Normalize();
+		v2.Normalize();
+
+		FVector normalV = FVector::Cross(v1, v2);
+		normalV.Normalize();
+		FVector playerUp = trfmPlayer.GetWorldUp();
+		FVector dirV = playerUp - normalV;
+		float angle = FVector::GetVectorAngleDeg(normalV, playerUp);
+
+		OutputDebugStringA(("- angle: " + std::to_string(angle) + "\n").c_str());
+
+		if (angle > 1)
+		{
+			Player->AddActorLocation(-dirV * angle);
+		}
+		else if (angle < -1)
+		{
+			Player->AddActorLocation(dirV * angle);
 		}
 	}
 }

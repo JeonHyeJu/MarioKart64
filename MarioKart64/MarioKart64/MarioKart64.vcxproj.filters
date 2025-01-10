@@ -262,7 +262,6 @@
     <ClInclude Include="ThirdParty\Assimp\Inc\SafeRelease.hpp">
       <Filter>ThirdParty\Assimp\Inc</Filter>
     </ClInclude>
-    <ClInclude Include="AiMesh.h" />
     <ClInclude Include="PlayGameMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>

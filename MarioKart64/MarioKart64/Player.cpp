@@ -3,6 +3,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EnginePlatform/EngineInput.h>
+#include "CData.h"
 
 APlayer::APlayer()
 {
@@ -27,6 +28,8 @@ APlayer::APlayer()
 
 	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);
+
+	PrevLoc = GetTransform().Location;
 }
 
 APlayer::~APlayer()
@@ -37,6 +40,88 @@ void APlayer::Tick(float _deltaTime)
 {
 	APawn::Tick(_deltaTime);
 
+	Move(_deltaTime);
+	//MoveBackup(_deltaTime);
+}
+
+void APlayer::Move(float _deltaTime)
+{
+	float x = 0.f;
+	float dx = 0.f;
+	FTransform trfmPlayer = GetActorTransform();
+	float4 orgLoc = trfmPlayer.Location;
+
+	// 오르막길: 가속도 - 중력가속도
+	// 내리막길: 가속도 + 중력가속도
+	// 평지: 중력가속도 = 마찰력?
+	if (UEngineInput::IsPress(VK_UP))
+	{
+		Velocity = FPhysics::GetVf(Velocity, ACCELERATION - FRICTION_FORCE, _deltaTime);
+		if (Velocity > MAX_VELOCITY)
+		{
+			Velocity = MAX_VELOCITY;
+		}
+
+		dx = FPhysics::GetDeltaX(Velocity, ACCELERATION - FRICTION_FORCE, _deltaTime);
+		OutputDebugStringA(("1. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
+	}
+	else if (UEngineInput::IsPress(VK_DOWN))
+	{
+		Velocity = FPhysics::GetVf(Velocity, -ACCELERATION + FRICTION_FORCE, _deltaTime);
+		if (Velocity < -MAX_VELOCITY)
+		{
+			Velocity = -MAX_VELOCITY;
+		}
+
+		dx = FPhysics::GetDeltaX(Velocity, -ACCELERATION + FRICTION_FORCE, _deltaTime);
+		OutputDebugStringA(("2. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
+	}
+	else
+	{
+		if (Velocity > 0)
+		{
+			Velocity = FPhysics::GetVf(Velocity, -FRICTION_FORCE, _deltaTime);
+			if (Velocity < 0)
+			{
+				Velocity = 0;
+			}
+
+			dx = FPhysics::GetDeltaX(Velocity, -FRICTION_FORCE, _deltaTime);
+			OutputDebugStringA(("3. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
+		}
+		else if (Velocity < 0)
+		{
+			Velocity = FPhysics::GetVf(Velocity, FRICTION_FORCE, _deltaTime);
+			if (Velocity > 0)
+			{
+				Velocity = 0;
+			}
+
+			dx = FPhysics::GetDeltaX(Velocity, FRICTION_FORCE, _deltaTime);
+			OutputDebugStringA(("4. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
+		}
+	}
+
+	float rotVal = 0.f;
+	if (UEngineInput::IsPress(VK_LEFT))
+	{
+		rotVal = -1.5f;
+	}
+	else if (UEngineInput::IsPress(VK_RIGHT))
+	{
+		rotVal = 1.5f;
+	}
+
+	FVector dir = GetActorForwardVector();
+	dir.Normalize();
+	dir = dir * dx;
+
+	AddActorRotation({ 0.f, rotVal, 0.f });
+	AddActorLocation(dir);
+}
+
+void APlayer::MoveBackup(float _deltaTime)
+{
 	FVector move;
 	static FVector accMove;
 	bool isInverted = false;
@@ -90,20 +175,6 @@ void APlayer::Tick(float _deltaTime)
 	const float ROT_VAL = 30.f * _deltaTime;
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		//{
-		//	const FTransform& trfm = GetTransform();
-		//	FVector temp = trfm.Location;
-		//	temp.Z = move.Z;
-
-		//	std::string log = "1. Rot: " + std::to_string(temp.X) + ", " + std::to_string(temp.Y) + ", " + std::to_string(temp.Z) + "\n";
-		//	OutputDebugStringA(log.c_str());
-		//	temp.RotationYRad(-ROT_VAL);
-		//	std::string log2 = "2. Rot: " + std::to_string(temp.X) + ", " + std::to_string(temp.Y) + ", " + std::to_string(temp.Z) + "\n";
-		//	OutputDebugStringA(log2.c_str());
-		//}
-
-		//move.X = accMove.X;
-
 		if (isInverted)
 		{
 			Renderer->ChangeAnimation("TurnR");
@@ -153,7 +224,7 @@ void APlayer::Tick(float _deltaTime)
 	FVector dir = GetActorForwardVector();
 	dir.Normalize();
 
-	FVector last = dir* move.Z;
+	FVector last = dir * move.Z;
 	last.Y = move.Y;
 
 	//Renderer->AddRelativeLocation(move);

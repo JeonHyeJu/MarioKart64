@@ -169,6 +169,51 @@ void APlayer::Move(float _deltaTime)
 	lastVec = dir;
 	lastRot.Y = rotVal;
 
+	// Temporary physics of slope
+	if (isCollided)
+	{
+		nd = navDatas[navIdx];
+		FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		FVector vertex2 = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		float4 v1 = vertex2 - vertex0;
+		float4 v2 = vertex1 - vertex0;
+		v1.Normalize();
+		v2.Normalize();
+
+		FVector normalV = FVector::Cross(v1, v2);
+		normalV.Normalize();
+
+		float crossV = FVector::Cross(normalV, FVector::UP).X;
+		float slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
+		if (crossV > 0)
+		{
+			slopeAngle *= -1;
+		}
+
+		if (isLog) OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", crossV: " + std::to_string(crossV) + "\n").c_str());
+
+		FVector backVec = GetActorForwardVector();
+		//backVec.X *= -1;
+		backVec.Z *= -1;
+
+		OutputDebugStringA(("- backVec: " + std::to_string(backVec.X) + ", " + std::to_string(backVec.Y) + ", " + std::to_string(backVec.Z) + "\n").c_str());
+
+		if (!std::isnan(slopeAngle))
+		{
+			//		/*float tempForce = -gravityForce * slopeAngle;
+			//		Velocity = FPhysics::GetVf(Velocity, tempForce, _deltaTime);
+			//		float dx = FPhysics::GetDeltaX(Velocity, tempForce, _deltaTime);
+			//		OutputDebugStringA(("tempForce: " + std::to_string(tempForce) + ", Velocity: " + std::to_string(Velocity) + ", dx : " + std::to_string(dx) + "\n").c_str());*/
+
+			//lastVec += FVector{ 0.f, 0.f, 1.f } * slopeAngle * .8f;
+			//lastVec -= backVec * slopeAngle * .8f;
+		}
+
+		// option2. rotated hidden renderer
+		RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
+	}
+
 	// Temporary gravity
 	if (isCollided)
 	{
@@ -219,45 +264,6 @@ void APlayer::Move(float _deltaTime)
 		{
 			lastVec.Y += fDistTemp;
 		}
-	}
-
-	if (isCollided)
-	{
-		// Temporary physics of slope
-		nd = navDatas[navIdx];
-		FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		FVector vertex2 = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		float4 v1 = vertex2 - vertex0;
-		float4 v2 = vertex1 - vertex0;
-		v1.Normalize();
-		v2.Normalize();
-
-		FVector normalV = FVector::Cross(v1, v2);
-		normalV.Normalize();
-
-		float crossV = FVector::Cross(normalV, FVector::UP).X;
-		float slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
-		if (crossV > 0)
-		{
-			slopeAngle *= -1;
-		}
-
-		//OutputDebugStringA(("- normalV: " + std::to_string(normalV.X) + ", " + std::to_string(normalV.Y) + ", " + std::to_string(normalV.Z) + "\n").c_str());
-		if (isLog) OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", crossV: " + std::to_string(crossV) + "\n").c_str());
-
-		if (!std::isnan(slopeAngle))
-		{
-	//		/*float tempForce = -gravityForce * slopeAngle;
-	//		Velocity = FPhysics::GetVf(Velocity, tempForce, _deltaTime);
-	//		float dx = FPhysics::GetDeltaX(Velocity, tempForce, _deltaTime);
-	//		OutputDebugStringA(("tempForce: " + std::to_string(tempForce) + ", Velocity: " + std::to_string(Velocity) + ", dx : " + std::to_string(dx) + "\n").c_str());*/
-
-			//lastVec += FVector{ 0.f, 0.f, 1.f } * slopeAngle * .8f;
-		}
-
-		// option2. rotated hidden renderer
-		RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
 	}
 
 	AddActorRotation(lastRot);

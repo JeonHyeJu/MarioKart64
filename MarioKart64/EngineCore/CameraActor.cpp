@@ -31,7 +31,8 @@ void ACameraActor::Tick(float _DeltaTime)
 	if (UEngineInput::IsDown('C'))
 	{
 		OutputDebugString("DOWN C\n");
-		FreeCameraSwitch();
+		//FreeCameraSwitch();
+		FreeCameraOn();
 	}
 
 	if (true == IsFreeCameraValue)

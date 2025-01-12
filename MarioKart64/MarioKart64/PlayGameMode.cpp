@@ -15,6 +15,7 @@ APlayGameMode::APlayGameMode()
 	Player = GetWorld()->SpawnActor<APlayer>();
 
 	Player->SetActorLocation({ 0.0f, 100.0f, 1000.0f });
+	Player->SetMap(TestMapPtr.get());
 
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
 	TestMapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
@@ -44,8 +45,6 @@ void APlayGameMode::Tick(float _deltaTime)
 
 	AActor::Tick(_deltaTime);
 
-	CheckCollision(_deltaTime);
-
 	// temp. for test
 	if (UEngineInput::IsPress('R'))
 	{
@@ -55,13 +54,17 @@ void APlayGameMode::Tick(float _deltaTime)
 	{
 		TestMapPtr->AddActorRotation({ 1.f, 0.f, 0.f });
 	}
+
+	//CheckCollision(_deltaTime);
 }
 
 void APlayGameMode::CheckCollision(float _deltaTime)
 {
-	bool isCollisionLog = false;
+	bool isCollisionLog = true;
 	FTransform trfmPlayer = Player->GetActorTransform();
 	FTransform trfmObj = TestMapPtr->GetActorTransform();
+	//FVector UpVector = FVector::UP;
+	FVector UpVector = trfmPlayer.GetWorldUp();
 
 	const float GRAVITY_FORCE = -500.f;
 	float gravityForce = GRAVITY_FORCE * _deltaTime;
@@ -78,13 +81,13 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 	float fDist = 0.f;
 	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
 	NavData nd = navDatas[navIdx];
-	isCollided = nd.Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 
 	if (!isCollided)
 	{
 		for (int linkedIdx : nd.LinkData)
 		{
-			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 			if (isCollided)
 			{
 				if (isCollisionLog) OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
@@ -107,7 +110,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 
 		float fDistTemp = 0.f;
 		nd = navDatas[navIdx];
-		isCollided = nd.Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+		isCollided = nd.Intersects(trfmFuture.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 		if (isCollided)
 		{
 			if (isCollisionLog) OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
@@ -116,7 +119,7 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 		{
 			for (int linkedIdx : nd.LinkData)
 			{
-				isCollided = navDatas[linkedIdx].Intersects(trfmFuture.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+				isCollided = navDatas[linkedIdx].Intersects(trfmFuture.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 				if (isCollided)
 				{
 					if (isCollisionLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
@@ -162,10 +165,12 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 
 		if (angle > 1)
 		{
+			Player->AddActorRotation({ -angle, 0.f, 0.f });
 			Player->AddActorLocation(-dirV * angle);
 		}
 		else if (angle < -1)
 		{
+			Player->AddActorRotation({ angle, 0.f, 0.f });
 			Player->AddActorLocation(dirV * angle);
 		}
 	}

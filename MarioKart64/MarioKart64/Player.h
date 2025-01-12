@@ -12,14 +12,18 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
+	void SetMap(class ATestMap* _ptr);
+
 protected:
 	void Tick(float _deltaTime) override;
 
 private:
 	void Move(float _deltaTime);
-	void MoveBackup(float _deltaTime);
+	void CheckCollision(const FVector& _rot, const FVector _forward, float _deltaTime);
+	void CheckCollisionOfAllMap();
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
+	std::shared_ptr<USpriteRenderer> RendererDebug;
 
 	float Speed = 5.f;
 	float SpeedWeight = 0.f;
@@ -33,5 +37,7 @@ private:
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
 	const float MAX_VELOCITY = 1000.f;
 	float Velocity = 0.f;
+
+	ATestMap* TestMapPtr = nullptr;
 };
 

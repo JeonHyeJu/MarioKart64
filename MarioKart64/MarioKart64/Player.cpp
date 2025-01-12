@@ -176,10 +176,15 @@ void APlayer::Move(float _deltaTime)
 	}
 	else
 	{
-		//FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();	// option2.
-		//forward.Y *= dy;
-		//lastVec.Y += forward.Y + gravityForce;
-		lastVec.Y += gravityForce;
+		FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();
+
+		if (VelocityV == 0) VelocityV = forward.Y * Velocity * .25f;
+		float dy = FPhysics::GetDeltaX(VelocityV, GRAVITY_FORCE, _deltaTime);
+
+		lastVec.Y += dy;
+
+		VelocityV = FPhysics::GetVf(VelocityV, GRAVITY_FORCE, _deltaTime);
+		OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", dy: " + std::to_string(dy) + "\n").c_str());
 
 		/*OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", dx: " + std::to_string(dx) + ", dy: " + std::to_string(dy) + ", VelocityV: " + std::to_string(VelocityV) + "\n").c_str());
 		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());

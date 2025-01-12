@@ -19,7 +19,6 @@ protected:
 
 private:
 	void Move(float _deltaTime);
-	void CheckCollision(const FVector& _rot, const FVector _forward, float _deltaTime);
 	void CheckCollisionOfAllMap();
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
@@ -35,7 +34,7 @@ private:
 	const float WEIGHT = 50.f;
 	const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
-	const float MAX_VELOCITY = 1000.f;
+	const float MAX_VELOCITY = 1000.f * 2;
 	float Velocity = 0.f;
 
 	ATestMap* TestMapPtr = nullptr;

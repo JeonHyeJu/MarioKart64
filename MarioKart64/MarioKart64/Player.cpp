@@ -51,11 +51,54 @@ void APlayer::Tick(float _deltaTime)
 
 void APlayer::Move(float _deltaTime)
 {
-	bool isLog = false;
+	bool isLog = true;
 	float x = 0.f;
 	float dx = 0.f;
 	FTransform trfmPlayer = GetActorTransform();
-	float4 orgLoc = trfmPlayer.Location;
+	FTransform trfmObj = TestMapPtr->GetActorTransform();
+	FVector UpVector = FVector::UP;
+
+	const float GRAVITY_FORCE = -300.f;
+	float gravityForce = GRAVITY_FORCE * _deltaTime;
+
+	int navIdx = TestMapPtr->GetNavIndex();
+	if (navIdx == -1)
+	{
+		AddActorLocation({ 0.f, gravityForce, 0.f });
+		CheckCollisionOfAllMap();
+		return;
+	}
+
+	bool isCollided = false;
+	float fDist = 0.f;
+	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
+	NavData nd = navDatas[navIdx];
+	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+	OutputDebugStringA(("deltaTime: " + std::to_string(_deltaTime) + ", nd.LinkData: " + std::to_string(nd.LinkData.size()) + "\n").c_str());
+
+	// check collision with link datas
+	if (!isCollided)
+	{
+		OutputDebugStringA("1. collision: false\n");
+		for (int linkedIdx : nd.LinkData)
+		{
+			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+			if (isCollided)
+			{
+				if (isLog) OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
+				TestMapPtr->SetNavIndex(linkedIdx);
+				navIdx = linkedIdx;
+				break;
+			}
+		}
+	}
+	else
+	{
+		OutputDebugStringA("1. collision: true\n");
+	}
+
+	FVector lastVec;
+	FVector lastRot;
 
 	if (UEngineInput::IsPress(VK_UP))
 	{
@@ -105,6 +148,11 @@ void APlayer::Move(float _deltaTime)
 		}
 	}
 
+	if (UEngineInput::IsPress(VK_LSHIFT))
+	{
+		Velocity = MAX_VELOCITY;
+	}
+
 	float rotVal = 0.f;
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
@@ -118,60 +166,8 @@ void APlayer::Move(float _deltaTime)
 	FVector dir = GetActorForwardVector();
 	dir.Normalize();
 	dir = dir * dx;
-
-	FVector rot{ 0.f, rotVal, 0.f };
-
-	CheckCollision(rot, dir, _deltaTime);
-}
-
-void APlayer::SetMap(class ATestMap* _ptr)
-{
-	TestMapPtr = _ptr;
-}
-
-void APlayer::CheckCollision(const FVector& _rot, const FVector _forward, float _deltaTime)
-{
-	bool isCollisionLog = true;
-
-	FTransform trfmPlayer = GetActorTransform();
-	FTransform trfmObj = TestMapPtr->GetActorTransform();
-	FVector UpVector = FVector::UP;
-
-	const float GRAVITY_FORCE = -300.f;
-	float gravityForce = GRAVITY_FORCE * _deltaTime;
-
-	int navIdx = TestMapPtr->GetNavIndex();
-	if (navIdx == -1)
-	{
-		AddActorLocation({ 0.f, gravityForce, 0.f });
-		CheckCollisionOfAllMap();
-		return;
-	}
-
-	bool isCollided = false;
-	float fDist = 0.f;
-	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
-	NavData nd = navDatas[navIdx];
-	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
-
-	FVector lastVec = _forward;
-	FVector lastRot = _rot;
-
-	// check collision with link datas
-	if (!isCollided)
-	{
-		for (int linkedIdx : nd.LinkData)
-		{
-			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
-			if (isCollided)
-			{
-				if (isCollisionLog) OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
-				TestMapPtr->SetNavIndex(linkedIdx);
-				navIdx = linkedIdx;
-				break;
-			}
-		}
-	}
+	lastVec = dir;
+	lastRot.Y = rotVal;
 
 	// Temporary gravity
 	if (isCollided)
@@ -180,13 +176,14 @@ void APlayer::CheckCollision(const FVector& _rot, const FVector _forward, float 
 	}
 	else
 	{
-		FVector forward = GetActorForwardVector();	// option1. not working
-		//FVector forward = RendererDebug->GetTransformRef().GetLocalFoward();	// option2.
-		lastVec.Y = forward.Y + gravityForce;
+		//FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();	// option2.
+		//forward.Y *= dy;
+		//lastVec.Y += forward.Y + gravityForce;
+		lastVec.Y += gravityForce;
 
-		OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + "\n").c_str());
+		/*OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", dx: " + std::to_string(dx) + ", dy: " + std::to_string(dy) + ", VelocityV: " + std::to_string(VelocityV) + "\n").c_str());
 		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());
-		OutputDebugStringA(("- _forward: " + std::to_string(_forward.Length()) + " .. " + std::to_string(_forward.X) + ", " + std::to_string(_forward.Y) + ", " + std::to_string(_forward.Z) + "\n").c_str());
+		OutputDebugStringA(("- lastVec: " + std::to_string(lastVec.X) + ", " + std::to_string(lastVec.Y) + ", " + std::to_string(lastVec.Z) + "\n").c_str());*/
 
 		// check fucture location
 		FVector locFuture = trfmPlayer.Location + lastVec;
@@ -196,7 +193,7 @@ void APlayer::CheckCollision(const FVector& _rot, const FVector _forward, float 
 		isCollided = nd.Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 		if (isCollided)
 		{
-			if (isCollisionLog) OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
+			if (isLog) OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
 		}
 		else
 		{
@@ -205,7 +202,7 @@ void APlayer::CheckCollision(const FVector& _rot, const FVector _forward, float 
 				isCollided = navDatas[linkedIdx].Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
 				if (isCollided)
 				{
-					if (isCollisionLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
+					if (isLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
 					TestMapPtr->SetNavIndex(linkedIdx);
 					navIdx = linkedIdx;
 					break;
@@ -215,63 +212,61 @@ void APlayer::CheckCollision(const FVector& _rot, const FVector _forward, float 
 
 		if (isCollided)
 		{
-			if (isCollisionLog) OutputDebugStringA(("fDistTemp: " + std::to_string(fDistTemp) + "\n").c_str());
 			lastVec.Y += fDistTemp;
 		}
 	}
 
-	// Temporary physics of slope
-	float slopeAngle = GetActorTransform().Rotation.X;
 	if (isCollided)
 	{
+		// Temporary physics of slope
 		nd = navDatas[navIdx];
-		nd.Vertex[0] = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		nd.Vertex[1] = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		nd.Vertex[2] = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		float4 v1 = nd.Vertex[2] - nd.Vertex[0];
-		float4 v2 = nd.Vertex[1] - nd.Vertex[0];
+		FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		FVector vertex2 = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+		float4 v1 = vertex2 - vertex0;
+		float4 v2 = vertex1 - vertex0;
 		v1.Normalize();
 		v2.Normalize();
 
 		FVector normalV = FVector::Cross(v1, v2);
 		normalV.Normalize();
-		FVector upVec = FVector::UP;
-		FVector dir = upVec - normalV;
-		dir.Normalize();
 
-		slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
+		float crossV = FVector::Cross(normalV, FVector::UP).X;
+		float slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
+		if (crossV > 0)
+		{
+			slopeAngle *= -1;
+		}
 
 		//OutputDebugStringA(("- normalV: " + std::to_string(normalV.X) + ", " + std::to_string(normalV.Y) + ", " + std::to_string(normalV.Z) + "\n").c_str());
-		if (isCollisionLog) OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", dir: " + std::to_string(dir.X) + ", " + std::to_string(dir.Y) + ", " + std::to_string(dir.Z) + "\n").c_str());
+		if (isLog) OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", crossV: " + std::to_string(crossV) + "\n").c_str());
+
 		if (!std::isnan(slopeAngle))
 		{
-			/*float tempForce = gravityForce * slopeAngle * .5f;
-			Velocity = FPhysics::GetVf(Velocity, tempForce, _deltaTime);
-			float dx = FPhysics::GetDeltaX(Velocity, tempForce, _deltaTime);
-			OutputDebugStringA(("tempForce: " + std::to_string(tempForce) + ", Velocity: " + std::to_string(Velocity) + ", dx : " + std::to_string(dx) + "\n").c_str());*/
+	//		/*float tempForce = -gravityForce * slopeAngle;
+	//		Velocity = FPhysics::GetVf(Velocity, tempForce, _deltaTime);
+	//		float dx = FPhysics::GetDeltaX(Velocity, tempForce, _deltaTime);
+	//		OutputDebugStringA(("tempForce: " + std::to_string(tempForce) + ", Velocity: " + std::to_string(Velocity) + ", dx : " + std::to_string(dx) + "\n").c_str());*/
 
-			if (slopeAngle > 1.f)
-			{
-				lastVec -= dir * slopeAngle;
-			}
-			else if (slopeAngle < -1.f)
-			{
-				lastVec += dir * slopeAngle;
-			}
+			//lastVec += FVector{ 0.f, 0.f, 1.f } * slopeAngle * .8f;
 		}
+
+		// option2. rotated hidden renderer
+		RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
 	}
 
-	lastRot += trfmPlayer.Rotation;
-	// option1. not working
-	//lastRot.X = slopeAngle;
+	AddActorRotation(lastRot);
+	AddActorLocation(lastVec);
 
-	// option2. rotated hidden renderer
-	//RendererDebug->AddLocalRotation({ slopeAngle, 0.f, 0.f });
+	FTransform temp = GetTransform();
+	OutputDebugStringA(("set Location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
 
 	OutputDebugStringA("------------------------------------------\n");
+}
 
-	SetActorRotation(lastRot);
-	AddActorLocation(lastVec);
+void APlayer::SetMap(class ATestMap* _ptr)
+{
+	TestMapPtr = _ptr;
 }
 
 void APlayer::CheckCollisionOfAllMap()

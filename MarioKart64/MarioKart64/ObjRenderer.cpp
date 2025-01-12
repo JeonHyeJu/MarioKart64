@@ -91,9 +91,10 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	info.Z = minZ;
 
 	// Temp
-	if (texName == "7EEAA53A_fix.png")
+	//if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png")
+	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png")
 	{
-		InitNavMesh(vertices);	// Test
+		InitVertecies.insert(InitVertecies.end(), vertices.begin(), vertices.end());
 		RenderInfos.push_back(info);
 	}
 
@@ -158,7 +159,7 @@ void ObjRenderer::InitNavMesh(const std::vector<FEngineVertex>& _vec)
 		{
 			NavData& leftNd = NavDatas[i];
 			NavData& rightNd = NavDatas[j];
-			if (leftNd.IsAttached(rightNd))
+			if (leftNd.IsAttached(rightNd, 1e-1f))
 			{
 				leftNd.LinkBoth(rightNd);
 			}
@@ -194,6 +195,9 @@ void ObjRenderer::_Init()
 	{
 		OutputDebugStringA(("[WARN] " + ObjPath + " is not set.").c_str());
 	}
+
+	InitNavMesh(InitVertecies);	// Temp
+	InitVertecies.clear();	// Temp
 
 	//Sort();
 

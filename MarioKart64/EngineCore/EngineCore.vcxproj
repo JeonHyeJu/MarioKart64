@@ -192,6 +192,7 @@
     <ClInclude Include="EngineMaterial.h" />
     <ClInclude Include="EnginePixelShader.h" />
     <ClInclude Include="EngineRasterizerState.h" />
+    <ClInclude Include="EngineRenderTarget.h" />
     <ClInclude Include="EngineResources.h" />
     <ClInclude Include="EngineSampler.h" />
     <ClInclude Include="EngineShader.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="EngineVertexBuffer.h" />
     <ClInclude Include="EngineVertexShader.h" />
     <ClInclude Include="GameMode.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -222,6 +224,8 @@
     <ClInclude Include="ThirdParty\DirectXTex\Inc\DirectXTex.h" />
     <ClInclude Include="TileMapRenderer.h" />
     <ClInclude Include="TimeEventComponent.h" />
+    <ClInclude Include="TransformObject.h" />
+    <ClInclude Include="Widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -247,6 +251,7 @@
     <ClCompile Include="EngineMaterial.cpp" />
     <ClCompile Include="EnginePixelShader.cpp" />
     <ClCompile Include="EngineRasterizerState.cpp" />
+    <ClCompile Include="EngineRenderTarget.cpp" />
     <ClCompile Include="EngineResources.cpp" />
     <ClCompile Include="EngineSampler.cpp" />
     <ClCompile Include="EngineShader.cpp" />
@@ -257,6 +262,7 @@
     <ClCompile Include="EngineVertexBuffer.cpp" />
     <ClCompile Include="EngineVertexShader.cpp" />
     <ClCompile Include="GameMode.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
@@ -276,6 +282,8 @@
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TileMapRenderer.cpp" />
     <ClCompile Include="TimeEventComponent.cpp" />
+    <ClCompile Include="TransformObject.cpp" />
+    <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">

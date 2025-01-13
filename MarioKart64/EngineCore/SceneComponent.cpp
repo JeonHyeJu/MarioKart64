@@ -10,61 +10,32 @@ USceneComponent::~USceneComponent()
 }
 
 
-void USceneComponent::SetupAttachment(std::shared_ptr<USceneComponent> _Parent)
-{
-	SetupAttachment(_Parent.get());
-}
-
-void USceneComponent::ParentMatrixCheck()
-{
-	if (nullptr != Parent)
-	{
-		Transform.ParentMat = Parent->Transform.World;
-	}
-}
-
-void USceneComponent::SetupAttachment(USceneComponent* _Parent)
-{
-	Parent = _Parent;
-	Parent->Childs.push_back(GetThis<USceneComponent>());
-
-	TransformUpdate();
-}
-
 void USceneComponent::BeginPlay()
 {
 	UActorComponent::BeginPlay();
 
-	for (std::shared_ptr<USceneComponent> Child : Childs)
+	for (UTransformObject* Child : Childs)
 	{
-		Child->BeginPlay();
+		USceneComponent* SceneChild = dynamic_cast<USceneComponent*>(Child);
+
+		SceneChild->BeginPlay();
 	}
-}
-
-void USceneComponent::TransformUpdate()
-{
-	ParentMatrixCheck();
-	Transform.TransformUpdate(IsAbsolute);
-
-	for (std::shared_ptr<USceneComponent> Child : Childs)
-	{
-		Child->TransformUpdate();
-	}
-
-	IsAbsolute = false;
 }
 
 void USceneComponent::ComponentTick(float _DeltaTime)
 {
 	UActorComponent::ComponentTick(_DeltaTime);
 
-	for (std::shared_ptr<USceneComponent> Child : Childs)
+	for (UTransformObject* Child : Childs)
 	{
-		if (false == Child->IsActive())
+
+		USceneComponent* SceneChild = dynamic_cast<USceneComponent*>(Child);
+
+		if (false == SceneChild->IsActive())
 		{
 			continue;
 		}
 
-		Child->ComponentTick(_DeltaTime);
+		SceneChild->ComponentTick(_DeltaTime);
 	}
 }

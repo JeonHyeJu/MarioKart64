@@ -113,12 +113,56 @@ void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
 		return;
 	}
 
+	if (Desc.BindFlags & D3D11_BIND_SHADER_RESOURCE)
+	{
+		CreateShaderResourceView();
+	}
+
+	if (Desc.BindFlags & D3D11_BIND_RENDER_TARGET)
+	{
+		CreateRenderTargetView();
+	}
+
 	if (Desc.BindFlags & D3D11_BIND_DEPTH_STENCIL)
 	{
-		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
-		{
-			MSGASSERT("깊이버퍼 생성에 실패했습니다..");
-			return;
-		}
+		CreateDepthStencilView();
+	}
+	
+
+}
+
+void UEngineTexture::ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D)
+{
+	Texture2D = _Texture2D;
+	Texture2D->GetDesc(&Desc);
+	Size.X = static_cast<float>(Desc.Width);
+	Size.Y = static_cast<float>(Desc.Height);
+
+	CreateRenderTargetView();
+}
+
+void UEngineTexture::CreateRenderTargetView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateRenderTargetView(Texture2D.Get(), nullptr, &RTV))
+	{
+		MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
+	}
+}
+
+void UEngineTexture::CreateShaderResourceView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateShaderResourceView(Texture2D.Get(), nullptr, &SRV))
+	{
+		MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+		return;
+	}
+}
+
+void UEngineTexture::CreateDepthStencilView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
+	{
+		MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+		return;
 	}
 }

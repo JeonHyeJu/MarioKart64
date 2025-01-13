@@ -76,6 +76,7 @@ public:
 
 	void SamplerSetting(std::string_view _Name, std::string_view _ResName);
 	void TextureSetting(std::string_view _Name, std::string_view _ResName);
+	void TextureSetting(std::string_view _Name, std::shared_ptr<UEngineTexture> _Texture);
 
 	void TextureSetting(std::string_view _Name, UEngineTexture* _Texture);
 

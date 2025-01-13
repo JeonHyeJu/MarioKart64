@@ -141,6 +141,18 @@
     <ClInclude Include="TileMapRenderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="EngineRenderTarget.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformObject.h">
+      <Filter>Transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -275,6 +287,18 @@
     <ClCompile Include="TileMapRenderer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="EngineRenderTarget.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget.cpp">
+      <Filter>Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformObject.cpp">
+      <Filter>Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -336,6 +360,9 @@
     </Filter>
     <Filter Include="Event">
       <UniqueIdentifier>{d7c754c5-44e0-46ee-b497-ef15bbeb6bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Transform">
+      <UniqueIdentifier>{de2125a5-bf16-465a-a989-fe89d7363641}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

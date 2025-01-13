@@ -12,37 +12,24 @@
 
 UEngineGraphicDevice& UEngineCore::GetDevice()
 {
-	return Device;
+	return GEngine->Device;
 }
 
 UEngineWindow& UEngineCore::GetMainWindow()
 {
-	return MainWindow;
+	return GEngine->MainWindow;
 }
 
 std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::GetAllLevelMap()
 {
-	return LevelMap;
+	return GEngine->LevelMap;
 }
 
-// 리얼 본체죠?
-// UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
-UEngineGraphicDevice UEngineCore::Device;
-UEngineWindow UEngineCore::MainWindow;
-HMODULE UEngineCore::ContentsDLL = nullptr;
-std::shared_ptr<IContentsCore> UEngineCore::Core;
-UEngineInitData UEngineCore::Data;
-UEngineTimer UEngineCore::Timer;
-
-
-std::shared_ptr<class ULevel> UEngineCore::NextLevel;
-std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
-
-std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::LevelMap;
+UEngineCore* GEngine = nullptr;
 
 FVector UEngineCore::GetScreenScale()
 {
-	return Data.WindowSize;
+	return GEngine->Data.WindowSize;
 }
 
 UEngineCore::UEngineCore()
@@ -57,7 +44,7 @@ UEngineCore::~UEngineCore()
 void UEngineCore::WindowInit(HINSTANCE _Instance)
 {
 	UEngineWindow::EngineWindowInit(_Instance);
-	MainWindow.Open("MainWindow");
+	GEngine->MainWindow.Open("MainWindow");
 }
 
 void UEngineCore::LoadContents(std::string_view _DllName)
@@ -76,15 +63,15 @@ void UEngineCore::LoadContents(std::string_view _DllName)
 
 	std::string FullPath = File.GetPathToString();
 
-	ContentsDLL = LoadLibraryA(FullPath.c_str());
+	GEngine->ContentsDLL = LoadLibraryA(FullPath.c_str());
 
-	if (nullptr == ContentsDLL)
+	if (nullptr == GEngine->ContentsDLL)
 	{
 		MSGASSERT("컨텐츠 기능을 로드할수가 없습니다.");
 		return;
 	}
 
-	INT_PTR(__stdcall * Ptr)(std::shared_ptr<IContentsCore>&) = (INT_PTR(__stdcall*)(std::shared_ptr<IContentsCore>&))GetProcAddress(ContentsDLL, "CreateContentsCore");
+	INT_PTR(__stdcall * Ptr)(std::shared_ptr<IContentsCore>&) = (INT_PTR(__stdcall*)(std::shared_ptr<IContentsCore>&))GetProcAddress(GEngine->ContentsDLL, "CreateContentsCore");
 
 	if (nullptr == Ptr)
 	{
@@ -92,9 +79,9 @@ void UEngineCore::LoadContents(std::string_view _DllName)
 		return;
 	}
 
-	Ptr(Core);
+	Ptr(GEngine->Core);
 
-	if (nullptr == Core)
+	if (nullptr == GEngine->Core)
 	{
 		MSGASSERT("컨텐츠 코어 생성에 실패했습니다.");
 		return;
@@ -105,6 +92,10 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 {
 	UEngineDebug::LeakCheck();
 
+	UEngineCore EngineCore;
+
+	GEngine = &EngineCore;
+
 	WindowInit(_Instance);
 
 	LoadContents(_DllName);
@@ -112,10 +103,11 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 	UEngineWindow::WindowMessageLoop(
 		[]()
 		{
-			Device.CreateDeviceAndContext();
-			Core->EngineStart(Data);
-			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
-			Device.CreateBackBuffer(MainWindow);		
+			GEngine->Device.CreateDeviceAndContext();
+			GEngine->Core->EngineStart(GEngine->Data);
+			GEngine->MainWindow.SetWindowPosAndScale(GEngine->Data.WindowPos, GEngine->Data.WindowSize);
+			GEngine->Device.CreateBackBuffer(GEngine->MainWindow);
+		
 			UEngineGUI::Init();
 		},
 		[]()
@@ -131,17 +123,16 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 // To prevent recursive importing
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
-	std::string UpperName = UEngineString::ToUpper(_Name);
-	if (true == LevelMap.contains(UpperName))
+	if (true == GEngine->LevelMap.contains(_Name.data()))
 	{
-		MSGASSERT("같은 이름의 레벨을 또 만들수는 없습니다." + std::string(UpperName));
+		MSGASSERT("같은 이름의 레벨을 또 만들수는 없습니다." + std::string( _Name.data()));
 		return nullptr;
 	}
 
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
-	Ptr->SetName(UpperName);
+	Ptr->SetName(_Name);
 
-	LevelMap.insert({ UpperName, Ptr});
+	GEngine->LevelMap.insert({ _Name.data(), Ptr});
 
 	std::cout << "NewLevelCreate" << std::endl;
 
@@ -152,34 +143,34 @@ void UEngineCore::OpenLevel(std::string_view _Name)
 {
 	std::string UpperString = UEngineString::ToUpper(_Name);
 
-	if (false == LevelMap.contains(UpperString))
+	if (false == GEngine->LevelMap.contains(UpperString))
 	{
 		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + UpperString);
 		return;
 	}
 
-	NextLevel = LevelMap[UpperString];
+	GEngine->NextLevel = GEngine->LevelMap[UpperString];
 }
 
 void UEngineCore::EngineFrame()
 {
-	if (nullptr != NextLevel)
+	if (nullptr != GEngine->NextLevel)
 	{
-		if (nullptr != CurLevel)
+		if (nullptr != GEngine->CurLevel)
 		{
-			CurLevel->LevelChangeEnd();
+			GEngine->CurLevel->LevelChangeEnd();
 		}
 
-		CurLevel = NextLevel;
+		GEngine->CurLevel = GEngine->NextLevel;
 
-		CurLevel->LevelChangeStart();
-		NextLevel = nullptr;
-		Timer.TimeStart();
+		GEngine->CurLevel->LevelChangeStart();
+		GEngine->NextLevel = nullptr;
+		GEngine->Timer.TimeStart();
 	}
 
-	Timer.TimeCheck();
-	float DeltaTime = Timer.GetDeltaTime();
-	if (true == MainWindow.IsFocus())
+	GEngine->Timer.TimeCheck();
+	float DeltaTime = GEngine->Timer.GetDeltaTime();
+	if (true == GEngine->MainWindow.IsFocus())
 	{
 		UEngineInput::KeyCheck(DeltaTime);
 	}
@@ -187,24 +178,24 @@ void UEngineCore::EngineFrame()
 		UEngineInput::KeyReset();
 	}
 	
-	CurLevel->Tick(DeltaTime);
-	CurLevel->Render(DeltaTime);
-	CurLevel->Collision(DeltaTime);
-	CurLevel->Release(DeltaTime);
+	GEngine->CurLevel->Tick(DeltaTime);
+	GEngine->CurLevel->Render(DeltaTime);
+	GEngine->CurLevel->Collision(DeltaTime);
+	GEngine->CurLevel->Release(DeltaTime);
 }
 
 void UEngineCore::EngineEnd()
 {
 
 	UEngineGUI::Release();
-
-	Device.Release();
+	GEngine->Device.Release();
 
 	UEngineResources::Release();
 	UEngineConstantBuffer::Release();
 
-	CurLevel = nullptr;
-	NextLevel = nullptr;
-	LevelMap.clear();
+	GEngine->CurLevel = nullptr;
+	GEngine->NextLevel = nullptr;
+	GEngine->LevelMap.clear();
+
 	UEngineDebug::EndConsole();
 }

@@ -362,6 +362,14 @@ public:
 		return Result;
 	}
 
+	TVector& operator+=(const TVector& _Other) const
+	{
+		X += _Other.X;
+		Y += _Other.Y;
+		Z += _Other.Z;
+		return *this;
+	}
+
 	ENGINEAPI TVector operator*(const class FMatrix& _Matrix) const;
 	ENGINEAPI TVector& operator*=(const class FMatrix& _Matrix);
 
@@ -473,10 +481,10 @@ public:
 };
 
 template<>
-const TVector<float> TVector<float>::NONE = TVector<float>(0.0f, 0.0f, 0.0f, 1.0f);
+const TVector<float> TVector<float>::NONE = TVector<float>(0.0f, 0.0f, 0.0f, 0.0f);
 
 template<>
-const TVector<float> TVector<float>::ZERO = TVector<float>(0.0f, 0.0f, 0.0f, 0.0f);
+const TVector<float> TVector<float>::ZERO = TVector<float>(0.0f, 0.0f, 0.0f, 1.0f);
 
 template<>
 const TVector<float> TVector<float>::LEFT = TVector<float>(-1.0f, 0.0f, 0.0f, 0.0f);;
@@ -876,7 +884,7 @@ public:
 
 	FVector ZAxisCenterLeftTop() const
 	{
-		return Location - Scale.Half();
+		return FVector(Location.X - Scale.Half().X, Location.Y + Scale.Half().Y);
 	}
 
 	FVector ZAxisCenterLeftBottom() const
@@ -894,20 +902,20 @@ public:
 
 	float ZAxisCenterTop() const
 	{
-		return Location.Y - Scale.hY();
+		return Location.Y + Scale.hY();
 	}
 
 	FVector ZAxisCenterRightTop() const
 	{
 		FVector Result;
 		Result.X = Location.X + Scale.hX();
-		Result.Y = Location.Y - Scale.hY();
+		Result.Y = Location.Y + Scale.hY();
 		return Result;
 	}
 
 	FVector ZAxisCenterRightBottom() const
 	{
-		return Location + Scale.Half();
+		return FVector(Location.X + Scale.Half().X, Location.Y - Scale.Half().Y);
 	}
 
 	float ZAxisCenterRight() const
@@ -917,7 +925,7 @@ public:
 
 	float ZAxisCenterBottom() const
 	{
-		return Location.Y + Scale.hY();
+		return Location.Y - Scale.hY();
 	}
 };
 

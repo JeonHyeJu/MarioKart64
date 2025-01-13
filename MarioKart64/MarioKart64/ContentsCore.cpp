@@ -9,6 +9,7 @@
 #include <EngineCore/EngineSprite.h>
 #include <EngineCore/EngineShader.h>
 #include <EngineCore/EngineMaterial.h>
+#include <EngineCore/HUD.h>
 #include "CGlobal.h"
 #include "TitleGameMode.h"
 #include "PlayGameMode.h"
@@ -77,9 +78,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitGraphics();
 	InitTest();
 	
-	//UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
-	//UEngineCore::CreateLevel<ASelectGameMode, APawn>("SelectLevel");
-	UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
+	//UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
+	//UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
+	UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
 	UEngineCore::OpenLevel("PlayLevel");

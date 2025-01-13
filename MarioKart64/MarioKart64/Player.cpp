@@ -143,7 +143,7 @@ void APlayer::Move(float _deltaTime)
 	}
 	else
 	{
-		// I didn't multiply deltaTime manually.
+		// I didn't multiply deltaTime intentionally.
 		bool hasFloor = CheckCollision(trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f }, navIdx, fDist);
 
 		if (hasFloor)

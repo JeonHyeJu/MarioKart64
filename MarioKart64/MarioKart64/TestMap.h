@@ -15,6 +15,8 @@ public:
 	ATestMap& operator=(ATestMap&& _other) noexcept = delete;
 
 	const std::vector<NavData>& GetNavData() const;
+	const NavData& GetNavData(int _idx) const;
+	const NavData& GetCurNavData() const;
 	int GetNavIndex() const;
 	void SetNavIndex(int _idx);
 

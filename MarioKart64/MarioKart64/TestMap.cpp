@@ -44,6 +44,16 @@ const std::vector<NavData>& ATestMap::GetNavData() const
 	return Renderer->GetNavData();
 }
 
+const NavData& ATestMap::GetNavData(int _idx) const
+{
+	return Renderer->GetNavData(_idx);
+}
+
+const NavData& ATestMap::GetCurNavData() const
+{
+	return Renderer->GetCurNavData();
+}
+
 int ATestMap::GetNavIndex() const
 {
 	if (Renderer == nullptr)

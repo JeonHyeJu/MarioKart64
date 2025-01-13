@@ -35,7 +35,7 @@ APlayer::APlayer()
 	RendererDebug->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
 	RendererDebug->ChangeAnimation("Idle");
 	RendererDebug->SetupAttachment(RootComponent);
-	RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
+	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
 }
 
 APlayer::~APlayer()
@@ -51,7 +51,11 @@ void APlayer::Tick(float _deltaTime)
 
 void APlayer::Move(float _deltaTime)
 {
-	// Temp
+	float gravityY = GRAVITY_FORCE * _deltaTime;
+	FTransform trfmPlayer = GetActorTransform();
+	FTransform trfmObj = TestMapPtr->GetActorTransform();
+
+	/* for debug start */
 	if (UEngineInput::IsPress(VK_LCONTROL))
 	{
 		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
@@ -59,14 +63,6 @@ void APlayer::Move(float _deltaTime)
 		TestMapPtr->SetNavIndex(-1);
 		return;
 	}
-
-	bool isLog = true;
-	float x = 0.f;
-	float dx = 0.f;
-	FTransform trfmPlayer = GetActorTransform();
-	FTransform trfmObj = TestMapPtr->GetActorTransform();
-	FVector UpVector = FVector::UP;
-
 	if (trfmPlayer.Location.Y < -1000)
 	{
 		Velocity = 0.f;
@@ -75,116 +71,30 @@ void APlayer::Move(float _deltaTime)
 		TestMapPtr->SetNavIndex(-1);
 		return;
 	}
-
-	const float GRAVITY_FORCE = -300.f;
-	float gravityForce = GRAVITY_FORCE * _deltaTime;
+	/* for debug end */
 
 	int navIdx = TestMapPtr->GetNavIndex();
 	if (navIdx == -1)
 	{
-		AddActorLocation({ 0.f, gravityForce, 0.f });
+		AddActorLocation({ 0.f, gravityY, 0.f });
 		CheckCollisionOfAllMap();
 		return;
 	}
 
-	bool isCollided = false;
 	float fDist = 0.f;
-	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
-	NavData nd = navDatas[navIdx];
-	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
-	OutputDebugStringA(("deltaTime: " + std::to_string(_deltaTime) + ", nd.LinkData: " + std::to_string(nd.LinkData.size()) + "\n").c_str());
+	bool isCollided = CheckCollision(trfmPlayer.Location, navIdx, fDist);
 
-	PrevIdx = navIdx;
-	PrevGroupIdx = navDatas[navIdx].GroupIndex;
-
-	// check collision with link datas
-	if (!isCollided)
-	{
-		OutputDebugStringA("1. collision: false\n");
-		for (int linkedIdx : nd.LinkData)
-		{
-			isCollided = navDatas[linkedIdx].Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
-			if (isCollided)
-			{
-				if (isLog) OutputDebugStringA(("[First coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
-				TestMapPtr->SetNavIndex(linkedIdx);
-				navIdx = linkedIdx;
-				break;
-			}
-		}
-	}
-	else
-	{
-		OutputDebugStringA(("1. collision: true: " + std::to_string(navIdx) + "\n").c_str());
-	}
-
-	FVector lastVec;
 	FVector lastRot;
+	FVector lastVec;
+	FVector dir = GetActorForwardVector();
+	dir.Normalize();
 
-	if (UEngineInput::IsPress(VK_UP))
-	{
-		Velocity = FPhysics::GetVf(Velocity, ACCELERATION - FRICTION_FORCE, _deltaTime);
-		if (Velocity > MAX_VELOCITY)
-		{
-			Velocity = MAX_VELOCITY;
-		}
-
-		dx = FPhysics::GetDeltaX(Velocity, ACCELERATION - FRICTION_FORCE, _deltaTime);
-		if (isLog) OutputDebugStringA(("1. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
-	}
-	else if (UEngineInput::IsPress(VK_DOWN))
-	{
-		Velocity = FPhysics::GetVf(Velocity, -ACCELERATION + FRICTION_FORCE, _deltaTime);
-		if (Velocity < -MAX_VELOCITY)
-		{
-			Velocity = -MAX_VELOCITY;
-		}
-
-		dx = FPhysics::GetDeltaX(Velocity, -ACCELERATION + FRICTION_FORCE, _deltaTime);
-		if (isLog) OutputDebugStringA(("2. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
-	}
-	else
-	{
-		if (Velocity > 0)
-		{
-			Velocity = FPhysics::GetVf(Velocity, -FRICTION_FORCE, _deltaTime);
-			if (Velocity < 0)
-			{
-				Velocity = 0;
-			}
-
-			dx = FPhysics::GetDeltaX(Velocity, -FRICTION_FORCE, _deltaTime);
-			if (isLog) OutputDebugStringA(("3. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
-		}
-		else if (Velocity < 0)
-		{
-			Velocity = FPhysics::GetVf(Velocity, FRICTION_FORCE, _deltaTime);
-			if (Velocity > 0)
-			{
-				Velocity = 0;
-			}
-
-			dx = FPhysics::GetDeltaX(Velocity, FRICTION_FORCE, _deltaTime);
-			if (isLog) OutputDebugStringA(("4. Velocity: " + std::to_string(Velocity) + ", dx: " + std::to_string(dx) + "\n").c_str());
-		}
-	}
-
+	/* for debug start */
+	float zVal = 0.f;
 	if (UEngineInput::IsPress(VK_LSHIFT))
 	{
 		Velocity = MAX_VELOCITY;
 	}
-
-	float rotVal = 0.f;
-	if (UEngineInput::IsPress(VK_LEFT))
-	{
-		rotVal = -1.5f;
-	}
-	else if (UEngineInput::IsPress(VK_RIGHT))
-	{
-		rotVal = 1.5f;
-	}
-
-	float zVal = 0.f;
 	if (UEngineInput::IsPress('Z'))
 	{
 		zVal = 10.f;
@@ -193,217 +103,258 @@ void APlayer::Move(float _deltaTime)
 	{
 		zVal = -10.f;
 	}
+	lastVec.Y = zVal;
+	/* for debug end */
 
-	FVector dir = GetActorForwardVector();
-	dir.Normalize();
-	dir = dir * dx;
-	lastVec = dir;
-	lastRot.Y = rotVal;
-	lastVec.Y = zVal;	// Temp
-
-	// Temporary physics of slope
+	float dx = 0.f;
+	float rotVal = 0.f;
+	float slopeAngle = 0.f;
 	if (isCollided)
 	{
-		nd = navDatas[navIdx];
-		FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		FVector vertex2 = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
-		float4 v1 = vertex2 - vertex0;
-		float4 v2 = vertex1 - vertex0;
-		v1.Normalize();
-		v2.Normalize();
-
-		FVector normalV = FVector::Cross(v1, v2);
-		normalV.Normalize();
-
-		float crossV = FVector::Cross(normalV, FVector::UP).X;
-		float slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
-		if (crossV > 0)
+		// Temporary physics of slope
 		{
-			slopeAngle *= -1;
+			slopeAngle = GetSlope();
+
+			FVector backVec = GetActorForwardVector();
+			backVec.X *= -1;
+			backVec.Z *= -1;
+
+			if (!std::isnan(slopeAngle))
+			{
+				//lastVec += FVector{ 0.f, 0.f, 1.f } * slopeAngle * .8f;
+				//lastVec -= backVec * slopeAngle * .8f;
+			}
+
+			RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
 		}
 
-		if (isLog) OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", crossV: " + std::to_string(crossV) + "\n").c_str());
+		GetForwardPhysics(_deltaTime, dx);	// Z
+		GetHandleRotation(_deltaTime, rotVal);	// X
 
-		FVector backVec = GetActorForwardVector();
-		//backVec.X *= -1;
-		backVec.Z *= -1;
+		dir *= dx;		// Z, X
+		lastVec = dir;
 
-		OutputDebugStringA(("- backVec: " + std::to_string(backVec.X) + ", " + std::to_string(backVec.Y) + ", " + std::to_string(backVec.Z) + "\n").c_str());
+		lastRot.Y = rotVal;		// X
+		lastVec.Y += fDist;		// Y
 
-		if (!std::isnan(slopeAngle))
-		{
-			//		/*float tempForce = -gravityForce * slopeAngle;
-			//		Velocity = FPhysics::GetVf(Velocity, tempForce, _deltaTime);
-			//		float dx = FPhysics::GetDeltaX(Velocity, tempForce, _deltaTime);
-			//		OutputDebugStringA(("tempForce: " + std::to_string(tempForce) + ", Velocity: " + std::to_string(Velocity) + ", dx : " + std::to_string(dx) + "\n").c_str());*/
+		VelocityV = Velocity * .5f * sinf(-slopeAngle * UEngineMath::D2R);
 
-			//lastVec += FVector{ 0.f, 0.f, 1.f } * slopeAngle * .8f;
-			//lastVec -= backVec * slopeAngle * .8f;
-		}
-
-		// option2. rotated hidden renderer
-		RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
-	}
-
-	// Temporary gravity
-	if (isCollided)
-	{
-		lastVec.Y += fDist;
+		CheckLab();
 	}
 	else
 	{
-		FVector forward = RendererDebug->GetTransformRef().GetLocalFoward();
-		//FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();
+		// I didn't multiply deltaTime manually.
+		bool hasFloor = CheckCollision(trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f }, navIdx, fDist);
 
-		float dy = 0.f;
-
-		dy = FPhysics::GetDeltaX(VelocityV, GRAVITY_FORCE, _deltaTime);
-		VelocityV = FPhysics::GetVf(VelocityV, GRAVITY_FORCE, _deltaTime);
-
-		lastVec.Y += dy;
-		
-		//VelocityV = FPhysics::GetVf(VelocityV, gravityForce, _deltaTime);
-		OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", dy: " + std::to_string(dy) + "\n").c_str());
-		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());
-
-		/*OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", dx: " + std::to_string(dx) + ", dy: " + std::to_string(dy) + ", VelocityV: " + std::to_string(VelocityV) + "\n").c_str());
-		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());
-		OutputDebugStringA(("- lastVec: " + std::to_string(lastVec.X) + ", " + std::to_string(lastVec.Y) + ", " + std::to_string(lastVec.Z) + "\n").c_str());*/
-
-		// check fucture location
-		FVector locFuture = trfmPlayer.Location + lastVec;
-		float fDistTemp = 0.f;
-		nd = navDatas[navIdx];
-
-		isCollided = nd.Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
-		if (isCollided)
+		if (hasFloor)
 		{
-			if (isLog) OutputDebugStringA(("[Second coliided idx]: " + std::to_string(navIdx) + "\n").c_str());
+			// Adjust gravity
+			GetForwardPhysics(_deltaTime, dx);
+			GetHandleRotation(_deltaTime, rotVal);
+
+			// for fDist. Do not remove
+			CheckCollision(trfmPlayer.Location + FVector{ 0.f, gravityY, 0.f }, navIdx, fDist);
+
+			dir *= dx;
+			lastVec = dir;
+
+			lastRot.Y = rotVal;
+			lastVec.Y += gravityY + fDist;
 		}
 		else
 		{
-			for (int linkedIdx : nd.LinkData)
+			// Block
+			if (TestMapPtr->GetNavData(PrevIdx).FloorType != NavType::FLATE_FASTER)
 			{
-				isCollided = navDatas[linkedIdx].Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
-				if (isCollided)
-				{
-					if (isLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
-					TestMapPtr->SetNavIndex(linkedIdx);
-					navIdx = linkedIdx;
-					break;
-				}
+				dir.X *= -1;
+				dir.Z *= -1;
+				dir *= 5000.f * _deltaTime;
+
+				Velocity *= .5f;
+
+				// TODO: handle corner backword
+				lastVec = dir;
+			}
+			else
+			{
+				IsTouchLastTriangle = true;
+
+				// Adjust gravity
+				GetForwardPhysics(_deltaTime, dx);
+
+				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 150.f, _deltaTime);
+				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 150.f, _deltaTime);
+
+				dir *= dx;
+				lastVec = dir;
+
+				lastVec.Y += dy;
+				OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", gravityForce: " + std::to_string(gravityY) + ", dy: " + std::to_string(dy) + "\n").c_str());
 			}
 		}
-
-		if (isCollided)
-		{
-			lastVec.Y += fDistTemp;
-		}
 	}
 
-	if (isCollided)
-	{
-		AddActorRotation(lastRot);
-		AddActorLocation(lastVec);
+	AddActorRotation(lastRot);
+	AddActorLocation(lastVec);
 
-		FTransform temp = GetTransform();
-		OutputDebugStringA(("set Location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
+	//FTransform temp = GetTransform();
+	//OutputDebugStringA(("Last location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
 
-		IsActiveBack = true;
-	}
-	else
-	{
-		FVector locFuture = trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f };
-		float fDistTemp = 0.f;
-		nd = navDatas[navIdx];
-
-		isCollided = nd.Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
-		if (!isCollided)
-		{
-			for (int linkedIdx : nd.LinkData)
-			{
-				isCollided = navDatas[linkedIdx].Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
-				if (isCollided)
-				{
-					if (isLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
-					TestMapPtr->SetNavIndex(linkedIdx);
-					navIdx = linkedIdx;
-					break;
-				}
-			}
-		}
-
-		if (!isCollided && navDatas[PrevIdx].FloorType != NavType::FLATE_FASTER)
-		{
-			FVector backward = GetActorForwardVector();
-			backward.Normalize();
-			backward.X *= -1;
-			//backward.Y = 1;
-			backward.Z *= -1;
-			backward *= 5000.f * _deltaTime;
-
-			Velocity *= .5f;
-
-			// TODO: handle corner backword
-
-			AddActorLocation(backward);
-		}
-		else
-		{
-			//AddActorRotation(lastRot);
-			AddActorLocation(lastVec);
-		}
-	}
-
-	if (isCollided)
-	{
-		// Temp
-		if (navDatas[PrevIdx].FloorType == NavType::FLATE_FASTER)
-		{
-			VelocityV = 50.f;
-		}
-
-		// Temp
-		// 363 -> 366 -> 367
-		//bool isReserve = false;
-		int curGroupIdx = navDatas[navIdx].GroupIndex;
-		if (!IsReverse && curGroupIdx == 363)
-		{
-			IsTouchLastTriangle = true;
-		}
-
-		if (PrevGroupIdx == 366 && curGroupIdx == 367)
-		{
-			if (IsTouchLastTriangle)
-			{
-				IsTouchLastTriangle = false;
-				Lab++;
-				OutputDebugStringA(("@@@@@@ Add Lab: " + std::to_string(Lab) + "\n").c_str());
-			}
-
-			IsReverse = false;
-		}
-		else if (PrevGroupIdx == 367 && curGroupIdx == 366)
-		{
-			IsReverse = true;
-		}
-
-		if (IsReverse) OutputDebugStringA("########## REVERSE!! ");
-		else OutputDebugStringA("########## NO REVERSE!! ");
-		OutputDebugStringA(("PrevIdx: " + std::to_string(PrevIdx) + " ~ CurIdx: " + std::to_string(navIdx) + ", ").c_str());
-		OutputDebugStringA(("PrevGroupIdx: " + std::to_string(PrevGroupIdx) + " ~ GroupIndex: " + std::to_string(curGroupIdx) + "\n").c_str());
-	}
-
-	FTransform temp = GetTransform();
-	OutputDebugStringA(("Last location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
-
-	OutputDebugStringA("------------------------------------------\n");
+	//OutputDebugStringA("------------------------------------------\n");
 }
 
 void APlayer::SetMap(class ATestMap* _ptr)
 {
 	TestMapPtr = _ptr;
+}
+
+void APlayer::CheckLab()
+{
+	if (!IsTouchLastTriangle) return;
+
+	NavData nd = TestMapPtr->GetCurNavData();
+	if (nd.FloorType == NavType::START_POINT)
+	{
+		++Lab;
+		OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lab) + "\n").c_str());
+		IsTouchLastTriangle = false;
+	}
+
+	//if (Lab == ALL_LAB)
+	//{
+	//	// change state
+	//}
+}
+
+float APlayer::GetSlope()
+{
+	float slopeAngle = 0.f;
+	int idx = TestMapPtr->GetNavIndex();
+	if (idx < 0) return 0.f;
+
+	NavData nd = TestMapPtr->GetCurNavData();
+	const FTransform& trfmObj = TestMapPtr->GetTransform();
+
+	FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+	FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+	FVector vertex2 = nd.Vertex[2] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
+	float4 v1 = vertex2 - vertex0;
+	float4 v2 = vertex1 - vertex0;
+
+	v1.Normalize();
+	v2.Normalize();
+
+	FVector normalV = FVector::Cross(v1, v2);
+	normalV.Normalize();
+
+	float crossV = FVector::Cross(normalV, FVector::UP).X;
+	slopeAngle = FVector::GetVectorAngleDeg(normalV, FVector::UP);
+	if (crossV < 0)
+	{
+		slopeAngle *= -1;
+	}
+	//OutputDebugStringA(("- slopeAngle: " + std::to_string(slopeAngle) + ", crossV: " + std::to_string(crossV) + "\n").c_str());
+	return slopeAngle;
+}
+
+void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
+{
+	if (UEngineInput::IsPress(VK_LEFT))
+	{
+		_refRot = -100.f * _deltaTime;
+	}
+	else if (UEngineInput::IsPress(VK_RIGHT))
+	{
+		_refRot = 100.f * _deltaTime;
+	}
+	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
+}
+
+void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided)
+{
+	float acc = 0.f;
+	float dx = 0.f;
+	bool isPushed = true;
+
+	if (UEngineInput::IsPress(VK_UP))
+	{
+		acc = ACCELERATION - FRICTION_FORCE;
+	}
+	else if (UEngineInput::IsPress(VK_DOWN))
+	{
+		acc = -ACCELERATION + FRICTION_FORCE;
+	}
+	else
+	{
+		isPushed = false;
+	}
+
+	if (_isCollided && isPushed)
+	{
+		Velocity = FPhysics::GetVf(Velocity, acc, _deltaTime);
+		if (Velocity > MAX_VELOCITY)
+		{
+			Velocity = MAX_VELOCITY;
+		}
+		else if (Velocity < -MAX_VELOCITY)
+		{
+			Velocity = -MAX_VELOCITY;
+		}
+		dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
+	}
+	else
+	{
+		if (fabs(Velocity) > 30)
+		{
+			acc = (Velocity * .5f) - Velocity;
+			Velocity = FPhysics::GetVf(Velocity, acc, _deltaTime);
+			dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
+		}
+		else
+		{
+			Velocity = 0.f;
+			dx = 0.f;
+		}
+	}
+
+	//OutputDebugStringA(("Velocity: " + std::to_string(Velocity) + ", acc: " + std::to_string(acc) + ", dx: " + std::to_string(dx) + "\n").c_str());
+	_refDx = dx;
+}
+
+bool APlayer::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
+{
+	bool isCollided = false;
+	_refIdx = TestMapPtr->GetNavIndex();
+	const FTransform& trfmObj = TestMapPtr->GetTransform();
+
+	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
+	NavData nd = navDatas[_refIdx];
+	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
+	
+	if (isCollided)
+	{
+		//OutputDebugStringA("CheckCollision first: true\n");
+	}
+	else
+	{
+		//OutputDebugStringA("CheckCollision first: false\n");
+		for (int linkedIdx : nd.LinkData)
+		{
+			isCollided = navDatas[linkedIdx].Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
+			if (isCollided)
+			{
+				//OutputDebugStringA(("CheckCollision second: true .. " + std::to_string(linkedIdx) + "\n").c_str());
+				PrevIdx = _refIdx;
+				PrevGroupIdx = navDatas[_refIdx].GroupIndex;
+
+				TestMapPtr->SetNavIndex(linkedIdx);
+				_refIdx = linkedIdx;
+				break;
+			}
+		}
+	}
+
+	return isCollided;
 }
 
 void APlayer::CheckCollisionOfAllMap()

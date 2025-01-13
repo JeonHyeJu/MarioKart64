@@ -114,11 +114,11 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		}
 
 		VertexNavDatas.push_back(data);
-		//RenderInfos.push_back(info);
+		RenderInfos.push_back(info);
 	}
 
 	// TODO: uncomment
-	RenderInfos.push_back(info);
+	//RenderInfos.push_back(info);
 }
 
 void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)

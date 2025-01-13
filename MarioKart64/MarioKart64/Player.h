@@ -19,7 +19,12 @@ protected:
 
 private:
 	void Move(float _deltaTime);
+	bool CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist);
 	void CheckCollisionOfAllMap();
+	float GetSlope();
+	void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided=true);
+	void GetHandleRotation(float _deltaTime, float& _refRot);
+	void CheckLab();
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
 	std::shared_ptr<USpriteRenderer> RendererDebug;
@@ -35,17 +40,16 @@ private:
 	const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
 	const float MAX_VELOCITY = 1000.f * 2;
-	float VelocityV = 0.f;
-	float Velocity = 0.f;
+	const float GRAVITY_FORCE = -300.f;
 
-	bool IsActiveBack = false;
+	float Velocity = 0.f;
+	float VelocityV = 0.f;
+
 	int PrevIdx = -1;
 	int PrevGroupIdx = -1;
 	ATestMap* TestMapPtr = nullptr;
 
-	bool IsReverse = false;
 	bool IsTouchLastTriangle = false;
-
 	int Lab = 0;
 };
 

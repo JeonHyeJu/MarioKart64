@@ -92,7 +92,7 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 
 	// Temp
 	//if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png")
-	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png")
+	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png" || texName == "5B7CDDF2_fix.png")
 	{
 		InitVertecies.insert(InitVertecies.end(), vertices.begin(), vertices.end());
 		RenderInfos.push_back(info);

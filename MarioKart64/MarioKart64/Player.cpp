@@ -221,15 +221,31 @@ void APlayer::Move(float _deltaTime)
 	}
 	else
 	{
-		FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();
+		FVector forward = RendererDebug->GetTransformRef().GetLocalFoward();
+		//FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();
 
-		if (VelocityV == 0) VelocityV = forward.Y * Velocity * .25f;
-		float dy = FPhysics::GetDeltaX(VelocityV, GRAVITY_FORCE, _deltaTime);
+		//if (VelocityV == 0) VelocityV = forward.Y * Velocity;
+
+		float dy = 0.f;
+		// Temp
+		if (PrevIdx == 373)
+		{
+			static bool first = true;
+			if (first)
+			{
+				first = false;
+				VelocityV = 30.f;
+			}
+		}
+
+		dy = FPhysics::GetDeltaX(VelocityV, GRAVITY_FORCE, _deltaTime);
+		VelocityV = FPhysics::GetVf(VelocityV, GRAVITY_FORCE, _deltaTime);
 
 		lastVec.Y += dy;
-
-		VelocityV = FPhysics::GetVf(VelocityV, GRAVITY_FORCE, _deltaTime);
+		
+		//VelocityV = FPhysics::GetVf(VelocityV, gravityForce, _deltaTime);
 		OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", dy: " + std::to_string(dy) + "\n").c_str());
+		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());
 
 		/*OutputDebugStringA(("- gravityForce: " + std::to_string(gravityForce) + ", dx: " + std::to_string(dx) + ", dy: " + std::to_string(dy) + ", VelocityV: " + std::to_string(VelocityV) + "\n").c_str());
 		OutputDebugStringA(("- forward: " + std::to_string(forward.X) + ", " + std::to_string(forward.Y) + ", " + std::to_string(forward.Z) + "\n").c_str());
@@ -266,11 +282,60 @@ void APlayer::Move(float _deltaTime)
 		}
 	}
 
-	AddActorRotation(lastRot);
-	AddActorLocation(lastVec);
+	if (isCollided)
+	{
+		AddActorRotation(lastRot);
+		AddActorLocation(lastVec);
+		PrevIdx = navIdx;
 
-	FTransform temp = GetTransform();
-	OutputDebugStringA(("set Location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
+		FTransform temp = GetTransform();
+		OutputDebugStringA(("set Location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
+
+		IsActiveBack = true;
+	}
+	else
+	{
+		FVector locFuture = trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f };
+		float fDistTemp = 0.f;
+		nd = navDatas[navIdx];
+
+		isCollided = nd.Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+		if (!isCollided)
+		{
+			for (int linkedIdx : nd.LinkData)
+			{
+				isCollided = navDatas[linkedIdx].Intersects(locFuture, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDistTemp);
+				if (isCollided)
+				{
+					if (isLog) OutputDebugStringA(("[Third coliided idx]: " + std::to_string(linkedIdx) + "\n").c_str());
+					TestMapPtr->SetNavIndex(linkedIdx);
+					navIdx = linkedIdx;
+					break;
+				}
+			}
+		}
+
+		if (!isCollided && PrevIdx != 373)
+		{
+			FVector backward = GetActorForwardVector();
+			backward.Normalize();
+			backward.X *= -1;
+			//backward.Y = 1;
+			backward.Z *= -1;
+			backward *= 5000.f * _deltaTime;
+
+			Velocity *= .5f;
+
+			// TODO: handle corner backword
+
+			AddActorLocation(backward);
+		}
+		else
+		{
+			//AddActorRotation(lastRot);
+			AddActorLocation(lastVec);
+		}
+	}
 
 	OutputDebugStringA("------------------------------------------\n");
 }

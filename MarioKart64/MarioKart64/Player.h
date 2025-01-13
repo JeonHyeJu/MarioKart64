@@ -38,6 +38,8 @@ private:
 	float VelocityV = 0.f;
 	float Velocity = 0.f;
 
+	bool IsActiveBack = false;
+	int PrevIdx = -1;
 	ATestMap* TestMapPtr = nullptr;
 };
 

@@ -65,7 +65,7 @@ private:
 
 	int CollidedNavIndex = -1;
 	std::vector<NavData> NavDatas;
-	std::vector<FEngineVertex> InitVertecies;
+	std::vector<VertexToNavData> VertexNavDatas;
 
-	void InitNavMesh(const std::vector<FEngineVertex>& _vec);
+	void InitNavMesh(const std::vector<VertexToNavData>& _vec);
 };

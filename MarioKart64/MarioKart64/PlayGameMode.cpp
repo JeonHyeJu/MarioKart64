@@ -14,7 +14,7 @@ APlayGameMode::APlayGameMode()
 	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 
-	Player->SetActorLocation({ 0.0f, 100.0f, 1000.0f });
+	Player->SetActorLocation({ 0.0f, 100.0f, 500.0f });
 	Player->SetMap(TestMapPtr.get());
 
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });

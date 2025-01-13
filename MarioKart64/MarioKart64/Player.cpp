@@ -51,12 +51,30 @@ void APlayer::Tick(float _deltaTime)
 
 void APlayer::Move(float _deltaTime)
 {
+	// Temp
+	if (UEngineInput::IsPress(VK_LCONTROL))
+	{
+		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
+		SetActorRotation({ 0.f, -110.f, 0.f });
+		TestMapPtr->SetNavIndex(-1);
+		return;
+	}
+
 	bool isLog = true;
 	float x = 0.f;
 	float dx = 0.f;
 	FTransform trfmPlayer = GetActorTransform();
 	FTransform trfmObj = TestMapPtr->GetActorTransform();
 	FVector UpVector = FVector::UP;
+
+	if (trfmPlayer.Location.Y < -1000)
+	{
+		Velocity = 0.f;
+		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
+		SetActorRotation({ 0.f, -110.f, 0.f });
+		TestMapPtr->SetNavIndex(-1);
+		return;
+	}
 
 	const float GRAVITY_FORCE = -300.f;
 	float gravityForce = GRAVITY_FORCE * _deltaTime;
@@ -76,6 +94,9 @@ void APlayer::Move(float _deltaTime)
 	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 	OutputDebugStringA(("deltaTime: " + std::to_string(_deltaTime) + ", nd.LinkData: " + std::to_string(nd.LinkData.size()) + "\n").c_str());
 
+	PrevIdx = navIdx;
+	PrevGroupIdx = navDatas[navIdx].GroupIndex;
+
 	// check collision with link datas
 	if (!isCollided)
 	{
@@ -94,7 +115,7 @@ void APlayer::Move(float _deltaTime)
 	}
 	else
 	{
-		OutputDebugStringA("1. collision: true\n");
+		OutputDebugStringA(("1. collision: true: " + std::to_string(navIdx) + "\n").c_str());
 	}
 
 	FVector lastVec;
@@ -163,11 +184,22 @@ void APlayer::Move(float _deltaTime)
 		rotVal = 1.5f;
 	}
 
+	float zVal = 0.f;
+	if (UEngineInput::IsPress('Z'))
+	{
+		zVal = 10.f;
+	}
+	else if (UEngineInput::IsPress('X'))
+	{
+		zVal = -10.f;
+	}
+
 	FVector dir = GetActorForwardVector();
 	dir.Normalize();
 	dir = dir * dx;
 	lastVec = dir;
 	lastRot.Y = rotVal;
+	lastVec.Y = zVal;	// Temp
 
 	// Temporary physics of slope
 	if (isCollided)
@@ -224,19 +256,7 @@ void APlayer::Move(float _deltaTime)
 		FVector forward = RendererDebug->GetTransformRef().GetLocalFoward();
 		//FVector forward = RendererDebug->GetTransformRef().GetWorldFoward();
 
-		//if (VelocityV == 0) VelocityV = forward.Y * Velocity;
-
 		float dy = 0.f;
-		// Temp
-		if (PrevIdx == 373)
-		{
-			static bool first = true;
-			if (first)
-			{
-				first = false;
-				VelocityV = 30.f;
-			}
-		}
 
 		dy = FPhysics::GetDeltaX(VelocityV, GRAVITY_FORCE, _deltaTime);
 		VelocityV = FPhysics::GetVf(VelocityV, GRAVITY_FORCE, _deltaTime);
@@ -286,7 +306,6 @@ void APlayer::Move(float _deltaTime)
 	{
 		AddActorRotation(lastRot);
 		AddActorLocation(lastVec);
-		PrevIdx = navIdx;
 
 		FTransform temp = GetTransform();
 		OutputDebugStringA(("set Location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
@@ -315,7 +334,7 @@ void APlayer::Move(float _deltaTime)
 			}
 		}
 
-		if (!isCollided && PrevIdx != 373)
+		if (!isCollided && navDatas[PrevIdx].FloorType != NavType::FLATE_FASTER)
 		{
 			FVector backward = GetActorForwardVector();
 			backward.Normalize();
@@ -336,6 +355,48 @@ void APlayer::Move(float _deltaTime)
 			AddActorLocation(lastVec);
 		}
 	}
+
+	if (isCollided)
+	{
+		// Temp
+		if (navDatas[PrevIdx].FloorType == NavType::FLATE_FASTER)
+		{
+			VelocityV = 50.f;
+		}
+
+		// Temp
+		// 363 -> 366 -> 367
+		//bool isReserve = false;
+		int curGroupIdx = navDatas[navIdx].GroupIndex;
+		if (!IsReverse && curGroupIdx == 363)
+		{
+			IsTouchLastTriangle = true;
+		}
+
+		if (PrevGroupIdx == 366 && curGroupIdx == 367)
+		{
+			if (IsTouchLastTriangle)
+			{
+				IsTouchLastTriangle = false;
+				Lab++;
+				OutputDebugStringA(("@@@@@@ Add Lab: " + std::to_string(Lab) + "\n").c_str());
+			}
+
+			IsReverse = false;
+		}
+		else if (PrevGroupIdx == 367 && curGroupIdx == 366)
+		{
+			IsReverse = true;
+		}
+
+		if (IsReverse) OutputDebugStringA("########## REVERSE!! ");
+		else OutputDebugStringA("########## NO REVERSE!! ");
+		OutputDebugStringA(("PrevIdx: " + std::to_string(PrevIdx) + " ~ CurIdx: " + std::to_string(navIdx) + ", ").c_str());
+		OutputDebugStringA(("PrevGroupIdx: " + std::to_string(PrevGroupIdx) + " ~ GroupIndex: " + std::to_string(curGroupIdx) + "\n").c_str());
+	}
+
+	FTransform temp = GetTransform();
+	OutputDebugStringA(("Last location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
 
 	OutputDebugStringA("------------------------------------------\n");
 }

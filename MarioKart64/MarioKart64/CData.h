@@ -3,16 +3,34 @@
 
 #define GRAVITY_ACC 9.8f
 
+enum class NavType
+{
+	NONE = 0,
+	ROAD,
+	START_POINT,
+	BORDER,
+	FLATE_FASTER,
+	END
+};
+
 struct FColor
 {
 	float4 Albedo;
 };
 
+struct VertexToNavData
+{
+	NavType FloorType = NavType::NONE;
+	std::vector<FEngineVertex> Vertecies;
+};
+
 struct NavData
 {
 	float4 Vertex[3] = { {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f} };
+	int GroupIndex = -1;
 	int Index = -1;
 	std::vector<int> LinkData;
+	NavType FloorType = NavType::NONE;
 
 	NavData()
 	{

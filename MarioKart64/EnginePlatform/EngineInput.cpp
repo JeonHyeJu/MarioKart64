@@ -134,6 +134,7 @@ UEngineInput::UEngineInput()
 	Keys.insert({ '0', UEngineKey('0') });
 
 	Keys.insert({ VK_RETURN, UEngineKey(VK_RETURN) });
+	Keys.insert({ VK_LCONTROL, UEngineKey(VK_LCONTROL) });
 	
 	Keys.insert({ VK_LBUTTON , UEngineKey(VK_LBUTTON) });
 	Keys.insert({ VK_RBUTTON , UEngineKey(VK_RBUTTON) });

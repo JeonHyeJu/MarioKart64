@@ -40,6 +40,12 @@ private:
 
 	bool IsActiveBack = false;
 	int PrevIdx = -1;
+	int PrevGroupIdx = -1;
 	ATestMap* TestMapPtr = nullptr;
+
+	bool IsReverse = false;
+	bool IsTouchLastTriangle = false;
+
+	int Lab = 0;
 };
 

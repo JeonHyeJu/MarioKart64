@@ -4,6 +4,9 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/Collision.h>
 
+const float AItemBox::SIZE = 50.f;
+const float AItemBox::ROTATION_DEG = 30.f;
+
 AItemBox::AItemBox()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();

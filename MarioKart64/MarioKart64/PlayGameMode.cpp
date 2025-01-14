@@ -9,8 +9,6 @@
 #include <EngineCore/EngineCamera.h>
 #include <EngineBase/EngineMath.h>
 
-#include "Item.h"	// for debug
-
 APlayGameMode::APlayGameMode()
 {
 	ULevel* pLevel = GetWorld();
@@ -30,10 +28,9 @@ APlayGameMode::APlayGameMode()
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
 	TestMapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
-	std::shared_ptr<class ACameraActor> Camera = pLevel->GetMainCamera();
-	Camera->GetCameraComponent()->SetZSort(1, true);
+	std::shared_ptr<ACameraActor> Camera = pLevel->GetMainCamera();
+	//Camera->GetCameraComponent()->SetZSort(1, true);
 
-	Camera->AddActorRotation({ 0.f, 0.f, 0.f });
 	Camera->AddRelativeLocation({ 0.f, 200.f, -500.f });
 	Camera->AttachToActor(Player.get());
 

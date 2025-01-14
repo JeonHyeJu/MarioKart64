@@ -298,6 +298,28 @@ void ULevel::Release(float _DeltaTime)
 	}
 
 	{
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : CheckCollisions)
+		{
+			std::list<std::shared_ptr<UCollision>>& List = Group.second;
+
+			std::list<std::shared_ptr<UCollision>>::iterator StartIter = List.begin();
+			std::list<std::shared_ptr<UCollision>>::iterator EndIter = List.end();
+
+			for (; StartIter != EndIter; )
+			{
+				if (false == (*StartIter)->IsDestroy())
+				{
+					++StartIter;
+					continue;
+				}
+
+				(*StartIter)->Release();
+				StartIter = List.erase(StartIter);
+			}
+		}
+	}
+
+	{
 		std::list<std::shared_ptr<AActor>>& List = AllActorList;
 
 		std::list<std::shared_ptr<AActor>>::iterator StartIter = List.begin();

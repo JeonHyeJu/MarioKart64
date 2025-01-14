@@ -54,7 +54,7 @@ APlayer::APlayer()
 	TestItem = CreateDefaultSubObject<USpriteRenderer>();
 	TestItem->SetOrder(0);
 	TestItem->SetupAttachment(RootComponent);
-	TestItem->SetSprite("Items.png", 0);
+	TestItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
 	TestItem->SetRelativeLocation({ 0.f, 100.f, 0.f });
 }
 
@@ -72,6 +72,16 @@ void APlayer::Tick(float _deltaTime)
 	APawn::Tick(_deltaTime);
 
 	Move(_deltaTime);
+
+	/* for debug start */
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
+		item->Init(EItemType::FAKE_ITEMBOX);
+		item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
+		item->SetDirection(GetActorForwardVector());
+	}
+	/* for debug end */
 
 	if (IsPickingItem)
 	{
@@ -440,6 +450,7 @@ void APlayer::PickItem(float _deltaTime)
 	int itemIdx = ItemRoulette.PickItem(_deltaTime);
 	if (itemIdx == -1)
 	{
+		//ItemIndex = static_cast<int>(EItemType::FAKE_ITEMBOX);	// for test
 		ItemIndex = prevItemIdx;
 		IsPickingItem = false;
 		prevItemIdx = -1;
@@ -455,14 +466,90 @@ void APlayer::PickItem(float _deltaTime)
 
 void APlayer::CheckUsingItem(float _deltaTime)
 {
-	if (ItemIndex < 0) return;
+	static const int NONE = static_cast<int>(EItemType::SIZE);
+	if (ItemIndex >= NONE) return;
 
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
-		std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
-		//item->SetActorRotation(GetActorRotation());
-		item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
-		item->SetDirection(GetActorForwardVector());
-		ItemIndex = -1;
+		EItemType itemType = static_cast<EItemType>(ItemIndex);
+		switch (itemType)
+		{
+		case EItemType::GREEN_SHELL:
+		case EItemType::GREEN_SHELLS:
+		case EItemType::RED_SHELL:
+		case EItemType::RED_SHELLS:
+		case EItemType::BOWSER_SHELL:
+			UseItem_Shell(itemType);
+			break;
+		case EItemType::MUSHROOM:
+		case EItemType::MUSHROOM2:
+		case EItemType::MUSHROOM3:
+		case EItemType::GOLD_MUSHROOM:
+			UseItem_Mushroom(itemType);
+			break;
+		case EItemType::BANANA:
+		case EItemType::BANANAS:
+			UseItem_Banana(itemType);
+			break;
+		case EItemType::STAR:
+			UseItem_Star(itemType);
+			break;
+		case EItemType::THUNDER:
+			UseItem_Thunder(itemType);
+			break;
+		case EItemType::GHOST:
+			UseItem_Ghost(itemType);
+			break;
+		case EItemType::FAKE_ITEMBOX:
+			UseItem_FakeItemBox(itemType);
+			break;
+		}
+
+		ItemIndex = NONE;
+		TestItem->SetSprite("Items.png", NONE);
 	}
+}
+
+void APlayer::UseItem_Shell(const EItemType& _itemType)
+{
+	if (_itemType < EItemType::RED_SHELL)
+	{
+		// TODO
+	}
+	else if (_itemType < EItemType::BOWSER_SHELL)
+	{
+		// TODO
+	}
+
+	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
+	item->Init(_itemType);
+	//item->SetActorRotation(GetActorRotation());
+	item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
+	item->SetDirection(GetActorForwardVector());
+}
+
+void APlayer::UseItem_Mushroom(const EItemType& _itemType)
+{
+	Velocity += 100.f;
+}
+
+void APlayer::UseItem_Banana(const EItemType& _itemType)
+{
+
+}
+
+void APlayer::UseItem_Star(const EItemType& _itemType)
+{
+}
+
+void APlayer::UseItem_Thunder(const EItemType& _itemType)
+{
+}
+
+void APlayer::UseItem_Ghost(const EItemType& _itemType)
+{
+}
+
+void APlayer::UseItem_FakeItemBox(const EItemType& _itemType)
+{
 }

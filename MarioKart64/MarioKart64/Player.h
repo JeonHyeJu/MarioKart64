@@ -32,6 +32,14 @@ private:
 	void PickItem(float _deltaTime);
 	void CheckUsingItem(float _deltaTime);
 
+	void UseItem_Shell(const EItemType& _itemType);
+	void UseItem_Mushroom(const EItemType& _itemType);
+	void UseItem_Banana(const EItemType& _itemType);
+	void UseItem_Star(const EItemType& _itemType);
+	void UseItem_Thunder(const EItemType& _itemType);
+	void UseItem_Ghost(const EItemType& _itemType);
+	void UseItem_FakeItemBox(const EItemType& _itemType);
+
 	std::shared_ptr<class USpriteRenderer> Renderer;
 	std::shared_ptr<USpriteRenderer> RendererDebug;
 	std::shared_ptr<class UCollision> CollisionItem = nullptr;

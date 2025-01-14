@@ -20,12 +20,6 @@ private:
 	void CheckCollision(float _deltaTime);
 	void CheckCollisionOfAllMap();
 
-	/*class ASkybox* Skybox = nullptr;
-	class ATestMap* TestMapPtr = nullptr;
-	class APlayer* Player = nullptr;
-	class ACameraActor* Camera = nullptr;
-	class AItemBox* TestItemBox = nullptr;*/
-
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ATestMap> TestMapPtr = nullptr;
 	std::shared_ptr<class APlayer> Player = nullptr;

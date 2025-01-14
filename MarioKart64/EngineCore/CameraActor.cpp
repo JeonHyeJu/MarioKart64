@@ -35,6 +35,10 @@ void ACameraActor::Tick(float _DeltaTime)
 		//FreeCameraSwitch();
 		FreeCameraOn();
 	}
+	else if (UEngineInput::IsDown('V'))
+	{
+		FreeCameraOff();
+	}
 
 	if (true == IsFreeCameraValue)
 	{
@@ -121,8 +125,6 @@ FVector ACameraActor::ScreenMousePosToWorldPos()
 	return MousePos;
 }
 
-
-
 void ACameraActor::FreeCameraOn()
 {
 	IsFreeCameraValue = true;
@@ -132,6 +134,7 @@ void ACameraActor::FreeCameraOn()
 void ACameraActor::FreeCameraOff()
 {
 	IsFreeCameraValue = false;
+	FreeCameraCheck();
 }
 
 void ACameraActor::FreeCameraSwitch()
@@ -150,7 +153,7 @@ void ACameraActor::FreeCameraCheck()
 	}
 	else 
 	{
-		/*SetActorTransform(PrevTrans);
-		GetCameraComponent()->ProjectionType = PrevProjectionType;*/
+		SetActorTransform(PrevTrans);
+		GetCameraComponent()->ProjectionType = PrevProjectionType;
 	}
 }

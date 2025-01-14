@@ -14,6 +14,26 @@ enum class NavType
 	END
 };
 
+enum class EItemType
+{
+	GREEN_SHELL = 0,
+	GREEN_SHELLS,
+	RED_SHELL,
+	RED_SHELLS,
+	MUSHROOM,
+	MUSHROOM2,
+	MUSHROOM3,
+	GOLD_MUSHROOM,
+	BANANA,
+	BANANAS,
+	STAR,
+	THUNDER,
+	GHOST,
+	FAKE_ITEMBOX,
+	BOWSER_SHELL,
+	SIZE
+};
+
 struct FColor
 {
 	float4 Albedo;
@@ -112,7 +132,7 @@ struct FPhysics
 
 struct SItemRoulette
 {
-	const int ALL_ITEM_SIZE = 16;
+	const int ALL_ITEM_SIZE = static_cast<int>(EItemType::SIZE);
 	const float ACC_PICK_ITEM = -5.f;
 	float VelocityPick = 0.f;
 	float Distance = 0.f;
@@ -120,7 +140,9 @@ struct SItemRoulette
 	void Reset()
 	{
 		VelocityPick = 20.f;
-		Distance = 0.f;
+		srand(static_cast<unsigned int>(time(nullptr)));
+		Distance = static_cast<float>(rand() % ALL_ITEM_SIZE);
+		//OutputDebugStringA(("Distance: " + std::to_string(Distance) + "\n").)
 	}
 
 	int PickItem(float _deltaTime)

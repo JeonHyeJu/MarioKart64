@@ -102,8 +102,6 @@ void UEngineGraphicDevice::ShaderInit()
 
 void UEngineGraphicDevice::MeshInit()
 {
-	int a = 0;
-
 	{
 		std::vector<FEngineVertex> Vertexs;
 		Vertexs.resize(4);
@@ -113,19 +111,18 @@ void UEngineGraphicDevice::MeshInit()
 		Vertexs[3] = FEngineVertex{ FVector(0.5f, -0.5f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
 
 		UEngineVertexBuffer::Create("Rect", Vertexs);
-	}
 
-	{
 		std::vector<unsigned int> Indexs;
-
 		Indexs.push_back(0);
 		Indexs.push_back(1);
 		Indexs.push_back(2);
-
 		Indexs.push_back(1);
 		Indexs.push_back(3);
 		Indexs.push_back(2);
+
 		UEngineIndexBuffer::Create("Rect", Indexs);
+
+		UMesh::Create("Rect");
 	}
 
 	{
@@ -137,10 +134,6 @@ void UEngineGraphicDevice::MeshInit()
 		Vertexs[3] = FEngineVertex{ FVector(1.0f, -1.0f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
 
 		UEngineVertexBuffer::Create("FullRect", Vertexs);
-	}
-
-	{
-		UMesh::Create("Rect");
 		UMesh::Create("FullRect", "FullRect", "Rect");
 	}
 }
@@ -195,7 +188,6 @@ void UEngineGraphicDevice::MaterialInit()
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("CollisionDebugMaterial");
 		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
 		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
-
 		Mat->SetDepthStencilState("CollisionDebugDepth");
 		Mat->SetRasterizerState("CollisionDebugRas");
 	}

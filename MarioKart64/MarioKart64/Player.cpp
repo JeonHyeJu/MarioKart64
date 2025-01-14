@@ -1,10 +1,13 @@
 #include "PreCompile.h"
 #include "Player.h"
-#include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
+#include <EngineCore/Collision.h>
 #include "TestMap.h"
 #include "CData.h"
+#include "Item.h"
+#include "CGlobal.h"
 
 APlayer::APlayer()
 {
@@ -36,10 +39,32 @@ APlayer::APlayer()
 	RendererDebug->ChangeAnimation("Idle");
 	RendererDebug->SetupAttachment(RootComponent);
 	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
+
+	float playerWidth = Renderer->GetWorldScale3D().X;
+
+	CollisionItem = CreateDefaultSubObject<UCollision>();
+	CollisionItem->SetCollisionType(ECollisionType::Sphere);
+	CollisionItem->SetupAttachment(RootComponent);
+	CollisionItem->SetCollisionProfileName("Player");
+	CollisionItem->SetScale3D({ playerWidth, playerWidth, playerWidth });
+	CollisionItem->AddRelativeLocation({0.f, playerWidth*.5f, 0.f });
+
+	CollisionItem->SetCollisionEnter(std::bind(&APlayer::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
+
+	TestItem = CreateDefaultSubObject<USpriteRenderer>();
+	TestItem->SetOrder(0);
+	TestItem->SetupAttachment(RootComponent);
+	TestItem->SetSprite("Items.png", 0);
+	TestItem->SetRelativeLocation({ 0.f, 100.f, 0.f });
 }
 
 APlayer::~APlayer()
 {
+}
+
+void APlayer::BeginPlay()
+{
+	AActor::BeginPlay();
 }
 
 void APlayer::Tick(float _deltaTime)
@@ -47,6 +72,15 @@ void APlayer::Tick(float _deltaTime)
 	APawn::Tick(_deltaTime);
 
 	Move(_deltaTime);
+
+	if (IsPickingItem)
+	{
+		PickItem(_deltaTime);
+	}
+	else
+	{
+		CheckUsingItem(_deltaTime);
+	}
 }
 
 void APlayer::Move(float _deltaTime)
@@ -376,5 +410,59 @@ void APlayer::CheckCollisionOfAllMap()
 			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(nd.Index) + "\n").c_str());
 			break;
 		}
+	}
+}
+
+void APlayer::OnCollisionEnter(UCollision* _this, UCollision* _other)
+{
+	const std::string& name = _other->GetCollisionProfileName();
+
+	if (name == "ITEM")
+	{
+		//_other->GetActor()->Destroy();
+
+		OutputDebugStringA("Ouch!!!!!!!!!!!!!!!!!!!\n");
+	}
+	else if (name == "ITEMBOX")
+	{
+		_other->GetActor()->Destroy();
+
+		OutputDebugStringA("Get ITEM!!!!!!!!!!!!!!!!!!!\n");
+
+		ItemRoulette.Reset();
+		IsPickingItem = true;
+	}
+}
+
+void APlayer::PickItem(float _deltaTime)
+{
+	static int prevItemIdx = -1;
+	int itemIdx = ItemRoulette.PickItem(_deltaTime);
+	if (itemIdx == -1)
+	{
+		ItemIndex = prevItemIdx;
+		IsPickingItem = false;
+		prevItemIdx = -1;
+		return;
+	}
+
+	if (prevItemIdx != itemIdx)
+	{
+		prevItemIdx = itemIdx;
+		TestItem->SetSprite("Items.png", itemIdx);
+	}
+}
+
+void APlayer::CheckUsingItem(float _deltaTime)
+{
+	if (ItemIndex < 0) return;
+
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
+		//item->SetActorRotation(GetActorRotation());
+		item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
+		item->SetDirection(GetActorForwardVector());
+		ItemIndex = -1;
 	}
 }

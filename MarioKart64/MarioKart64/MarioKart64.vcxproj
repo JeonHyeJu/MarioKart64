@@ -154,6 +154,18 @@
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="CGlobal.h" />
     <ClInclude Include="ColorRenderer.h" />
+    <ClInclude Include="CubeRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="LineRenderer.h">
       <SubType>
       </SubType>
@@ -288,6 +300,18 @@
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="CGlobal.cpp" />
     <ClCompile Include="ColorRenderer.cpp" />
+    <ClCompile Include="CubeRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="LineRenderer.cpp">
       <SubType>
       </SubType>

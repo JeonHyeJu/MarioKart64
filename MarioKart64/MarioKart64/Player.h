@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Pawn.h>
+#include "CData.h"
 
 class APlayer : public APawn
 {
@@ -15,6 +16,7 @@ public:
 	void SetMap(class ATestMap* _ptr);
 
 protected:
+	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 private:
@@ -25,6 +27,10 @@ private:
 	void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided=true);
 	void GetHandleRotation(float _deltaTime, float& _refRot);
 	void CheckLab();
+
+	void OnCollisionEnter(UCollision* _this, UCollision* _other);
+	void PickItem(float _deltaTime);
+	void CheckUsingItem(float _deltaTime);
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
 	std::shared_ptr<USpriteRenderer> RendererDebug;
@@ -51,5 +57,14 @@ private:
 
 	bool IsTouchLastTriangle = false;
 	int Lab = 0;
+
+	std::shared_ptr<class UCollision> CollisionItem = nullptr;
+
+	bool IsPickingItem = false;
+	SItemRoulette ItemRoulette;
+	int ItemIndex = -1;
+
+	// Temp
+	std::shared_ptr<class USpriteRenderer> TestItem = nullptr;
 };
 

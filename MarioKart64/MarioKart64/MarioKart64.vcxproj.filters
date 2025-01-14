@@ -302,6 +302,15 @@
     </ClInclude>
     <ClInclude Include="CData.h" />
     <ClInclude Include="TestVertex.h" />
+    <ClInclude Include="CubeRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -353,6 +362,15 @@
     </ClCompile>
     <ClCompile Include="LineRenderer.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Actor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

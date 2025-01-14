@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
+#include <EngineCore/EngineVertexBuffer.h>
 
 #define GRAVITY_ACC 9.8f
 
@@ -106,5 +107,35 @@ struct FPhysics
 	static float GetDeltaX(float _vi, float _acc, float _t)
 	{
 		return (_vi * _t) + (.5f * _acc * (_t * _t));
+	}
+};
+
+struct SItemRoulette
+{
+	const int ALL_ITEM_SIZE = 16;
+	const float ACC_PICK_ITEM = -5.f;
+	float VelocityPick = 0.f;
+	float Distance = 0.f;
+
+	void Reset()
+	{
+		VelocityPick = 20.f;
+		Distance = 0.f;
+	}
+
+	int PickItem(float _deltaTime)
+	{
+		float dx = FPhysics::GetDeltaX(VelocityPick, ACC_PICK_ITEM, _deltaTime);
+		int idx = static_cast<int>(Distance) % ALL_ITEM_SIZE;
+
+		VelocityPick = FPhysics::GetVf(VelocityPick, ACC_PICK_ITEM, _deltaTime);
+		Distance += dx;
+
+		if (VelocityPick < 0)
+		{
+			return -1;
+		}
+
+		return idx;
 	}
 };

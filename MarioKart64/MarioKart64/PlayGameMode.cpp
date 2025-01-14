@@ -3,13 +3,23 @@
 #include "TestMap.h"
 #include "Player.h"
 #include "Skybox.h"
+#include "ItemBox.h"
 #include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineBase/EngineMath.h>
 
+#include "Item.h"	// for debug
+
 APlayGameMode::APlayGameMode()
 {
+	ULevel* pLevel = GetWorld();
+	pLevel->CreateCollisionProfile("ItemBox");
+	pLevel->CreateCollisionProfile("Player");
+	pLevel->CreateCollisionProfile("Item");
+	pLevel->LinkCollisionProfile("Player", "ItemBox");
+	pLevel->LinkCollisionProfile("Player", "Item");
+
 	Skybox = GetWorld()->SpawnActor<ASkybox>();
 	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
 	Player = GetWorld()->SpawnActor<APlayer>();
@@ -26,6 +36,9 @@ APlayGameMode::APlayGameMode()
 	Camera->AddActorRotation({ 0.f, 0.f, 0.f });
 	Camera->AddRelativeLocation({ 0.f, 200.f, -500.f });
 	Camera->AttachToActor(Player.get());
+
+	TestItemBox = GetWorld()->SpawnActor<AItemBox>();
+	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
 
 	CheckCollisionOfAllMap();
 }

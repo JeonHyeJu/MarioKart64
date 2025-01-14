@@ -69,11 +69,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\Background");
 	InitTextures("Resources\\Sprites\\Title");
 	InitTextures("Resources\\Sprites\\Clouds");
+	InitTextures("Resources\\Sprites\\GameObjects");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 
 	InitSprites("Resources\\Sprites\\Background");
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Items.png", ".meta");
 
 	InitGraphics();
 	InitTest();
@@ -189,5 +191,14 @@ void UContentsCore::InitTest()
 		UEngineVertexBuffer::Create("MultiTriangle", MultipleTriangles);
 		UEngineIndexBuffer::Create("MultiTriangle", indices);
 		UMesh::Create("MultiTriangle");
+	}
+
+	// Cube
+	{
+		std::vector<UINT> indices = { 2, 1, 0, 2, 3, 1, 5, 4, 0, 0, 1, 5, 2, 6, 7, 7, 3, 2, 0, 4, 2, 4, 6, 2, 3, 5, 1, 3, 7, 5, 4, 7, 6, 4, 5, 7 };
+
+		UEngineVertexBuffer::Create("Cube", SingleCube);
+		UEngineIndexBuffer::Create("Cube", indices);
+		UMesh::Create("Cube");
 	}
 }

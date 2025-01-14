@@ -122,6 +122,11 @@ public:
 	{
 		return RootComponent->Transform.WorldLocation;
 	}
+	
+	FVector GetActorRotation()
+	{
+		return RootComponent->Transform.WorldRotation;
+	}
 
 	// 트랜스폼 자체를 고칠수는 없다. 복사본을 주는 함수.
 	FTransform GetActorTransform()

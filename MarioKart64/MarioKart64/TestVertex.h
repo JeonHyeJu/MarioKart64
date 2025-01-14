@@ -6,8 +6,8 @@ static std::vector<FEngineVertex> SingleTriangle = {
 	FEngineVertex{ FVector(-0.5f, -0.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
 	FEngineVertex{ FVector(-0.5f, 0.5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} },
 	FEngineVertex{ FVector(0.5f, 0.5f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} },
-
 };
+
 static std::vector<FEngineVertex> SingleLine = {
 	FEngineVertex{ FVector(0.f, -.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
 	FEngineVertex{ FVector(0.f, .5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} }
@@ -44,4 +44,18 @@ static std::vector<FEngineVertex> MultipleTriangles = {
 	FEngineVertex{ FVector{ -126.000015f, 0.000000f, -220.000000f }, {0.f, 0.f}, {0.f, 0.f, 0.f, 1.f}},
 	FEngineVertex{ FVector{ -32.999954f, 16.000000f, -252.000000f }, {0.f, 0.f}, {0.f, 0.f, 0.f, 1.f}},
 	FEngineVertex{ FVector{ -56.999985f, 19.000000f, -312.000000f}, {0.f, 0.f}, {0.f, 0.f, 0.f, 1.f}}
+};
+
+static std::vector<FEngineVertex> SingleCube = {
+	FEngineVertex{ FVector(-0.5f, -0.5f, -0.5f), { 0.0f , 1.0f }, {1.0f, 0.0f, 0.0f, 0.8f} },
+	FEngineVertex{ FVector(0.5f, -0.5f, -0.5f), { 0.0f , 1.0f }, {0.0f, 1.0f, 0.0f, 0.8f} },
+
+	FEngineVertex{ FVector(-0.5f, 0.5f, -0.5f), { 0.0f , 1.0f }, {0.0f, 0.0f, 1.0f, 0.8f} },
+	FEngineVertex{ FVector(0.5f, 0.5f, -0.5f), { 0.0f , 1.0f }, {1.0f, 1.0f, 1.0f, 0.8f} },
+
+	FEngineVertex{ FVector(-0.5f, -0.5f, 0.5f), { 0.0f , 1.0f }, {1.0f, 0.0f, 0.0f, 0.8f} },
+	FEngineVertex{ FVector(0.5f, -0.5f, 0.5f), { 0.0f , 1.0f }, {0.0f, 1.0f, 0.0f, 0.8f} },
+
+	FEngineVertex{ FVector(-0.5f, 0.5f, 0.5f), { 0.0f , 1.0f }, {0.0f, 0.0f, 1.0f, 0.8f} },
+	FEngineVertex{ FVector(0.5f, 0.5f, 0.5f), { 0.0f , 1.0f }, {1.0f, 1.0f, 1.0f, 0.8f} },
 };

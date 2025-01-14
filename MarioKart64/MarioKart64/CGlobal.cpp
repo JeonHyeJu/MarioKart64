@@ -7,6 +7,7 @@ const char* CGlobal::OBJ_SHADER_NAME = "Object";
 const char* CGlobal::OBJ_SPRITE_SHADER_NAME = "ObjectSprite";
 const char* CGlobal::OBJ_SKY_SHADER_NAME = "Skybox";
 const char* CGlobal::OBJ_LINE_SHADER_NAME = "Line";
+const int CGlobal::ALL_ITEM_SIZE = 16;
 
 std::string CGlobal::GetModelPath(std::string_view _append="", std::string_view _fileName="")
 {

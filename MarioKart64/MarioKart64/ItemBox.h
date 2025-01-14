@@ -22,6 +22,5 @@ private:
 	const float ROTATION_DEG = 30.f;
 
 	std::shared_ptr<class CubeRenderer> BoxRenderer = nullptr;
-
 	std::shared_ptr<class UCollision> Collision = nullptr;
 };

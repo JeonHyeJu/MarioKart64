@@ -29,7 +29,12 @@ public:
 	{
 		return MainPawn;
 	}
-	
+
+	class AHUD* GetHUD()
+	{
+		return HUD;
+	}
+
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
 	void Collision(float _DeltaTime);
@@ -38,6 +43,12 @@ public:
 	std::shared_ptr<class ACameraActor> GetMainCamera()
 	{
 		return GetCamera(0);
+	}
+
+	template<typename EnumType>
+	std::shared_ptr<class ACameraActor> GetCamera(EnumType _Order)
+	{
+		return GetCamera(static_cast<int>(_Order));
 	}
 
 	std::shared_ptr<class ACameraActor> GetCamera(int _Order)
@@ -70,7 +81,6 @@ public:
 		}
 
 		char* ActorMemory = new char[sizeof(ActorType)];
-
 
 		AActor* ActorPtr = reinterpret_cast<ActorType*>(ActorMemory);
 		ActorPtr->World = this;
@@ -133,9 +143,7 @@ protected:
 
 private:
 	class AHUD* HUD = nullptr;
-
 	class AGameMode* GameMode = nullptr;
-
 	class APawn* MainPawn = nullptr;
 
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
@@ -147,8 +155,6 @@ private:
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> CheckCollisions;
 	std::map<std::string, std::list<std::string>> CollisionLinks;
-
-	std::map<int, std::list<std::shared_ptr<class UWidget>>> Widgets;
 
 	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD);
 };

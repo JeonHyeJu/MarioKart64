@@ -10,6 +10,7 @@ public:
 	URenderUnit();
 	~URenderUnit();
 
+	UTransformObject* TransformObject = nullptr;
 	URenderer* ParentRenderer = nullptr;
 
 	std::shared_ptr<UMesh> Mesh;

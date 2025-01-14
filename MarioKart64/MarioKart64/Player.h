@@ -34,6 +34,7 @@ private:
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
 	std::shared_ptr<USpriteRenderer> RendererDebug;
+	std::shared_ptr<class UCollision> CollisionItem = nullptr;
 
 	float Speed = 5.f;
 	float SpeedWeight = 0.f;
@@ -57,8 +58,6 @@ private:
 
 	bool IsTouchLastTriangle = false;
 	int Lab = 0;
-
-	std::shared_ptr<class UCollision> CollisionItem = nullptr;
 
 	bool IsPickingItem = false;
 	SItemRoulette ItemRoulette;

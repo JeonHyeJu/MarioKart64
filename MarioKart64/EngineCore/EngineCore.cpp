@@ -38,7 +38,11 @@ UEngineCore::UEngineCore()
 
 UEngineCore::~UEngineCore()
 {
-	FreeLibrary(ContentsDLL);
+	if (GEngine->ContentsDLL != nullptr)
+	{
+		// Crashed..
+		//FreeLibrary(GEngine->ContentsDLL);
+	}
 }
 
 void UEngineCore::WindowInit(HINSTANCE _Instance)
@@ -186,7 +190,6 @@ void UEngineCore::EngineFrame()
 
 void UEngineCore::EngineEnd()
 {
-
 	UEngineGUI::Release();
 	GEngine->Device.Release();
 

@@ -9,7 +9,6 @@ USceneComponent::~USceneComponent()
 {
 }
 
-
 void USceneComponent::BeginPlay()
 {
 	UActorComponent::BeginPlay();

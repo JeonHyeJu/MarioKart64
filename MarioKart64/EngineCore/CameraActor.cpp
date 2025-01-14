@@ -21,6 +21,7 @@ void ACameraActor::BeginPlay()
 
 void ACameraActor::Tick(float _DeltaTime)
 {
+	//OutputDebugStringA(("ACameraActor::Tick --------- " + std::to_string(_DeltaTime) + "\n").c_str());
 	AActor::Tick(_DeltaTime);
 
 	ScreenPos = UEngineCore::GetMainWindow().GetMousePos();

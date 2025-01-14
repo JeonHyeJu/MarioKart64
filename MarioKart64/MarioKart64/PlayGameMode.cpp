@@ -20,9 +20,9 @@ APlayGameMode::APlayGameMode()
 	pLevel->LinkCollisionProfile("Player", "ItemBox");
 	pLevel->LinkCollisionProfile("Player", "Item");
 
-	Skybox = GetWorld()->SpawnActor<ASkybox>();
-	TestMapPtr = GetWorld()->SpawnActor<ATestMap>();
-	Player = GetWorld()->SpawnActor<APlayer>();
+	Skybox = pLevel->SpawnActor<ASkybox>();
+	TestMapPtr = pLevel->SpawnActor<ATestMap>();
+	Player = pLevel->SpawnActor<APlayer>();
 
 	Player->SetActorLocation({ 0.0f, 100.0f, 500.0f });
 	Player->SetMap(TestMapPtr.get());
@@ -30,14 +30,14 @@ APlayGameMode::APlayGameMode()
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
 	TestMapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
-	Camera = GetWorld()->GetMainCamera();
+	std::shared_ptr<class ACameraActor> Camera = pLevel->GetMainCamera();
 	Camera->GetCameraComponent()->SetZSort(1, true);
 
 	Camera->AddActorRotation({ 0.f, 0.f, 0.f });
 	Camera->AddRelativeLocation({ 0.f, 200.f, -500.f });
 	Camera->AttachToActor(Player.get());
 
-	TestItemBox = GetWorld()->SpawnActor<AItemBox>();
+	TestItemBox = pLevel->SpawnActor<AItemBox>();
 	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
 
 	CheckCollisionOfAllMap();

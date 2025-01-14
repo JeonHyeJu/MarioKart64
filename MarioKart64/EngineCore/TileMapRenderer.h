@@ -28,7 +28,7 @@ struct FTileData
 	bool IsBlock = false;
 	int SpriteIndex = 0;
 	FTileIndex Index;
-	ResultColor ColorData;
+	FResultColor ColorData;
 	FSpriteData SpriteData;
 };
 
@@ -90,14 +90,13 @@ public:
 
 	FVector TileIndexToWorldPos(FTileIndex _Pos);
 
-	ENGINEAPI void Serialize(UEngineSerializer& _Ser);
-	ENGINEAPI void DeSerialize(UEngineSerializer& _Ser);
+	ENGINEAPI void Serialize(UEngineSerializer& _Ser) override;
+	ENGINEAPI void DeSerialize(UEngineSerializer& _Ser) override;
 
 protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
 	void BeginPlay() override;
 	void ComponentTick(float _DeltaTime) override;
-	ENGINEAPI void RenderTransUpdate(UEngineCamera* _Camera) override;
 
 private:
 	bool IsAutoScale = true;

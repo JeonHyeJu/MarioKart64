@@ -153,6 +153,11 @@
     <ClInclude Include="TransformObject.h">
       <Filter>Transform</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDataStruct.h" />
+    <ClInclude Include="EngineFont.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineConst.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -299,6 +304,9 @@
     <ClCompile Include="TransformObject.cpp">
       <Filter>Transform</Filter>
     </ClCompile>
+    <ClCompile Include="EngineFont.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -363,6 +371,9 @@
     </Filter>
     <Filter Include="Transform">
       <UniqueIdentifier>{de2125a5-bf16-465a-a989-fe89d7363641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Font">
+      <UniqueIdentifier>{964810da-e7fc-4072-81dd-128caefc17df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

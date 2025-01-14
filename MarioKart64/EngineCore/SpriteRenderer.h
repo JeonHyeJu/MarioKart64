@@ -1,21 +1,8 @@
 #pragma once
 #include "Renderer.h"
 #include <EngineBase/EngineDelegate.h>
+#include "EngineDataStruct.h"
 
-struct FUVValue 
-{
-	float4 PlusUVValue;
-};
-
-
-struct ResultColor 
-{
-public:
-	float4 PlusColor;
-	float4 MulColor;
-};
-
-// Ό³Έν :
 class USpriteRenderer : public URenderer
 {
 public:
@@ -120,7 +107,7 @@ public:
 
 	void SetSprite(UEngineSprite* _Sprite);
 
-	ResultColor ColorData;
+	FResultColor ColorData;
 	FUVValue UVValue;
 	FSpriteData SpriteData;
 
@@ -128,7 +115,7 @@ protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
 	void BeginPlay() override;
 	void ComponentTick(float _DeltaTime) override;
-	ENGINEAPI void RenderTransUpdate(UEngineCamera* _Camera) override;
+	ENGINEAPI void CameraTransUpdate(UEngineCamera* _Camera) override;
 
 private:
 	bool IsBillboard = false;

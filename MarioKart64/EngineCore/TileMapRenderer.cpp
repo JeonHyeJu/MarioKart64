@@ -175,10 +175,6 @@ void UTileMapRenderer::RemoveTile(int _X, int _Y)
 	Tiles.erase(Index.Key);
 }
 
-void UTileMapRenderer::RenderTransUpdate(UEngineCamera* _Camera) 
-{
-}
-
 void UTileMapRenderer::ComponentTick(float _DeltaTime)
 {
 	URenderer::ComponentTick(_DeltaTime);

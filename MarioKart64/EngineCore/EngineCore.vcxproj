@@ -176,14 +176,17 @@
     <ClInclude Include="DefaultSceneComponent.h" />
     <ClInclude Include="EngineBlend.h" />
     <ClInclude Include="EngineCamera.h" />
+    <ClInclude Include="EngineConst.h" />
     <ClInclude Include="EngineConstantBuffer.h" />
     <ClInclude Include="EngineCore.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineDataStruct.h" />
     <ClInclude Include="EngineDepthStencilState.h" />
     <ClInclude Include="EngineDeviceBuffer.h" />
     <ClInclude Include="EngineEnums.h" />
+    <ClInclude Include="EngineFont.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="EngineGUI.h" />
     <ClInclude Include="EngineGUIWindow.h" />
@@ -242,6 +245,7 @@
     </ClCompile>
     <ClCompile Include="EngineDepthStencilState.cpp" />
     <ClCompile Include="EngineDeviceBuffer.cpp" />
+    <ClCompile Include="EngineFont.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
     <ClCompile Include="EngineGUI.cpp" />

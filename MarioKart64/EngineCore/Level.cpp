@@ -7,6 +7,7 @@
 #include "EngineCamera.h"
 #include "CameraActor.h"
 #include "EngineGUI.h"
+#include "HUD.h"
 #include "EngineRenderTarget.h"
 
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
@@ -37,9 +38,7 @@ ULevel::ULevel()
 ULevel::~ULevel()
 {
 	BeginPlayList.clear();
-
 	AllActorList.clear();
-
 	Cameras.clear();
 }
 
@@ -124,10 +123,36 @@ void ULevel::Render(float _DeltaTime)
 		{
 			continue;
 		}
+		
+		if (false == Camera.second->IsActive())
+		{
+			continue;
+		}
 
 		Camera.second->Tick(_DeltaTime);
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
+	}
+
+	if (true == Cameras.contains(static_cast<int>(EEngineCameraType::UICamera)))
+	{
+		std::shared_ptr<ACameraActor> CameraActor = Cameras[static_cast<int>(EEngineCameraType::UICamera)];
+		if (true == CameraActor->IsActive())
+		{
+			std::shared_ptr<UEngineCamera> CameraComponent = Cameras[static_cast<int>(EEngineCameraType::UICamera)]->GetCameraComponent();
+
+			CameraActor->Tick(_DeltaTime);
+			CameraComponent->CameraTarget->Clear();
+			CameraComponent->CameraTarget->Setting();
+
+			HUD->UIRender(CameraComponent.get(), _DeltaTime);
+
+			CameraComponent->CameraTarget->MergeTo(LastRenderTarget);
+		}
+
+	} else 
+	{
+		MSGASSERT("UI카메라가 존재하지 않습니다. 엔진 오류입니다. UI카메라를 제작해주세요.");
 	}
 
 	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
@@ -266,6 +291,7 @@ void ULevel::Release(float _DeltaTime)
 					continue;
 				}
 
+				(*StartIter)->Release();
 				StartIter = List.erase(StartIter);
 			}
 		}
@@ -299,8 +325,6 @@ void ULevel::Release(float _DeltaTime)
 void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD)
 {
 	GameMode = _GameMode;
-
 	MainPawn = _Pawn;
-
 	HUD = _HUD;
 }

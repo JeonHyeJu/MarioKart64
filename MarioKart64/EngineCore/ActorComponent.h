@@ -15,6 +15,12 @@ public:
 	UActorComponent& operator=(const UActorComponent& _Other) = delete;
 	UActorComponent& operator=(UActorComponent&& _Other) noexcept = delete;
 
+	template<typename ConvertType>
+	ConvertType* GetActor()
+	{
+		return dynamic_cast<ConvertType*>(GetActor());
+	}
+
 	ENGINEAPI class AActor* GetActor();
 	ENGINEAPI virtual void InitializeComponent() {}
 	ENGINEAPI virtual void BeginPlay() {}

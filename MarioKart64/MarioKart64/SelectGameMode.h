@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 
-class SelectGameMode : public AGameMode
+class ASelectGameMode : public AGameMode
 {
 public:
 	enum class Scene
@@ -13,17 +13,20 @@ public:
 		END,
 	};
 
-	SelectGameMode();
-	~SelectGameMode();
+	ASelectGameMode();
+	~ASelectGameMode();
 
-	SelectGameMode(const SelectGameMode& _other) = delete;
-	SelectGameMode(SelectGameMode&& _other) noexcept = delete;
-	SelectGameMode& operator=(const SelectGameMode& _other) = delete;
-	SelectGameMode& operator=(SelectGameMode&& _other) noexcept = delete;
+	ASelectGameMode(const ASelectGameMode& _other) = delete;
+	ASelectGameMode(ASelectGameMode&& _other) noexcept = delete;
+	ASelectGameMode& operator=(const ASelectGameMode& _other) = delete;
+	ASelectGameMode& operator=(ASelectGameMode&& _other) noexcept = delete;
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 	Scene SceneIdx = Scene::IDLE;
+
+private:
+	std::shared_ptr<class ASelectScene> SelectScene = nullptr;
 };

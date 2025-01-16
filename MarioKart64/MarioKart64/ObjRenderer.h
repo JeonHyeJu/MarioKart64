@@ -3,10 +3,8 @@
 #include <EngineBase/EngineDefine.h>
 #include <vector>
 #include <assimp/scene.h>
-#include "CData.h"
 
 class UEngineCamera;
-class ModelLoader;
 class ObjRenderer : public URenderer
 {
 	friend class UEngineCamera;
@@ -31,41 +29,6 @@ public:
 	void Init(std::string_view _path);
 	void Init(std::string_view _objPath, std::string_view _mtlPath);
 
-	const std::vector<NavData>& GetNavData() const
-	{
-		return NavDatas;
-	}
-	const NavData& GetNavData(int _idx) const
-	{
-		if (_idx < NavDatas.size())
-		{
-			return NavDatas[_idx];
-		}
-		else
-		{
-			return Base;
-		}
-	}
-	const NavData& GetCurNavData() const
-	{
-		if (CollidedNavIndex > -1)
-		{
-			return NavDatas[CollidedNavIndex];
-		}
-		else
-		{
-			return Base;
-		}
-	}
-	int GetNavIndex() const
-	{
-		return CollidedNavIndex;
-	}
-	void SetNavIndex(int _idx)
-	{
-		CollidedNavIndex = _idx;
-	}
-
 protected:
 	void BeginPlay() override;
 	void Render(UEngineCamera* _camera, float _deltaTime) override;
@@ -84,11 +47,4 @@ private:
 
 	std::vector<RenderInfo> RenderInfos;
 	int MeshCount = 0;
-
-	int CollidedNavIndex = -1;
-	NavData Base;
-	std::vector<NavData> NavDatas;
-	std::vector<VertexToNavData> VertexNavDatas;
-
-	void InitNavMesh(const std::vector<VertexToNavData>& _vec);
 };

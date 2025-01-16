@@ -8,6 +8,7 @@
 #include "CameraActor.h"
 #include "EngineGUI.h"
 #include "HUD.h"
+#include "EngineFont.h"
 #include "EngineRenderTarget.h"
 
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
@@ -256,6 +257,11 @@ void ULevel::Collision(float _DeltaTime)
 			{
 				for (std::shared_ptr<class UCollision>& RightCollision : RightList)
 				{
+					if (LeftCollision == RightCollision)
+					{
+						continue;
+					}
+
 					if (false == LeftCollision->IsActive())
 					{
 						continue;
@@ -290,8 +296,7 @@ void ULevel::Release(float _DeltaTime)
 					++StartIter;
 					continue;
 				}
-
-				(*StartIter)->Release();
+				
 				StartIter = List.erase(StartIter);
 			}
 		}
@@ -312,8 +317,7 @@ void ULevel::Release(float _DeltaTime)
 					++StartIter;
 					continue;
 				}
-
-				(*StartIter)->Release();
+				
 				StartIter = List.erase(StartIter);
 			}
 		}

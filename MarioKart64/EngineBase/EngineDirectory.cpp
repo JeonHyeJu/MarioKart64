@@ -4,6 +4,41 @@
 #include "EngineDebug.h"
 #include "EngineString.h"
 
+// Custom function
+void Sort(std::vector<UEngineFile>& _vec)
+{
+	std::sort(_vec.begin(), _vec.end(),
+		[](UEngineFile& f1, UEngineFile& f2)
+		{
+			std::string s1 = f1.GetPathToString();
+			std::string s2 = f2.GetPathToString();
+
+			if (s1.size() < s2.size()) {
+				return true;
+			}
+			else if (s1.size() > s2.size())
+			{
+				return false;
+			}
+
+			// only this case.. s1.size() == s2.size()
+			size_t size = s1.size();
+			for (size_t i = 0; i < size; ++i)
+			{
+				char c1 = std::tolower(s1[i]);
+				char c2 = std::tolower(s2[i]);
+				if (c1 < c2)
+				{
+					return true;
+				}
+				else if (c1 > c2) {
+					return false;
+				}
+			}
+			return true;
+		});
+}
+
 UEngineDirectory::UEngineDirectory()
 	: UEnginePath()
 {
@@ -79,6 +114,7 @@ std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive, c
 		++Diriter;
 	}
 	
+	Sort(Result);
 	return Result;
 }
 

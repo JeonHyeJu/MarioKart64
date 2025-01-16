@@ -65,5 +65,6 @@ float4 MY_PS(VertexShaderOutPut _Vertex) : SV_Target0
 {
     //float4 white = float4(1.f, 1.f, 1.f, 1.f);
     //float4 color = GetMixedValue(Albedo, white, _Vertex.UV.y);
-    return _Vertex.COLOR;
+    //return _Vertex.COLOR;
+    return Albedo;
 };

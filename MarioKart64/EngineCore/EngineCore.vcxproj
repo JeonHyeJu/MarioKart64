@@ -205,6 +205,7 @@
     <ClInclude Include="EngineVertex.h" />
     <ClInclude Include="EngineVertexBuffer.h" />
     <ClInclude Include="EngineVertexShader.h" />
+    <ClInclude Include="FontWidget.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="IContentsCore.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="ThirdParty\DirectXTex\Inc\DirectXTex.h" />
+    <ClInclude Include="ThirdParty\FW1FontWrapper\Inc\FW1FontWrapper.h" />
     <ClInclude Include="TileMapRenderer.h" />
     <ClInclude Include="TimeEventComponent.h" />
     <ClInclude Include="TransformObject.h" />
@@ -265,6 +267,7 @@
     <ClCompile Include="EngineVertex.cpp" />
     <ClCompile Include="EngineVertexBuffer.cpp" />
     <ClCompile Include="EngineVertexShader.cpp" />
+    <ClCompile Include="FontWidget.cpp" />
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -296,9 +299,17 @@
     <Library Include="ThirdParty\DirectXTex\Release\DirectXTex.lib">
       <FileType>Document</FileType>
     </Library>
+    <Library Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.lib" />
+    <Library Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl" />
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\EngineShader\EngineDebugCollisionShader.fx">

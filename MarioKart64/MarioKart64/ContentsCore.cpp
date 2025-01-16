@@ -12,6 +12,7 @@
 #include <EngineCore/HUD.h>
 #include "CGlobal.h"
 #include "TitleGameMode.h"
+#include "SelectGameMode.h"
 #include "PlayGameMode.h"
 
 #include "TestGameMode.h"	// for test
@@ -70,9 +71,14 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\Title");
 	InitTextures("Resources\\Sprites\\Clouds");
 	InitTextures("Resources\\Sprites\\GameObjects");
+	InitTextures("Resources\\Sprites\\SelectGame");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
+	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
+	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
 
 	InitSprites("Resources\\Sprites\\Background");
+	InitSprites("Resources\\Sprites\\SelectGame");
+
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Items.png", ".meta");
@@ -80,12 +86,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitGraphics();
 	InitTest();
 	
-	//UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
-	//UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
-	UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
+	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
+	UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
+	//UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	UEngineCore::OpenLevel("SelectLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -139,7 +146,7 @@ void UContentsCore::InitGraphics()
 
 		matSky->SetVertexShader("ColorShader.fx");
 		matSky->SetPixelShader("ColorShader.fx");
-		matSky->SetRasterizerState("CullBack");	// Temp
+		//matSky->SetRasterizerState("CullBack");
 		
 		matLine->SetVertexShader("ColorShader.fx");
 		matLine->SetPixelShader("ColorShader.fx");

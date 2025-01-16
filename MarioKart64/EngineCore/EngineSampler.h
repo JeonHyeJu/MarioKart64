@@ -18,6 +18,8 @@ public:
 
 	void Setting(EShaderType _Type, UINT _BindIndex);
 
+	void Reset(EShaderType _Type, UINT _BindIndex);
+
 protected:
 	void ResCreate(const D3D11_SAMPLER_DESC& _Value);
 

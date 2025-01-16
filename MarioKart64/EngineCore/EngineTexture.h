@@ -51,6 +51,8 @@ public:
 
 	void Setting(EShaderType _Type, UINT _BindIndex);
 
+	void Reset(EShaderType _Type, UINT _BindIndex);
+
 	ENGINEAPI void ResCreate(const D3D11_TEXTURE2D_DESC& _Value);
 	ENGINEAPI void ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D);
 

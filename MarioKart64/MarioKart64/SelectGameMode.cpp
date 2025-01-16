@@ -1,22 +1,27 @@
 #include "PreCompile.h"
 #include "SelectGameMode.h"
+#include "SelectScene.h"
+#include <EngineCore/CameraActor.h>
 
-SelectGameMode::SelectGameMode()
+ASelectGameMode::ASelectGameMode()
+{
+	SelectScene = GetWorld()->SpawnActor<ASelectScene>();
+
+	std::shared_ptr<ACameraActor> camera = GetWorld()->GetMainCamera();
+	camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f });
+}
+
+ASelectGameMode::~ASelectGameMode()
 {
 
 }
 
-SelectGameMode::~SelectGameMode()
-{
-
-}
-
-void SelectGameMode::BeginPlay()
+void ASelectGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 }
 
-void SelectGameMode::Tick(float _deltaTime)
+void ASelectGameMode::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 }

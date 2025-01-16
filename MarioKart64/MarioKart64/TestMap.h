@@ -27,5 +27,5 @@ protected:
 private:
 	std::vector<FEngineVertex> Base;
 	std::vector<NavData> BaseNav;
-	std::shared_ptr<class ObjRenderer> Renderer = nullptr;
+	std::shared_ptr<class CircuitRenderer> Renderer = nullptr;
 };

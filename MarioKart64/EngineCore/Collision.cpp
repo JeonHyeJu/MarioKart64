@@ -7,17 +7,12 @@ UCollision::UCollision()
 {
 }
 
-void UCollision::Release()
+UCollision::~UCollision()
 {
 	for (UCollision* Other : CollisionCheckSet)
 	{
 		Other->CollisionCheckSet.erase(this);
 	}
-}
-
-UCollision::~UCollision()
-{
-
 }
 
 void UCollision::SetCollisionProfileName(std::string_view _ProfileName)

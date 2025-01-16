@@ -339,3 +339,19 @@ void USpriteRenderer::SetSprite(UEngineSprite* _Sprite)
 		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
 	}
 }
+
+FVector USpriteRenderer::GetRealScaleOfSprite() const
+{
+	if (CurIndex < 0 || Sprite == nullptr)
+	{
+		return FVector::NONE;
+	}
+
+	FVector scale = Sprite->GetSpriteScaleToReal(CurIndex);
+	if (IsAutoScale)
+	{
+		return scale* AutoScaleRatio;
+	}
+
+	return scale;
+}

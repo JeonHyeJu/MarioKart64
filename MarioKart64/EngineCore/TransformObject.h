@@ -82,6 +82,16 @@ public:
 		return Transform.WorldScale;
 	}
 
+	FVector GetRelativeLocation()
+	{
+		return Transform.RelativeLocation;
+	}
+	
+	FVector GetWorldLocation()
+	{
+		return Transform.WorldLocation;
+	}
+	
 	const FTransform& GetTransform() const
 	{
 		return Transform;

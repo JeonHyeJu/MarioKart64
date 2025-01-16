@@ -161,6 +161,11 @@ public:
 		return;
 	}
 
+	AActor* GetParent() const
+	{
+		return Parent;
+	}
+
 	ENGINEAPI FVector GetActorUpVector();
 	ENGINEAPI FVector GetActorRightVector();
 	ENGINEAPI FVector GetActorForwardVector();

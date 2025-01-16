@@ -2,6 +2,7 @@
 #include "TitleGameMode.h"
 #include "NintendoLogo.h"
 #include "Title.h"
+#include <EngineCore/EngineCamera.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
@@ -12,13 +13,14 @@ ATitleGameMode::ATitleGameMode()
 	NintendoLogo = GetWorld()->SpawnActor<ANintendoLogo>();
 	Title = GetWorld()->SpawnActor<ATitle>();
 
+	NintendoLogo->SetActorLocation({ 0.f, -200.f, 0.f });
 	Title->SetActorLocation({ -500.0f, 500.f, 0.0f });
 
 	NintendoLogo->Hide();
 	Title->Hide();
 	
-	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	std::shared_ptr<ACameraActor> camera = GetWorld()->GetMainCamera();
+	camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f });
 }
 
 ATitleGameMode::~ATitleGameMode()
@@ -57,9 +59,9 @@ void ATitleGameMode::SpinLogoAndTimeCheck(float _deltaTime)
 	eplasedSec += _deltaTime;
 	if (eplasedSec > .5f)
 	{
-		if (angle < 360)
+		if (angle < 720)
 		{
-			angle += 10.f;
+			angle += 45.f;
 		}
 		else
 		{

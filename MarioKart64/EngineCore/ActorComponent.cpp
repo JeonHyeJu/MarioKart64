@@ -12,13 +12,23 @@ UActorComponent::~UActorComponent()
 
 bool UActorComponent::IsActive() 
 {
-	if (nullptr == GetActor())
+	AActor* actor = GetActor();
+	if (nullptr == actor)
 	{
 		MSGASSERT("부모가 존재하지 않는 컴포넌트가 존재합니다");
 		return false;
 	}
 
-	return UObject::IsActive() && GetActor()->IsActive();
+	bool ret = UObject::IsActive() && actor->IsActive();
+
+	AActor* parent = actor->GetParent();
+	if (parent != nullptr)
+	{
+		ret = ret && parent->IsActive();
+	}
+
+	return ret;
+	//return UObject::IsActive() && GetActor()->IsActive();
 }
 
 bool UActorComponent::IsDestroy() 

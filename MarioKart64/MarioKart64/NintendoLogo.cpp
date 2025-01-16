@@ -2,6 +2,9 @@
 #include "NintendoLogo.h"
 #include "ObjRenderer.h"
 #include "CGlobal.h"
+#include "CircuitRenderer.h"	// for test
+
+#include <EngineCore/DefaultSceneComponent.h>
 
 ANintendoLogo::ANintendoLogo()
 {
@@ -10,9 +13,9 @@ ANintendoLogo::ANintendoLogo()
 	Renderer = CreateDefaultSubObject<ObjRenderer>();
 	RootComponent = Renderer;
 
+	Renderer->SetOrder(0);
+	Renderer->SetScale3D({ .25f, .25f, .25f });
 	Renderer->Init(path);
-	Renderer->SetScale3D({ .2f, .2f, .2f });
-	Renderer->SetWorldLocation({ 0.0f, -150.0f, 0.0f });
 }
 
 ANintendoLogo::~ANintendoLogo()

@@ -49,6 +49,19 @@ void UEngineShaderResources::CreateConstantBufferRes(std::string_view _Name, UEn
 	ConstantBufferRes[UpperString] = _Res;
 }
 
+void UEngineShaderResources::Reset()
+{
+	for (std::pair<const std::string, UEngineTextureRes>& Res : TextureRes)
+	{
+		Res.second.Reset();
+	}
+
+	for (std::pair<const std::string, UEngineSamplerRes>& Res : SamplerRes)
+	{
+		Res.second.Reset();
+	}
+}
+
 void UEngineShaderResources::Setting()
 {
 	for (std::pair<const std::string, UEngineConstantBufferRes>& Res : ConstantBufferRes)

@@ -103,6 +103,37 @@ void ACameraActor::Tick(float _DeltaTime)
 	CameraComponent->CalculateViewAndProjection();
 }
 
+FVector ACameraActor::ScreenPosToWorldPos(FVector _Pos)
+{
+	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
+
+	float4x4 ViewPort;
+	ViewPort.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);
+
+	FTransform CameraTransform = GetActorTransform();
+
+	_Pos = _Pos * ViewPort.InverseReturn();
+	_Pos = _Pos * CameraTransform.Projection.InverseReturn();
+	_Pos = _Pos * CameraTransform.View.InverseReturn();
+
+	return _Pos;
+}
+
+FVector ACameraActor::WorldPosToScreenPos(FVector _Pos)
+{
+	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
+
+	float4x4 ViewPort;
+	ViewPort.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);
+
+	FTransform CameraTransform = GetActorTransform();
+
+	_Pos = _Pos * CameraTransform.View;
+	_Pos = _Pos * CameraTransform.Projection;
+	_Pos = _Pos * ViewPort;
+	return _Pos;
+}
+
 FVector ACameraActor::ScreenMousePosToWorldPosWithOutPos()
 {
 	return FVector();
@@ -110,19 +141,9 @@ FVector ACameraActor::ScreenMousePosToWorldPosWithOutPos()
 
 FVector ACameraActor::ScreenMousePosToWorldPos()
 {
-	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
 	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
 
-	float4x4 Mat;
-	Mat.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);
-
-	FTransform CameraTransform = GetActorTransform();
-
-	MousePos = MousePos * Mat.InverseReturn();
-	MousePos = MousePos * CameraTransform.Projection.InverseReturn();
-	MousePos = MousePos * CameraTransform.View.InverseReturn();
-
-	return MousePos;
+	return ScreenPosToWorldPos(MousePos);
 }
 
 void ACameraActor::FreeCameraOn()

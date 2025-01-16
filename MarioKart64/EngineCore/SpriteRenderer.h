@@ -104,6 +104,7 @@ public:
 		IsBillboard = false;
 	}
 
+	ENGINEAPI FVector GetRealScaleOfSprite() const;
 
 	void SetSprite(UEngineSprite* _Sprite);
 

@@ -4,9 +4,6 @@
     <ClInclude Include="ContentsCore.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
@@ -265,29 +262,14 @@
     <ClInclude Include="PlayGameMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>
-    <ClInclude Include="TestMap.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="TestActor.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="TestGameMode.h">
       <Filter>GameMode</Filter>
-    </ClInclude>
-    <ClInclude Include="NintendoLogo.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="CGlobal.h" />
     <ClInclude Include="SelectGameMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>
     <ClInclude Include="ObjImporter.h" />
-    <ClInclude Include="Skybox.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="ObjRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -305,19 +287,49 @@
     <ClInclude Include="CubeRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="ItemBox.h">
-      <Filter>Actor</Filter>
+    <ClInclude Include="CircuitRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>Actor\SelectLevel</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>Actor</Filter>
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="NintendoLogo.h">
+      <Filter>Actor\TitleLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Actor\TitleLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMap.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActor.h">
+      <Filter>Actor\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSelectBox.h">
+      <Filter>Actor\SelectLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectButton.h">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinkActor.h">
+      <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>Precompile</Filter>
@@ -328,29 +340,14 @@
     <ClCompile Include="PlayGameMode.cpp">
       <Filter>GameMode</Filter>
     </ClCompile>
-    <ClCompile Include="TestMap.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="TestActor.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="TestGameMode.cpp">
       <Filter>GameMode</Filter>
-    </ClCompile>
-    <ClCompile Include="NintendoLogo.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="CGlobal.cpp" />
     <ClCompile Include="SelectGameMode.cpp">
       <Filter>GameMode</Filter>
     </ClCompile>
     <ClCompile Include="ObjImporter.cpp" />
-    <ClCompile Include="Skybox.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="ObjRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -366,11 +363,44 @@
     <ClCompile Include="CubeRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ItemBox.cpp">
-      <Filter>Actor</Filter>
+    <ClCompile Include="CircuitRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>Actor\SelectLevel</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="NintendoLogo.cpp">
+      <Filter>Actor\TitleLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Actor\TitleLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMap.cpp">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="TestActor.cpp">
+      <Filter>Actor\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSelectBox.cpp">
+      <Filter>Actor\SelectLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectButton.cpp">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinkActor.cpp">
+      <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +448,21 @@
     </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{ddc14c34-194f-439f-b04b-4cd1a159d9f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\SelectLevel">
+      <UniqueIdentifier>{9a44d03b-a280-48de-8945-1c22ae9c1b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\PlayLevel">
+      <UniqueIdentifier>{3d06922c-94bd-4958-9974-6d58e3c15402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\TitleLevel">
+      <UniqueIdentifier>{621e26a8-a918-4fc6-bd40-9e515d2592a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Test">
+      <UniqueIdentifier>{4a8fe42d-4182-4cc1-a3ae-df4470b7bbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\SelectLevel\Component">
+      <UniqueIdentifier>{9792f2d0-e5b0-49dc-911f-874a53d1edc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

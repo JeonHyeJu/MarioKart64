@@ -52,30 +52,17 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 
 	std::string matName = CGlobal::OBJ_SHADER_NAME;
 	std::string texName = "NSBase.png";
-	if (_mesh->mNumVertices == 6)	// temp
-	{
-		matName = CGlobal::OBJ_SPRITE_SHADER_NAME;
-	}
-
 	if (_mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* mat = _scene->mMaterials[_mesh->mMaterialIndex];
 		std::string name = std::string(mat->GetName().C_Str());
 
 		UINT size = mat->GetTextureCount(aiTextureType_DIFFUSE);
-		if (size == 0)
+		for (UINT i = 0; i < size; ++i)	// almost size == 1
 		{
-			OutputDebugStringA(("_mesh->mMaterialIndex: " + std::to_string(_mesh->mMaterialIndex) + "\n").c_str());
-			OutputDebugStringA((name + std::string(", size: ") + std::to_string(size) + "\n").c_str());
-		}
-		else
-		{
-			for (UINT i = 0; i < size; ++i)	// almost size == 1
-			{
-				aiString str;
-				mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
-				texName = str.C_Str();
-			}
+			aiString str;
+			mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
+			texName = str.C_Str();
 		}
 	}
 
@@ -90,35 +77,7 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	info.TexName = texName;
 	info.Z = minZ;
 
-	// Temp
-	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png" || texName == "5B7CDDF2_fix.png")
-	{
-		VertexToNavData data;
-		data.Vertecies = vertices;
-		// Temp
-		if (texName == "7EEAA53A_fix.png")
-		{
-			data.FloorType = NavType::ROAD;
-		}
-		else if (texName == "922DEA6_c.png")
-		{
-			data.FloorType = NavType::START_POINT;
-		}
-		else if (texName == "3A87458D_c.png")
-		{
-			data.FloorType = NavType::BORDER;
-		}
-		else if (texName == "5B7CDDF2_fix.png")
-		{
-			data.FloorType = NavType::FLATE_FASTER;
-		}
-
-		VertexNavDatas.push_back(data);
-		RenderInfos.push_back(info);
-	}
-
-	// TODO: uncomment
-	//RenderInfos.push_back(info);
+	RenderInfos.push_back(info);
 }
 
 void ObjRenderer::ProcessNode(aiNode* node, const aiScene* scene)
@@ -156,67 +115,9 @@ bool ObjRenderer::LoadModel()
 	return true;
 }
 
-void ObjRenderer::InitNavMesh(const std::vector<VertexToNavData>& _vec)
-{
-	NavDatas.reserve(10000);		// TODO: set with mesh size
-
-	int idx = 0;
-	for (const VertexToNavData& vnData : _vec)
-	{
-		const std::vector<FEngineVertex>& vec = vnData.Vertecies;
-		for (size_t i = 0, size = vec.size(); i < size; i += 3)
-		{
-			NavData nd;
-			nd.Vertex[0] = vec[i].POSITION;
-			nd.Vertex[1] = vec[i + 1].POSITION;
-			nd.Vertex[2] = vec[i + 2].POSITION;
-			nd.Index = idx++;
-			nd.FloorType = vnData.FloorType;
-
-			NavDatas.push_back(nd);
-		}
-	}
-
-	int groupIdx = 0;
-	for (size_t i = 0, size = NavDatas.size(); i < size - 1; ++i)
-	{
-		for (size_t j = i + 1; j < size; j++)
-		{
-			NavData& leftNd = NavDatas[i];
-			NavData& rightNd = NavDatas[j];
-			if (leftNd.GroupIndex == -1)
-			{
-				leftNd.GroupIndex = groupIdx;
-			}
-
-			if (leftNd.IsAttached(rightNd, 1e-1f))
-			{
-				leftNd.LinkBoth(rightNd);
-				if (rightNd.GroupIndex == -1)
-				{
-					rightNd.GroupIndex = groupIdx;
-				}
-			}
-		}
-
-		groupIdx++;
-	}
-
-	// Temp
-	// Not both
-	NavDatas[373].Link(NavDatas[125]);
-	NavDatas[373].Link(NavDatas[124]);
-	NavDatas[373].Link(NavDatas[123]);
-	NavDatas[373].Link(NavDatas[122]);
-	NavDatas[373].Link(NavDatas[121]);
-	NavDatas[373].Link(NavDatas[120]);
-}
-
 ObjRenderer::ObjRenderer()
 {
-	// temp
 	RenderInfos.reserve(10000);
-	VertexNavDatas.reserve(100);
 }
 
 ObjRenderer::~ObjRenderer()
@@ -242,11 +143,6 @@ void ObjRenderer::_Init()
 	{
 		OutputDebugStringA(("[WARN] " + ObjPath + " is not set.").c_str());
 	}
-
-	InitNavMesh(VertexNavDatas);	// Temp
-	VertexNavDatas.clear();	// Temp
-
-	//Sort();
 
 	int size = static_cast<int>(RenderInfos.size());
 	for (int i = 0; i < size; ++i)

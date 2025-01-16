@@ -1,6 +1,6 @@
 #include "PreCompile.h"
 #include "TestMap.h"
-#include "ObjRenderer.h"
+#include "CircuitRenderer.h"
 #include "CGlobal.h"
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
@@ -14,7 +14,7 @@ ATestMap::ATestMap()
 
 	std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
 
-	Renderer = CreateDefaultSubObject<ObjRenderer>();
+	Renderer = CreateDefaultSubObject<CircuitRenderer>();
 	Renderer->SetOrder(0);
 	Renderer->Init(path);
 	Renderer->SetupAttachment(RootComponent);

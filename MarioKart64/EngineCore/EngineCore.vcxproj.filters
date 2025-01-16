@@ -158,6 +158,12 @@
       <Filter>Font</Filter>
     </ClInclude>
     <ClInclude Include="EngineConst.h" />
+    <ClInclude Include="FontWidget.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FW1FontWrapper\Inc\FW1FontWrapper.h">
+      <Filter>ThirdParty\FW1FontWrapper\Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -307,6 +313,9 @@
     <ClCompile Include="EngineFont.cpp">
       <Filter>Font</Filter>
     </ClCompile>
+    <ClCompile Include="FontWidget.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -375,6 +384,18 @@
     <Filter Include="Font">
       <UniqueIdentifier>{964810da-e7fc-4072-81dd-128caefc17df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty\FW1FontWrapper">
+      <UniqueIdentifier>{c3d730a3-feea-4998-ad46-6817e16ba418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\FW1FontWrapper\Inc">
+      <UniqueIdentifier>{2df272fb-fa88-4ad4-b9a4-86c527009ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\FW1FontWrapper\Debug">
+      <UniqueIdentifier>{fdcb37c3-6822-4df7-9104-50c57e627455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\FW1FontWrapper\Release">
+      <UniqueIdentifier>{81a4d6f1-e438-493d-a4ad-b3dfaed387d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl">
@@ -388,6 +409,12 @@
     <Library Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
       <Filter>ThirdParty\DirectXTex\Debug</Filter>
     </Library>
+    <Library Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.lib">
+      <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
+    </Library>
+    <Library Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.lib">
+      <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
+    </Library>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\EngineShader\EngineSpriteShader.fx">
@@ -399,5 +426,13 @@
     <FxCompile Include="..\EngineShader\EngineTileMapShader.fx">
       <Filter>Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.dll">
+      <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.dll">
+      <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

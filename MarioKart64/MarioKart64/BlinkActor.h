@@ -1,6 +1,14 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
+enum class EBlinkState
+{
+	OFF = 0,
+	BLINK,
+	SELECTED,
+	END
+};
+
 class ABlinkActor : public AActor
 {
 public:
@@ -12,7 +20,7 @@ public:
 	ABlinkActor& operator=(const ABlinkActor& _other) = delete;
 	ABlinkActor& operator=(ABlinkActor&& _other) noexcept = delete;
 
-	void SetSelected(bool _val);
+	void SetBlinkState(EBlinkState _state);
 	void SetBgScale(const FVector& _scale);
 	void SetBgLocation(const FVector& _loc);
 
@@ -25,7 +33,9 @@ private:
 
 	std::shared_ptr<class ColorRenderer> RBackground = nullptr;
 
-	bool IsSelected = false;
 	float RectBgVal = 1.f;
-	const FVector OFF_COLOR = { 0.f, 0.f, 0.f, 1.f };
+	const FVector OFF_COLOR = FVector::BLACK;
+	const FVector SEL_COLOR = FVector::WHITE;
+
+	EBlinkState State = EBlinkState::OFF;
 };

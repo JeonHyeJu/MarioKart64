@@ -317,13 +317,13 @@
     <ClInclude Include="TestActor.h">
       <Filter>Actor\Test</Filter>
     </ClInclude>
-    <ClInclude Include="GameSelectBox.h">
-      <Filter>Actor\SelectLevel</Filter>
-    </ClInclude>
     <ClInclude Include="SelectButton.h">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
     <ClInclude Include="BlinkActor.h">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSelectBox.h">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -393,13 +393,13 @@
     <ClCompile Include="TestActor.cpp">
       <Filter>Actor\Test</Filter>
     </ClCompile>
-    <ClCompile Include="GameSelectBox.cpp">
-      <Filter>Actor\SelectLevel</Filter>
-    </ClCompile>
     <ClCompile Include="SelectButton.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
     <ClCompile Include="BlinkActor.cpp">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSelectBox.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
   </ItemGroup>

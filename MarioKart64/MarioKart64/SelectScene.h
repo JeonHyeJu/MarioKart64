@@ -10,7 +10,9 @@ public:
 	enum class SceneState
 	{
 		SELECT_GAME = 0,
-		CHANGE_GAME_TO_CC,
+		CHANGE_GAME_TO_RULE,
+		CHANGE_RULE_TO_GAME,
+		SELECT_RULE,
 		SELECT_CC,
 		END
 	};
@@ -23,15 +25,20 @@ public:
 	ASelectScene& operator=(const ASelectScene& _other) = delete;
 	ASelectScene& operator=(ASelectScene&& _other) noexcept = delete;
 
-	void SelectingGame(float _deltaTime);
-	void ChangingGameToCC(float _deltaTime);
-	void SelectingCC(float _deltaTime);
-
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 private:
+	void ChangingGameToRule(float _deltaTime);
+	void ChangingRuleToGame(float _deltaTime);
+	void SwitchNoSelectedGameBoxes(bool _isVisible);
+
+	// Fsm
+	void SelectingGame(float _deltaTime);
+	void SelectingRule(float _deltaTime);
+	void SelectingCC(float _deltaTime);
+
 	std::shared_ptr<USpriteRenderer> RBackground = nullptr;
 	std::shared_ptr<USpriteRenderer> RTitle = nullptr;
 	std::shared_ptr<ASelectButton> RBtnOption = nullptr;
@@ -43,6 +50,8 @@ private:
 
 	float AddRectDist = 0.f;
 	int SelectedGameIdx = 0;
+	FVector LocOrgSelectedBox;
+	int DirMoveSelectedBox = 1;
 
 	SceneState State = SceneState::SELECT_GAME;
 };

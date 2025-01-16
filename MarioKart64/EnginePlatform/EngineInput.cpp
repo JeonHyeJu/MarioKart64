@@ -133,6 +133,7 @@ UEngineInput::UEngineInput()
 	Keys.insert({ '9', UEngineKey('9') });
 	Keys.insert({ '0', UEngineKey('0') });
 
+	Keys.insert({ VK_ESCAPE, UEngineKey(VK_ESCAPE) });
 	Keys.insert({ VK_RETURN, UEngineKey(VK_RETURN) });
 	Keys.insert({ VK_LCONTROL, UEngineKey(VK_LCONTROL) });
 	

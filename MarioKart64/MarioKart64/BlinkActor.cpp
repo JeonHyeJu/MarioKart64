@@ -27,7 +27,7 @@ void ABlinkActor::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
-	if (IsSelected)
+	if (State == EBlinkState::BLINK)
 	{
 		ChangeSelectedRectColor(_deltaTime);
 	}
@@ -62,13 +62,20 @@ void ABlinkActor::ChangeSelectedRectColor(float _deltaTime)
 	RBackground->SetColor({ RectBgVal, RectBgVal, RectBgVal, 1.f });
 }
 
-void ABlinkActor::SetSelected(bool _val)
+void ABlinkActor::SetBlinkState(EBlinkState _state)
 {
-	IsSelected = _val;
+	State = _state;
 
-	if (!_val)
+	if (_state == EBlinkState::OFF)
+	{
+		RBackground->SetColor(OFF_COLOR);
+	}
+	else if (_state == EBlinkState::BLINK)
 	{
 		RectBgVal = 1.f;
-		RBackground->SetColor(OFF_COLOR);
+	}
+	else if (_state == EBlinkState::SELECTED)
+	{
+		RBackground->SetColor(SEL_COLOR);
 	}
 }

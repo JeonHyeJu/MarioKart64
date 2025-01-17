@@ -1,26 +1,32 @@
 #pragma once
 #include "BlinkActor.h"
 
+struct SButtonData
+{
+	std::string SpriteName = "";
+	int SpriteIndex = 0;
+	float AutoScaleRatio = 1.f;
+	FVector InitLoc = FVector::ZERO;
+	bool IsInitActive = true;
+};
+
+enum class ELayer
+{
+	RULE,
+	CC,
+	END
+};
+
+enum class EDirection
+{
+	DOWN = -1,
+	UP = 1
+};
+
 class USpriteRenderer;
 class AGameSelectBox : public ABlinkActor
 {
 public:
-	enum class EOptionType
-	{
-		MARIO_GP = 0,
-		TIME_TRAIALS,
-		VS,
-		BATTLE,
-		END
-	};
-
-	enum class ECCType
-	{
-		C50 = 50,
-		C100 = 100,
-		C150 = 150,
-	};
-
 	AGameSelectBox();
 	~AGameSelectBox();
 
@@ -30,37 +36,28 @@ public:
 	AGameSelectBox& operator=(AGameSelectBox&& _other) noexcept = delete;
 
 	void Init(int _idx);
-	void GetRectSize(float* _refW, float* _refH);
-	void SetActiveCCList(bool _val);
-	void SetBlinkStateToRuleList(int _idx, EBlinkState _state=EBlinkState::OFF);
-	void SetBlinkStateToCCList(int _idx, EBlinkState _state=EBlinkState::OFF);
-	void UpBlinkStateToRuleList();
-	void DownBlinkStateToRuleList();
-	void UpBlinkStateToCCList();
-	void DownBlinkStateToCCList();
+	void SetActiveToLayers(ELayer _idx, bool _val);
+	void SetBlinkStateToLayer(ELayer _layerIdx, int _idx, EBlinkState _state = EBlinkState::OFF);
+	void MoveSelectedLayer(ELayer _idx, EDirection _dir);
 
-	uint8_t GetSelectedIdxRule() const
+	void GetRectSize(float* _refW, float* _refH);
+	FVector GetButtonSize(ELayer _layerIdx, int _idx=0);
+
+	uint8_t GetSelectedIdx(ELayer _idx)
 	{
-		return SelectedIdxRule;
+		return SelectedIdxs[_idx];
 	}
-	uint8_t GetSelectedIdxCC() const
-	{
-		return SelectedIdxCC;
-	}
+
+	void AddObjectsToLayer(ELayer _idx, const std::vector<SButtonData>& _options);
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 private:
-	void CreateRuleList(const std::vector<EOptionType>& _options);
-	void CreateCCList(const std::vector<ECCType>& _options);
-
 	std::shared_ptr<USpriteRenderer> RRect = nullptr;
 	std::shared_ptr<USpriteRenderer> RDownArrow = nullptr;
-	std::vector<class ASelectButton*> ARuleList;
-	std::vector<class ASelectButton*> ACCList;
 
-	uint8_t SelectedIdxRule = 0;
-	uint8_t SelectedIdxCC = 0;
+	std::map<ELayer, std::vector<class ASelectButton*>> Buttons;
+	std::map<ELayer, uint8_t> SelectedIdxs;
 };

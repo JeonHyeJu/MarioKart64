@@ -28,5 +28,11 @@ protected:
 	Scene SceneIdx = Scene::IDLE;
 
 private:
-	std::shared_ptr<class ASelectScene> SelectScene = nullptr;
+	void OnEndSelectGame();
+	void OnEndSelectCharacter();
+	void OnEndSelectMap();
+
+	std::shared_ptr<class ASelectGame> SelectGame = nullptr;
+	std::shared_ptr<class ASelectCharacter> SelectCharacter = nullptr;
+	std::shared_ptr<class ASelectMap> SelectMap = nullptr;
 };

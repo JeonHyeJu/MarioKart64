@@ -72,23 +72,28 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\Clouds");
 	InitTextures("Resources\\Sprites\\GameObjects");
 	InitTextures("Resources\\Sprites\\SelectGame");
+	InitTextures("Resources\\Sprites\\SelectCharacter");
+	InitTextures("Resources\\Sprites\\TrackIcons");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
 	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
 
 	InitSprites("Resources\\Sprites\\Background");
 	InitSprites("Resources\\Sprites\\SelectGame");
+	InitSprites("Resources\\Sprites\\SelectCharacter");
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Items.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("SelectCharacter.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("TrackIcons.png", ".meta");
 
 	InitGraphics();
 	InitTest();
 	
 	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
 	UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
-	//UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
+	UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
 	UEngineCore::OpenLevel("SelectLevel");

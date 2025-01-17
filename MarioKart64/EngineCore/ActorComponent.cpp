@@ -22,9 +22,10 @@ bool UActorComponent::IsActive()
 	bool ret = UObject::IsActive() && actor->IsActive();
 
 	AActor* parent = actor->GetParent();
-	if (parent != nullptr)
+	while (parent != nullptr)
 	{
 		ret = ret && parent->IsActive();
+		parent = parent->GetParent();
 	}
 
 	return ret;

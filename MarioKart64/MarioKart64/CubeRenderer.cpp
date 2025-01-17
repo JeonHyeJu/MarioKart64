@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "CubeRenderer.h"
 #include "CGlobal.h"
+#include "CData.h"
 
 CubeRenderer::CubeRenderer()
 {
@@ -8,6 +9,10 @@ CubeRenderer::CubeRenderer()
 	unit.SetMesh("Cube");
 	unit.SetMaterial(CGlobal::OBJ_SKY_SHADER_NAME);
 	//unit.SetTexture("diffTexture", "Cloud_1.png");
+
+	FColor RenderColor;
+	RenderColor.Albedo = { -1.f, -1.f, -1.f, 1.f };
+	GetRenderUnit().ConstantBufferLinkData("FColor", RenderColor);
 }
 
 CubeRenderer::~CubeRenderer()

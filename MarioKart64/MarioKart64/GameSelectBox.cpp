@@ -5,15 +5,22 @@
 
 AGameSelectBox::AGameSelectBox()
 {
-	ARuleList.reserve(4);
-	ACCList.reserve(4);
-
 	// Already has RootComponent in ABlinkObject
 	RRect = CreateDefaultSubObject<USpriteRenderer>();
 	RDownArrow = CreateDefaultSubObject<USpriteRenderer>();
 
 	RRect->SetupAttachment(RootComponent);
 	RDownArrow->SetupAttachment(RootComponent);
+
+	std::vector<ASelectButton*> temp1, temp2;
+	temp1.reserve(4);
+	temp2.reserve(3);
+
+	Buttons.insert(std::make_pair(ELayer::RULE, temp1));
+	Buttons.insert(std::make_pair(ELayer::CC, temp2));
+
+	SelectedIdxs.insert(std::make_pair(ELayer::RULE, 0));
+	SelectedIdxs.insert(std::make_pair(ELayer::CC, 0));
 }
 
 AGameSelectBox::~AGameSelectBox()
@@ -42,35 +49,6 @@ void AGameSelectBox::Init(int _idx)
 
 	SetBgScale(RRect->GetRealScaleOfSprite());
 	SetBgLocation(RRect->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
-
-	std::vector<EOptionType> vecR;
-	std::vector<ECCType> vecC = { ECCType::C50, ECCType::C100, ECCType::C150 };
-	vecR.reserve(4);
-
-	if (_idx == 0)
-	{
-		vecR.emplace_back(EOptionType::MARIO_GP);
-		vecR.emplace_back(EOptionType::TIME_TRAIALS);
-	}
-	else if (_idx == 1)
-	{
-		vecR.emplace_back(EOptionType::MARIO_GP);
-		vecR.emplace_back(EOptionType::VS);
-		vecR.emplace_back(EOptionType::BATTLE);
-	}
-	else if (_idx == 2)
-	{
-		vecR.emplace_back(EOptionType::VS);
-		vecR.emplace_back(EOptionType::BATTLE);
-	}
-	else if (_idx == 3)
-	{
-		vecR.emplace_back(EOptionType::VS);
-		vecR.emplace_back(EOptionType::BATTLE);
-	}
-
-	CreateRuleList(vecR);
-	CreateCCList(vecC);
 }
 
 void AGameSelectBox::GetRectSize(float* _refW, float* _refH)
@@ -80,144 +58,74 @@ void AGameSelectBox::GetRectSize(float* _refW, float* _refH)
 	*_refH = scale.Y;
 }
 
-void AGameSelectBox::CreateRuleList(const std::vector<EOptionType>& _options)
+FVector AGameSelectBox::GetButtonSize(ELayer _layerIdx, int _idx)
 {
-	if (ARuleList.size() > 0)
+	if (_idx < 0 || _idx >= Buttons[_layerIdx].size())
 	{
-		MSGASSERT("You can't execute CreateOptionList() more than once.");
+		return FVector::ZERO;
 	}
 
-	for (size_t i=0, size=_options.size(); i<size; ++i)
-	{
-		float SCALE = .6f;
-		std::shared_ptr<ASelectButton> ptr = GetWorld()->SpawnActor<ASelectButton>();
-		switch (_options[i])
-		{
-			case EOptionType::MARIO_GP:
-				ptr->Init("SelectGame", 10, SCALE);
-				break;
-			case EOptionType::TIME_TRAIALS:
-				ptr->Init("SelectGame", 9, SCALE);
-				break;
-			case EOptionType::VS:
-				ptr->Init("SelectGame", 11, SCALE);
-				break;
-			case EOptionType::BATTLE:
-				ptr->Init("SelectGame", 8, SCALE);
-				break;
-		}
-
-		FVector scale = ptr->GetRealScaleOfSprite();
-		ptr->SetActorLocation({ 0.f, -240.f + (i * -scale.Y), 0.f });
-		ptr->AttachToActor(this);
-		ARuleList.push_back(ptr.get());
-	}
+	return Buttons[_layerIdx][_idx]->GetRealScaleOfSprite();
 }
 
-void AGameSelectBox::CreateCCList(const std::vector<ECCType>& _options)
+void AGameSelectBox::AddObjectsToLayer(ELayer _idx, const std::vector<SButtonData>& _options)
 {
-	if (ACCList.size() > 0)
-	{
-		MSGASSERT("You can't execute CreateCCList() more than once.");
-	}
-
-	if (ARuleList.size() == 0)
-	{
-		MSGASSERT("You have to set ARuleList first.");
-	}
-
 	for (size_t i = 0, size = _options.size(); i < size; ++i)
 	{
-		float SCALE = .6f;
+		const SButtonData& data = _options[i];
+
 		std::shared_ptr<ASelectButton> ptr = GetWorld()->SpawnActor<ASelectButton>();
-		switch (_options[i])
-		{
-		case ECCType::C50:
-			ptr->Init("SelectGame", 4, SCALE);
-			break;
-		case ECCType::C100:
-			ptr->Init("SelectGame", 5, SCALE);
-			break;
-		case ECCType::C150:
-			ptr->Init("SelectGame", 6, SCALE);
-			break;
-		}
+		ptr->Init(data.SpriteName, data.SpriteIndex, data.AutoScaleRatio);
 
-		float leftX = (*ARuleList.begin())->GetRealScaleOfSprite().X;
 		FVector scale = ptr->GetRealScaleOfSprite();
-		ptr->SetActorLocation({ leftX, -235.f + (i * -scale.Y), 0.f });
+		FVector loc = FVector{ 0.f, i * -scale.Y, 0.f };
+		ptr->SetActorLocation(data.InitLoc + loc);
 		ptr->AttachToActor(this);
-		ptr->SetActive(false);
-		ACCList.push_back(ptr.get());
+		ptr->SetActive(data.IsInitActive);
+
+		Buttons[_idx].push_back(ptr.get());
 	}
 }
 
-void AGameSelectBox::SetActiveCCList(bool _val)
+void AGameSelectBox::SetActiveToLayers(ELayer _idx, bool _val)
 {
-	for (ASelectButton* _type : ACCList)
+	for (size_t i = 0, size = Buttons[_idx].size(); i < size; ++i)
 	{
-		_type->SetActive(_val);
+		ASelectButton* btn = Buttons[_idx][i];
+		btn->SetActive(_val);
 	}
 }
 
-void AGameSelectBox::SetBlinkStateToRuleList(int _idx, EBlinkState _state)
+void AGameSelectBox::SetBlinkStateToLayer(ELayer _layerIdx, int _idx, EBlinkState _state)
 {
-	size_t size = ARuleList.size();
+	std::vector<ASelectButton*>& btns = Buttons[_layerIdx];
+	size_t size = btns.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		ARuleList[i]->SetBlinkState(EBlinkState::OFF);
+		btns[i]->SetBlinkState(EBlinkState::OFF);
 	}
 
 	if (_idx >= 0 || _idx < size)
 	{
-		ARuleList[_idx]->SetBlinkState(_state);
-		SelectedIdxRule = _idx;
+		btns[_idx]->SetBlinkState(_state);
+		SelectedIdxs[_layerIdx] = _idx;
 	}
 }
 
-void AGameSelectBox::SetBlinkStateToCCList(int _idx, EBlinkState _state)
+void AGameSelectBox::MoveSelectedLayer(ELayer _idx, EDirection _dir)
 {
-	size_t size = ACCList.size();
-	for (size_t i = 0; i < size; ++i)
+	if (_dir == EDirection::UP)
 	{
-		ACCList[i]->SetBlinkState(EBlinkState::OFF);
+		if (SelectedIdxs[_idx] > 0)
+		{
+			SetBlinkStateToLayer(_idx, --SelectedIdxs[_idx], EBlinkState::BLINK);
+		}
 	}
-
-	if (_idx >= 0 || _idx < size)
+	else
 	{
-		ACCList[_idx]->SetBlinkState(_state);
-		SelectedIdxCC = _idx;
-	}
-}
-
-void AGameSelectBox::UpBlinkStateToRuleList()
-{
-	if (SelectedIdxRule > 0)
-	{
-		SetBlinkStateToRuleList(--SelectedIdxRule, EBlinkState::BLINK);
-	}
-}
-
-void AGameSelectBox::DownBlinkStateToRuleList()
-{
-	if (SelectedIdxRule < ARuleList.size() - 1)
-	{
-		SetBlinkStateToRuleList(++SelectedIdxRule, EBlinkState::BLINK);
-	}
-}
-
-void AGameSelectBox::UpBlinkStateToCCList()
-{
-	if (SelectedIdxCC > 0)
-	{
-		SetBlinkStateToCCList(--SelectedIdxCC, EBlinkState::BLINK);
-	}
-}
-
-void AGameSelectBox::DownBlinkStateToCCList()
-{
-	if (SelectedIdxCC < ACCList.size() - 1)
-	{
-		SetBlinkStateToCCList(++SelectedIdxCC, EBlinkState::BLINK);
+		if (SelectedIdxs[_idx] < Buttons[_idx].size() - 1)
+		{
+			SetBlinkStateToLayer(_idx, ++SelectedIdxs[_idx], EBlinkState::BLINK);
+		}
 	}
 }

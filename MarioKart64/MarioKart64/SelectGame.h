@@ -4,7 +4,7 @@
 class ASelectButton;
 class AGameSelectBox;
 class USpriteRenderer;
-class ASelectScene : public AActor
+class ASelectGame : public AActor
 {
 public:
 	enum class SceneState
@@ -14,39 +14,52 @@ public:
 		CHANGE_RULE_TO_GAME,
 		SELECT_RULE,
 		SELECT_CC,
+		WAIT_OK,
+		FINISH,
 		END
 	};
 
-	ASelectScene();
-	~ASelectScene();
+	ASelectGame();
+	~ASelectGame();
 
-	ASelectScene(const ASelectScene& _other) = delete;
-	ASelectScene(ASelectScene&& _other) noexcept = delete;
-	ASelectScene& operator=(const ASelectScene& _other) = delete;
-	ASelectScene& operator=(ASelectScene&& _other) noexcept = delete;
+	ASelectGame(const ASelectGame& _other) = delete;
+	ASelectGame(ASelectGame&& _other) noexcept = delete;
+	ASelectGame& operator=(const ASelectGame& _other) = delete;
+	ASelectGame& operator=(ASelectGame&& _other) noexcept = delete;
+
+	void SetCallback(std::function<void()> _fn)
+	{
+		EndFuntion = _fn;
+	}
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 private:
+	void InitGameSelectBox();
 	void ChangingGameToRule(float _deltaTime);
 	void ChangingRuleToGame(float _deltaTime);
 	void SwitchNoSelectedGameBoxes(bool _isVisible);
+	void SetIndex(int _idx);
 
 	// Fsm
 	void SelectingGame(float _deltaTime);
 	void SelectingRule(float _deltaTime);
 	void SelectingCC(float _deltaTime);
+	void WaitingOk(float _deltaTime);
+	void OnFinish();
 
 	std::shared_ptr<USpriteRenderer> RBackground = nullptr;
 	std::shared_ptr<USpriteRenderer> RTitle = nullptr;
 	std::shared_ptr<ASelectButton> RBtnOption = nullptr;
 	std::shared_ptr<ASelectButton> RBtnData = nullptr;
+	std::shared_ptr<ASelectButton> RBtnOk = nullptr;
 
 	static const int SELECT_LIST_SIZE = 4;
 	AGameSelectBox* SelectBoxes[SELECT_LIST_SIZE] = { nullptr, };
 	std::shared_ptr<AGameSelectBox> Tester = nullptr;
+	AGameSelectBox* PtrSelectedBox = nullptr;
 
 	float AddRectDist = 0.f;
 	int SelectedGameIdx = 0;
@@ -54,4 +67,6 @@ private:
 	int DirMoveSelectedBox = 1;
 
 	SceneState State = SceneState::SELECT_GAME;
+
+	std::function<void()> EndFuntion;
 };

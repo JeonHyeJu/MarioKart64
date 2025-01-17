@@ -33,7 +33,7 @@ void ASelectButton::Init(std::string_view _name, UINT idx, float _scale)
 	SetBgLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
 }
 
-const FVector& ASelectButton::GetRealScaleOfSprite() const
+FVector ASelectButton::GetRealScaleOfSprite() const
 {
 	if (RBtn == nullptr)
 	{

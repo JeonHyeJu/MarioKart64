@@ -194,11 +194,19 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="SelectCharacter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="SelectGameMode.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="SelectScene.h">
+    <ClInclude Include="SelectGame.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SelectMap.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -360,11 +368,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SelectCharacter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="SelectGameMode.cpp">
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="SelectScene.cpp">
+    <ClCompile Include="SelectGame.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SelectMap.cpp">
       <SubType>
       </SubType>
     </ClCompile>

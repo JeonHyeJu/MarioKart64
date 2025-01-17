@@ -290,7 +290,7 @@
     <ClInclude Include="CircuitRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="SelectScene.h">
+    <ClInclude Include="SelectGame.h">
       <Filter>Actor\SelectLevel</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
@@ -325,6 +325,12 @@
     </ClInclude>
     <ClInclude Include="GameSelectBox.h">
       <Filter>Actor\SelectLevel\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectCharacter.h">
+      <Filter>Actor\SelectLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectMap.h">
+      <Filter>Actor\SelectLevel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -366,7 +372,7 @@
     <ClCompile Include="CircuitRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="SelectScene.cpp">
+    <ClCompile Include="SelectGame.cpp">
       <Filter>Actor\SelectLevel</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
@@ -401,6 +407,12 @@
     </ClCompile>
     <ClCompile Include="GameSelectBox.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectCharacter.cpp">
+      <Filter>Actor\SelectLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectMap.cpp">
+      <Filter>Actor\SelectLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

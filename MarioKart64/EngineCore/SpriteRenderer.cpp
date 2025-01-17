@@ -275,7 +275,7 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 
 	FrameAnimation* ChangeAnimation = &FrameAnimations[UpperName];
 
-	if (CurAnimation == ChangeAnimation && false == _Force)
+	if (CurAnimation == ChangeAnimation && false == _Force && CurAnimation->IsEnd == false)
 	{
 		return;
 	}
@@ -289,6 +289,7 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 		CurAnimation->Events[CurAnimation->CurIndex]();
 	}
 
+	Sprite = CurAnimation->Sprite;	// Temp
 	if (true == IsAutoScale)
 	{
 		FVector Scale = CurAnimation->Sprite->GetSpriteScaleToReal(CurIndex);

@@ -17,6 +17,7 @@ ASelectGameMode::ASelectGameMode()
 	
 	SelectMap = GetWorld()->SpawnActor<ASelectMap>();
 	//SelectMap->SetCallback(std::bind(&ASelectGameMode::OnEndSelectCharacter, this));
+	//SelectMap->SetActive(false);
 
 	std::shared_ptr<ACameraActor> camera = GetWorld()->GetMainCamera();
 	camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f });

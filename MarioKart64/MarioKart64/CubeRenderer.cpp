@@ -11,7 +11,7 @@ CubeRenderer::CubeRenderer()
 	//unit.SetTexture("diffTexture", "Cloud_1.png");
 
 	FColor RenderColor;
-	RenderColor.Albedo = { -1.f, -1.f, -1.f, 1.f };
+	RenderColor.Albedo = { -10.f, -10.f, -10.f, 1.f };
 	GetRenderUnit().ConstantBufferLinkData("FColor", RenderColor);
 }
 

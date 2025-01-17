@@ -14,6 +14,7 @@ public:
 	ASelectButton& operator=(ASelectButton&& _other) noexcept = delete;
 
 	void Init(std::string_view _name, UINT idx, float _scale=1.f);
+	void SetImage(std::string_view _name, UINT idx);
 	FVector GetRealScaleOfSprite() const;
 
 protected:

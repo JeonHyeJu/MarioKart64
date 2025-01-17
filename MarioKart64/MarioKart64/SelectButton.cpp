@@ -26,11 +26,20 @@ void ASelectButton::Tick(float _deltaTime)
 
 void ASelectButton::Init(std::string_view _name, UINT idx, float _scale)
 {
+	if (RBtn == nullptr) return;
+
 	RBtn->SetSprite(_name.data(), idx);
 	RBtn->SetAutoScaleRatio(_scale);
 
 	SetBgScale(RBtn->GetRealScaleOfSprite());
 	SetBgLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
+}
+
+void ASelectButton::SetImage(std::string_view _name, UINT idx)
+{
+	if (RBtn == nullptr) return;
+
+	RBtn->SetSprite(_name.data(), idx);
 }
 
 FVector ASelectButton::GetRealScaleOfSprite() const

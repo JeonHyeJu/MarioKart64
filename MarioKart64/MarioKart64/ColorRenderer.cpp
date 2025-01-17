@@ -9,6 +9,7 @@ ColorRenderer::ColorRenderer()
 	unit.SetMaterial(CGlobal::OBJ_SKY_SHADER_NAME);
 	//unit.SetTexture("diffTexture", "Cloud_1.png");
 
+	RenderColor.Albedo = { 0.f, 0.f, 0.f, 1.f };
 	GetRenderUnit().ConstantBufferLinkData("FColor", RenderColor);
 }
 

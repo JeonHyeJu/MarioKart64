@@ -332,6 +332,9 @@
     <ClInclude Include="SelectMap.h">
       <Filter>Actor\SelectLevel</Filter>
     </ClInclude>
+    <ClInclude Include="MapSpec.h">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -413,6 +416,9 @@
     </ClCompile>
     <ClCompile Include="SelectMap.cpp">
       <Filter>Actor\SelectLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="MapSpec.cpp">
+      <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

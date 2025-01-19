@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneComponent.h"
+#include <EngineCore/EngineCore.h>
 
 class AActor : public UObject
 {
@@ -31,6 +32,8 @@ public:
 			return nullptr;
 		}
 
+		size_t Size = sizeof(ComponentType);
+
 		char* ComMemory = new char[sizeof(ComponentType)];
 
 		UActorComponent* ComPtr = reinterpret_cast<ComponentType*>(ComMemory);
@@ -39,7 +42,10 @@ public:
 		ComponentType* NewPtr = reinterpret_cast<ComponentType*>(ComMemory);
 		std::shared_ptr<ComponentType> NewCom(new(ComMemory) ComponentType());
 
-		if (std::is_base_of_v<UActorComponent, ComponentType> && !std::is_base_of_v<USceneComponent, ComponentType>)
+		AllComponentList.push_back(NewCom);
+
+		if (std::is_base_of_v<UActorComponent, ComponentType> 
+			&& !std::is_base_of_v<USceneComponent, ComponentType>)
 		{
 			ActorComponentList.push_back(NewCom);
 		}
@@ -50,6 +56,14 @@ public:
 
 		return NewCom;
 	}
+
+	template<typename Type>
+	Type* GetGameInstance()
+	{
+		return dynamic_cast<Type*>(GetGameInstance());
+	}
+
+	ENGINEAPI class UGameInstance* GetGameInstance();
 
 	ULevel* GetWorld()
 	{
@@ -170,6 +184,23 @@ public:
 	ENGINEAPI FVector GetActorRightVector();
 	ENGINEAPI FVector GetActorForwardVector();
 
+	template<typename ComType>
+	std::vector<std::shared_ptr<ComType>> GetComponentByClass()
+	{
+		std::vector<std::shared_ptr<ComType>> Result;
+
+		for (std::shared_ptr<class UActorComponent> Component : AllComponentList)
+		{
+			std::shared_ptr<ComType> Com = std::dynamic_pointer_cast<ComType>(Component);
+			if (nullptr != Com)
+			{
+				Result.push_back(Com);
+			}
+		}
+
+		return Result;
+	}
+
 protected:
 	std::shared_ptr<class USceneComponent> RootComponent = nullptr;
 	FTransform Base;
@@ -180,5 +211,8 @@ private:
 	ULevel* World;
 
 	std::list<std::shared_ptr<class UActorComponent>> ActorComponentList;
+
+	// for reference count
+	std::list<std::shared_ptr<class UActorComponent>> AllComponentList;
 };
 

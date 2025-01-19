@@ -3,6 +3,7 @@
 #include "EngineCamera.h"
 
 UTransformObject::UTransformObject()
+	: Parent(nullptr)
 {
 }
 

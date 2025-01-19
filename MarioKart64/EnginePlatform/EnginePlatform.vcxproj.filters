@@ -7,6 +7,12 @@
     </ClInclude>
     <ClInclude Include="EngineInput.h" />
     <ClInclude Include="EngineWinImage.h" />
+    <ClInclude Include="EngineWorkThreadPool.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineWindow.cpp" />
@@ -15,10 +21,19 @@
     </ClCompile>
     <ClCompile Include="EngineInput.cpp" />
     <ClCompile Include="EngineWinImage.cpp" />
+    <ClCompile Include="EngineWorkThreadPool.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
       <UniqueIdentifier>{8af3e523-0627-4633-a2b9-2eb9b04c3705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{4b943659-f623-4012-901a-b828e464a9d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

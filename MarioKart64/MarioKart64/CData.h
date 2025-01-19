@@ -4,6 +4,19 @@
 
 #define GRAVITY_ACC 9.8f
 
+enum class ECharacter
+{
+	NONE = 0,
+	MARIO,
+	LUIGI,
+	PEACH,
+	YOSHI,
+	DONGKEYKONG,
+	WARIO,
+	BOWSER,
+	END
+};
+
 enum class NavType
 {
 	NONE = 0,
@@ -16,6 +29,7 @@ enum class NavType
 
 enum class EItemType
 {
+	NONE = -1,
 	GREEN_SHELL = 0,
 	GREEN_SHELLS,
 	RED_SHELL,
@@ -32,6 +46,12 @@ enum class EItemType
 	FAKE_ITEMBOX,
 	BOWSER_SHELL,
 	SIZE
+};
+
+struct SPlayerInfo
+{
+	ECharacter Chracter = ECharacter::NONE;
+	EItemType Item = EItemType::NONE;
 };
 
 struct FColor

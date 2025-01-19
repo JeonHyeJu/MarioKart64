@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Skybox.h"
 #include "ItemBox.h"
+#include "GameData.h"
 #include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineCamera.h>
@@ -36,6 +37,15 @@ APlayGameMode::APlayGameMode()
 
 	TestItemBox = pLevel->SpawnActor<AItemBox>();
 	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
+
+	// Temp
+	std::vector<SPlayerInfo> palyerInfos = {
+		SPlayerInfo{ ECharacter::MARIO, EItemType::NONE },
+		SPlayerInfo{ ECharacter::LUIGI, EItemType::NONE },
+		SPlayerInfo{ ECharacter::PEACH, EItemType::NONE },
+		SPlayerInfo{ ECharacter::YOSHI, EItemType::NONE }
+	};
+	GameData::GetInstance()->SetPlayers(palyerInfos);
 
 	CheckCollisionOfAllMap();
 }

@@ -335,6 +335,12 @@
     <ClInclude Include="MapSpec.h">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
+    <ClInclude Include="UIPlay.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>GameInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -420,6 +426,12 @@
     <ClCompile Include="MapSpec.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
+    <ClCompile Include="UIPlay.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>GameInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -481,6 +493,12 @@
     </Filter>
     <Filter Include="Actor\SelectLevel\Component">
       <UniqueIdentifier>{9792f2d0-e5b0-49dc-911f-874a53d1edc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{784b31d6-7bf2-443e-b649-121e26f12971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameInstance">
+      <UniqueIdentifier>{081fe426-e4a9-49d4-8bd1-168584caa067}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

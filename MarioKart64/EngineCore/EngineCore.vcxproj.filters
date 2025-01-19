@@ -164,6 +164,13 @@
     <ClInclude Include="ThirdParty\FW1FontWrapper\Inc\FW1FontWrapper.h">
       <Filter>ThirdParty\FW1FontWrapper\Inc</Filter>
     </ClInclude>
+    <ClInclude Include="FontRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInstance.h" />
+    <ClInclude Include="ImageWidget.h">
+      <Filter>Transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -315,6 +322,13 @@
     </ClCompile>
     <ClCompile Include="FontWidget.cpp">
       <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="FontRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="ImageWidget.cpp">
+      <Filter>Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

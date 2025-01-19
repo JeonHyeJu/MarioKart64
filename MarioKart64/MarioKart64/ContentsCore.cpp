@@ -14,6 +14,8 @@
 #include "TitleGameMode.h"
 #include "SelectGameMode.h"
 #include "PlayGameMode.h"
+#include "GameData.h"
+#include "UIPlay.h"
 
 #include "TestGameMode.h"	// for test
 #include "TestVertex.h"	// for test
@@ -74,6 +76,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\SelectGame");
 	InitTextures("Resources\\Sprites\\SelectCharacter");
 	InitTextures("Resources\\Sprites\\TrackIcons");
+	InitTextures("Resources\\Sprites\\UI");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
 	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
@@ -87,17 +90,20 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineSprite::CreateSpriteToMeta("Items.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("SelectCharacter.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("TrackIcons.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("FontAndPositions.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Timer.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("RacePositionIcons.png", ".meta");
 
 	InitGraphics();
 	InitTest();
-	
+
 	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
 	UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
-	UEngineCore::CreateLevel<APlayGameMode, APawn, AHUD>("PlayLevel");
+	UEngineCore::CreateLevel<APlayGameMode, APawn, AUIPlay>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
-	UEngineCore::OpenLevel("SelectLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("SelectLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -109,6 +115,7 @@ void UContentsCore::EngineTick(float _DeltaTime)
 
 void UContentsCore::EngineEnd()
 {
+	GameData::GetInstance()->Release();
 }
 
 /* Graphics */

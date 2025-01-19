@@ -168,20 +168,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EngineInput.h" />
+    <ClInclude Include="EngineThread.h" />
     <ClInclude Include="EngineWindow.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="EngineWinImage.h" />
+    <ClInclude Include="EngineWorkThreadPool.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineInput.cpp" />
+    <ClCompile Include="EngineThread.cpp" />
     <ClCompile Include="EngineWindow.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineWinImage.cpp" />
+    <ClCompile Include="EngineWorkThreadPool.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

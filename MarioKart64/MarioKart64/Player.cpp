@@ -5,6 +5,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/Collision.h>
 #include "TestMap.h"
+#include "GameData.h"
 #include "CData.h"
 #include "Item.h"
 #include "CGlobal.h"
@@ -51,11 +52,11 @@ APlayer::APlayer()
 
 	CollisionItem->SetCollisionEnter(std::bind(&APlayer::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
 
-	TestItem = CreateDefaultSubObject<USpriteRenderer>();
-	TestItem->SetOrder(0);
-	TestItem->SetupAttachment(RootComponent);
-	TestItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
-	TestItem->SetRelativeLocation({ 0.f, 100.f, 0.f });
+	DebugItem = CreateDefaultSubObject<USpriteRenderer>();
+	DebugItem->SetOrder(0);
+	DebugItem->SetupAttachment(RootComponent);
+	DebugItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
+	DebugItem->SetRelativeLocation({ 30.f, 50.f, 0.f });
 }
 
 APlayer::~APlayer()
@@ -460,7 +461,8 @@ void APlayer::PickItem(float _deltaTime)
 	if (prevItemIdx != itemIdx)
 	{
 		prevItemIdx = itemIdx;
-		TestItem->SetSprite("Items.png", itemIdx);
+		GameData::GetInstance()->SetItem(0, static_cast<EItemType>(itemIdx));
+		DebugItem->SetSprite("Items.png", itemIdx);	// Temp
 	}
 }
 
@@ -506,7 +508,7 @@ void APlayer::CheckUsingItem(float _deltaTime)
 		}
 
 		ItemIndex = NONE;
-		TestItem->SetSprite("Items.png", NONE);
+		DebugItem->SetSprite("Items.png", NONE);
 	}
 }
 

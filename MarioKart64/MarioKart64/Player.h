@@ -72,6 +72,6 @@ private:
 	int ItemIndex = -1;
 
 	// Temp
-	std::shared_ptr<class USpriteRenderer> TestItem = nullptr;
+	std::shared_ptr<class USpriteRenderer> DebugItem = nullptr;
 };
 

@@ -2,6 +2,11 @@
 #include "Actor.h"
 #include "SceneComponent.h"
 
+UGameInstance* AActor::GetGameInstance()
+{
+	return GEngine->GetGameInstance();
+}
+
 AActor::AActor()
 {
 }
@@ -29,11 +34,6 @@ void AActor::Tick(float _DeltaTime)
 {
 	for (std::shared_ptr<AActor>& Actor : ChildList)
 	{
-		if (false == Actor->IsActive())
-		{
-			continue;
-		}
-
 		Actor->Tick(_DeltaTime);
 	}
 

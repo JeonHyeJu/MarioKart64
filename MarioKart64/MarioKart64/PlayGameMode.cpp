@@ -75,6 +75,8 @@ void APlayGameMode::Tick(float _deltaTime)
 		TestMapPtr->AddActorRotation({ 1.f, 0.f, 0.f });
 	}
 
+	FVector loc = Player->GetActorLocation();
+	GameData::GetInstance()->SetMinimapLoc(0, loc);
 	//CheckCollision(_deltaTime);
 }
 

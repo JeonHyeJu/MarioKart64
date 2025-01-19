@@ -97,3 +97,31 @@ EItemType GameData::GetItem(uint8_t _playerIdx)
 
 	return EItemType::NONE;
 }
+
+void GameData::SetMapTiles(const std::vector<float4>& _vec)
+{
+	MapTiles = _vec;
+}
+
+const std::vector<float4>& GameData::GetMapTiles() const
+{
+	return MapTiles;
+}
+
+void GameData::SetMinimapLoc(uint8_t _playerIdx, float4 _loc)
+{
+	if (_playerIdx < Players.size())
+	{
+		Players[_playerIdx].MapLoc = _loc;
+	}
+}
+
+float4 GameData::GetMinimapLoc(uint8_t _playerIdx) const
+{
+	if (_playerIdx < Players.size())
+	{
+		return Players[_playerIdx].MapLoc;
+	}
+
+	return float4{ 0.f, 0.f, 0.f, 0.f };
+}

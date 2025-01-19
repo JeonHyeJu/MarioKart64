@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "CircuitRenderer.h"
 #include "CGlobal.h"
+#include "GameData.h"
 #include <EngineCore/EngineGraphicDevice.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineCore.h>
@@ -17,7 +18,8 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	vertices.reserve(10000);
 	indices.reserve(10000);
 
-	float minZ = 999999.f;
+	float minX = 99999.f, minY = 99999.f, minZ = 99999.f;
+	float maxX = 0.f, maxY = 0.f, maxZ = 0.f;
 	for (UINT i = 0; i < _mesh->mNumVertices; ++i)
 	{
 		FEngineVertex vertex;
@@ -26,10 +28,12 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		vertex.POSITION.Z = _mesh->mVertices[i].z;
 		vertex.POSITION.W = 1.f;
 
-		if (vertex.POSITION.Z < minZ)
-		{
-			minZ = vertex.POSITION.Z;
-		}
+		if (vertex.POSITION.X < minX) minX = vertex.POSITION.X;
+		if (vertex.POSITION.Y < minY) minY = vertex.POSITION.Y;
+		if (vertex.POSITION.Z < minZ) minZ = vertex.POSITION.Z;
+		if (vertex.POSITION.X > maxX) maxX = vertex.POSITION.X;
+		if (vertex.POSITION.Y > maxY) maxY = vertex.POSITION.Y;
+		if (vertex.POSITION.Z > maxZ) maxZ = vertex.POSITION.Z;
 
 		if (_mesh->mTextureCoords[0])
 		{
@@ -98,6 +102,30 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		// Temp
 		if (texName == "7EEAA53A_fix.png")
 		{
+			// Temp
+			std::vector<float4> temp;
+			temp.reserve(vertices.size());
+
+			const float RANGE_X = maxX - minX;
+			const float RANGE_Y = maxY - minY;
+			const float RANGE_Z = maxZ - minZ;
+			for (size_t i = 0, size = vertices.size(); i < size; ++i)
+			{
+				float4 num;
+				num.X = (vertices[i].POSITION.X - minX) / RANGE_X;
+				num.Y = (vertices[i].POSITION.Y - minY) / RANGE_Y;
+				num.Z = (vertices[i].POSITION.Z - minZ) / RANGE_Z;
+				temp.push_back(num);
+			}
+			GameData* pData = GameData::GetInstance();
+			pData->MapMinX = minX;
+			pData->MapMinY = minY;
+			pData->MapMinZ = minZ;
+			pData->MapMaxX = maxX;
+			pData->MapMaxY = maxY;
+			pData->MapMaxZ = maxZ;
+			pData->SetMapTiles(temp);
+
 			data.FloorType = NavType::ROAD;
 		}
 		else if (texName == "922DEA6_c.png")

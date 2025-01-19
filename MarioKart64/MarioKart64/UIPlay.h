@@ -43,6 +43,7 @@ private:
 	void SetTimerUI(float _secs);
 	void SetHighRankUI();
 	void SetItemUI();
+	void SetMinimapLoc();
 
 	std::shared_ptr<UImageWidget> Minimap = nullptr;
 	std::shared_ptr<UImageWidget> PlayerRanking = nullptr;
@@ -80,4 +81,6 @@ private:
 	const char* ITEM_SPRITE = "Items.png";
 
 	int ItemIdx = -1;
+	
+	FVector MapScale;
 };

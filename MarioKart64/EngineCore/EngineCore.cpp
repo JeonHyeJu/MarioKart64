@@ -133,6 +133,7 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		},
 		[]()
 		{
+			GEngine->Core->EngineEnd();
 			EngineEnd();
 		});
 }

@@ -2,6 +2,7 @@
 #include "TestMap.h"
 #include "CircuitRenderer.h"
 #include "CGlobal.h"
+#include "GameData.h"
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 

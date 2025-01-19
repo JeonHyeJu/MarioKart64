@@ -52,6 +52,7 @@ struct SPlayerInfo
 {
 	ECharacter Chracter = ECharacter::NONE;
 	EItemType Item = EItemType::NONE;
+	float4 MapLoc;
 };
 
 struct FColor

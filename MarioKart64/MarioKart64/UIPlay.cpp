@@ -7,12 +7,10 @@
 
 AUIPlay::AUIPlay()
 {
-
 }
 
 AUIPlay::~AUIPlay()
 {
-
 }
 
 void AUIPlay::BeginPlay()
@@ -39,6 +37,7 @@ void AUIPlay::Tick(float _deltaTime)
 
 	CountTimer(_deltaTime);
 	SetItemUI();
+	SetMinimapLoc();
 }
 
 void AUIPlay::InitMinimap()
@@ -51,6 +50,8 @@ void AUIPlay::InitMinimap()
 	Minimap->SetSprite("TrackIcons.png", 101);	// Temp
 	Minimap->SetAutoScaleRatio(3.f);
 	Minimap->SetWorldLocation({ 450, -250 });
+
+	MapScale = Minimap->GetRealScaleOfSprite();
 }
 
 void AUIPlay::InitPlayerRank()
@@ -174,8 +175,9 @@ void AUIPlay::InitMinimapLoc()
 		std::shared_ptr<UImageWidget> ptr = CreateWidget<UImageWidget>(0);
 		ptr->SetSprite(ITEM_SPRITE, MINIMAP_CAR_INIT_IDX);
 		ptr->SetAutoScaleRatio(2.f);
-		ptr->SetWorldLocation({ initX, initY });
+		ptr->SetWorldLocation(Minimap->GetWorldLocation());
 		MinimapLocs.push_back(ptr.get());
+
 		break;
 	}
 }
@@ -253,4 +255,22 @@ void AUIPlay::SetItemUI()
 
 	ItemIdx = idx;
 	PlayerItem->SetSprite(ITEM_SPRITE, ItemIdx);
+}
+
+void AUIPlay::SetMinimapLoc()
+{
+	GameData* pData = GameData::GetInstance();
+	float4 playerLoc = pData->GetMinimapLoc(0);
+	float subX = pData->MapMaxX - pData->MapMinX;
+	float subZ = pData->MapMaxZ - pData->MapMinZ;
+	float normX = (playerLoc.X - pData->MapMinX) / subX;
+	float normZ = (playerLoc.Z - pData->MapMinZ) / subZ;
+	float x = MapScale.X * normX;
+	float z = MapScale.Y * normZ;
+	
+	OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + "\n").c_str());
+	OutputDebugStringA(("minimapLoc: " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
+
+	FVector mapLoc = Minimap->GetWorldLocation();
+	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ x, z });
 }

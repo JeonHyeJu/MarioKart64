@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "CData.h"
+#include <EngineCore/EngineVertex.h>
 
 class GameData
 {
@@ -32,7 +33,21 @@ public:
 	void SetItem(uint8_t _playerIdx, EItemType _item);
 	EItemType GetItem(uint8_t _playerIdx);
 
+	void SetMapTiles(const std::vector<float4>& _vec);
+	const std::vector<float4>& GetMapTiles() const;
+
+	void SetMinimapLoc(uint8_t _playerIdx, float4 _loc);
+	float4 GetMinimapLoc(uint8_t _playerIdx) const;
+
 	static const int MAX_PLAYER_CNT = 8;
+
+	// Temp
+	float MapMinX = 0.f;
+	float MapMinY = 0.f;
+	float MapMinZ = 0.f;
+	float MapMaxX = 0.f;
+	float MapMaxY = 0.f;
+	float MapMaxZ = 0.f;
 
 private:
 	uint8_t PlayerRank = 8;
@@ -41,6 +56,7 @@ private:
 
 	// 0 is must be the user's character.
 	std::vector<SPlayerInfo> Players;
+	std::vector<float4> MapTiles;
 
 	static GameData* pInstance;
 };

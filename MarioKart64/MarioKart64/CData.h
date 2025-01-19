@@ -53,6 +53,7 @@ struct SPlayerInfo
 	ECharacter Chracter = ECharacter::NONE;
 	EItemType Item = EItemType::NONE;
 	float4 MapLoc;
+	float4 Rotation;
 };
 
 struct FColor

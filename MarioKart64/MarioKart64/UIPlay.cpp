@@ -50,8 +50,6 @@ void AUIPlay::InitMinimap()
 	Minimap->SetSprite("TrackIcons.png", 101);	// Temp
 	Minimap->SetAutoScaleRatio(3.f);
 	Minimap->SetWorldLocation({ 450, -250 });
-
-	MapScale = Minimap->GetRealScaleOfSprite();
 }
 
 void AUIPlay::InitPlayerRank()
@@ -261,16 +259,20 @@ void AUIPlay::SetMinimapLoc()
 {
 	GameData* pData = GameData::GetInstance();
 	float4 playerLoc = pData->GetMinimapLoc(0);
+	float4 playerRot = pData->GetPlayerRotation(0);
+
+	float scaleW = 85.f;
+	float scaleH = 80.f;
 	float subX = pData->MapMaxX - pData->MapMinX;
 	float subZ = pData->MapMaxZ - pData->MapMinZ;
 	float normX = (playerLoc.X - pData->MapMinX) / subX;
 	float normZ = (playerLoc.Z - pData->MapMinZ) / subZ;
-	float x = MapScale.X * normX;
-	float z = MapScale.Y * normZ;
+	float x = normX * scaleW;
+	float z = normZ * scaleH;
 	
-	OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + "\n").c_str());
-	OutputDebugStringA(("minimapLoc: " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
+	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
 
 	FVector mapLoc = Minimap->GetWorldLocation();
-	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ x, z });
+	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ -36.f + x, -65.f + z });
+	MinimapLocs[0]->SetRotation(FVector{ 0.f, 0.f, -playerRot.Y });
 }

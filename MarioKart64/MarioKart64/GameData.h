@@ -38,6 +38,9 @@ public:
 
 	void SetMinimapLoc(uint8_t _playerIdx, float4 _loc);
 	float4 GetMinimapLoc(uint8_t _playerIdx) const;
+	
+	void SetPlayerRotation(uint8_t _playerIdx, float4 _rot);
+	float4 GetPlayerRotation(uint8_t _playerIdx) const;
 
 	static const int MAX_PLAYER_CNT = 8;
 

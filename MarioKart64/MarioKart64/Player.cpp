@@ -116,6 +116,10 @@ void APlayer::Move(float _deltaTime)
 		TestMapPtr->SetNavIndex(-1);
 		return;
 	}
+	if (UEngineInput::IsPress(VK_LSHIFT))
+	{
+		Velocity = MAX_VELOCITY;
+	}
 	/* for debug end */
 
 	int navIdx = TestMapPtr->GetNavIndex();
@@ -134,26 +138,52 @@ void APlayer::Move(float _deltaTime)
 	FVector dir = GetActorForwardVector();
 	dir.Normalize();
 
-	/* for debug start */
-	float zVal = 0.f;
-	if (UEngineInput::IsPress(VK_LSHIFT))
-	{
-		Velocity = MAX_VELOCITY;
-	}
-	if (UEngineInput::IsPress('Z'))
-	{
-		zVal = 10.f;
-	}
-	else if (UEngineInput::IsPress('X'))
-	{
-		zVal = -10.f;
-	}
-	lastVec.Y = zVal;
-	/* for debug end */
-
 	float dx = 0.f;
 	float rotVal = 0.f;
 	float slopeAngle = 0.f;
+
+	/* for debug start */
+	/*{
+		GetForwardPhysics(_deltaTime, dx);
+		GetHandleRotation(_deltaTime, rotVal);
+
+		dir *= dx;
+		lastVec = dir;
+		lastRot.Y = rotVal;
+
+		float zVal = 0.f;
+		if (UEngineInput::IsPress('Z'))
+		{
+			zVal = 10.f;
+		}
+		else if (UEngineInput::IsPress('X'))
+		{
+			zVal = -10.f;
+		}
+		if (UEngineInput::IsPress('W'))
+		{
+			lastVec.Z += 500.f * _deltaTime;
+		}
+		else if (UEngineInput::IsPress('S'))
+		{
+			lastVec.Z += -500.f * _deltaTime;
+		}
+		if (UEngineInput::IsPress('A'))
+		{
+			lastVec.X += -500.f * _deltaTime;
+		}
+		else if (UEngineInput::IsPress('D'))
+		{
+			lastVec.X += 500.f * _deltaTime;
+		}
+		lastVec.Y = zVal;
+
+		AddActorRotation(lastRot);
+		AddActorLocation(lastVec);
+		return;
+	}*/
+	/* for debug end */
+
 	if (isCollided)
 	{
 		// Temporary physics of slope

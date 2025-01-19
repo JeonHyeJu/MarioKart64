@@ -125,3 +125,21 @@ float4 GameData::GetMinimapLoc(uint8_t _playerIdx) const
 
 	return float4{ 0.f, 0.f, 0.f, 0.f };
 }
+
+void GameData::SetPlayerRotation(uint8_t _playerIdx, float4 _rot)
+{
+	if (_playerIdx < Players.size())
+	{
+		Players[_playerIdx].Rotation = _rot;
+	}
+}
+
+float4 GameData::GetPlayerRotation(uint8_t _playerIdx) const
+{
+	if (_playerIdx < Players.size())
+	{
+		return Players[_playerIdx].Rotation;
+	}
+
+	return float4{ 0.f, 0.f, 0.f, 0.f };
+}

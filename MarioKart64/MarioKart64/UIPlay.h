@@ -81,6 +81,4 @@ private:
 	const char* ITEM_SPRITE = "Items.png";
 
 	int ItemIdx = -1;
-	
-	FVector MapScale;
 };

@@ -273,6 +273,6 @@ void AUIPlay::SetMinimapLoc()
 	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
 
 	FVector mapLoc = Minimap->GetWorldLocation();
-	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ -36.f + x, -65.f + z });
+	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ -36.f + x, -65.f + z });		// Temp
 	MinimapLocs[0]->SetRotation(FVector{ 0.f, 0.f, -playerRot.Y });
 }

@@ -1,19 +1,17 @@
 #pragma once
 #include <EngineCore/Pawn.h>
 #include "CData.h"
-#include <fstream>	// temp
-#include <sstream>	// temp
 
-class APlayer : public APawn
+class ADriver : public APawn
 {
 public:
-	APlayer();
-	~APlayer();
+	ADriver();
+	~ADriver();
 
-	APlayer(const APlayer& _Other) = delete;
-	APlayer(APlayer&& _Other) noexcept = delete;
-	APlayer& operator=(const APlayer& _Other) = delete;
-	APlayer& operator=(APlayer&& _Other) noexcept = delete;
+	ADriver(const ADriver& _Other) = delete;
+	ADriver(ADriver&& _Other) noexcept = delete;
+	ADriver& operator=(const ADriver& _Other) = delete;
+	ADriver& operator=(ADriver&& _Other) noexcept = delete;
 
 	void SetMap(class ATestMap* _ptr);
 
@@ -26,7 +24,7 @@ private:
 	bool CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist);
 	void CheckCollisionOfAllMap();
 	float GetSlope();
-	void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided=true, bool _isComputer=false);
+	void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided=true, bool _isComputer=true);
 	void GetHandleRotation(float _deltaTime, float& _refRot);
 	void CheckLab();
 
@@ -54,7 +52,8 @@ private:
 	const float MAX_TURN = 5.f;
 
 	const float WEIGHT = 50.f;
-	const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
+	const float ACCELERATION = WEIGHT * 5.f;	// 350px/s
+	//const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
 	const float MAX_VELOCITY = 1000.f * 2;
 	const float GRAVITY_FORCE = -300.f;
@@ -77,7 +76,6 @@ private:
 
 	// Temp
 	std::shared_ptr<class USpriteRenderer> DebugItem = nullptr;
-	std::stringstream FileTemp;
 
 	int DstRouteNavIdx = 1;
 	int CurRouteIdx = 0;

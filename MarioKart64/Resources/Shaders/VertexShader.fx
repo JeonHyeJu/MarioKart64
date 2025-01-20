@@ -31,9 +31,10 @@ struct VOut
 {
     float4 pos : SV_POSITION;
     float2 texcoord : TEXCOORD;
+    float4 color : COLOR;
 };
 
-VOut main_VS(float4 pos : POSITION, float2 texcoord : TEXCOORD)
+VOut main_VS(float4 pos : POSITION, float2 texcoord : TEXCOORD, float4 color : COLOR)
 {
     VOut output;
 
@@ -41,6 +42,7 @@ VOut main_VS(float4 pos : POSITION, float2 texcoord : TEXCOORD)
     output.pos = mul(output.pos, View);
     output.pos = mul(output.pos, Projection);
     output.texcoord = texcoord;
+    output.color = color;
 
     return output;
 }

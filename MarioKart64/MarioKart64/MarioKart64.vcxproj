@@ -163,6 +163,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Driver.h" />
     <ClInclude Include="GameData.h">
       <SubType>
       </SubType>
@@ -346,6 +347,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="GameData.cpp">
       <SubType>
       </SubType>

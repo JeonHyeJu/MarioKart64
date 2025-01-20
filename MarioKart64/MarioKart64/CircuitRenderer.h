@@ -66,6 +66,11 @@ public:
 		CollidedNavIndex = _idx;
 	}
 
+	void SetDebugLocation(const FVector& _loc)
+	{
+		Debug.Index = _loc;
+	}
+
 protected:
 	void BeginPlay() override;
 	void Render(UEngineCamera* _camera, float _deltaTime) override;
@@ -76,6 +81,8 @@ private:
 	bool LoadModel();
 	void ProcessMesh(struct aiMesh* _mesh, const struct aiScene* _scene);
 	void ProcessNode(struct aiNode* node, const struct aiScene* scene);
+
+	void InitNavMesh(const std::vector<VertexToNavData>& _vec);
 
 	std::string ObjPath = "";
 	std::string MtlPath = "";
@@ -90,5 +97,6 @@ private:
 	std::vector<NavData> NavDatas;
 	std::vector<VertexToNavData> VertexNavDatas;
 
-	void InitNavMesh(const std::vector<VertexToNavData>& _vec);
+	FDebug Debug;
+	int DebugIndex = 0;
 };

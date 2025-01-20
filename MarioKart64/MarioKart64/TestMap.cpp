@@ -74,3 +74,11 @@ void ATestMap::SetNavIndex(int _idx)
 
 	return Renderer->SetNavIndex(_idx);
 }
+
+void ATestMap::SetDebugLocation(const FVector& _loc)
+{
+	if (Renderer != nullptr)
+	{
+		Renderer->SetDebugLocation(_loc);
+	}
+}

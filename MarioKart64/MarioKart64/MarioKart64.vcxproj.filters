@@ -341,6 +341,9 @@
     <ClInclude Include="GameData.h">
       <Filter>GameInstance</Filter>
     </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -431,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="GameData.cpp">
       <Filter>GameInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp">
+      <Filter>Actor\PlayLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

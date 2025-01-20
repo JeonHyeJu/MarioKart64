@@ -2,6 +2,7 @@
 #include "PlayGameMode.h"
 #include "TestMap.h"
 #include "Player.h"
+#include "Driver.h"
 #include "Skybox.h"
 #include "ItemBox.h"
 #include "GameData.h"
@@ -21,7 +22,8 @@ APlayGameMode::APlayGameMode()
 
 	Skybox = pLevel->SpawnActor<ASkybox>();
 	TestMapPtr = pLevel->SpawnActor<ATestMap>();
-	Player = pLevel->SpawnActor<APlayer>();
+	Player = pLevel->SpawnActor<ADriver>();
+	//Player = pLevel->SpawnActor<APlayer>();
 
 	Player->SetActorLocation({ 0.0f, 100.0f, 500.0f });
 	Player->SetMap(TestMapPtr.get());

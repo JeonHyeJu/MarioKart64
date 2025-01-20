@@ -20,6 +20,8 @@ public:
 	int GetNavIndex() const;
 	void SetNavIndex(int _idx);
 
+	void SetDebugLocation(const FVector& _loc);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

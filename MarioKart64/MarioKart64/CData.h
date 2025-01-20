@@ -61,6 +61,11 @@ struct FColor
 	float4 Albedo;
 };
 
+struct FDebug
+{
+	float4 Index;
+};
+
 struct VertexToNavData
 {
 	NavType FloorType = NavType::NONE;

@@ -83,6 +83,19 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		}
 	}
 
+	// Temp.. TODO: use pos org! and optimization
+	// To match mesh index
+	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png" || texName == "5B7CDDF2_fix.png")
+	{
+		for (size_t i = 0, size = vertices.size() - 3; i < size; i += 3)
+		{
+			vertices[i].COLOR = float4{ static_cast<float>(DebugIndex), 0.f, 0.f, 1.f };
+			vertices[i+1].COLOR = float4{ static_cast<float>(DebugIndex), 0.f, 0.f, 1.f };
+			vertices[i+2].COLOR = float4{ static_cast<float>(DebugIndex), 0.f, 0.f, 1.f };
+			DebugIndex++;
+		}
+	}
+
 	std::string name = FileName + "_" + std::to_string(MeshCount++);
 	UEngineVertexBuffer::Create(name, vertices);
 	UEngineIndexBuffer::Create(name, indices);
@@ -99,6 +112,7 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	{
 		VertexToNavData data;
 		data.Vertecies = vertices;
+
 		// Temp
 		if (texName == "7EEAA53A_fix.png")
 		{
@@ -284,6 +298,7 @@ void CircuitRenderer::_Init()
 		SetMesh(unitInfo.Name, i);
 		SetMaterial(unitInfo.MatName, i);
 		unit.SetTexture("diffTexture", unitInfo.TexName);
+		unit.ConstantBufferLinkData("FDebug", Debug);
 	}
 }
 

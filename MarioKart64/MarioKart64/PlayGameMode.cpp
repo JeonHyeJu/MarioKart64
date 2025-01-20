@@ -25,7 +25,7 @@ APlayGameMode::APlayGameMode()
 	Player = pLevel->SpawnActor<ADriver>();
 	//Player = pLevel->SpawnActor<APlayer>();
 
-	Player->SetActorLocation({ 0.0f, 100.0f, 500.0f });
+	Player->SetActorLocation({ -50.0f, 100.0f, 700.0f });
 	Player->SetMap(TestMapPtr.get());
 
 	TestMapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });

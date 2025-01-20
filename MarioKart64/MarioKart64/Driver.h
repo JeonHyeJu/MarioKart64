@@ -42,6 +42,7 @@ private:
 
 	std::shared_ptr<class USpriteRenderer> Renderer;
 	std::shared_ptr<USpriteRenderer> RendererDebug;
+	std::shared_ptr<class LineRenderer> LineDebug;
 	std::shared_ptr<class UCollision> CollisionItem = nullptr;
 
 	float Speed = 5.f;

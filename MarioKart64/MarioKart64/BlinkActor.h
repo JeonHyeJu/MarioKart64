@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
+// TODO: FSM
 enum class EBlinkState
 {
 	OFF = 0,

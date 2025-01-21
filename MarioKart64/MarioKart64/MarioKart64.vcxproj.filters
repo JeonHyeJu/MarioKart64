@@ -350,6 +350,9 @@
     <ClInclude Include="CharacterAndName.h">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
+    <ClInclude Include="BaseMap.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -449,6 +452,9 @@
     </ClCompile>
     <ClCompile Include="CharacterAndName.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMap.cpp">
+      <Filter>Actor\PlayLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

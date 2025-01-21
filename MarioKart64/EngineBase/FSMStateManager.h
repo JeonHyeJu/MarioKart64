@@ -81,6 +81,11 @@ public:
 		}
 	}
 
+	int GetCurIState() const
+	{
+		return CurState;
+	}
+
 protected:
 
 private:

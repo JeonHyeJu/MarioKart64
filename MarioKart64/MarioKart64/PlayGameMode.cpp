@@ -40,15 +40,6 @@ APlayGameMode::APlayGameMode()
 	TestItemBox = pLevel->SpawnActor<AItemBox>();
 	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
 
-	// Temp
-	std::vector<SPlayerInfo> palyerInfos = {
-		SPlayerInfo{ ECharacter::MARIO, EItemType::NONE },
-		SPlayerInfo{ ECharacter::LUIGI, EItemType::NONE },
-		SPlayerInfo{ ECharacter::PEACH, EItemType::NONE },
-		SPlayerInfo{ ECharacter::YOSHI, EItemType::NONE }
-	};
-	GameData::GetInstance()->SetPlayers(palyerInfos);
-
 	CheckCollisionOfAllMap();
 }
 

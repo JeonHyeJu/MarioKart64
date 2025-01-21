@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseMap.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BlinkActor.h">
       <SubType>
       </SubType>
@@ -343,6 +347,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMap.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BlinkActor.cpp">
       <SubType>
       </SubType>

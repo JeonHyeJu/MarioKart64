@@ -29,6 +29,11 @@ public:
 		EndFuntion = _fn;
 	}
 
+	uint8_t GetSelectedIdx() const
+	{
+		return SelectedIdx;
+	}
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
@@ -48,15 +53,15 @@ private:
 
 	/* Fsm update functions */
 	void Selecting(float _deltaTime);
-	void MovingForward(float _deltaTime);
-	void MovingBackward(float _deltaTime);
+	void Moving(float _deltaTime);
 	void Waiting(float _deltaTime);
 
 	static const int SIZE = 8;
 	const int HALF_SIZE = SIZE / 2;
-	int SelectedIdx = 0;
+	uint8_t SelectedIdx = 0;
 	const float MARGIN_Y = 50.f;
 	FVector SelectMargin = FVector::ZERO;
+	int DISABLE_IDXS[2] = { 3, 5 };
 
 	FVector LocOrg;
 	FVector LocDst;

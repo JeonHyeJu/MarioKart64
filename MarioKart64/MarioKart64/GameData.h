@@ -30,11 +30,14 @@ public:
 	void SetPlayers(const std::vector<SPlayerInfo>& _players);
 	const std::vector<SPlayerInfo>& GetPlayers() const;
 
-	void SetItem(uint8_t _playerIdx, EItemType _item);
-	EItemType GetItem(uint8_t _playerIdx);
+	void SetMaps(const std::vector<ECircuit>& _maps);
+	const std::vector<ECircuit>& GetMaps() const;
 
 	void SetMapTiles(const std::vector<float4>& _vec);
 	const std::vector<float4>& GetMapTiles() const;
+
+	void SetItem(uint8_t _playerIdx, EItemType _item);
+	EItemType GetItem(uint8_t _playerIdx);
 
 	void SetMinimapLoc(uint8_t _playerIdx, float4 _loc);
 	float4 GetMinimapLoc(uint8_t _playerIdx) const;
@@ -43,6 +46,7 @@ public:
 	float4 GetPlayerRotation(uint8_t _playerIdx) const;
 
 	static const int MAX_PLAYER_CNT = 8;
+	static const int MAX_MAP_CNT = 4;
 
 	// Temp
 	float MapMinX = 0.f;
@@ -60,6 +64,7 @@ private:
 	// 0 is must be the user's character.
 	std::vector<SPlayerInfo> Players;
 	std::vector<float4> MapTiles;
+	std::vector<ECircuit> Maps;
 
 	static GameData* pInstance;
 };

@@ -33,6 +33,11 @@ public:
 		EndFuntion = _fn;
 	}
 
+	uint8_t GetSelectedIdx() const
+	{
+		return SelectedGameIdx;
+	}
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
@@ -67,7 +72,7 @@ private:
 	AGameSelectBox* PtrSelectedBox = nullptr;
 
 	float AddRectDist = 0.f;
-	int SelectedGameIdx = 0;
+	uint8_t SelectedGameIdx = 0;
 	FVector LocOrgSelectedBox;
 	int DirMoveSelectedBox = 1;
 

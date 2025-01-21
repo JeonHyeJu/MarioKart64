@@ -19,7 +19,6 @@ public:
 	const SNavData& GetCurNavData() const;
 	int GetNavIndex() const;
 	void SetNavIndex(int _idx);
-
 	void SetDebugLocation(const FVector& _loc);
 
 protected:

@@ -58,8 +58,8 @@ ASelectCharacter::ASelectCharacter()
 	SelectMargin = FVector{ 0.f, scaleName.Y * .125f, -1.f };
 
 	Fsm.CreateState(ESceneState::SELECT, std::bind(&ASelectCharacter::Selecting, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelect, this));
-	Fsm.CreateState(ESceneState::SELECT_MOVING, std::bind(&ASelectCharacter::MovingForward, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveForward, this));
-	Fsm.CreateState(ESceneState::SELECT_MOVING_REVERSE, std::bind(&ASelectCharacter::MovingBackward, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveBackward, this));
+	Fsm.CreateState(ESceneState::SELECT_MOVING, std::bind(&ASelectCharacter::Moving, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveForward, this));
+	Fsm.CreateState(ESceneState::SELECT_MOVING_REVERSE, std::bind(&ASelectCharacter::Moving, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveBackward, this));
 	Fsm.CreateState(ESceneState::WAIT_OK, std::bind(&ASelectCharacter::Waiting, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnWaitOk, this));
 	Fsm.CreateState(ESceneState::FINISH, nullptr, std::bind(&ASelectCharacter::OnFinish, this));
 	Fsm.CreateState(ESceneState::END, nullptr);
@@ -99,9 +99,9 @@ void ASelectCharacter::InitCharacterImgs()
 	const char* SPRITE_NAME = "SelectCharacter.png";
 
 	ULevel* pLevel = GetWorld();
+	// The order is the same with ECharacter
 	for (int i = 0; i < SIZE; ++i)
 	{
-		// Picture
 		std::shared_ptr<ACharacterAndName> ptr = pLevel->SpawnActor<ACharacterAndName>();
 		ptr->Init(SPRITE_NAME, i, SCALE_RATIO);
 		FVector scale = ptr->GetScale();
@@ -112,6 +112,16 @@ void ASelectCharacter::InitCharacterImgs()
 
 		ptr->SetActorLocation(loc);
 		ptr->AttachToActor(this);
+
+		for (int j = 0, size = ARRAYSIZE(DISABLE_IDXS); j < size; ++j)
+		{
+			if (i == DISABLE_IDXS[j])
+			{
+				ptr->SetEnable(false);
+				break;
+			}
+		}
+
 		ImageList[i] = ptr;
 	}
 }
@@ -123,6 +133,15 @@ void ASelectCharacter::RunBlink(int _idx)
 
 void ASelectCharacter::MoveSelectUI(int _idx)
 {
+	for (int j = 0, size = ARRAYSIZE(DISABLE_IDXS); j < size; ++j)
+	{
+		if (_idx == DISABLE_IDXS[j])
+		{
+			_idx = ++SelectedIdx;
+			break;
+		}
+	}
+
 	RSelect->SetRelativeLocation(ImageList[_idx]->GetActorLocation() + SelectMargin);
 	RPlayer1->SetRelativeLocation(RSelect->GetRelativeLocation() + SelectMargin);
 }
@@ -230,28 +249,7 @@ void ASelectCharacter::Selecting(float _deltaTime)
 	}
 }
 
-void ASelectCharacter::MovingForward(float _deltaTime)
-{
-	FVector loc = ImageList[SelectedIdx]->GetActorLocation();
-	FVector dir = LocDst - loc;
-	FVector dirDst = dir;
-	dirDst.Normalize();
-	dirDst *= (1000.f * _deltaTime);
-	dirDst.Z = 0.f;
-
-	if (abs(dir.X) < 1 && abs(dir.Y) < 1)
-	{
-		ImageList[SelectedIdx]->SetActorLocation(LocDst);
-		MoveSelectUI(SelectedIdx);
-		Fsm.ChangeState(ESceneState::WAIT_OK);
-		return;
-	}
-
-	ImageList[SelectedIdx]->AddActorLocation(dirDst);
-	MoveSelectUI(SelectedIdx);
-}
-
-void ASelectCharacter::MovingBackward(float _deltaTime)
+void ASelectCharacter::Moving(float _deltaTime)
 {
 	FVector loc = ImageList[SelectedIdx]->GetActorLocation();
 	FVector dir = LocDst - loc;
@@ -264,7 +262,15 @@ void ASelectCharacter::MovingBackward(float _deltaTime)
 	{
 		ImageList[SelectedIdx]->SetActorLocation(LocDst);
 		MoveSelectUI(SelectedIdx);
-		Fsm.ChangeState(ESceneState::SELECT);
+
+		if (static_cast<ESceneState>(Fsm.GetCurIState()) == ESceneState::SELECT_MOVING)
+		{
+			Fsm.ChangeState(ESceneState::WAIT_OK);
+		}
+		else
+		{
+			Fsm.ChangeState(ESceneState::SELECT);
+		}
 		return;
 	}
 

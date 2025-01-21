@@ -6,6 +6,7 @@ GameData* GameData::pInstance = nullptr;
 GameData::GameData()
 {
 	Players.reserve(MAX_PLAYER_CNT);
+	Maps.reserve(MAX_MAP_CNT);
 }
 
 GameData::~GameData()
@@ -106,6 +107,16 @@ void GameData::SetMapTiles(const std::vector<float4>& _vec)
 const std::vector<float4>& GameData::GetMapTiles() const
 {
 	return MapTiles;
+}
+
+void GameData::SetMaps(const std::vector<ECircuit>& _maps)
+{
+	Maps = _maps;
+}
+
+const std::vector<ECircuit>& GameData::GetMaps() const
+{
+	return Maps;
 }
 
 void GameData::SetMinimapLoc(uint8_t _playerIdx, float4 _loc)

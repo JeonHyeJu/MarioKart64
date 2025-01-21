@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "CharacterAndName.h"
+#include "ColorRenderer.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
 
@@ -9,9 +10,11 @@ ACharacterAndName::ACharacterAndName()
 	RootComponent = _default;
 
 	RImage = CreateDefaultSubObject<USpriteRenderer>();
+	RDisable = CreateDefaultSubObject<ColorRenderer>();
 	RName = CreateDefaultSubObject<USpriteRenderer>();
 
 	RImage->SetupAttachment(RootComponent);
+	RDisable->SetupAttachment(RootComponent);
 	RName->SetupAttachment(RootComponent);
 }
 
@@ -65,11 +68,14 @@ void ACharacterAndName::Init(std::string_view _spriteName, int _idx, float _scal
 	float height = scale.Y;
 
 	const int INIT_NAME_IDX = 17;
-	RName = CreateDefaultSubObject<USpriteRenderer>();
 	RName->SetSprite(_spriteName, INIT_NAME_IDX + (_idx * STRIDE));
 	RName->SetAutoScaleRatio(_scaleRatio);
-	RName->SetupAttachment(RootComponent);
-	RName->SetRelativeLocation(FVector{ 0.f, -height * .5f, -1.f });
+	RName->SetRelativeLocation(FVector{ 0.f, -height * .5f, -2.f });
+
+	RDisable->SetScale3D({ width, height, 1.f });
+	RDisable->SetRelativeLocation(RImage->GetRelativeLocation() + FVector{ 0.f, 0.f, -1.f });
+	RDisable->SetColor(FVector{ 0.f, 0.f, 0.f, .75f });
+	RDisable->SetActive(false);
 }
 
 FVector ACharacterAndName::GetScale()
@@ -113,5 +119,17 @@ void ACharacterAndName::SetIdle()
 	if (RImage != nullptr)
 	{
 		RImage->ChangeAnimation("Idle");
+	}
+}
+
+void ACharacterAndName::SetEnable(bool _val)
+{
+	if (_val)
+	{
+		RDisable->SetActive(false);
+	}
+	else
+	{
+		RDisable->SetActive(true);
 	}
 }

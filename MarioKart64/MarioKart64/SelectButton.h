@@ -16,6 +16,7 @@ public:
 	void Init(std::string_view _name, UINT idx, float _scale=1.f);
 	void SetImage(std::string_view _name, UINT idx);
 	void SetAutoScaleRatio(float _val);
+	//void SetEnable(bool _val);	// TODO
 	FVector GetRealScaleOfSprite() const;
 
 protected:
@@ -24,4 +25,5 @@ protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> RBtn = nullptr;
+	std::shared_ptr<class ColorRenderer> RDisable = nullptr;
 };

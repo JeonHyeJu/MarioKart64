@@ -7,7 +7,10 @@ ASelectButton::ASelectButton()
 {
 	// Already has RootComponent in ABlinkObject
 	RBtn = CreateDefaultSubObject<USpriteRenderer>();
+	//RDisable = CreateDefaultSubObject<ColorRenderer>();
+
 	RBtn->SetupAttachment(RootComponent);
+	//RDisable->SetupAttachment(RootComponent);
 }
 
 ASelectButton::~ASelectButton()
@@ -31,7 +34,12 @@ void ASelectButton::Init(std::string_view _name, UINT idx, float _scale)
 	RBtn->SetSprite(_name.data(), idx);
 	RBtn->SetAutoScaleRatio(_scale);
 
-	SetBgScale(RBtn->GetRealScaleOfSprite());
+	FVector scale = RBtn->GetRealScaleOfSprite();
+	/*RDisable->SetScale3D(scale);
+	RDisable->SetColor({ 0.f, 0.f, 0.f, .5f });
+	RDisable->SetRelativeLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 0.f, -1.f });*/
+
+	SetBgScale(scale);
 	SetBgLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
 }
 

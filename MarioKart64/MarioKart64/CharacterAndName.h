@@ -17,6 +17,7 @@ public:
 	void SetBlink();
 	void SetSelect();
 	void SetIdle();
+	void SetEnable(bool _val);
 	FVector GetScale();
 	FVector GetScaleName();
 
@@ -27,4 +28,5 @@ protected:
 private:
 	std::shared_ptr<USpriteRenderer> RImage = nullptr;
 	std::shared_ptr<USpriteRenderer> RName = nullptr;
+	std::shared_ptr<class ColorRenderer> RDisable = nullptr;
 };

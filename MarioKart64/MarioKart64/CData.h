@@ -19,12 +19,11 @@ enum class ECircuit
 
 enum class ECharacter
 {
-	NONE = 0,
-	MARIO,
+	NONE = -1,
+	MARIO = 0,
 	LUIGI,
 	PEACH,
 	YOSHI,
-	DONGKEYKONG,
 	WARIO,
 	BOWSER,
 	END

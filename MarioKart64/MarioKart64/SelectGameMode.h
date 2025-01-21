@@ -40,7 +40,7 @@ private:
 	std::shared_ptr<class ASelectGame> SelectGame = nullptr;
 	std::shared_ptr<class ASelectCharacter> SelectCharacter = nullptr;
 	std::shared_ptr<class ASelectMap> SelectMap = nullptr;
-	//std::shared_ptr<class AFade> Fade = nullptr;
+	//std::shared_ptr<class AFade> Fade = nullptr;	// TODO
 
 	UFSMStateManager Fsm;
 };

@@ -3,6 +3,7 @@
 #include "SelectGame.h"
 #include "SelectCharacter.h"
 #include "SelectMap.h"
+#include "GameData.h"
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -39,16 +40,15 @@ void ASelectGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	Fsm.ChangeState(Scene::SELECT_MAP);
-	//Fsm.ChangeState(Scene::SELECT_GAME);
+	Fsm.ChangeState(Scene::SELECT_GAME);
 }
 
 void ASelectGameMode::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
-	// There are not any update functions.
-	// I'm not use Fsm.Update() intentionally;
+	// I'm not use Fsm.Update() intentionally. 
+	// Because there are not any update functions.
 }
 
 /* Fsm start function */
@@ -81,11 +81,35 @@ void ASelectGameMode::OnEndSelectGame()
 
 void ASelectGameMode::OnEndSelectCharacter()
 {
+	uint8_t idx = SelectCharacter->GetSelectedIdx();
+	int size = static_cast<int>(ECharacter::END);
+
+	std::vector<SPlayerInfo> palyerInfos{ SPlayerInfo{ static_cast<ECharacter>(idx), EItemType::NONE } };
+	palyerInfos.reserve(size);
+	
+	for (int i = 0; i < size; ++i)
+	{
+		if (i != idx)
+		{
+			palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
+		}
+	}
+
+	GameData::GetInstance()->SetPlayers(palyerInfos);
 	Fsm.ChangeState(Scene::SELECT_MAP);
 }
 
 void ASelectGameMode::OnEndSelectMap()
 {
-	Fsm.ChangeState(Scene::END);
+	uint8_t idx = SelectMap->GetSelectedIdx();
+
+	std::vector<ECircuit> mapInfo;
+	mapInfo.reserve(4);
+	for (int i = 0; i < 4; ++i)
+	{
+		mapInfo.push_back(static_cast<ECircuit>(i+idx));
+	}
+
 	UEngineCore::OpenLevel("PlayLevel");
+	Fsm.ChangeState(Scene::END);
 }

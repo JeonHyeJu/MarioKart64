@@ -155,7 +155,7 @@ void ADriver::Move(float _deltaTime)
 	/* Test start */
 	GetForwardPhysics(_deltaTime, dx, true, true);
 
-	FVector futureDir = dir * Velocity;
+	FVector futureDir = dir * Velocity * .45f;
 	LineDebug->SetScale3D({ 1.f, futureDir.Z, 1.f });
 	LineDebug->SetRelativeLocation({ 0.f, 25.f, futureDir.Z * .5f });
 	FVector curLoc = GetActorLocation();

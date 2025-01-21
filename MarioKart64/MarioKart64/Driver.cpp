@@ -69,7 +69,6 @@ ADriver::ADriver()
 	{
 		TempRouteIdx[TempRouteIdxInit[i]] = static_cast<int>(i);
 	}
-	LastIdx = TempRouteIdxInit.back();
 	TempRouteIdxInit.clear();
 }
 
@@ -115,22 +114,6 @@ void ADriver::Move(float _deltaTime)
 	float fDist = 0.f;
 	bool isCollided = CheckCollision(trfmPlayer.Location, navIdx, fDist);
 
-	if (!isCollided)
-	{
-		const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
-
-		// TODO: Important.. This doesn't take into account children
-		for (size_t i = 0, size = navDatas.size(); i < size; ++i)
-		{
-			const FTransform& trfmObj = TestMapPtr->GetTransform();
-			const NavData& nd = navDatas[i];
-
-			isCollided = nd.Intersects(trfmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
-			if (isCollided) break;
-			navIdx = i;
-		}
-	}
-
 	// Temp start
 	std::map<int, int>::iterator it = TempRouteIdx.find(navIdx);
 	std::map<int, int>::iterator itEnd = TempRouteIdx.end();
@@ -169,6 +152,110 @@ void ADriver::Move(float _deltaTime)
 	float rotVal = 0.f;
 	float slopeAngle = 0.f;
 
+	/* Test start */
+	GetForwardPhysics(_deltaTime, dx, true, true);
+
+	FVector futureDir = dir * Velocity;
+	LineDebug->SetScale3D({ 1.f, futureDir.Z, 1.f });
+	LineDebug->SetRelativeLocation({ 0.f, 25.f, futureDir.Z * .5f });
+	FVector curLoc = GetActorLocation();
+	futureDir.Y = -10.f;
+
+	float tempFDist = 0.f;
+	if (FutureNavIdx < 0)
+	{
+		FutureNavIdx = navIdx;
+	}
+
+	bool isCol = CheckCollision(futureDir + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
+	std::vector<float> tempAngles = { 0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120, 135, -135, 150, -150, 165, -165 };
+	if (isCol)
+	{
+		const NavData& _nd = TestMapPtr->GetNavData(FutureNavIdx);
+		if (_nd.FloorType != NavType::ROAD && _nd.FloorType != NavType::START_POINT)
+		{
+			OutputDebugStringA("AAAAAAA\n");
+
+			bool isBreak = false;
+			for (int f = 300; f < 800; f += 50)
+			{
+				for (int i = 0; i < tempAngles.size(); ++i)
+				{
+					FVector tempVec = dir * f;
+					tempVec.Y = -10.f;
+					float _angle = tempAngles[i];
+					//float _angle = angles[i] * _deltaTime;
+					tempVec.RotationYDeg(_angle);
+
+					isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
+					if (isCol)
+					{
+						const NavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
+						if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
+						{
+							if (_angle <= -1)
+							{
+								rotVal = 100.f * _deltaTime;
+							}
+							else if (_angle >= 1)
+							{
+								rotVal = -100.f * _deltaTime;
+							}
+							OutputDebugStringA(("f: " + std::to_string(f) + ", angle: " + std::to_string(_angle) + ", rotVal: " + std::to_string(rotVal) + "\n").c_str());
+
+							isBreak = true;
+							break;
+						}
+					}
+				}
+
+				if (isBreak) break;
+			}
+		}
+	}
+	else
+	{
+		OutputDebugStringA("BBBBBBB\n");
+
+		bool isBreak = false;
+		for (int f = 300; f < 800; f += 50)
+		{
+			for (int i = 0; i < tempAngles.size(); ++i)
+			{
+				FVector tempVec = dir * f;
+				tempVec.Y = -10.f;
+				float _angle = tempAngles[i];
+				//float _angle = angles[i] * _deltaTime;
+				tempVec.RotationYDeg(_angle);
+
+				isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
+				if (isCol)
+				{
+					const NavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
+					if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
+					{
+						if (_angle <= -1)
+						{
+							rotVal = 100.f * _deltaTime;
+						}
+						else if (_angle >= 1)
+						{
+							rotVal = -100.f * _deltaTime;
+						}
+						OutputDebugStringA(("f: " + std::to_string(f) + ", angle: " + std::to_string(_angle) + ", rotVal: " + std::to_string(rotVal) + "\n").c_str());
+
+						isBreak = true;
+						break;
+					}
+				}
+			}
+
+			if (isBreak) break;
+		}
+	}
+
+
+
 	if (isCollided)
 	{
 		TestMapPtr->SetDebugLocation(float4{ static_cast<float>(navIdx), 0.f, 0.f, 1.f });
@@ -190,120 +277,6 @@ void ADriver::Move(float _deltaTime)
 			RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
 		}
 
-		/* Test start */
-		GetForwardPhysics(_deltaTime, dx, true, true);
-		//GetHandleRotation(_deltaTime, rotVal);
-
-		FVector futureDir = dir * Velocity * .5f;
-		LineDebug->SetScale3D({1.f, futureDir.Z, 1.f});
-		LineDebug->SetRelativeLocation({ 0.f, 25.f, futureDir.Z * .5f });
-		FVector curLoc = GetActorLocation();
-		futureDir.Y = -10.f;
-
-		int tempNavIdx = 0;
-		float tempFDist = 0.f;
-		bool isCol = CheckCollision(futureDir + curLoc, tempNavIdx, tempFDist);
-
-		if (!isCol)
-		{
-			const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
-
-			// TODO: Important.. This doesn't take into account children
-			for (size_t i = 0, size = navDatas.size(); i < size; ++i)
-			{
-				const FTransform& trfmObj = TestMapPtr->GetTransform();
-				const NavData& nd = navDatas[i];
-
-				isCol = nd.Intersects(futureDir + curLoc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, tempFDist);
-				if (isCol) break;
-				tempNavIdx = i;
-			}
-		}
-
-		std::vector<float> tempAngles = { 0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120, 135, -135, 150, -150, 165, -165 };
-		if (isCol)
-		{
-			const NavData& _nd = TestMapPtr->GetNavData(tempNavIdx);
-			if (_nd.FloorType != NavType::ROAD && _nd.FloorType != NavType::START_POINT)
-			{
-				OutputDebugStringA("AAAAAAA\n");
-
-				for (int f = 1; f < 800; f+=50)
-				{
-					for (int i = 0; i < tempAngles.size(); ++i)
-					{
-						FVector tempVec = dir * f;
-						tempVec.Y = -10.f;
-						float _angle = tempAngles[i];
-						//float _angle = angles[i] * _deltaTime;
-						tempVec.RotationYDeg(_angle);
-
-						isCol = CheckCollision(tempVec + curLoc, tempNavIdx, tempFDist);
-						if (isCol)
-						{
-							const NavData& _nd2 = TestMapPtr->GetNavData(tempNavIdx);
-							if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
-							{
-								if (_angle < 0)
-								{
-									rotVal = 300.f * _deltaTime;
-								}
-								else
-								{
-									rotVal = -300.f * _deltaTime;
-								}
-
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			OutputDebugStringA("BBBBBBB\n");
-
-			for (int f = 1; f < 800; f+=50)
-			{
-				for (int i = 0; i < tempAngles.size(); ++i)
-				{
-					FVector tempVec = dir * f;
-					tempVec.Y = -10.f;
-					float _angle = tempAngles[i];
-					//float _angle = angles[i] * _deltaTime;
-					tempVec.RotationYDeg(_angle);
-
-					isCol = CheckCollision(tempVec + curLoc, tempNavIdx, tempFDist);
-					if (isCol)
-					{
-						const NavData& _nd2 = TestMapPtr->GetNavData(tempNavIdx);
-						if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
-						{
-							if (_angle < 0)
-							{
-								rotVal = 100.f * _deltaTime;
-							}
-							else
-							{
-								rotVal = -100.f * _deltaTime;
-							}
-
-							break;
-						}
-					}
-				}
-			}
-		}
-		
-		dir *= dx;
-		lastVec = dir;
-
-		lastRot.Y = rotVal;
-		lastVec.Y += fDist;
-
-		/* Test end */
-
 		VelocityV = Velocity * .5f * sinf(-slopeAngle * UEngineMath::D2R);
 		PrevLoc = GetActorLocation();
 		CheckLab();
@@ -316,8 +289,8 @@ void ADriver::Move(float _deltaTime)
 		if (hasFloor)
 		{
 			// Adjust gravity
-			GetForwardPhysics(_deltaTime, dx);
-			GetHandleRotation(_deltaTime, rotVal);
+			//GetForwardPhysics(_deltaTime, dx);
+			//GetHandleRotation(_deltaTime, rotVal);
 
 			// for fDist. Do not remove
 			CheckCollision(trfmPlayer.Location + FVector{ 0.f, gravityY, 0.f }, navIdx, fDist);
@@ -345,7 +318,7 @@ void ADriver::Move(float _deltaTime)
 				IsTouchLastTriangle = true;
 
 				// Adjust gravity
-				GetForwardPhysics(_deltaTime, dx);
+				//GetForwardPhysics(_deltaTime, dx);
 
 				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 150.f, _deltaTime);
 				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 150.f, _deltaTime);
@@ -357,7 +330,21 @@ void ADriver::Move(float _deltaTime)
 				OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", gravityForce: " + std::to_string(gravityY) + ", dy: " + std::to_string(dy) + "\n").c_str());
 			}
 		}
+
+		AddActorRotation(lastRot);
+		AddActorLocation(lastVec);
+		return;
 	}
+
+	dir *= dx;
+	lastVec = dir;
+
+	OutputDebugStringA(("dir: " + std::to_string(dir.X) + ", " + std::to_string(dir.Y) + ", " + std::to_string(dir.Z) + "\n").c_str());
+	OutputDebugStringA(("dx: " + std::to_string(dx) + ", FutureNavIdx: " + std::to_string(FutureNavIdx) + "\n").c_str());
+	lastRot.Y = rotVal;
+	lastVec.Y += fDist;
+
+	/* Test end */
 
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
@@ -508,6 +495,38 @@ bool ADriver::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 				PrevGroupIdx = navDatas[_refIdx].GroupIndex;
 
 				TestMapPtr->SetNavIndex(linkedIdx);
+				_refIdx = linkedIdx;
+				break;
+			}
+		}
+	}
+
+	return isCollided;
+}
+
+bool ADriver::CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, float& _refDist)
+{
+	bool isCollided = false;
+	const FTransform& trfmObj = TestMapPtr->GetTransform();
+
+	// TODO: Check size
+	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
+	NavData nd = navDatas[_startIdx];
+	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
+
+	if (isCollided)
+	{
+		//OutputDebugStringA("CheckCollision first: true\n");
+	}
+	else
+	{
+		//OutputDebugStringA("CheckCollision first: false\n");
+		for (int linkedIdx : nd.LinkData)
+		{
+			isCollided = navDatas[linkedIdx].Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
+			if (isCollided)
+			{
+				//OutputDebugStringA(("CheckCollision second: true .. " + std::to_string(linkedIdx) + "\n").c_str());
 				_refIdx = linkedIdx;
 				break;
 			}

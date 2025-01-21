@@ -7,7 +7,10 @@ const char* CGlobal::OBJ_SHADER_NAME = "Object";
 const char* CGlobal::OBJ_SPRITE_SHADER_NAME = "ObjectSprite";
 const char* CGlobal::OBJ_SKY_SHADER_NAME = "Skybox";
 const char* CGlobal::OBJ_LINE_SHADER_NAME = "Line";
-const int CGlobal::ALL_ITEM_SIZE = 16;
+const int CGlobal::WINDOW_W = 625 * 2;
+const int CGlobal::WINDOW_H = 395 * 2;
+const float CGlobal::FWINDOW_W = static_cast<float>(625 * 2);
+const float CGlobal::FWINDOW_H = static_cast<float>(395 * 2);
 
 std::string CGlobal::GetModelPath(std::string_view _append="", std::string_view _fileName="")
 {

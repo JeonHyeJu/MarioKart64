@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include <EngineBase/FSMStateManager.h>
 
 class ASelectGameMode : public AGameMode
 {
@@ -25,9 +26,13 @@ protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
-	Scene SceneIdx = Scene::IDLE;
-
 private:
+	/* Fsm start function */
+	void OnShowSelectGame();
+	void OnShowSelectCharacter();
+	void OnShowSelectMap();
+
+	/* Callbacks */
 	void OnEndSelectGame();
 	void OnEndSelectCharacter();
 	void OnEndSelectMap();
@@ -35,4 +40,7 @@ private:
 	std::shared_ptr<class ASelectGame> SelectGame = nullptr;
 	std::shared_ptr<class ASelectCharacter> SelectCharacter = nullptr;
 	std::shared_ptr<class ASelectMap> SelectMap = nullptr;
+	//std::shared_ptr<class AFade> Fade = nullptr;
+
+	UFSMStateManager Fsm;
 };

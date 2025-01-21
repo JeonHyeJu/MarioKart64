@@ -105,8 +105,8 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 
 	bool isCollided = false;
 	float fDist = 0.f;
-	const std::vector<NavData> navDatas = TestMapPtr->GetNavData();
-	NavData nd = navDatas[navIdx];
+	const std::vector<SNavData> navDatas = TestMapPtr->GetNavData();
+	SNavData nd = navDatas[navIdx];
 	isCollided = nd.Intersects(trfmPlayer.Location, UpVector, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 
 	if (!isCollided)
@@ -205,13 +205,13 @@ void APlayGameMode::CheckCollision(float _deltaTime)
 void APlayGameMode::CheckCollisionOfAllMap()
 {
 	const FTransform& tfrmPlayer = Player->GetTransform();
-	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
+	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
 
 	// TODO: Important.. This doesn't take into account children
 	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
 	{
 		const FTransform& trfmObj = TestMapPtr->GetTransform();
-		const NavData& nd = navDatas[i];
+		const SNavData& nd = navDatas[i];
 
 		float fDist = 0.f;
 		bool isCollided = nd.Intersects(tfrmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);

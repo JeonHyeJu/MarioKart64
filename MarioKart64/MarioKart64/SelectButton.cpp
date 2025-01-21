@@ -42,6 +42,13 @@ void ASelectButton::SetImage(std::string_view _name, UINT idx)
 	RBtn->SetSprite(_name.data(), idx);
 }
 
+void ASelectButton::SetAutoScaleRatio(float _val)
+{
+	if (RBtn == nullptr) return;
+
+	RBtn->SetAutoScaleRatio(_val);
+}
+
 FVector ASelectButton::GetRealScaleOfSprite() const
 {
 	if (RBtn == nullptr)

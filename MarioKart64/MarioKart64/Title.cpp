@@ -11,40 +11,46 @@ ATitle::ATitle()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	const float SCALE_RATIO = 5.f;
+	const float SCALE_RATIO = 4.f;
+
+	float w = CGlobal::FWINDOW_W;
+	float h = CGlobal::FWINDOW_H;
 
 	RBackground = CreateDefaultSubObject<USpriteRenderer>();
 	RBackground->SetSprite("Title_Screen.png", 0);
-	RBackground->SetAutoScaleRatio(SCALE_RATIO+1);
-	RBackground->SetRelativeLocation({ -450.f, 250.f, 0.f });
+	RBackground->SetAutoScale(false);
+	RBackground->SetScale3D({ w, h, 1.f });
+	//RBackground->SetRelativeLocation({ -w * .5f, h * .5f, 0.f });
 	RBackground->SetupAttachment(RootComponent);
 
 	std::string path = CGlobal::GetModelPath("Miscellaneous\\Title_Screen_Flag", "title_screen_flag");
 	RFlag = CreateDefaultSubObject<ObjRenderer>();
 	RFlag->SetOrder(0);
 	RFlag->Init(path);
-	RFlag->SetScale3D({ 500.f, 500.f, 500.f });
-	RFlag->SetRelativeLocation({ 500.f, -350.f, -100.f });
-	RFlag->SetRotation({ 30.f, 165.f, 0.f });
+	RFlag->SetScale3D({ 400.f, 350.f, 300.f });
+	RFlag->SetRelativeLocation({ 0.f, 150.f, -150.f });
+	RFlag->SetRotation({ -15.f, 180.f, 0.f });
 	RFlag->SetupAttachment(RootComponent);
 
 	RTitleText = CreateDefaultSubObject<USpriteRenderer>();
 	RTitleText->SetSprite("Title_Screen.png", 4);
 	RTitleText->SetAutoScaleRatio(SCALE_RATIO);
-	RTitleText->SetRelativeLocation({ -125.f, -300.f, -230.f });
+	RTitleText->SetRelativeLocation({ 0.f, 100.f, -300.f });
 	RTitleText->SetupAttachment(RootComponent);
 	RTitleText->SetOrder(0);
+
+	float halfH = h * .5f;
 
 	RPushButton = CreateDefaultSubObject<USpriteRenderer>();
 	RPushButton->SetSprite("Title_Screen.png", 2);
 	RPushButton->SetAutoScaleRatio(SCALE_RATIO);
-	RPushButton->SetRelativeLocation({ 125.f, -600.f, -240.f });
+	RPushButton->SetRelativeLocation({ 0.f, -halfH * .65f, -310.f });
 	RPushButton->SetupAttachment(RootComponent);
 
 	RCopyright = CreateDefaultSubObject<USpriteRenderer>();
 	RCopyright->SetSprite("Title_Screen.png", 3);
-	RCopyright->SetAutoScaleRatio(SCALE_RATIO);
-	RCopyright->SetRelativeLocation({ 150.f, -800.f, -250.f });
+	RCopyright->SetAutoScaleRatio(SCALE_RATIO - 1);
+	RCopyright->SetRelativeLocation({ 0.f, -halfH * .85f, -320.f });
 	RCopyright->SetupAttachment(RootComponent);
 }
 
@@ -64,65 +70,10 @@ void ATitle::Tick(float _deltaTime)
 
 	static float elapsedSecs = 0.f;
 
-	if (IsHidden == false)
+	elapsedSecs += _deltaTime;
+	if (elapsedSecs >= 1.f)
 	{
-		elapsedSecs += _deltaTime;
-		if (elapsedSecs >= 1.f)
-		{
-			elapsedSecs = 0.f;
-			RPushButton->SetActiveSwitch();
-		}
-	}
-}
-
-void ATitle::Show()
-{
-	IsHidden = false;
-
-	if (RBackground != nullptr)
-	{
-		RBackground->SetActive(true);
-	}
-	if (RFlag != nullptr)
-	{
-		RFlag->SetActive(true);
-	}
-	if (RTitleText != nullptr)
-	{
-		RTitleText->SetActive(true);
-	}
-	if (RPushButton != nullptr)
-	{
-		RPushButton->SetActive(true);
-	}
-	if (RCopyright != nullptr)
-	{
-		RCopyright->SetActive(true);
-	}
-}
-
-void ATitle::Hide()
-{
-	IsHidden = true;
-
-	if (RBackground != nullptr)
-	{
-		RBackground->SetActive(false);
-	}
-	if (RFlag != nullptr)
-	{
-		RFlag->SetActive(false);
-	}
-	if (RTitleText != nullptr)
-	{
-		RTitleText->SetActive(false);
-	}
-	if (RPushButton != nullptr)
-	{
-		RPushButton->SetActive(false);
-	}
-	if (RCopyright != nullptr)
-	{
-		RCopyright->SetActive(false);
+		elapsedSecs = 0.f;
+		RPushButton->SetActiveSwitch();
 	}
 }

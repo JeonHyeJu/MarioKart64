@@ -3,6 +3,7 @@
 #include "EngineVertexShader.h"
 #include "EnginePixelShader.h"
 #include "EngineConstantBuffer.h"
+#include "EngineStructuredBuffer.h" 
 
 UEngineShader::UEngineShader()
 {
@@ -132,8 +133,20 @@ void UEngineShader::ShaderResCheck()
 		}
 		case D3D_SIT_STRUCTURED:
 		{
-			int a = 0;
+			ID3D11ShaderReflectionConstantBuffer* Info = CompileInfo->GetConstantBufferByName(ResDesc.Name);
+			D3D11_SHADER_BUFFER_DESC BufferInfo = { 0 };
+			Info->GetDesc(&BufferInfo);
 
+			std::shared_ptr<UEngineStructuredBuffer> Buffer = UEngineStructuredBuffer::CreateOrFind(BufferInfo.Size, UpperName);
+
+			UEngineStructuredBufferRes NewRes;
+			NewRes.ShaderType = ShaderType;
+			NewRes.Name = UpperName;
+			NewRes.BindIndex = ResDesc.BindPoint;
+			NewRes.Res = Buffer.get();
+			NewRes.DataSize = BufferInfo.Size;
+
+			ShaderResources.CreateStructuredBufferRes(UpperName, NewRes);
 			break;
 		}
 		case D3D_SIT_UAV_RWSTRUCTURED: // ÄÄÇ»Æ®

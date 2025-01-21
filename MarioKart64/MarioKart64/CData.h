@@ -4,6 +4,19 @@
 
 #define GRAVITY_ACC 9.8f
 
+enum class ECircuit
+{
+	LUIGI_RACEWAY = 0,
+	KOOPA_TROOPA_BEACH,
+	MARIO_RACEWAY,
+	WARIO_STADIUM,
+	SHERBET_LAND,
+	ROYAL_RACEWAY,
+	BOWSERS_CASTLE,
+	RAINBOW_ROAD,
+	END
+};
+
 enum class ECharacter
 {
 	NONE = 0,
@@ -17,7 +30,7 @@ enum class ECharacter
 	END
 };
 
-enum class NavType
+enum class ENavType
 {
 	NONE = 0,
 	ROAD,
@@ -66,21 +79,21 @@ struct FDebug
 	float4 Index;
 };
 
-struct VertexToNavData
+struct SVertexToNavData
 {
-	NavType FloorType = NavType::NONE;
+	ENavType FloorType = ENavType::NONE;
 	std::vector<FEngineVertex> Vertecies;
 };
 
-struct NavData
+struct SNavData
 {
 	float4 Vertex[3] = { {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f} };
 	int GroupIndex = -1;
 	int Index = -1;
 	std::vector<int> LinkData;
-	NavType FloorType = NavType::NONE;
+	ENavType FloorType = ENavType::NONE;
 
-	NavData()
+	SNavData()
 	{
 		LinkData.reserve(1000);	// temp
 	}
@@ -109,7 +122,7 @@ struct NavData
 		return isSame;
 	}
 
-	bool IsAttached(const NavData& _other, float _eps = 1e-4)
+	bool IsAttached(const SNavData& _other, float _eps = 1e-4)
 	{
 		bool isSame = false;
 		for (int i=0; i<3; ++i)
@@ -124,14 +137,14 @@ struct NavData
 	}
 
 	// It won't be duplicated.
-	void LinkBoth(NavData& _other)
+	void LinkBoth(SNavData& _other)
 	{
 		LinkData.push_back(_other.Index);
 
 		_other.Link(*this);
 	}
 
-	void Link(const NavData& _other)
+	void Link(const SNavData& _other)
 	{
 		LinkData.push_back(_other.Index);
 	}

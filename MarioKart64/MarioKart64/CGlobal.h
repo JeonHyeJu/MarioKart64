@@ -11,4 +11,8 @@ public:
 	static const char* OBJ_SKY_SHADER_NAME;
 	static const char* OBJ_LINE_SHADER_NAME;
 	static const int ALL_ITEM_SIZE;
+	static const int WINDOW_W;
+	static const int WINDOW_H;
+	static const float FWINDOW_W;
+	static const float FWINDOW_H;
 };

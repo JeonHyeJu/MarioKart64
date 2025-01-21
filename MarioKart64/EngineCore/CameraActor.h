@@ -21,6 +21,10 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
+	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos(float _PosZ);
+
+	ENGINEAPI FVector ScreenPosToWorldPosWithOutPos(FVector _Pos, float _PosZ);
+
 	ENGINEAPI FVector ScreenMousePosToWorldPos();
 	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
 
@@ -43,6 +47,11 @@ public:
 	void SetFreeCameraSpeed(float _Speed)
 	{
 		FreeSpeed = _Speed;
+	}
+
+	void SetFreeCameraRotSpeed(float _Speed)
+	{
+		RotSpeed = _Speed;
 	}
 // #endif
 

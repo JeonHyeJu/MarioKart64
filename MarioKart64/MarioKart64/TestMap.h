@@ -14,9 +14,9 @@ public:
 	ATestMap& operator=(const ATestMap& _other) = delete;
 	ATestMap& operator=(ATestMap&& _other) noexcept = delete;
 
-	const std::vector<NavData>& GetNavData() const;
-	const NavData& GetNavData(int _idx) const;
-	const NavData& GetCurNavData() const;
+	const std::vector<SNavData>& GetNavData() const;
+	const SNavData& GetNavData(int _idx) const;
+	const SNavData& GetCurNavData() const;
 	int GetNavIndex() const;
 	void SetNavIndex(int _idx);
 
@@ -28,6 +28,6 @@ protected:
 
 private:
 	std::vector<FEngineVertex> Base;
-	std::vector<NavData> BaseNav;
+	std::vector<SNavData> BaseNav;
 	std::shared_ptr<class CircuitRenderer> Renderer = nullptr;
 };

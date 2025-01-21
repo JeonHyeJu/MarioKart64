@@ -14,7 +14,7 @@ ANintendoLogo::ANintendoLogo()
 	RootComponent = Renderer;
 
 	Renderer->SetOrder(0);
-	Renderer->SetScale3D({ .25f, .25f, .25f });
+	Renderer->SetScale3D({ .2f, .2f, .2f });
 	Renderer->Init(path);
 }
 
@@ -31,20 +31,4 @@ void ANintendoLogo::BeginPlay()
 void ANintendoLogo::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
-}
-
-void ANintendoLogo::Show()
-{
-	if (Renderer != nullptr)
-	{
-		Renderer->SetActive(true);
-	}
-}
-
-void ANintendoLogo::Hide()
-{
-	if (Renderer != nullptr)
-	{
-		Renderer->SetActive(false);
-	}
 }

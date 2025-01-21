@@ -2,25 +2,30 @@
 #include "TitleGameMode.h"
 #include "NintendoLogo.h"
 #include "Title.h"
+#include "CGlobal.h"
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/EngineCamera.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 
-// TODO: change to fsm
 ATitleGameMode::ATitleGameMode()
 {
 	NintendoLogo = GetWorld()->SpawnActor<ANintendoLogo>();
 	Title = GetWorld()->SpawnActor<ATitle>();
 
-	NintendoLogo->SetActorLocation({ 0.f, -200.f, 0.f });
-	Title->SetActorLocation({ -500.0f, 500.f, 0.0f });
+	int winH = CGlobal::WINDOW_H;
+	NintendoLogo->SetActorLocation({ 0.f, -(winH * .15f), 0.f });
+	Title->SetActorLocation({ 0.0f, 0.f, 0.0f });
 
-	NintendoLogo->Hide();
-	Title->Hide();
+	NintendoLogo->SetActive(false);
+	Title->SetActive(false);
 	
-	std::shared_ptr<ACameraActor> camera = GetWorld()->GetMainCamera();
-	camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f });
+	GetWorld()->GetMainCamera()->SetActorLocation({ 0.0f, 0.0f, -1000.0f });
+
+	Fsm.CreateState(EScene::NINTENDO_LOGO, std::bind(&ATitleGameMode::ShowingLogo, this, std::placeholders::_1), std::bind(&ATitleGameMode::OnShowLogo, this));
+	Fsm.CreateState(EScene::TITLE, std::bind(&ATitleGameMode::ShowingTitle, this, std::placeholders::_1), std::bind(&ATitleGameMode::OnShowTitle, this));
+	Fsm.CreateState(EScene::END, nullptr, std::bind(&ATitleGameMode::OnEnd, this));
 }
 
 ATitleGameMode::~ATitleGameMode()
@@ -31,90 +36,76 @@ void ATitleGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	ShowScene(Scene::NINTENDO_LOGO);
+	Fsm.ChangeState(EScene::NINTENDO_LOGO);
 }
 
 void ATitleGameMode::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
-	if (SceneIdx < Scene::END)
-	{
-		CheckKey();
-
-		if (SceneIdx == Scene::NINTENDO_LOGO)
-		{
-			SpinLogoAndTimeCheck(_deltaTime);
-		}
-	}
+	Fsm.Update(_deltaTime);
 }
 
 void ATitleGameMode::SpinLogoAndTimeCheck(float _deltaTime)
 {
-	static float eplasedSec = 0.f;
-	static float angle = 60.f;
+	NintendoLogo->AddActorRotation({ 0.f, LogoAngle * _deltaTime, 0.f });
 
-	NintendoLogo->AddActorRotation({ 0.f, angle * _deltaTime, 0.f });
-
-	eplasedSec += _deltaTime;
-	if (eplasedSec > .5f)
+	LogoElapsedSecs += _deltaTime;
+	if (LogoElapsedSecs > .5f)
 	{
-		if (angle < 720)
+		if (LogoAngle < 720)
 		{
-			angle += 45.f;
+			LogoAngle += 45.f;
 		}
 		else
 		{
-			ShowScene(Scene::TITLE);
+			Fsm.ChangeState(EScene::TITLE);
 		}
 
-		eplasedSec = 0.f;
+		LogoElapsedSecs = 0.f;
 	}
 }
 
-void ATitleGameMode::CheckKey()
+/* Fsm start function */
+void ATitleGameMode::OnShowLogo()
+{
+	NintendoLogo->SetActive(true);
+	Title->SetActive(false);
+
+	LogoElapsedSecs = 0.f;
+	LogoAngle = 60.f;
+
+	GetWorld()->GetMainCamera()->GetCameraComponent()->SetProjectionType(EProjectionType::Perspective);
+}
+
+void ATitleGameMode::OnShowTitle()
+{
+	NintendoLogo->SetActive(false);
+	Title->SetActive(true);
+
+	GetWorld()->GetMainCamera()->GetCameraComponent()->SetProjectionType(EProjectionType::Orthographic);
+}
+
+void ATitleGameMode::OnEnd()
+{
+	UEngineCore::OpenLevel("SelectLevel");
+}
+
+/* Fsm update function */
+void ATitleGameMode::ShowingLogo(float _deltaTime)
+{
+	SpinLogoAndTimeCheck(_deltaTime);
+
+	if (UEngineInput::IsDown(VK_SPACE) || UEngineInput::IsDown(VK_RETURN))
+	{
+		Fsm.ChangeState(EScene::TITLE);
+	}
+}
+
+void ATitleGameMode::ShowingTitle(float _deltaTime)
 {
 	if (UEngineInput::IsDown(VK_SPACE) || UEngineInput::IsDown(VK_RETURN))
 	{
-		int idx = static_cast<int>(SceneIdx);
-		ShowScene(static_cast<Scene>(++idx));
+		Fsm.ChangeState(EScene::END);
 	}
 }
-
-void ATitleGameMode::ShowScene(Scene _sceneNum)
-{
-	switch (_sceneNum)
-	{
-		case Scene::NINTENDO_LOGO:
-		{
-			if (SceneIdx != Scene::NINTENDO_LOGO)
-			{
-				NintendoLogo->Show();
-				Title->Hide();
-				SceneIdx = _sceneNum;
-			}
-
-			break;
-		}
-		case Scene::TITLE:
-		{
-			if (SceneIdx != Scene::TITLE)
-			{
-				NintendoLogo->Hide();
-				Title->Show();
-				SceneIdx = _sceneNum;
-			}
-
-			break;
-		}
-		case Scene::END:
-			// TODO: Reset level
-			UEngineCore::OpenLevel("PlayLevel");
-			[[fallthrough]];
-		default:	// IDLE
-			NintendoLogo->Hide();
-			Title->Hide();
-			break;
-	}
-}
-

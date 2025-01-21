@@ -25,6 +25,7 @@
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="EngineRandom.cpp" />
+    <ClCompile Include="FSMStateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
@@ -52,6 +53,7 @@
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="EngineRandom.h" />
+    <ClInclude Include="FSMStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">

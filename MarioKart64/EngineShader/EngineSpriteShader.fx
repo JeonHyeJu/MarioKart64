@@ -53,7 +53,7 @@ cbuffer FUVValue : register(b2)
 	float4 PlusUVValue;
 };
 
-VertexShaderOutPut VertexToWorld_VS(EngineVertex _Vertex)
+VertexShaderOutPut SpriteRender_VS(EngineVertex _Vertex)
 {	
 	VertexShaderOutPut OutPut;
 	_Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
@@ -92,7 +92,7 @@ cbuffer ResultColor : register(b0)
 	float4 MulColor;
 };
 
-float4 PixelToWorld_PS(VertexShaderOutPut _Vertex) : SV_Target0
+float4 SpriteRender_PS(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
 	Color += PlusColor;

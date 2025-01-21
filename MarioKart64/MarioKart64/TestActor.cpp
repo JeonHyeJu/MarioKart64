@@ -259,7 +259,7 @@ void TestActor::RunTestMultipleTriangle(float _DeltaTime)
 		return;
 	}
 
-	const NavData& nd = NavDatas[CollidedNavIndex];
+	const SNavData& nd = NavDatas[CollidedNavIndex];
 	bool isCollided = nd.Intersects(playerTrfm.Location, FVector::UP, triTrfm.ScaleMat, triTrfm.RotationMat, triTrfm.LocationMat, fDist);
 
 	// for logging
@@ -376,7 +376,7 @@ void TestActor::InitNavMesh()
 	int idx = 0;
 	for (size_t i = 0, size = MultipleTriangles.size(); i < size; i += 3)
 	{
-		NavData nd;
+		SNavData nd;
 		nd.Vertex[0] = MultipleTriangles[i].POSITION;
 		nd.Vertex[1] = MultipleTriangles[i+1].POSITION;
 		nd.Vertex[2] = MultipleTriangles[i+2].POSITION;
@@ -389,8 +389,8 @@ void TestActor::InitNavMesh()
 	{
 		for (size_t j = i+1; j < size; j++)
 		{
-			NavData& leftNd = NavDatas[i];
-			NavData& rightNd = NavDatas[j];
+			SNavData& leftNd = NavDatas[i];
+			SNavData& rightNd = NavDatas[j];
 			if (leftNd.IsAttached(rightNd))
 			{
 				leftNd.LinkBoth(rightNd);
@@ -408,7 +408,7 @@ void TestActor::CheckAllMesh()
 	{
 		const FTransform& playerTfrm = Player->GetTransform();
 		const FTransform& triangleTfrm = Triangle->GetTransform();
-		const NavData& nd = NavDatas[i];
+		const SNavData& nd = NavDatas[i];
 
 		float fDist = 0.f;
 		bool isCollided = nd.Intersects(playerTfrm.Location, FVector::UP, triangleTfrm.ScaleMat, triangleTfrm.RotationMat, triangleTfrm.LocationMat, fDist);

@@ -12,9 +12,6 @@ public:
 	ATitle& operator=(const ATitle& _other) = delete;
 	ATitle& operator=(ATitle&& _other) noexcept = delete;
 
-	void Show();
-	void Hide();
-
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -26,6 +23,4 @@ private:
 	std::shared_ptr<class USpriteRenderer> RCopyright = nullptr;
 
 	std::shared_ptr<class ObjRenderer> RFlag = nullptr;
-
-	bool IsHidden = false;	// Temp
 };

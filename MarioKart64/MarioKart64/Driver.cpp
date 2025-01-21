@@ -171,8 +171,8 @@ void ADriver::Move(float _deltaTime)
 	std::vector<float> tempAngles = { 0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120, 135, -135, 150, -150, 165, -165 };
 	if (isCol)
 	{
-		const NavData& _nd = TestMapPtr->GetNavData(FutureNavIdx);
-		if (_nd.FloorType != NavType::ROAD && _nd.FloorType != NavType::START_POINT)
+		const SNavData& _nd = TestMapPtr->GetNavData(FutureNavIdx);
+		if (_nd.FloorType != ENavType::ROAD && _nd.FloorType != ENavType::START_POINT)
 		{
 			OutputDebugStringA("AAAAAAA\n");
 
@@ -190,8 +190,8 @@ void ADriver::Move(float _deltaTime)
 					isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
 					if (isCol)
 					{
-						const NavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
-						if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
+						const SNavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
+						if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT)
 						{
 							if (_angle <= -1)
 							{
@@ -231,8 +231,8 @@ void ADriver::Move(float _deltaTime)
 				isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
 				if (isCol)
 				{
-					const NavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
-					if (_nd2.FloorType == NavType::ROAD || _nd2.FloorType == NavType::START_POINT)
+					const SNavData& _nd2 = TestMapPtr->GetNavData(FutureNavIdx);
+					if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT)
 					{
 						if (_angle <= -1)
 						{
@@ -304,7 +304,7 @@ void ADriver::Move(float _deltaTime)
 		else
 		{
 			// Block
-			if (TestMapPtr->GetNavData(PrevIdx).FloorType != NavType::FLATE_FASTER)
+			if (TestMapPtr->GetNavData(PrevIdx).FloorType != ENavType::FLATE_FASTER)
 			{
 				Velocity *= .5f;
 
@@ -364,8 +364,8 @@ void ADriver::CheckLab()
 {
 	if (!IsTouchLastTriangle) return;
 
-	NavData nd = TestMapPtr->GetCurNavData();
-	if (nd.FloorType == NavType::START_POINT)
+	SNavData nd = TestMapPtr->GetCurNavData();
+	if (nd.FloorType == ENavType::START_POINT)
 	{
 		++Lab;
 		OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lab) + "\n").c_str());
@@ -384,7 +384,7 @@ float ADriver::GetSlope()
 	int idx = TestMapPtr->GetNavIndex();
 	if (idx < 0) return 0.f;
 
-	NavData nd = TestMapPtr->GetCurNavData();
+	SNavData nd = TestMapPtr->GetCurNavData();
 	const FTransform& trfmObj = TestMapPtr->GetTransform();
 
 	FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
@@ -474,8 +474,8 @@ bool ADriver::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 	_refIdx = TestMapPtr->GetNavIndex();
 	const FTransform& trfmObj = TestMapPtr->GetTransform();
 
-	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
-	NavData nd = navDatas[_refIdx];
+	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
+	SNavData nd = navDatas[_refIdx];
 	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
 	
 	if (isCollided)
@@ -510,8 +510,8 @@ bool ADriver::CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, f
 	const FTransform& trfmObj = TestMapPtr->GetTransform();
 
 	// TODO: Check size
-	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
-	NavData nd = navDatas[_startIdx];
+	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
+	SNavData nd = navDatas[_startIdx];
 	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
 
 	if (isCollided)
@@ -539,13 +539,13 @@ bool ADriver::CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, f
 void ADriver::CheckCollisionOfAllMap()
 {
 	const FTransform& tfrmPlayer = GetTransform();
-	const std::vector<NavData>& navDatas = TestMapPtr->GetNavData();
+	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
 
 	// TODO: Important.. This doesn't take into account children
 	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
 	{
 		const FTransform& trfmObj = TestMapPtr->GetTransform();
-		const NavData& nd = navDatas[i];
+		const SNavData& nd = navDatas[i];
 
 		float fDist = 0.f;
 		bool isCollided = nd.Intersects(tfrmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);

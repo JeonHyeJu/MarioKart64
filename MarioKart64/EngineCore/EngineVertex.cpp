@@ -16,6 +16,9 @@ public:
 		FEngineVertex::Info.AddInputLayout("POSITION", DXGI_FORMAT_R32G32B32A32_FLOAT);
 		FEngineVertex::Info.AddInputLayout("TEXCOORD", DXGI_FORMAT_R32G32B32A32_FLOAT);
 		FEngineVertex::Info.AddInputLayout("COLOR", DXGI_FORMAT_R32G32B32A32_FLOAT);
+		FEngineVertex::Info.AddInputLayout("NORMAL", DXGI_FORMAT_R32G32B32A32_FLOAT);
+		FEngineVertex::Info.AddInputLayout("BINORMAL", DXGI_FORMAT_R32G32B32A32_FLOAT);
+		FEngineVertex::Info.AddInputLayout("TANGENT", DXGI_FORMAT_R32G32B32A32_FLOAT);
 	}
 };
 

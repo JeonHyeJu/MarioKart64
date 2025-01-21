@@ -110,7 +110,7 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	// Temp
 	if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png" || texName == "5B7CDDF2_fix.png")
 	{
-		VertexToNavData data;
+		SVertexToNavData data;
 		data.Vertecies = vertices;
 
 		// Temp
@@ -140,19 +140,19 @@ void CircuitRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 			pData->MapMaxZ = maxZ;
 			pData->SetMapTiles(temp);
 
-			data.FloorType = NavType::ROAD;
+			data.FloorType = ENavType::ROAD;
 		}
 		else if (texName == "922DEA6_c.png")
 		{
-			data.FloorType = NavType::START_POINT;
+			data.FloorType = ENavType::START_POINT;
 		}
 		else if (texName == "3A87458D_c.png")
 		{
-			data.FloorType = NavType::BORDER;
+			data.FloorType = ENavType::BORDER;
 		}
 		else if (texName == "5B7CDDF2_fix.png")
 		{
-			data.FloorType = NavType::FLATE_FASTER;
+			data.FloorType = ENavType::FLATE_FASTER;
 		}
 
 		VertexNavDatas.push_back(data);
@@ -198,17 +198,17 @@ bool CircuitRenderer::LoadModel()
 	return true;
 }
 
-void CircuitRenderer::InitNavMesh(const std::vector<VertexToNavData>& _vec)
+void CircuitRenderer::InitNavMesh(const std::vector<SVertexToNavData>& _vec)
 {
 	NavDatas.reserve(10000);		// TODO: set with mesh size
 
 	int idx = 0;
-	for (const VertexToNavData& vnData : _vec)
+	for (const SVertexToNavData& vnData : _vec)
 	{
 		const std::vector<FEngineVertex>& vec = vnData.Vertecies;
 		for (size_t i = 0, size = vec.size(); i < size; i += 3)
 		{
-			NavData nd;
+			SNavData nd;
 			nd.Vertex[0] = vec[i].POSITION;
 			nd.Vertex[1] = vec[i + 1].POSITION;
 			nd.Vertex[2] = vec[i + 2].POSITION;
@@ -224,8 +224,8 @@ void CircuitRenderer::InitNavMesh(const std::vector<VertexToNavData>& _vec)
 	{
 		for (size_t j = i + 1; j < size; j++)
 		{
-			NavData& leftNd = NavDatas[i];
-			NavData& rightNd = NavDatas[j];
+			SNavData& leftNd = NavDatas[i];
+			SNavData& rightNd = NavDatas[j];
 			if (leftNd.GroupIndex == -1)
 			{
 				leftNd.GroupIndex = groupIdx;

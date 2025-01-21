@@ -41,11 +41,11 @@ void AGameSelectBox::Tick(float _deltaTime)
 void AGameSelectBox::Init(int _idx)
 {
 	RRect->SetSprite("SelectGame", _idx);
-	RRect->SetAutoScaleRatio(.65f);
+	RRect->SetAutoScaleRatio(.5f);
 	RRect->SetRelativeLocation({ 0.f, 0.f, 0.f });
 	
 	RDownArrow->SetSprite("SelectGame", 16);
-	RDownArrow->SetRelativeLocation({ 0.f, -175.f, 0.f });
+	RDownArrow->SetRelativeLocation({ 0.f, -135.f, 0.f });
 
 	SetBgScale(RRect->GetRealScaleOfSprite());
 	SetBgLocation(RRect->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
@@ -76,7 +76,7 @@ void AGameSelectBox::AddObjectsToLayer(ELayer _idx, const std::vector<SButtonDat
 
 		std::shared_ptr<ASelectButton> ptr = GetWorld()->SpawnActor<ASelectButton>();
 		ptr->Init(data.SpriteName, data.SpriteIndex, data.AutoScaleRatio);
-
+		
 		FVector scale = ptr->GetRealScaleOfSprite();
 		FVector loc = FVector{ 0.f, i * -scale.Y, 0.f };
 		ptr->SetActorLocation(data.InitLoc + loc);

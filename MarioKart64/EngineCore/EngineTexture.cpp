@@ -11,6 +11,25 @@ UEngineTexture::~UEngineTexture()
 {
 }
 
+
+std::shared_ptr<UEngineTexture> UEngineTexture::ThreadSafeLoad(std::string_view _Name, std::string_view _Path)
+{
+	std::string UpperName = ToUpperName(_Name);
+
+	if (true == Contains(UpperName))
+	{
+		MSGASSERT("이미 로드한 텍스처를 도 로드하려고 했습니다." + UpperName);
+		return nullptr;
+	}
+
+	std::shared_ptr<UEngineTexture> NewRes = std::make_shared<UEngineTexture>();
+	ThreadSafePushRes<UEngineTexture>(NewRes, _Name, _Path);
+	NewRes->ResLoad();
+
+	return NewRes;
+}
+
+
 std::shared_ptr<UEngineTexture> UEngineTexture::Load(std::string_view _Name, std::string_view _Path)
 {
 	std::string UpperName = ToUpperName(_Name);

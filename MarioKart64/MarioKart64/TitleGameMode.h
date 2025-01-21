@@ -1,10 +1,11 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include <EngineBase/FSMStateManager.h>
 
 class ATitleGameMode : public AGameMode
 {
 public:
-	enum class Scene
+	enum class EScene
 	{
 		IDLE = 0,
 		NINTENDO_LOGO,
@@ -25,13 +26,22 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
-	void CheckKey();
 	void SpinLogoAndTimeCheck(float _deltaTime);
-	void ShowScene(Scene _sceneNum);
+
+	/* Fsm start function */
+	void OnShowLogo();
+	void OnShowTitle();
+	void OnEnd();
+
+	/* Fsm update function */
+	void ShowingLogo(float _deltaTime);
+	void ShowingTitle(float _deltaTime);
 
 	std::shared_ptr<class ANintendoLogo> NintendoLogo = nullptr;
 	std::shared_ptr<class ATitle> Title = nullptr;
 
-	Scene SceneIdx = Scene::IDLE;
-};
+	UFSMStateManager Fsm;
 
+	float LogoElapsedSecs = 0.f;
+	float LogoAngle = 60.f;
+};

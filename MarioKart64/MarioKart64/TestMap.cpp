@@ -35,7 +35,7 @@ void ATestMap::Tick(float _deltaTime)
 	AActor::Tick(_deltaTime);
 }
 
-const std::vector<NavData>& ATestMap::GetNavData() const
+const std::vector<SNavData>& ATestMap::GetNavData() const
 {
 	if (Renderer == nullptr)
 	{
@@ -45,12 +45,12 @@ const std::vector<NavData>& ATestMap::GetNavData() const
 	return Renderer->GetNavData();
 }
 
-const NavData& ATestMap::GetNavData(int _idx) const
+const SNavData& ATestMap::GetNavData(int _idx) const
 {
 	return Renderer->GetNavData(_idx);
 }
 
-const NavData& ATestMap::GetCurNavData() const
+const SNavData& ATestMap::GetCurNavData() const
 {
 	return Renderer->GetCurNavData();
 }

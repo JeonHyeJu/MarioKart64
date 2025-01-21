@@ -8,24 +8,26 @@ AMapSpec::AMapSpec()
 {
 	RootComponent = CreateDefaultSubObject<UDefaultSceneComponent>();
 
+	const float SCALE_RATIO = 3.5f;
 	const float SPEED = 2.f;
 	RMapImg = CreateDefaultSubObject<USpriteRenderer>();
 	RMapImg->CreateAnimation("Slide_0", SPRITE_NAME, { 5, 6, 7, 8 }, SPEED);
 	RMapImg->CreateAnimation("Slide_1", SPRITE_NAME, { 23, 24, 25, 26 }, SPEED);
 	RMapImg->CreateAnimation("Slide_2", SPRITE_NAME, { 41, 42, 43, 44 }, SPEED);
 	RMapImg->CreateAnimation("Slide_3", SPRITE_NAME, { 59, 60, 61, 62 }, SPEED);
-	RMapImg->SetAutoScaleRatio(5.f);
+	RMapImg->SetAutoScaleRatio(SCALE_RATIO);
 	RMapImg->SetupAttachment(RootComponent);
-	RMapImg->SetRelativeLocation({ -500.f, -300.f, -10.f });
+	RMapImg->SetRelativeLocation({ -370.f, -250.f, -10.f });
 
 	float width = -1.f;
 	float height = -1.f;
 	const float INIT_X = 200.f;
-	const float INIT_Y = -150.f;
+	const float INIT_Y = -145.f;
+	const float MARGIN = 10.f;
 	for (int i = 0; i < SIZE; ++i)
 	{
 		std::shared_ptr<ASelectButton> ptr = GetWorld()->SpawnActor<ASelectButton>();
-		ptr->Init(SPRITE_NAME, 9+i, 5.f);	// Temp
+		ptr->Init(SPRITE_NAME, 9+i, SCALE_RATIO);
 
 		if (width < 0)
 		{
@@ -34,7 +36,7 @@ AMapSpec::AMapSpec()
 			height = scale.Y;
 		}
 
-		ptr->SetActorLocation({ INIT_X, INIT_Y - i * (height + 20.f), -5.f });
+		ptr->SetActorLocation({ INIT_X, INIT_Y - i * (height + MARGIN), -5.f });
 		ptr->AttachToActor(this);
 		TrackList[i] = ptr.get();
 	}

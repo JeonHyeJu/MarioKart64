@@ -8,6 +8,11 @@ UTileMapRenderer::UTileMapRenderer()
 	CreateRenderUnit();
 	SetMesh("Rect");
 	SetMaterial("TileMap");
+	
+	// 1 : for instancing
+	CreateRenderUnit();
+	SetMesh("Rect", 1);
+	SetMaterial("TileMapInst", 1);
 }
 
 UTileMapRenderer::~UTileMapRenderer()
@@ -79,59 +84,18 @@ FVector UTileMapRenderer::TileIndexToWorldPos(FTileIndex _Index)
 
 void UTileMapRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
-	// URenderer::Render(_Camera, _DeltaTime);
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-	FTransform& RendererTrans = GetTransformRef();
 
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
-
-
-	if (0 == Tiles.size())
+	switch (TileMapRenderType)
 	{
-		return;
+	case Normal:
+		RenderNormal(_Camera, _DeltaTime);
+		break;
+	case Instancing:
+		RenderInstancing(_Camera, _DeltaTime);
+		break;
+	default:
+		break;
 	}
-	
-	URenderUnit& Unit = GetRenderUnit();
-
-	FTransform Trans;
-	FMatrix Scale;
-	FMatrix Pos;
-
-	Scale.Scale(ImageSize);
-
-
-	for (std::pair<const __int64, FTileData>& TilePair : Tiles)
-	{
-		//if (화면 바깥에 나간 타일은)
-		//{
-		//	continue;
-		//}
-
-		FTileData& Tile = TilePair.second;
-		FTileIndex Index;
-
-		GetRenderUnit().SetTexture("TileMapTex", Sprite->GetTexture(Tile.SpriteIndex));
-		Tile.SpriteData = Sprite->GetSpriteData(Tile.SpriteIndex);
-		Tile.SpriteData.Pivot = { 0.0f, 0.0f };
-
-		Index.Key = TilePair.first;
-
-		FVector ConvertPos = TileIndexToWorldPos(Index);
-
-		Pos.Position({ ConvertPos.X, ConvertPos.Y, 0.0f });
-
-		Trans.WVP = Scale * Pos * RendererTrans.View * RendererTrans.Projection;
-
-		GetRenderUnit().ConstantBufferLinkData("FTransform", Trans);
-
-		GetRenderUnit().ConstantBufferLinkData("ResultColor", Tile.ColorData);
-		GetRenderUnit().ConstantBufferLinkData("FSpriteData", Tile.SpriteData);
-
-		Unit.Render(_Camera, _DeltaTime);
-	}
-
 }
 
 void UTileMapRenderer::SetTile(FVector _Pos, int _Spriteindex)
@@ -146,6 +110,11 @@ void UTileMapRenderer::RemoveTile(FVector _Pos)
 	FTileIndex Index = WorldPosToTileIndex(_Pos);
 
 	RemoveTile(Index.X, Index.Y);
+}
+
+void UTileMapRenderer::InstancingOn()
+{
+	TileMapRenderType = ETileMapRenderType::Instancing;
 }
 
 void UTileMapRenderer::SetTile(int _X, int _Y, int _Spriteindex)
@@ -216,4 +185,120 @@ void UTileMapRenderer::DeSerialize(UEngineSerializer& _Ser)
 		_Ser.Read(&TileData, sizeof(TileData));
 		Tiles.insert({ TileData.Index.Key, TileData });
 	}
+}
+
+void UTileMapRenderer::RenderNormal(class UEngineCamera* _Camera, float _DeltaTime)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+
+	if (0 == Tiles.size())
+	{
+		return;
+	}
+
+	URenderUnit& Unit = GetRenderUnit(0);
+
+	FTransform Trans;
+	FMatrix Scale;
+	FMatrix Pos;
+
+	Scale.Scale(ImageSize);
+
+
+	for (std::pair<const __int64, FTileData>& TilePair : Tiles)
+	{
+		FTileData& Tile = TilePair.second;
+		FTileIndex Index;
+
+		Unit.SetTexture("TileMapTex", Sprite->GetTexture(Tile.SpriteIndex));
+		Tile.SpriteData = Sprite->GetSpriteData(Tile.SpriteIndex);
+		Tile.SpriteData.Pivot = { 0.0f, 0.0f };
+
+		Index.Key = TilePair.first;
+
+		FVector ConvertPos = TileIndexToWorldPos(Index);
+
+		Pos.Position({ ConvertPos.X, ConvertPos.Y, 0.0f });
+
+		Trans.WVP = Scale * Pos * RendererTrans.View * RendererTrans.Projection;
+
+		float OrthX = abs(Trans.WVP.ArrVector[3].Y);
+		float OrthY = abs(Trans.WVP.ArrVector[3].X);
+
+		if (1.0f <= OrthX || 1.0f <= OrthY)
+		{
+			continue;
+		}
+
+		Unit.ConstantBufferLinkData("FTransform", Trans);
+		Unit.ConstantBufferLinkData("ResultColor", Tile.ColorData);
+		Unit.ConstantBufferLinkData("FSpriteData", Tile.SpriteData);
+
+		Unit.Render(_Camera, _DeltaTime);
+	}
+}
+
+void UTileMapRenderer::RenderInstancing(class UEngineCamera* _Camera, float _DeltaTime)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+
+	if (0 == Tiles.size())
+	{
+		return;
+	}
+
+	URenderUnit& Unit = GetRenderUnit(1);
+
+	FTransform Trans;
+	FMatrix Scale;
+	FMatrix Pos;
+
+	Scale.Scale(ImageSize);
+
+	InstTransform.resize(Tiles.size());
+	InstSpriteData.resize(Tiles.size());
+	InstColorData.resize(Tiles.size());
+
+	int RenderCount = 0;
+
+	for (std::pair<const __int64, FTileData>& TilePair : Tiles)
+	{
+		FTileData& Tile = TilePair.second;
+		FTileIndex Index;
+
+		Unit.SetTexture("TileMapTex", Sprite->GetTexture(Tile.SpriteIndex));
+		Tile.SpriteData = Sprite->GetSpriteData(Tile.SpriteIndex);
+		Tile.SpriteData.Pivot = { 0.0f, 0.0f };
+
+		Index.Key = TilePair.first;
+
+		FVector ConvertPos = TileIndexToWorldPos(Index);
+
+		Pos.Position({ ConvertPos.X, ConvertPos.Y, 0.0f });
+
+		Trans.WVP = Scale * Pos * RendererTrans.View * RendererTrans.Projection;
+
+		InstTransform[RenderCount] = Trans;
+		InstColorData[RenderCount] = Tile.ColorData;
+		InstSpriteData[RenderCount] = Tile.SpriteData;
+		++RenderCount;
+	}
+
+	Unit.StructuredBufferLinkData("TransformBuffer", InstTransform);
+	Unit.StructuredBufferLinkData("SpriteDataBuffer", InstSpriteData);
+	Unit.StructuredBufferLinkData("ColorDataBuffer", InstColorData);
+
+	Unit.RenderInst(_Camera, static_cast<UINT>(Tiles.size()), _DeltaTime);
 }

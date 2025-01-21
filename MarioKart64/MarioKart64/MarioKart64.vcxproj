@@ -155,6 +155,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="CharacterAndName.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="CircuitRenderer.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="CGlobal.h" />
@@ -164,6 +168,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Driver.h" />
+    <ClInclude Include="Fade.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameData.h">
       <SubType>
       </SubType>
@@ -339,6 +347,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="CharacterAndName.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="CircuitRenderer.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="CGlobal.cpp" />
@@ -348,6 +360,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="Fade.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameData.cpp">
       <SubType>
       </SubType>

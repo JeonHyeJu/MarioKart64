@@ -41,5 +41,8 @@ bool UEngineThread::Start(std::string _Name, std::function<void()> _Function)
 
 void UEngineThread::Join()
 {
-	ThreadInst.join();
+	if (true == ThreadInst.joinable())
+	{
+		ThreadInst.join();
+	}
 }

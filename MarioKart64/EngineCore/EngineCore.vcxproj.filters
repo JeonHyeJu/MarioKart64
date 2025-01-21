@@ -171,6 +171,9 @@
     <ClInclude Include="ImageWidget.h">
       <Filter>Transform</Filter>
     </ClInclude>
+    <ClInclude Include="EngineStructuredBuffer.h">
+      <Filter>DirectX\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -330,6 +333,9 @@
     <ClCompile Include="ImageWidget.cpp">
       <Filter>Transform</Filter>
     </ClCompile>
+    <ClCompile Include="EngineStructuredBuffer.cpp">
+      <Filter>DirectX\Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -438,6 +444,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\EngineShader\EngineTileMapShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineTileMapInstShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineTargetMergeShader.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

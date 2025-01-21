@@ -2,6 +2,7 @@
 #include "SelectGame.h"
 #include "GameSelectBox.h"
 #include "SelectButton.h"
+#include "CGlobal.h"
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
@@ -24,25 +25,50 @@ ASelectGame::ASelectGame()
 	RBtnOption->AttachToActor(this);
 	RBtnData->AttachToActor(this);
 
+	float w = CGlobal::FWINDOW_W;
+	float h = CGlobal::FWINDOW_H;
+	float halfW = w * .5f;
+	float halfH = h * .5f;
+
+	RBackground->SetAutoScale(false);
+	RBackground->SetScale3D({ w, h, 1.f });
 	RBackground->SetSprite("SelectGame", 17);
 	RBackground->SetRelativeLocation({ 0.f, 0.f, 500.f });
 
 	InitGameSelectBox();
 
 	RTitle->SetSprite("SelectGame", 14);
-	RTitle->SetAutoScaleRatio(.75f);
-	RTitle->SetRelativeLocation({ 0.f, 400.f, 0.f });
+	FVector scale = RTitle->GetRealScaleOfSprite();
+	RTitle->SetAutoScale(false);
+	RTitle->SetScale3D({ scale.X * .5f, scale.Y * .4f, 1.f});
+	RTitle->SetRelativeLocation({ 0.f, halfH * .75f, 0.f });
 
-	RBtnOption->Init("SelectGame", 13, .5f);
-	RBtnOption->SetActorLocation({ -625.f, -450.f, 0.f });
+	const float MARGIN = 20.f;
+	const float SCALE_RATIO_BTN = .35f;
+	RBtnOption->Init("SelectGame", 13, SCALE_RATIO_BTN);
+	scale = RBtnOption->GetRealScaleOfSprite();
+	float optW = scale.X;
+	RBtnOption->SetActorLocation({ -halfW + scale.X, -halfH + scale.Y, 0.f });
 
-	RBtnData->Init("SelectGame", 12, .5f);
-	RBtnData->SetActorLocation({ -350.f, -450.f, 0.f });
+	RBtnData->Init("SelectGame", 12, SCALE_RATIO_BTN);
+	scale = RBtnOption->GetRealScaleOfSprite();
+	RBtnData->SetActorLocation({ -halfW + optW + scale.X + MARGIN, -halfH + scale.Y, 0.f });
 
-	RBtnOk->Init("SelectGame", 15, .5f);
-	RBtnOk->SetActorLocation({ 625.f, -450.f, 0.f });
+	RBtnOk->Init("SelectGame", 15, SCALE_RATIO_BTN);
+	scale = RBtnOk->GetRealScaleOfSprite();
+	RBtnOk->SetActorLocation({ halfW - scale.X, -halfH + scale.Y, 0.f });
+	RBtnOk->SetActive(false);
 
 	SetIndex(0);
+
+	Fsm.CreateState(ESceneState::SELECT_GAME, std::bind(&ASelectGame::SelectingGame, this, std::placeholders::_1));
+	Fsm.CreateState(ESceneState::CHANGE_GAME_TO_RULE, std::bind(&ASelectGame::ChangingGameToRule, this, std::placeholders::_1));
+	Fsm.CreateState(ESceneState::CHANGE_RULE_TO_GAME, std::bind(&ASelectGame::ChangingRuleToGame, this, std::placeholders::_1));
+	Fsm.CreateState(ESceneState::SELECT_RULE, std::bind(&ASelectGame::SelectingRule, this, std::placeholders::_1));
+	Fsm.CreateState(ESceneState::SELECT_CC, std::bind(&ASelectGame::SelectingCC, this, std::placeholders::_1), std::bind(&ASelectGame::OnSelectCC, this));
+	Fsm.CreateState(ESceneState::WAIT_OK, std::bind(&ASelectGame::WaitingOk, this, std::placeholders::_1), std::bind(&ASelectGame::OnWaitOk, this));
+	Fsm.CreateState(ESceneState::FINISH, nullptr, std::bind(&ASelectGame::OnFinish, this));
+	Fsm.CreateState(ESceneState::END, nullptr);
 }
 
 ASelectGame::~ASelectGame()
@@ -53,71 +79,48 @@ ASelectGame::~ASelectGame()
 void ASelectGame::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	Fsm.ChangeState(ESceneState::SELECT_GAME);
 }
 
 void ASelectGame::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
-	// Change to fsm
-	if (State == SceneState::SELECT_GAME)
-	{
-		SelectingGame(_deltaTime);
-	}
-	else if (State == SceneState::CHANGE_GAME_TO_RULE)
-	{
-		ChangingGameToRule(_deltaTime);
-	}
-	else if (State == SceneState::CHANGE_RULE_TO_GAME)
-	{
-		ChangingRuleToGame(_deltaTime);
-	}
-	else if (State == SceneState::SELECT_RULE)
-	{
-		SelectingRule(_deltaTime);
-	}
-	else if (State == SceneState::SELECT_CC)
-	{
-		SelectingCC(_deltaTime);
-	}
-	else if (State == SceneState::WAIT_OK)
-	{
-		WaitingOk(_deltaTime);
-	}
-	else if (State == SceneState::FINISH)
-	{
-		OnFinish();
-	}
+	Fsm.Update(_deltaTime);
 }
 
 void ASelectGame::InitGameSelectBox()
 {
 	std::vector<std::vector<SButtonData>> ruleDatas;
 	ruleDatas.reserve(SELECT_LIST_SIZE);
+	
+	const float SCALE_RATIO = .45f;
+	const FVector INIT_LOC{ 0.f, -190.f, 0.f };
 
 	ruleDatas.push_back({
-		SButtonData{ "SelectGame", 10, .6f, FVector{ 0.f, -240.f, 0.f }, true },
-		SButtonData{ "SelectGame", 9, .6f, FVector{ 0.f, -240.f, 0.f }, true },
+		SButtonData{ "SelectGame", 10, SCALE_RATIO, INIT_LOC, true },
+		SButtonData{ "SelectGame", 9, SCALE_RATIO, INIT_LOC, true },
 	});
 	ruleDatas.push_back({
-		SButtonData{ "SelectGame", 10, .6f, FVector{ 0.f, -240.f, 0.f }, true },
-		SButtonData{ "SelectGame", 11, .6f, FVector{ 0.f, -240.f, 0.f }, true },
-		SButtonData{ "SelectGame", 8, .6f, FVector{ 0.f, -240.f, 0.f }, true },
+		SButtonData{ "SelectGame", 10, SCALE_RATIO, INIT_LOC, true },
+		SButtonData{ "SelectGame", 11, SCALE_RATIO, INIT_LOC, true },
+		SButtonData{ "SelectGame", 8, SCALE_RATIO, INIT_LOC, true },
 	});
 	ruleDatas.push_back({
-		SButtonData{ "SelectGame", 11, .6f, FVector{ 0.f, -240.f, 0.f }, true },
-		SButtonData{ "SelectGame", 8, .6f, FVector{ 0.f, -240.f, 0.f }, true },
+		SButtonData{ "SelectGame", 11, SCALE_RATIO, INIT_LOC, true },
+		SButtonData{ "SelectGame", 8, SCALE_RATIO, INIT_LOC, true },
 	});
 	ruleDatas.push_back({
-		SButtonData{ "SelectGame", 11, .6f, FVector{ 0.f, -240.f, 0.f }, true },
-		SButtonData{ "SelectGame", 8, .6f, FVector{ 0.f, -240.f, 0.f }, true },
+		SButtonData{ "SelectGame", 11, SCALE_RATIO, INIT_LOC, true },
+		SButtonData{ "SelectGame", 8, SCALE_RATIO, INIT_LOC, true },
 	});
 
 	// same
 	std::vector<SButtonData> ccDatas = {
-		SButtonData{ "SelectGame", 4, .6f, FVector{ 0.f, -240.f, 0.f }, false },
-		SButtonData{ "SelectGame", 5, .6f, FVector{ 0.f, -240.f, 0.f }, false },
-		SButtonData{ "SelectGame", 6, .6f, FVector{ 0.f, -240.f, 0.f }, false },
+		SButtonData{ "SelectGame", 4, SCALE_RATIO, INIT_LOC, false },
+		SButtonData{ "SelectGame", 5, SCALE_RATIO, INIT_LOC, false },
+		SButtonData{ "SelectGame", 6, SCALE_RATIO, INIT_LOC, false },
 	};
 
 	float rectW, rectH = 0;
@@ -155,6 +158,38 @@ void ASelectGame::SetIndex(int _idx)
 	}
 }
 
+void ASelectGame::SwitchNoSelectedGameBoxes(bool _isVisible)
+{
+	for (int i = 0; i < SELECT_LIST_SIZE; ++i)
+	{
+		if (i != SelectedGameIdx)
+		{
+			SelectBoxes[i]->SetActive(_isVisible);
+		}
+	}
+}
+
+/* Fsm start function */
+void ASelectGame::OnSelectCC()
+{
+	RBtnOk->SetActive(false);
+}
+
+void ASelectGame::OnWaitOk()
+{
+	RBtnOk->SetActive(true);
+	RBtnOk->SetActorRotation({ 0.f, 90.f, 0.f });
+}
+
+void ASelectGame::OnFinish()
+{
+	if (EndFuntion != nullptr)
+	{
+		EndFuntion();
+	}
+}
+
+/* Fsm update function */
 void ASelectGame::SelectingGame(float _deltaTime)
 {
 	if (UEngineInput::IsDown(VK_LEFT))
@@ -182,18 +217,7 @@ void ASelectGame::SelectingGame(float _deltaTime)
 		PtrSelectedBox->SetBlinkState(EBlinkState::SELECTED);
 		LocOrgSelectedBox = PtrSelectedBox->GetActorLocation();
 		DirMoveSelectedBox = (LocOrgSelectedBox.X < 0 ? 1 : -1);
-		State = SceneState::CHANGE_GAME_TO_RULE;
-	}
-}
-
-void ASelectGame::SwitchNoSelectedGameBoxes(bool _isVisible)
-{
-	for (int i = 0; i < SELECT_LIST_SIZE; ++i)
-	{
-		if (i != SelectedGameIdx)
-		{
-			SelectBoxes[i]->SetActive(_isVisible);
-		}
+		Fsm.ChangeState(ESceneState::CHANGE_GAME_TO_RULE);
 	}
 }
 
@@ -203,7 +227,7 @@ void ASelectGame::ChangingGameToRule(float _deltaTime)
 	if (LocOrgSelectedBox.X < 0 && loc.X > 0 || LocOrgSelectedBox.X > 0 && loc.X < 0)
 	{
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::RULE, 0, EBlinkState::BLINK);
-		State = SceneState::SELECT_RULE;
+		Fsm.ChangeState(ESceneState::SELECT_RULE);
 		return;
 	}
 	
@@ -217,7 +241,7 @@ void ASelectGame::ChangingRuleToGame(float _deltaTime)
 	{
 		PtrSelectedBox->SetActorLocation(LocOrgSelectedBox);
 		SwitchNoSelectedGameBoxes(true);
-		State = SceneState::SELECT_GAME;
+		Fsm.ChangeState(ESceneState::SELECT_GAME);
 		return;
 	}
 
@@ -239,14 +263,14 @@ void ASelectGame::SelectingRule(float _deltaTime)
 		PtrSelectedBox->SetBlinkState(EBlinkState::BLINK);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::RULE, -1);
 		DirMoveSelectedBox = (LocOrgSelectedBox.X < 0 ? -1 : 1);
-		State = SceneState::CHANGE_RULE_TO_GAME;
+		Fsm.ChangeState(ESceneState::CHANGE_RULE_TO_GAME);
 	}
 	else if (UEngineInput::IsDown(VK_RETURN) || UEngineInput::IsDown(VK_SPACE))
 	{
 		PtrSelectedBox->SetActiveToLayers(ELayer::CC, true);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::RULE, PtrSelectedBox->GetSelectedIdx(ELayer::RULE), EBlinkState::SELECTED);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::CC, 0, EBlinkState::BLINK);
-		State = SceneState::SELECT_CC;
+		Fsm.ChangeState(ESceneState::SELECT_CC);
 	}
 }
 
@@ -265,37 +289,33 @@ void ASelectGame::SelectingCC(float _deltaTime)
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::CC, -1);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::RULE, PtrSelectedBox->GetSelectedIdx(ELayer::RULE), EBlinkState::BLINK);
 		PtrSelectedBox->SetActiveToLayers(ELayer::CC, false);
-		State = SceneState::SELECT_RULE;
+		Fsm.ChangeState(ESceneState::SELECT_RULE);
 	}
 	else if (UEngineInput::IsDown(VK_RETURN) || UEngineInput::IsDown(VK_SPACE))
 	{
 		uint8_t idx = PtrSelectedBox->GetSelectedIdx(ELayer::CC);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::CC, PtrSelectedBox->GetSelectedIdx(ELayer::CC), EBlinkState::SELECTED);
 		RBtnOk->SetBlinkState(EBlinkState::BLINK);
-		State = SceneState::WAIT_OK;
+		Fsm.ChangeState(ESceneState::WAIT_OK);
 	}
 }
 
 void ASelectGame::WaitingOk(float _deltaTime)
 {
+	float rotY = RBtnOk->GetTransform().Rotation.Y;
+	if (rotY > 0)
+	{
+		RBtnOk->AddActorRotation({ 0.f, -180.f * _deltaTime, 0.f });
+	}
+
 	if (UEngineInput::IsDown(VK_ESCAPE))
 	{
 		RBtnOk->SetBlinkState(EBlinkState::OFF);
 		PtrSelectedBox->SetBlinkStateToLayer(ELayer::CC, PtrSelectedBox->GetSelectedIdx(ELayer::CC), EBlinkState::BLINK);
-		State = SceneState::SELECT_CC;
+		Fsm.ChangeState(ESceneState::SELECT_CC);
 	}
 	else if (UEngineInput::IsDown(VK_RETURN) || UEngineInput::IsDown(VK_SPACE))
 	{
-		State = SceneState::FINISH;
-	}
-}
-
-void ASelectGame::OnFinish()
-{
-	State = SceneState::END;
-
-	if (EndFuntion != nullptr)
-	{
-		EndFuntion();
+		Fsm.ChangeState(ESceneState::FINISH);
 	}
 }

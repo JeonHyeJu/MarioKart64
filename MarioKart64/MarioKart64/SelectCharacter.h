@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineBase/FSMStateManager.h>
 
 class USpriteRenderer;
 class ASelectCharacter : public AActor
@@ -33,23 +34,31 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
+	void InitCharacterImgs();
 	void RunBlink(int _idx);
-	void Move(int _idx);
-	void OffObjs();
+	void MoveSelectUI(int _idx);
+	void OnOffObjs(bool _isActive);
 
-	void Selecting(float _deltaTime);
-	void Moving(float _deltaTime);
-	void Waiting(float _deltaTime);
+	/* Fsm start functions */
+	void OnSelect();
+	void OnSelectMoveForward();
+	void OnSelectMoveBackward();
+	void OnWaitOk();
 	void OnFinish();
+
+	/* Fsm update functions */
+	void Selecting(float _deltaTime);
+	void MovingForward(float _deltaTime);
+	void MovingBackward(float _deltaTime);
+	void Waiting(float _deltaTime);
 
 	static const int SIZE = 8;
 	const int HALF_SIZE = SIZE / 2;
 	int SelectedIdx = 0;
-	const float MARGIN_Y = 80.f;	// Temp
+	const float MARGIN_Y = 50.f;
+	FVector SelectMargin = FVector::ZERO;
 
 	FVector LocOrg;
-	FVector LocOrgName;
-
 	FVector LocDst;
 
 	std::shared_ptr<USpriteRenderer> RBg = nullptr;
@@ -57,10 +66,9 @@ private:
 	std::shared_ptr<USpriteRenderer> RSelect = nullptr;
 	std::shared_ptr<USpriteRenderer> RPlayer1 = nullptr;
 	std::shared_ptr<class ASelectButton> BtnOk = nullptr;
-	std::shared_ptr<USpriteRenderer> ImageList[SIZE] = { nullptr, };
-	std::shared_ptr<USpriteRenderer> NameList[SIZE] = { nullptr, };
+	std::shared_ptr<class ACharacterAndName> ImageList[SIZE] = { nullptr, };
 
 	std::function<void()> EndFuntion;
 	
-	ESceneState SceneState = ESceneState::SELECT;
+	UFSMStateManager Fsm;
 };

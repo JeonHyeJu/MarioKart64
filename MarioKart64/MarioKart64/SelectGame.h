@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineBase/FSMStateManager.h>
 
 class ASelectButton;
 class AGameSelectBox;
@@ -7,7 +8,7 @@ class USpriteRenderer;
 class ASelectGame : public AActor
 {
 public:
-	enum class SceneState
+	enum class ESceneState
 	{
 		SELECT_GAME = 0,
 		CHANGE_GAME_TO_RULE,
@@ -38,17 +39,21 @@ protected:
 
 private:
 	void InitGameSelectBox();
-	void ChangingGameToRule(float _deltaTime);
-	void ChangingRuleToGame(float _deltaTime);
 	void SwitchNoSelectedGameBoxes(bool _isVisible);
 	void SetIndex(int _idx);
 
-	// Fsm
+	/* Fsm start function */
+	void OnSelectCC();
+	void OnWaitOk();
+	void OnFinish();
+
+	/* Fsm update function */
 	void SelectingGame(float _deltaTime);
+	void ChangingGameToRule(float _deltaTime);
+	void ChangingRuleToGame(float _deltaTime);
 	void SelectingRule(float _deltaTime);
 	void SelectingCC(float _deltaTime);
 	void WaitingOk(float _deltaTime);
-	void OnFinish();
 
 	std::shared_ptr<USpriteRenderer> RBackground = nullptr;
 	std::shared_ptr<USpriteRenderer> RTitle = nullptr;
@@ -66,7 +71,7 @@ private:
 	FVector LocOrgSelectedBox;
 	int DirMoveSelectedBox = 1;
 
-	SceneState State = SceneState::SELECT_GAME;
-
 	std::function<void()> EndFuntion;
+
+	UFSMStateManager Fsm;
 };

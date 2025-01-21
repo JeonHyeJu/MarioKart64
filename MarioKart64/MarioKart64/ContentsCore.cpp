@@ -65,8 +65,8 @@ void UContentsCore::InitSprites(std::string_view _path)
 
 void UContentsCore::EngineStart(UEngineInitData& _Data)
 {
-	_Data.WindowPos = { 100, 100 };
-	_Data.WindowSize = { 1280, 720 };
+	_Data.WindowPos = { 200, 20 };
+	_Data.WindowSize = { CGlobal::WINDOW_W, CGlobal::WINDOW_H };
 
 	InitTextures("Resources\\Sprites\\Characters");
 	InitTextures("Resources\\Sprites\\Background");
@@ -102,8 +102,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APawn, AUIPlay>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
-	//UEngineCore::OpenLevel("SelectLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	UEngineCore::OpenLevel("SelectLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/

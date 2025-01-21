@@ -39,6 +39,6 @@ private:
 	std::shared_ptr<class LineRenderer> Line;
 
 	int CollidedNavIndex = -1;
-	std::vector<NavData> NavDatas;
+	std::vector<SNavData> NavDatas;
 };
 

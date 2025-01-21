@@ -344,6 +344,12 @@
     <ClInclude Include="Driver.h">
       <Filter>Actor\PlayLevel</Filter>
     </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterAndName.h">
+      <Filter>Actor\SelectLevel\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -437,6 +443,12 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp">
       <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterAndName.cpp">
+      <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

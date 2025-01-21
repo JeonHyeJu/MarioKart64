@@ -12,8 +12,6 @@ UEngineMaterial::~UEngineMaterial()
 {
 }
 
-
-
 void UEngineMaterial::SetVertexShader(std::string_view _Name)
 {
 	VertexShader = UEngineVertexShader::Find<UEngineVertexShader>(_Name);
@@ -23,7 +21,6 @@ void UEngineMaterial::SetVertexShader(std::string_view _Name)
 		MSGASSERT("존재하지 않는 버텍스 쉐이더를 세팅하려고.");
 	}
 }
-
 
 void UEngineMaterial::SetPixelShader(std::string_view _Name)
 {

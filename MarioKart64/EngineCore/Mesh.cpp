@@ -24,5 +24,15 @@ std::shared_ptr<UMesh> UMesh::Create(std::string_view _Name, std::string_view _V
 	NewRes->VertexBuffer = UEngineVertexBuffer::Find<UEngineVertexBuffer>(_VertexBuffer);
 	NewRes->IndexBuffer = UEngineIndexBuffer::Find<UEngineIndexBuffer>(_IndexBuffer);
 
+	if (nullptr == NewRes->VertexBuffer)
+	{
+		MSGASSERT("존재하지 않는 버텍스 버퍼 입니다.");
+	}
+
+	if (nullptr == NewRes->IndexBuffer)
+	{
+		MSGASSERT("존재하지 않는 인덱스 버퍼 입니다.");
+	}
+
 	return NewRes;
 }

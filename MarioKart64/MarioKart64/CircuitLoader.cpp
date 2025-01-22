@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "CircuitLoader.h"
 #include "CGlobal.h"
+#include "GameData.h"
 #include <EngineCore/EngineVertex.h>
 #include <EngineCore/EngineVertexBuffer.h>
 #include <EngineCore/EngineIndexBuffer.h>
@@ -40,15 +41,14 @@ void CircuitLoader::Load(ECircuit _type, const std::map<std::string, ENavType>& 
 	FolderName = path.substr(0, idx);
 	FileName = path.substr(idx + 1, -1);
 
+	SRenderInfo::MapInfos.insert({ MapType, SMapInfo{} });	// Init
+
 	if (!LoadModel())
 	{
 		MSGASSERT("Obj파일 로딩에 실패했습니다.");
 	}
 
-	SMapInfo mapInfo;
-	mapInfo.RenderInfos = RenderInfos;	// Copy
-	SRenderInfo::MapInfos.insert({ MapType, mapInfo });	// Init
-
+	SRenderInfo::MapInfos.find(MapType)->second.RenderInfos = RenderInfos;	// Copy
 	InitNavMesh();
 
 	Reset();
@@ -181,47 +181,16 @@ void CircuitLoader::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		data.Vertecies = vertices;
 		data.FloorType = NavTextures.find(texName)->second;
 
-		// Temp
-		/*if (texName == "7EEAA53A_fix.png")
+		if (data.FloorType == ENavType::ROAD)
 		{
-			// Temp
-			std::vector<float4> temp;
-			temp.reserve(vertices.size());
-
-			const float RANGE_X = maxX - minX;
-			const float RANGE_Y = maxY - minY;
-			const float RANGE_Z = maxZ - minZ;
-			for (size_t i = 0, size = vertices.size(); i < size; ++i)
-			{
-				float4 num;
-				num.X = (vertices[i].POSITION.X - minX) / RANGE_X;
-				num.Y = (vertices[i].POSITION.Y - minY) / RANGE_Y;
-				num.Z = (vertices[i].POSITION.Z - minZ) / RANGE_Z;
-				temp.push_back(num);
-			}
-			GameData* pData = GameData::GetInstance();
-			pData->MapMinX = minX;
-			pData->MapMinY = minY;
-			pData->MapMinZ = minZ;
-			pData->MapMaxX = maxX;
-			pData->MapMaxY = maxY;
-			pData->MapMaxZ = maxZ;
-			pData->SetMapTiles(temp);
-
-			data.FloorType = ENavType::ROAD;
+			SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(MapType)->second.MapSizeInfo;
+			if (minX < refSize.Min.X) refSize.Min.X = minX;
+			if (minY < refSize.Min.Y) refSize.Min.Y = minY;
+			if (minZ < refSize.Min.Z) refSize.Min.Z = minZ;
+			if (maxX > refSize.Max.X) refSize.Max.X = maxX;
+			if (maxY > refSize.Max.Y) refSize.Max.Y = maxY;
+			if (maxZ > refSize.Max.Z) refSize.Max.Z = maxZ;
 		}
-		else if (texName == "922DEA6_c.png")
-		{
-			data.FloorType = ENavType::START_POINT;
-		}
-		else if (texName == "3A87458D_c.png")
-		{
-			data.FloorType = ENavType::BORDER;
-		}
-		else if (texName == "5B7CDDF2_fix.png")
-		{
-			data.FloorType = ENavType::FLATE_FASTER;
-		}*/
 
 		VertexNavDatas.push_back(data);
 		//RenderInfos.push_back(info);

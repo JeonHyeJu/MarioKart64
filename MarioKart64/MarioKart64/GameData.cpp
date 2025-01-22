@@ -99,16 +99,6 @@ EItemType GameData::GetItem(uint8_t _playerIdx)
 	return EItemType::NONE;
 }
 
-void GameData::SetMapTiles(const std::vector<float4>& _vec)
-{
-	MapTiles = _vec;
-}
-
-const std::vector<float4>& GameData::GetMapTiles() const
-{
-	return MapTiles;
-}
-
 void GameData::SetMaps(const std::vector<ECircuit>& _maps)
 {
 	Maps = _maps;
@@ -153,4 +143,14 @@ float4 GameData::GetPlayerRotation(uint8_t _playerIdx) const
 	}
 
 	return float4{ 0.f, 0.f, 0.f, 0.f };
+}
+
+void GameData::SetCurMap(ECircuit _type)
+{
+	CurMapType = _type;
+}
+
+ECircuit GameData::GetCurMap() const
+{
+	return CurMapType;
 }

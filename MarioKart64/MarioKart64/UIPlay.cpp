@@ -43,11 +43,21 @@ void AUIPlay::Tick(float _deltaTime)
 void AUIPlay::InitMinimap()
 {
 	GameData* gameData = GameData::GetInstance();
-	uint8_t mapIdx = gameData->GetMapIdx();
+	ECircuit type = gameData->GetCurMap();
+	int idx = 0;
 
 	Minimap = CreateWidget<UImageWidget>(-1);
 
-	Minimap->SetSprite("TrackIcons.png", 101);	// Temp
+	switch (type)
+	{
+	case ECircuit::LUIGI_RACEWAY:
+		idx = 91;
+		break;
+	case ECircuit::ROYAL_RACEWAY:
+		idx = 101;
+		break;
+	}
+	Minimap->SetSprite("TrackIcons.png", idx);
 	Minimap->SetAutoScaleRatio(3.f);
 	Minimap->SetWorldLocation({ 450, -250 });
 }
@@ -261,18 +271,21 @@ void AUIPlay::SetMinimapLoc()
 	float4 playerLoc = pData->GetMinimapLoc(0);
 	float4 playerRot = pData->GetPlayerRotation(0);
 
-	float scaleW = 85.f;
-	float scaleH = 80.f;
-	float subX = pData->MapMaxX - pData->MapMinX;
-	float subZ = pData->MapMaxZ - pData->MapMinZ;
-	float normX = (playerLoc.X - pData->MapMinX) / subX;
-	float normZ = (playerLoc.Z - pData->MapMinZ) / subZ;
+	float scaleW = pData->MapSizeInfo.Scale.X;
+	float scaleH = pData->MapSizeInfo.Scale.Y;
+	float subX = pData->MapSizeInfo.Max.X - pData->MapSizeInfo.Min.X;
+	float subZ = pData->MapSizeInfo.Max.Z - pData->MapSizeInfo.Min.Z;
+	float normX = (playerLoc.X - pData->MapSizeInfo.Min.X) / subX;
+	float normZ = (playerLoc.Z - pData->MapSizeInfo.Min.Z) / subZ;
 	float x = normX * scaleW;
 	float z = normZ * scaleH;
 	
 	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
 
 	FVector mapLoc = Minimap->GetWorldLocation();
-	MinimapLocs[0]->SetWorldLocation(mapLoc + FVector{ -36.f + x, -65.f + z });		// Temp
+	MinimapLocs[0]->SetWorldLocation(
+		mapLoc + 
+		FVector{ pData->MapSizeInfo.InitLoc.X + x, pData->MapSizeInfo.InitLoc.Z + z
+	});
 	MinimapLocs[0]->SetRotation(FVector{ 0.f, 0.f, -playerRot.Y });
 }

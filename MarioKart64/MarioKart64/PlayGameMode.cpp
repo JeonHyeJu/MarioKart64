@@ -25,6 +25,12 @@ APlayGameMode::APlayGameMode()
 	
 	TestItemBox = pLevel->SpawnActor<AItemBox>();
 	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
+
+	// for test
+	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
+	GameData::GetInstance()->SetPlayers(players);
+	GameData::GetInstance()->SetCurMap(ECircuit::LUIGI_RACEWAY);
+	//GameData::GetInstance()->SetCurMap(ECircuit::ROYAL_RACEWAY);
 }
 
 APlayGameMode::~APlayGameMode()
@@ -33,21 +39,31 @@ APlayGameMode::~APlayGameMode()
 
 void APlayGameMode::StartLuigiRaceway()
 {
-	MapPtr->Init(ECircuit::LUIGI_RACEWAY);
+	ECircuit type = GameData::GetInstance()->GetCurMap();
+	MapPtr->Init(type);
 	MapPtr->SetActorRelativeScale3D({ 3500.f, 3500.f, 3500.f });
 	MapPtr->SetActorLocation({ 0.0f, 0.f, 0.f });
 	MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
 	Player->SetActorLocation({ -400.0f, -60.0f, 300.0f });
+
+	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ 44.f, 0.f, -40.f };
+	GameData::GetInstance()->MapSizeInfo.Scale = FVector{ .0225f, .068f, 0.f };
 }
 
 void APlayGameMode::StartRoyalRaceway()
 {
-	MapPtr->Init(ECircuit::ROYAL_RACEWAY);
-	MapPtr->SetActorRelativeScale3D({ 2.f, 2.f, 2.f });
+	ECircuit type = GameData::GetInstance()->GetCurMap();
+	MapPtr->Init(type);
+	MapPtr->SetActorRelativeScale3D({ 4.f, 4.f, 4.f });
 	MapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
 	Player->SetActorLocation({ -50.0f, 100.0f, 700.0f });
+
+	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -8.f, 0.f, -60.f };
+	GameData::GetInstance()->MapSizeInfo.Scale = FVector{ 42.5f, 40.f, 0.f };
 }
 
 void APlayGameMode::BeginPlay()

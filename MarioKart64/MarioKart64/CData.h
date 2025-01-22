@@ -63,8 +63,10 @@ enum class EItemType
 
 struct SMapSizeInfo
 {
-	FVector Min = FVector::ZERO;
+	FVector Min = FVector{ 99999.f, 99999.f, 99999.f};
 	FVector Max = FVector::ZERO;
+	FVector InitLoc = FVector::ZERO;
+	FVector Scale = FVector::ZERO;
 };
 
 struct SPlayerInfo

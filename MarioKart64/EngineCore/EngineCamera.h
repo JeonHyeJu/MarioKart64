@@ -57,7 +57,7 @@ protected:
 private:
 	float Near = 1.0f;
 	float Far = 20000.0f;
-	float FOV = 60.0f;
+	float FOV = 50.0f;
 
 	EProjectionType ProjectionType = EProjectionType::Perspective;
 	D3D11_VIEWPORT ViewPortInfo;

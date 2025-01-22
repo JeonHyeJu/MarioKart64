@@ -17,7 +17,7 @@ ASkybox::ASkybox()
 	Front->SetAutoScaleRatio(10.f);
 	//Front->BillboardOn();	// TODO: ..?
 	Front->SetupAttachment(RootComponent);
-	Front->SetRelativeLocation({0.f, 0.f, 10000.f});
+	Front->SetRelativeLocation({0.f, 0.f, 20000.f});
 	Front->SetOrder(1);
 
 	/*Left = CreateDefaultSubObject<ColorRenderer>();

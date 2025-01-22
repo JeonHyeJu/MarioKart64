@@ -3,8 +3,9 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
+#include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
-#include "TestMap.h"
+#include "BaseMap.h"
 #include "GameData.h"
 #include "CData.h"
 #include "Item.h"
@@ -64,6 +65,8 @@ APlayer::APlayer()
 	}
 	LastIdx = TempRouteIdxInit.back();
 	TempRouteIdxInit.clear();
+
+	Camera = GetWorld()->GetMainCamera();
 }
 
 APlayer::~APlayer()
@@ -77,7 +80,7 @@ APlayer::~APlayer()
 
 void APlayer::BeginPlay()
 {
-	AActor::BeginPlay();
+	APawn::BeginPlay();
 }
 
 void APlayer::Tick(float _deltaTime)
@@ -110,14 +113,14 @@ void APlayer::Move(float _deltaTime)
 {
 	float gravityY = GRAVITY_FORCE * _deltaTime;
 	FTransform trfmPlayer = GetActorTransform();
-	FTransform trfmObj = TestMapPtr->GetActorTransform();
+	FTransform trfmObj = MapPtr->GetActorTransform();
 
 	/* for debug start */
 	if (UEngineInput::IsPress(VK_LCONTROL))
 	{
 		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
 		SetActorRotation({ 0.f, -110.f, 0.f });
-		TestMapPtr->SetNavIndex(-1);
+		MapPtr->SetNavIndex(-1);
 		return;
 	}
 	if (trfmPlayer.Location.Y < -1000)
@@ -125,7 +128,7 @@ void APlayer::Move(float _deltaTime)
 		Velocity = 0.f;
 		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
 		SetActorRotation({ 0.f, -110.f, 0.f });
-		TestMapPtr->SetNavIndex(-1);
+		MapPtr->SetNavIndex(-1);
 		return;
 	}
 	if (UEngineInput::IsPress(VK_LSHIFT))
@@ -134,7 +137,7 @@ void APlayer::Move(float _deltaTime)
 	}
 	/* for debug end */
 
-	int navIdx = TestMapPtr->GetNavIndex();
+	int navIdx = MapPtr->GetNavIndex();
 	if (navIdx == -1)
 	{
 		AddActorLocation({ 0.f, gravityY, 0.f });
@@ -229,7 +232,7 @@ void APlayer::Move(float _deltaTime)
 
 	if (isCollided)
 	{
-		TestMapPtr->SetDebugLocation(float4{ static_cast<float>(navIdx), 0.f, 0.f, 1.f });
+		MapPtr->SetDebugLocation(float4{ static_cast<float>(navIdx), 0.f, 0.f, 1.f });
 
 		// Temporary physics of slope
 		{
@@ -284,7 +287,7 @@ void APlayer::Move(float _deltaTime)
 		else
 		{
 			// Block
-			if (TestMapPtr->GetNavData(PrevIdx).FloorType != ENavType::FLATE_FASTER)
+			if (MapPtr->GetNavData(PrevIdx).FloorType != ENavType::FLATE_FASTER)
 			{
 				Velocity *= .5f;
 
@@ -312,6 +315,8 @@ void APlayer::Move(float _deltaTime)
 		}
 	}
 
+	Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
+
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
@@ -321,16 +326,21 @@ void APlayer::Move(float _deltaTime)
 	//OutputDebugStringA("------------------------------------------\n");
 }
 
-void APlayer::SetMap(class ATestMap* _ptr)
+void APlayer::SetMap(ABaseMap* _ptr)
 {
-	TestMapPtr = _ptr;
+	MapPtr = _ptr;
+}
+
+void APlayer::SetInitCameraLoc(const FVector& _loc)
+{
+	InitCameraLoc = _loc;
 }
 
 void APlayer::CheckLab()
 {
 	if (!IsTouchLastTriangle) return;
 
-	SNavData nd = TestMapPtr->GetCurNavData();
+	SNavData nd = MapPtr->GetCurNavData();
 	if (nd.FloorType == ENavType::START_POINT)
 	{
 		++Lab;
@@ -347,11 +357,11 @@ void APlayer::CheckLab()
 float APlayer::GetSlope()
 {
 	float slopeAngle = 0.f;
-	int idx = TestMapPtr->GetNavIndex();
+	int idx = MapPtr->GetNavIndex();
 	if (idx < 0) return 0.f;
 
-	SNavData nd = TestMapPtr->GetCurNavData();
-	const FTransform& trfmObj = TestMapPtr->GetTransform();
+	SNavData nd = MapPtr->GetCurNavData();
+	const FTransform& trfmObj = MapPtr->GetTransform();
 
 	FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
 	FVector vertex1 = nd.Vertex[1] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
@@ -400,7 +410,7 @@ void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
-		acc = -ACCELERATION + FRICTION_FORCE;
+		acc = -ACCELERATION;
 	}
 	else
 	{
@@ -442,10 +452,10 @@ void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 bool APlayer::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 {
 	bool isCollided = false;
-	_refIdx = TestMapPtr->GetNavIndex();
-	const FTransform& trfmObj = TestMapPtr->GetTransform();
+	_refIdx = MapPtr->GetNavIndex();
+	const FTransform& trfmObj = MapPtr->GetTransform();
 
-	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
+	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
 	SNavData nd = navDatas[_refIdx];
 	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
 	
@@ -465,7 +475,7 @@ bool APlayer::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 				PrevIdx = _refIdx;
 				PrevGroupIdx = navDatas[_refIdx].GroupIndex;
 
-				TestMapPtr->SetNavIndex(linkedIdx);
+				MapPtr->SetNavIndex(linkedIdx);
 				_refIdx = linkedIdx;
 				break;
 			}
@@ -478,19 +488,19 @@ bool APlayer::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 void APlayer::CheckCollisionOfAllMap()
 {
 	const FTransform& tfrmPlayer = GetTransform();
-	const std::vector<SNavData>& navDatas = TestMapPtr->GetNavData();
+	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
 
 	// TODO: Important.. This doesn't take into account children
 	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
 	{
-		const FTransform& trfmObj = TestMapPtr->GetTransform();
+		const FTransform& trfmObj = MapPtr->GetTransform();
 		const SNavData& nd = navDatas[i];
 
 		float fDist = 0.f;
 		bool isCollided = nd.Intersects(tfrmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 		if (isCollided)
 		{
-			TestMapPtr->SetNavIndex(nd.Index);
+			MapPtr->SetNavIndex(nd.Index);
 			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(nd.Index) + "\n").c_str());
 			break;
 		}

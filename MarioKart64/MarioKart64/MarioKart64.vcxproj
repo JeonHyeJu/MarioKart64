@@ -204,7 +204,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="ObjImporter.h">
+    <ClInclude Include="CircuitLoader.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -355,6 +355,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="CData.cpp" />
     <ClCompile Include="CharacterAndName.cpp">
       <SubType>
       </SubType>
@@ -400,7 +401,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="ObjImporter.cpp">
+    <ClCompile Include="CircuitLoader.cpp">
       <SubType>
       </SubType>
     </ClCompile>

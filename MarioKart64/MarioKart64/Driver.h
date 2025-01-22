@@ -16,7 +16,7 @@ public:
 	ADriver& operator=(const ADriver& _Other) = delete;
 	ADriver& operator=(ADriver&& _Other) noexcept = delete;
 
-	void SetMap(class ATestMap* _ptr);
+	void SetMap(class ABaseMap* _ptr);
 
 protected:
 	void BeginPlay() override;
@@ -68,7 +68,7 @@ private:
 
 	int PrevIdx = -1;
 	int PrevGroupIdx = -1;
-	ATestMap* TestMapPtr = nullptr;
+	ABaseMap* MapPtr = nullptr;
 
 	bool IsTouchLastTriangle = false;
 	int Lab = 0;

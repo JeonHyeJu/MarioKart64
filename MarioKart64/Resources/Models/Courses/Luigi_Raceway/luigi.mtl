@@ -274,7 +274,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:\VRML\luigi\Shape.163.bmp
+map_Kd Shape.163.png
 
 newmtl Shape_166
 Ns 0.000000

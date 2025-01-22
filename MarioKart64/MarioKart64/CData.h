@@ -36,6 +36,7 @@ enum class ENavType
 	START_POINT,
 	BORDER,
 	FLATE_FASTER,
+	WALL,
 	END
 };
 
@@ -58,6 +59,12 @@ enum class EItemType
 	FAKE_ITEMBOX,
 	BOWSER_SHELL,
 	SIZE
+};
+
+struct SMapSizeInfo
+{
+	FVector Min = FVector::ZERO;
+	FVector Max = FVector::ZERO;
 };
 
 struct SPlayerInfo
@@ -147,6 +154,24 @@ struct SNavData
 	{
 		LinkData.push_back(_other.Index);
 	}
+};
+
+struct SMapInfo;
+struct SRenderInfo
+{
+	std::string Name = "";	// Vertex buffer, Pixel buffer, Mesh
+	std::string MatName = "";	// Material
+	std::string TexName = "";	// Texture
+	float Z = 0.f;
+
+	static std::map<ECircuit, SMapInfo> MapInfos;
+};
+
+struct SMapInfo
+{
+	SMapSizeInfo MapSizeInfo;
+	std::vector<SRenderInfo> RenderInfos;
+	std::vector<SNavData> NavInfos;
 };
 
 struct FPhysics

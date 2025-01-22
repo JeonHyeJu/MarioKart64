@@ -14,11 +14,12 @@ public:
 	ATestMap& operator=(const ATestMap& _other) = delete;
 	ATestMap& operator=(ATestMap&& _other) noexcept = delete;
 
+	void Init(ECircuit _type);
 	const std::vector<SNavData>& GetNavData() const;
-	const SNavData& GetNavData(int _idx) const;
+	const SNavData& GetNavData(UINT _idx) const;
 	const SNavData& GetCurNavData() const;
-	int GetNavIndex() const;
-	void SetNavIndex(int _idx);
+	UINT GetNavIndex() const;
+	void SetNavIndex(UINT _idx);
 	void SetDebugLocation(const FVector& _loc);
 
 protected:
@@ -27,6 +28,12 @@ protected:
 
 private:
 	std::vector<FEngineVertex> Base;
-	std::vector<SNavData> BaseNav;
+	std::vector<SNavData> BaseNavs;
+	SNavData BaseNav;
 	std::shared_ptr<class CircuitRenderer> Renderer = nullptr;
+
+	std::vector<SNavData>* NavData = nullptr;
+
+	ECircuit MapType = ECircuit::END;
+	int CurNavIdx = -1;
 };

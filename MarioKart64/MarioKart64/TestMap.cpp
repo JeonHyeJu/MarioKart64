@@ -13,12 +13,20 @@ ATestMap::ATestMap()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
-
 	Renderer = CreateDefaultSubObject<CircuitRenderer>();
 	Renderer->SetOrder(0);
-	Renderer->Init(path);
 	Renderer->SetupAttachment(RootComponent);
+}
+
+void ATestMap::Init(ECircuit _type)
+{
+	MapType = ECircuit::ROYAL_RACEWAY;
+
+	Renderer->Init(MapType);
+	if (SRenderInfo::MapInfos.contains(_type))
+	{
+		NavData = &SRenderInfo::MapInfos.find(MapType)->second.NavInfos;
+	}
 }
 
 ATestMap::~ATestMap()
@@ -39,40 +47,35 @@ const std::vector<SNavData>& ATestMap::GetNavData() const
 {
 	if (Renderer == nullptr)
 	{
+		return BaseNavs;
+	}
+
+	return *NavData;
+}
+
+const SNavData& ATestMap::GetNavData(UINT _idx) const
+{
+	if (_idx >= NavData->size())
+	{
 		return BaseNav;
 	}
 
-	return Renderer->GetNavData();
-}
-
-const SNavData& ATestMap::GetNavData(int _idx) const
-{
-	return Renderer->GetNavData(_idx);
+	return (*NavData)[_idx];
 }
 
 const SNavData& ATestMap::GetCurNavData() const
 {
-	return Renderer->GetCurNavData();
+	return GetNavData(CurNavIdx);
 }
 
-int ATestMap::GetNavIndex() const
+UINT ATestMap::GetNavIndex() const
 {
-	if (Renderer == nullptr)
-	{
-		return -1;
-	}
-
-	return Renderer->GetNavIndex();
+	return CurNavIdx;
 }
 
-void ATestMap::SetNavIndex(int _idx)
+void ATestMap::SetNavIndex(UINT _idx)
 {
-	if (Renderer == nullptr)
-	{
-		return;
-	}
-
-	return Renderer->SetNavIndex(_idx);
+	CurNavIdx = _idx;
 }
 
 void ATestMap::SetDebugLocation(const FVector& _loc)

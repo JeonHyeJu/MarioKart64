@@ -11,11 +11,14 @@
 #include <EngineCore/EngineMaterial.h>
 #include <EngineCore/HUD.h>
 #include "CGlobal.h"
+#include "CircuitLoader.h"
 #include "TitleGameMode.h"
 #include "SelectGameMode.h"
 #include "PlayGameMode.h"
 #include "GameData.h"
 #include "UIPlay.h"
+#include "Player.h"
+#include "Driver.h"
 
 #include "TestGameMode.h"	// for test
 #include "TestVertex.h"	// for test
@@ -78,6 +81,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\TrackIcons");
 	InitTextures("Resources\\Sprites\\UI");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
+	InitTextures("Resources\\Models\\Courses\\Luigi_Raceway");
 	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
 	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
 
@@ -96,14 +100,16 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	InitGraphics();
 	InitTest();
+	InitObjs();
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
 	UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
-	UEngineCore::CreateLevel<APlayGameMode, APawn, AUIPlay>("PlayLevel");
+	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
+	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
 	//UEngineCore::OpenLevel("TitleLevel");
-	UEngineCore::OpenLevel("SelectLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("SelectLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -219,5 +225,35 @@ void UContentsCore::InitTest()
 		UEngineVertexBuffer::Create("Cube", SingleCube);
 		UEngineIndexBuffer::Create("Cube", indices);
 		UMesh::Create("Cube");
+	}
+}
+
+void UContentsCore::InitObjs()
+{
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "7EEAA53A_fix.png", ENavType::ROAD });
+		navTextures.insert({ "922DEA6_c.png", ENavType::START_POINT });
+		navTextures.insert({ "3A87458D_c.png", ENavType::BORDER });
+		navTextures.insert({ "5B7CDDF2_fix.png", ENavType::FLATE_FASTER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
+		loader.Load(ECircuit::ROYAL_RACEWAY, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "Shape.023.png", ENavType::ROAD });
+		navTextures.insert({ "Shape.022.png", ENavType::ROAD });
+		navTextures.insert({ "Shape.066.png", ENavType::START_POINT });
+		navTextures.insert({ "Shape.182.png", ENavType::BORDER });
+		navTextures.insert({ "Shape.007.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Luigi_Raceway", "luigi");
+		loader.Load(ECircuit::LUIGI_RACEWAY, navTextures, path);
 	}
 }

@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Balloons.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BaseMap.h">
       <SubType>
       </SubType>
@@ -181,6 +185,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameSelectBox.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="InstanceRectRenderer.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -347,6 +355,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Balloons.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BaseMap.cpp">
       <SubType>
       </SubType>
@@ -378,6 +390,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameSelectBox.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="InstanceRectRenderer.cpp">
       <SubType>
       </SubType>
     </ClCompile>

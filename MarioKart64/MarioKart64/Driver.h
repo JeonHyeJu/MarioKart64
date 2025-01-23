@@ -17,6 +17,7 @@ public:
 	ADriver& operator=(ADriver&& _Other) noexcept = delete;
 
 	void SetMap(class ABaseMap* _ptr);
+	void SetInitCameraLoc(const FVector& _loc);
 
 protected:
 	void BeginPlay() override;
@@ -79,8 +80,10 @@ private:
 
 	FVector PrevLoc = FVector::NONE;
 
-	// Temp
+	// Temp S
 	std::shared_ptr<class USpriteRenderer> DebugItem = nullptr;
+	std::vector<float> FutureAngles = { 0.f };
+	// Temp E
 
 	int DstRouteNavIdx = 1;
 	int CurRouteIdx = 0;
@@ -91,5 +94,8 @@ private:
 	};
 
 	int FutureNavIdx = -1;
+
+	FVector InitCameraLoc = FVector::ZERO;
+	std::shared_ptr<class ACameraActor> Camera = nullptr;
 };
 

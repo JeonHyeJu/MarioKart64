@@ -353,6 +353,12 @@
     <ClInclude Include="BaseMap.h">
       <Filter>Actor\PlayLevel</Filter>
     </ClInclude>
+    <ClInclude Include="Balloons.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceRectRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -457,6 +463,12 @@
       <Filter>Actor\PlayLevel</Filter>
     </ClCompile>
     <ClCompile Include="CData.cpp" />
+    <ClCompile Include="Balloons.cpp">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceRectRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

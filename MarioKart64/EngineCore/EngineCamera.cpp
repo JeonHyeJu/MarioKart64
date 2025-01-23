@@ -15,8 +15,9 @@ void UEngineCamera::BeginPlay()
 
 	ProjectionScale = Scale;
 
-	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
-	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
+	ViewPortInfo.Width = Scale.X;
+	ViewPortInfo.Height = Scale.Y;
+
 	ViewPortInfo.TopLeftX = 0.0f;
 	ViewPortInfo.TopLeftY = 0.0f;
 	ViewPortInfo.MinDepth = 0.0f;

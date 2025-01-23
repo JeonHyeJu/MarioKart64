@@ -11,14 +11,13 @@ ASkybox::ASkybox()
 
 	// TODO: check camera's value
 
-	Front = CreateDefaultSubObject<USpriteRenderer>();
-	//Front->SetTexture("PinkSky.png");
+	std::shared_ptr<USpriteRenderer> Front = CreateDefaultSubObject<USpriteRenderer>();
 	Front->SetSprite("Background", 0);
 	Front->SetAutoScaleRatio(10.f);
-	//Front->BillboardOn();	// TODO: ..?
+	//Front->BillboardOn();
 	Front->SetupAttachment(RootComponent);
 	Front->SetRelativeLocation({0.f, 0.f, 20000.f});
-	Front->SetOrder(1);
+	//Front->SetOrder(1);
 
 	/*Left = CreateDefaultSubObject<ColorRenderer>();
 	Left->SetupAttachment(RootComponent);

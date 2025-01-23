@@ -60,6 +60,7 @@ void AUIPlay::InitMinimap()
 	Minimap->SetSprite("TrackIcons.png", idx);
 	Minimap->SetAutoScaleRatio(3.f);
 	Minimap->SetWorldLocation({ 450, -250 });
+	MinimapSizeInfo = Minimap->GetRealScaleOfSprite();
 }
 
 void AUIPlay::InitPlayerRank()
@@ -271,14 +272,12 @@ void AUIPlay::SetMinimapLoc()
 	float4 playerLoc = pData->GetMinimapLoc(0);
 	float4 playerRot = pData->GetPlayerRotation(0);
 
-	float scaleW = pData->MapSizeInfo.Scale.X;
-	float scaleH = pData->MapSizeInfo.Scale.Y;
 	float subX = pData->MapSizeInfo.Max.X - pData->MapSizeInfo.Min.X;
 	float subZ = pData->MapSizeInfo.Max.Z - pData->MapSizeInfo.Min.Z;
 	float normX = (playerLoc.X - pData->MapSizeInfo.Min.X) / subX;
 	float normZ = (playerLoc.Z - pData->MapSizeInfo.Min.Z) / subZ;
-	float x = normX * scaleW;
-	float z = normZ * scaleH;
+	float x = normX * MinimapSizeInfo.X;
+	float z = normZ * MinimapSizeInfo.Y;
 	
 	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
 

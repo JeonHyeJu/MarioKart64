@@ -6,6 +6,7 @@
 #include "Skybox.h"
 #include "ItemBox.h"
 #include "GameData.h"
+#include "Balloons.h"
 #include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineCamera.h>
@@ -24,7 +25,12 @@ APlayGameMode::APlayGameMode()
 	MapPtr = pLevel->SpawnActor<ABaseMap>();
 	
 	TestItemBox = pLevel->SpawnActor<AItemBox>();
-	TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
+	TestItemBox->SetActorLocation({ -400.f, -125.f, 1000.f });
+	//TestItemBox->SetActorLocation({ 0.f, TestItemBox->SIZE * .75f, 1000.f });
+
+	// Temp
+	Balloons = pLevel->SpawnActor<ABalloons>();
+	Balloons->SetActorLocation(FVector{-400.f, 0.f, 500.f});
 
 	// for test
 	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
@@ -39,31 +45,39 @@ APlayGameMode::~APlayGameMode()
 
 void APlayGameMode::StartLuigiRaceway()
 {
+	const float SCALE = 3500.f;
 	ECircuit type = GameData::GetInstance()->GetCurMap();
 	MapPtr->Init(type);
-	MapPtr->SetActorRelativeScale3D({ 3500.f, 3500.f, 3500.f });
+	MapPtr->SetActorRelativeScale3D({ SCALE, SCALE, SCALE });
 	MapPtr->SetActorLocation({ 0.0f, 0.f, 0.f });
 	MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
 	Player->SetActorLocation({ -400.0f, -60.0f, 300.0f });
 
+	// Temp
+	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	refSize.Min *= SCALE;
+	refSize.Max *= SCALE;
 	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
-	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ 44.f, 0.f, -40.f };
-	GameData::GetInstance()->MapSizeInfo.Scale = FVector{ .0225f, .068f, 0.f };
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ 50.f, 0.f, -200.f };
 }
 
 void APlayGameMode::StartRoyalRaceway()
 {
+	const float SCALE = 4;
 	ECircuit type = GameData::GetInstance()->GetCurMap();
 	MapPtr->Init(type);
-	MapPtr->SetActorRelativeScale3D({ 4.f, 4.f, 4.f });
+	MapPtr->SetActorRelativeScale3D({ SCALE, SCALE, SCALE });
 	MapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
 	Player->SetActorLocation({ -50.0f, 100.0f, 700.0f });
 
+	// Temp
+	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	refSize.Min *= SCALE;
+	refSize.Max *= SCALE;
 	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
-	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -8.f, 0.f, -60.f };
-	GameData::GetInstance()->MapSizeInfo.Scale = FVector{ 42.5f, 40.f, 0.f };
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -90.f, 0.f, -80.f };
 }
 
 void APlayGameMode::BeginPlay()
@@ -74,18 +88,27 @@ void APlayGameMode::BeginPlay()
 	//Player = pLevel->GetMainPawn<ADriver>();
 	Player = pLevel->GetMainPawn<APlayer>();
 	
-	FVector initCamLoc = { 0.f, 100.f, -300.f };
 	Player->SetMap(MapPtr.get());
-	Player->SetInitCameraLoc(initCamLoc);
+	Player->SetInitCameraLoc(CameraInitLoc);
 
 	std::shared_ptr<ACameraActor> Camera = pLevel->GetMainCamera();
-	//Camera->GetCameraComponent()->SetZSort(1, true);
+	Camera->GetCameraComponent()->SetZSort(1, true);
 
-	Camera->SetActorLocation(initCamLoc);
+	Camera->AddActorLocation(CameraInitLoc);
+	//Camera->AddActorLocation(CameraInitLoc + CameraMoveLoc * CAM_MOVE_SCALAR);
 	Camera->AttachToActor(Player);
 
-	//StartRoyalRaceway();
-	StartLuigiRaceway();
+	// Temp
+	if (GameData::GetInstance()->GetCurMap() == ECircuit::LUIGI_RACEWAY)
+	{
+		StartLuigiRaceway();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
+	{
+		StartRoyalRaceway();
+	}
+
+	State = EState::START;
 }
 
 void APlayGameMode::Tick(float _deltaTime)
@@ -94,6 +117,43 @@ void APlayGameMode::Tick(float _deltaTime)
 
 	AActor::Tick(_deltaTime);
 
+	if (State == EState::START)
+	{
+		Starting(_deltaTime);
+	}
+	else if (State == EState::PLAY)
+	{
+		Playing(_deltaTime);
+	}
+}
+
+void APlayGameMode::Starting(float _deltaTime)
+{
+	Balloons->AddActorLocation({ 0.f, 20.f * _deltaTime, 0.f });
+
+	if (Balloons->GetActorLocation().Y > 100)
+	{
+		Balloons->Destroy();
+	}
+
+	// Temp
+	State = EState::PLAY;
+
+	/*std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
+
+	FVector camLoc = Camera->GetActorLocation();
+	if (camLoc.Y > CameraInitLoc.Y)
+	{
+		Camera->AddActorLocation(-CameraMoveLoc * _deltaTime);
+	}
+	else
+	{
+		State = EState::PLAY;
+	}*/
+}
+
+void APlayGameMode::Playing(float _deltaTime)
+{
 	// temp. for test
 	if (UEngineInput::IsPress('R'))
 	{
@@ -106,8 +166,10 @@ void APlayGameMode::Tick(float _deltaTime)
 
 	FVector loc = Player->GetActorLocation();
 	FVector rot = Player->GetTransform().Rotation;
-	GameData::GetInstance()->SetMinimapLoc(0, loc);
-	GameData::GetInstance()->SetPlayerRotation(0, rot);
-	//CheckCollision(_deltaTime);
-}
 
+	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
+
+	GameData* pData = GameData::GetInstance();
+	pData->SetMinimapLoc(0, loc);
+	pData->SetPlayerRotation(0, rot);
+}

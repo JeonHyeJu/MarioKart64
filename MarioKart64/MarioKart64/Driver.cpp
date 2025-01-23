@@ -2,6 +2,7 @@
 #include "Driver.h"
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/Collision.h>
 #include "LineRenderer.h"	// for test
@@ -70,6 +71,15 @@ ADriver::ADriver()
 		TempRouteIdx[TempRouteIdxInit[i]] = static_cast<int>(i);
 	}
 	TempRouteIdxInit.clear();
+
+	Camera = GetWorld()->GetMainCamera();
+
+	FutureAngles.reserve(40);
+	for (int i = 1; i < 36; ++i)
+	{
+		FutureAngles.push_back(i * 5.f);
+		FutureAngles.push_back(i * -5.f);
+	}
 }
 
 ADriver::~ADriver()
@@ -168,23 +178,21 @@ void ADriver::Move(float _deltaTime)
 	}
 
 	bool isCol = CheckCollision(futureDir + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
-	std::vector<float> tempAngles = { 0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120, 135, -135, 150, -150, 165, -165 };
 	if (isCol)
 	{
 		const SNavData& _nd = MapPtr->GetNavData(FutureNavIdx);
-			if (_nd.FloorType != ENavType::ROAD && _nd.FloorType != ENavType::START_POINT)
+		if (_nd.FloorType != ENavType::ROAD && _nd.FloorType != ENavType::START_POINT)
 		{
 			OutputDebugStringA("AAAAAAA\n");
 
 			bool isBreak = false;
-			for (int f = 300; f < 800; f += 50)
+			for (int f = 200; f < 1000; f += 50)
 			{
-				for (int i = 0; i < tempAngles.size(); ++i)
+				for (int i = 0; i < FutureAngles.size(); ++i)
 				{
 					FVector tempVec = dir * f;
 					tempVec.Y = -10.f;
-					float _angle = tempAngles[i];
-					//float _angle = angles[i] * _deltaTime;
+					float _angle = FutureAngles[i];
 					tempVec.RotationYDeg(_angle);
 
 					isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
@@ -218,14 +226,13 @@ void ADriver::Move(float _deltaTime)
 		OutputDebugStringA("BBBBBBB\n");
 
 		bool isBreak = false;
-		for (int f = 300; f < 800; f += 50)
+		for (int f = 200; f < 1000; f += 50)
 		{
-			for (int i = 0; i < tempAngles.size(); ++i)
+			for (int i = 0; i < FutureAngles.size(); ++i)
 			{
 				FVector tempVec = dir * f;
 				tempVec.Y = -10.f;
-				float _angle = tempAngles[i];
-				//float _angle = angles[i] * _deltaTime;
+				float _angle = FutureAngles[i];
 				tempVec.RotationYDeg(_angle);
 
 				isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
@@ -346,6 +353,8 @@ void ADriver::Move(float _deltaTime)
 
 	/* Test end */
 
+	Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
+
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
@@ -358,6 +367,11 @@ void ADriver::Move(float _deltaTime)
 void ADriver::SetMap(ABaseMap* _ptr)
 {
 	MapPtr = _ptr;
+}
+
+void ADriver::SetInitCameraLoc(const FVector& _loc)
+{
+	InitCameraLoc = _loc;
 }
 
 void ADriver::CheckLab()

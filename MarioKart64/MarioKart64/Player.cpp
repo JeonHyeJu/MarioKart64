@@ -67,6 +67,7 @@ APlayer::APlayer()
 	TempRouteIdxInit.clear();
 
 	Camera = GetWorld()->GetMainCamera();
+	TrainDatas.reserve(10000);
 }
 
 APlayer::~APlayer()
@@ -87,6 +88,8 @@ void APlayer::Tick(float _deltaTime)
 {
 	APawn::Tick(_deltaTime);
 
+	DirVTrain = 0;
+	DirHTrain = 0;
 	Move(_deltaTime);
 
 	/* for debug start */
@@ -97,6 +100,37 @@ void APlayer::Tick(float _deltaTime)
 		item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
 		item->SetDirection(GetActorForwardVector());
 	}
+	else if (UEngineInput::IsDown(VK_F8))
+	{
+		IsTraining = !IsTraining;
+
+		if (!IsTraining)
+		{
+			FILE* file;
+			fopen_s(&file, "train_data.txt", "a");
+
+			if (file != nullptr)
+			{
+				fwrite("[", 1, 1, file);
+				for (size_t i = 0, size = TrainDatas.size(); i < size; ++i)
+				{
+					std::string str = TrainDatas[i].ToString();
+					if (i < size - 1)
+					{
+						str += ",";
+					}
+					fwrite(str.c_str(), str.size(), 1, file);
+				}
+				TrainDatas.clear();
+				fwrite("]", 1, 1, file);
+				fclose(file);
+			}
+		}
+	}
+	else if (UEngineInput::IsDown(VK_F7))
+	{
+		IsReverseTrain = !IsReverseTrain;
+	}
 	/* for debug end */
 
 	if (IsPickingItem)
@@ -106,6 +140,40 @@ void APlayer::Tick(float _deltaTime)
 	else
 	{
 		CheckUsingItem(_deltaTime);
+	}
+
+	if (IsTraining)
+	{
+		static float elaspedSecTrain = 0.f;
+
+		elaspedSecTrain += _deltaTime;
+
+		if (elaspedSecTrain > .0001f)
+		{
+			elaspedSecTrain = 0.f;
+
+			GameData* pData = GameData::GetInstance();
+			FVector loc = GetActorLocation();
+
+			float subX = pData->MapSizeInfo.Max.X - pData->MapSizeInfo.Min.X;
+			float subZ = pData->MapSizeInfo.Max.Z - pData->MapSizeInfo.Min.Z;
+			float normX = (loc.X - pData->MapSizeInfo.Min.X) / subX;
+			float normZ = (loc.Z - pData->MapSizeInfo.Min.Z) / subZ;
+
+			TrainData data
+			{
+				pData->MapSizeInfo.InitLoc,
+				GetActorForwardVector(),
+				normX,
+				normZ,
+				GetTransform().Rotation.Y,
+				IsReverseTrain ? 1 : 0,
+				Velocity,
+				DirVTrain,
+				DirHTrain
+			};
+			TrainDatas.push_back(data);
+		}
 	}
 }
 
@@ -389,11 +457,13 @@ void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 {
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		_refRot = -100.f * _deltaTime;
+		DirHTrain = 1;
+		_refRot = -65.f * _deltaTime;
 	}
 	else if (UEngineInput::IsPress(VK_RIGHT))
 	{
-		_refRot = 100.f * _deltaTime;
+		DirHTrain = 2;
+		_refRot = 65.f * _deltaTime;
 	}
 	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
 }
@@ -406,10 +476,12 @@ void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 
 	if (UEngineInput::IsPress(VK_UP) || _isComputer)
 	{
+		DirVTrain = 1;
 		acc = ACCELERATION - FRICTION_FORCE;
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
+		DirVTrain = 2;
 		acc = -ACCELERATION;
 	}
 	else

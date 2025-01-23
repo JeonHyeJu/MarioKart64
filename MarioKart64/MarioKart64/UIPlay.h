@@ -65,6 +65,9 @@ private:
 
 	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
 
+	// Temp
+	FVector MinimapSizeInfo = FVector::ZERO;
+
 	const int RANK_1ST_SPRITE_IDX = 194;
 	const float RANK_MUL_COLOR = 0.05f;
 

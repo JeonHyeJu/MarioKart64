@@ -55,8 +55,8 @@ private:
 	const float MAX_TURN = 5.f;
 
 	const float WEIGHT = 50.f;
-	const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
-	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
+	const float ACCELERATION = WEIGHT * 5.f;
+	const float FRICTION_FORCE = WEIGHT * 2.f;
 	const float MAX_VELOCITY = 1000.f * 2;
 	const float GRAVITY_FORCE = -300.f;
 
@@ -91,5 +91,12 @@ private:
 
 	FVector InitCameraLoc = FVector::ZERO;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;
+
+	// For train
+	bool IsTraining = false;
+	int DirVTrain = 0;
+	int DirHTrain = 0;
+	bool IsReverseTrain = false;
+	std::vector<TrainData> TrainDatas;
 };
 

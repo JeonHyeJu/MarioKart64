@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
 #include <EngineCore/EngineVertexBuffer.h>
+#include <sstream>
 
 #define GRAVITY_ACC 9.8f
 
@@ -59,6 +60,34 @@ enum class EItemType
 	FAKE_ITEMBOX,
 	BOWSER_SHELL,
 	SIZE
+};
+
+struct TrainData
+{
+	FVector InitLoc = FVector::ZERO;
+	FVector Forward = FVector::ZERO;
+	float NormX = 0.f;
+	float NormZ = 0.f;
+	float RotY = 0.f;
+	int IsReverse = 0;
+	float Velocity = 0.f;
+	int DirV = 0;	// 0: None, 1: Forward, 2: Backward
+	int DirH = 0;	// 0: None, 1: Left, 2: Right
+
+	std::string ToString()
+	{
+		std::stringstream ss;
+		ss << "{\"initLoc\":[" << InitLoc.X << "," << InitLoc.Y << "],"
+			<< "\"forward\":[" << Forward.X << "," << Forward.Y << "," << Forward.Z << "],"
+			<< "\"normX\":" << NormX << ","
+			<< "\"normZ\":" << NormZ << ","
+			<< "\"rotY\":" << RotY << ","
+			<< "\"isReverse\":" << IsReverse << ","
+			<< "\"velocity\":" << Velocity << ","
+			<< "\"dirV\":" << DirV << ","
+			<< "\"dirH\":" << DirH << "}";
+		return ss.str();
+	}
 };
 
 struct SMapSizeInfo

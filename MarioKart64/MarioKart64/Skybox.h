@@ -18,5 +18,4 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
-	std::shared_ptr<USpriteRenderer> Front = nullptr;
 };

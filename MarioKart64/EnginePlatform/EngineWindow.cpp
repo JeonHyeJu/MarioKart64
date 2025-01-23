@@ -7,7 +7,12 @@ std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
 std::map<HWND, UEngineWindow*> UEngineWindow::AllWindows;
 std::function<bool(HWND, UINT, WPARAM, LPARAM)> UEngineWindow::CustomProc = nullptr;
 int WindowCount = 0;
-// bool UEngineWindow::LoopActive = true;
+int WheelDir = 0;
+
+int UEngineWindow::GetWheelDir()
+{
+    return WheelDir;
+}
 
 void UEngineWindow::SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> _CustomProc)
 {
@@ -35,6 +40,11 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
         EndPaint(hWnd, &ps);
+    }
+    break;
+    case WM_MOUSEWHEEL:
+    {
+        WheelDir = GET_WHEEL_DELTA_WPARAM(wParam);
     }
     break;
     case WM_SETFOCUS:
@@ -118,6 +128,8 @@ int UEngineWindow::WindowMessageLoop(std::function<void()> _StartFunction, std::
         }
 
         _FrameFunction();
+
+        WheelDir = 0;
     }
 
     if (nullptr != _EndFunction)
@@ -218,4 +230,35 @@ FVector UEngineWindow::GetMousePos()
     ScreenToClient(WindowHandle, &MousePoint);
 
     return FVector(MousePoint.x, MousePoint.y);
+}
+
+
+bool UEngineWindow::IsMouseScreenOut() const
+{
+    POINT MousePoint;
+
+    GetCursorPos(&MousePoint);
+    ScreenToClient(WindowHandle, &MousePoint);
+
+    if (0.0f > MousePoint.x)
+    {
+        return true;
+    }
+
+    if (0.0f > MousePoint.y)
+    {
+        return true;
+    }
+
+    if (WindowSize.X < MousePoint.x)
+    {
+        return true;
+    }
+
+    if (WindowSize.Y < MousePoint.y)
+    {
+        return true;
+    }
+
+    return false;
 }

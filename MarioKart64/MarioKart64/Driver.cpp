@@ -190,7 +190,7 @@ void ADriver::Move(float _deltaTime)
 			{
 				for (int i = 0; i < FutureAngles.size(); ++i)
 				{
-					FVector tempVec = dir * f;
+					FVector tempVec = dir * static_cast<float>(f);
 					tempVec.Y = -10.f;
 					float _angle = FutureAngles[i];
 					tempVec.RotationYDeg(_angle);
@@ -230,7 +230,7 @@ void ADriver::Move(float _deltaTime)
 		{
 			for (int i = 0; i < FutureAngles.size(); ++i)
 			{
-				FVector tempVec = dir * f;
+				FVector tempVec = dir * static_cast<float>(f);
 				tempVec.Y = -10.f;
 				float _angle = FutureAngles[i];
 				tempVec.RotationYDeg(_angle);

@@ -1,3 +1,5 @@
+#include "Transform.hlsli"
+
 struct EngineVertex
 {
 	float4 POSITION : POSITION;
@@ -14,43 +16,12 @@ struct VertexShaderOutPut
 	uint iInstance : SV_InstanceID;
 };
 
-struct FTransform
-{
-	float4 Scale;
-	float4 Rotation;
-	float4 Qut;
-	float4 Location;
-
-	float4 RelativeScale;
-	float4 RelativeRotation;
-	float4 RelativeQut;
-	float4 RelativeLocation;
-
-	float4 WorldScale;
-	float4 WorldRotation;
-	float4 WorldQuat;
-	float4 WorldLocation;
-
-	float4x4 ScaleMat;
-	float4x4 RotationMat;
-	float4x4 LocationMat;
-	float4x4 RevolveMat;
-	float4x4 ParentMat;
-	float4x4 LocalWorld;
-	float4x4 World;
-	float4x4 View;
-	float4x4 Projection;
-	float4x4 WVP;
-};
-
 struct FSpriteData
 {
 	float4 CuttingPos;
 	float4 CuttingSize;
 	float4 Pivot;
 };
-
-StructuredBuffer<FTransform> TransformBuffer : register(t0);
 
 StructuredBuffer<FSpriteData> SpriteDataBuffer : register(t1);
 

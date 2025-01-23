@@ -222,10 +222,10 @@ void APlayer::Move(float _deltaTime)
 	if (it != itEnd)
 	{
 		int _idx = it->second;
-		OutputDebugStringA(("navIdx: " + std::to_string(navIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
+		//OutputDebugStringA(("navIdx: " + std::to_string(navIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
 		if (CurRouteIdx > _idx)
 		{
-			OutputDebugStringA("REVERSE!!!!!!!\n");
+			//OutputDebugStringA("REVERSE!!!!!!!\n");
 		}
 		else if (CurRouteIdx < _idx)
 		{
@@ -240,7 +240,7 @@ void APlayer::Move(float _deltaTime)
 	static int tempPrevIdx = -1;
 	if (tempPrevIdx != navIdx)
 	{
-		OutputDebugStringA(("navIdx: " + std::to_string(navIdx) + "\n").c_str());
+		//OutputDebugStringA(("navIdx: " + std::to_string(navIdx) + "\n").c_str());
 		tempPrevIdx = navIdx;
 		FileTemp << std::to_string(navIdx) << ",";
 	}

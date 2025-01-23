@@ -174,6 +174,12 @@
     <ClInclude Include="EngineStructuredBuffer.h">
       <Filter>DirectX\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="LightActor.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -336,6 +342,12 @@
     <ClCompile Include="EngineStructuredBuffer.cpp">
       <Filter>DirectX\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LightActor.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -416,10 +428,19 @@
     <Filter Include="ThirdParty\FW1FontWrapper\Release">
       <UniqueIdentifier>{81a4d6f1-e438-493d-a4ad-b3dfaed387d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{614dfa92-c2ca-4d2f-82ec-6f14712cac09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectXTex\Inc\DirectXTex.inl">
       <Filter>ThirdParty\DirectXTex\Inc</Filter>
+    </None>
+    <None Include="..\EngineShader\Light.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\EngineShader\Transform.hlsli">
+      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -450,6 +471,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\EngineShader\EngineTargetMergeShader.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\EngineShader\EngineMeshLightShader.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

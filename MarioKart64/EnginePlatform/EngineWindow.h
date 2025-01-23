@@ -44,11 +44,14 @@ public:
 		LoopActive = false;
 	}
 
+	ENGINEAPI static int GetWheelDir();
+
 	ENGINEAPI static bool IsApplicationOn()
 	{
 		return LoopActive;
 	}
 
+	ENGINEAPI bool IsMouseScreenOut() const;
 
 	ENGINEAPI HWND GetWindowHandle() const
 	{

@@ -31,6 +31,28 @@ public:
 		return NewLevel;
 	}
 
+	template<typename GameModeType, typename MainPawnType, typename HUDType>
+	static void ResetLevel(std::string_view _LevelName)
+	{
+		std::string UpperName = UEngineString::ToUpper(_LevelName);
+
+		if (false == IsCurLevel(_LevelName))
+		{
+			CreateLevel<GameModeType, MainPawnType, HUDType>(UpperName);
+		}
+		else
+		{
+			std::shared_ptr<class ULevel> NextFrameLevel = ReadyToNextLevel(_LevelName);
+			NextFrameLevel = CreateLevel<GameModeType, MainPawnType, HUDType>(UpperName);
+			SetNextLevel(NextFrameLevel);
+		}
+	}
+
+	ENGINEAPI static bool IsCurLevel(std::string_view _LevelName);
+	ENGINEAPI static std::shared_ptr<class ULevel> ReadyToNextLevel(std::string_view _LevelName);
+	ENGINEAPI static void SetNextLevel(std::shared_ptr<class ULevel> _NextLevel);
+	static void DestroyLevel(std::string_view _LevelName);
+
 	ENGINEAPI static void OpenLevel(std::string_view _Name);
 
 
@@ -82,6 +104,7 @@ private:
 	std::map<std::string, std::shared_ptr<class ULevel>> LevelMap;
 	std::shared_ptr<class ULevel> CurLevel;
 	std::shared_ptr<class ULevel> NextLevel;
+	bool IsCurLevelReset = false;
 
 	ENGINEAPI static void SetGameInstance(std::shared_ptr<UGameInstance> _Inst);
 

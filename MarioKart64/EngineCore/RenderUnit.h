@@ -10,8 +10,8 @@ public:
 	URenderUnit();
 	~URenderUnit();
 
-	UTransformObject* TransformObject = nullptr;
-	URenderer* ParentRenderer = nullptr;
+	class UTransformObject* TransformObject = nullptr;
+	class URenderer* ParentRenderer = nullptr;
 
 	std::shared_ptr<UMesh> Mesh;
 	std::shared_ptr<UEngineMaterial> Material;

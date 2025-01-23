@@ -41,6 +41,13 @@ public:
 
 	ENGINEAPI FrameAnimation* FindAnimation(std::string_view _AnimationName);
 
+private:
+	int CurIndex = 0;
+	float CurAnimationSpeed = 1.0f;
+	FrameAnimation* CurAnimation = nullptr;
+	std::map<std::string, FrameAnimation> FrameAnimations;
+
+public:
 	ENGINEAPI UImageWidget();
 	ENGINEAPI ~UImageWidget();
 
@@ -78,11 +85,6 @@ public:
 protected:
 
 private:
-	int CurIndex = 0;
-	float CurAnimationSpeed = 1.0f;
-	FrameAnimation* CurAnimation = nullptr;
-	std::map<std::string, FrameAnimation> FrameAnimations;
-
 	bool IsAutoScale = true;
 	float AutoScaleRatio = 1.0f;
 	class UEngineSprite* Sprite = nullptr;

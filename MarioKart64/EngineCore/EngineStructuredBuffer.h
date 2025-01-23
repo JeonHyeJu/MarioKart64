@@ -33,6 +33,6 @@ private:
 	UINT DataSize = 0;
 	UINT DataCount = 0;
 
-	ID3D11ShaderResourceView* SRV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr;
 };
 

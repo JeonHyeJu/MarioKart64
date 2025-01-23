@@ -419,4 +419,12 @@ void UEngineGraphicDevice::MaterialInit()
 		Mat->SetDepthStencilState("TargetMerge");
 	}
 
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("LightMesh");
+		Mat->SetVertexShader("EngineMeshLightShader.fx");
+		Mat->SetPixelShader("EngineMeshLightShader.fx");
+	}
+
+
+
 }

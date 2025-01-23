@@ -86,6 +86,11 @@ public:
 		return Transform.WorldLocation;
 	}
 	
+	FVector GetWorldForwardVector()
+	{
+		return Transform.GetWorldFoward();
+	}
+	
 	const FTransform& GetTransform() const
 	{
 		return Transform;

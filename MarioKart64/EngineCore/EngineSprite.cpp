@@ -11,6 +11,44 @@ UEngineSprite::~UEngineSprite()
 {
 }
 
+std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToCount(std::string_view _Name, int X, int Y, FVector Pivot)
+{
+	std::string UpperName = UEngineString::ToUpper(_Name);
+
+
+	std::shared_ptr<UEngineSprite> NewRes = std::make_shared<UEngineSprite>();
+	PushRes<UEngineSprite>(NewRes, _Name, "");
+
+	std::shared_ptr<UEngineTexture> Texture = UEngineTexture::Find<UEngineTexture>(UpperName);
+
+	if (nullptr == Texture)
+	{
+		MSGASSERT("텍스처를 먼저 로드하고 폴더 스프라이트를 만들어 주세요." + UpperName);
+		return nullptr;
+	}
+
+	FVector Scale = { 1.0f / X, 1.0f / Y };
+	FVector StartPos = { 0.0f, 0.0f };
+
+	for (size_t y = 0; y < Y; y++)
+	{
+		for (size_t x = 0; x < X; x++)
+		{
+			NewRes->SpriteTexture.push_back(Texture.get());
+			FSpriteData SpriteData;
+			SpriteData.CuttingPos = StartPos;
+			SpriteData.CuttingSize = Scale;
+			SpriteData.Pivot = Pivot;
+			NewRes->SpriteDatas.push_back(SpriteData);
+			StartPos.X += Scale.X;
+		}
+		StartPos.X = 0.0f;
+		StartPos.Y += Scale.Y;
+	}
+
+	return NewRes;
+}
+
 std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToFolder(std::string_view _Name, std::string_view _Path)
 {
 	UEngineDirectory Dir = _Path;

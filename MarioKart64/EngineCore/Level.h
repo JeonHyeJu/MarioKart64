@@ -2,11 +2,14 @@
 
 #include <EngineBase/Object.h>
 #include <EngineBase/EngineDebug.h>
+#include "Light.h"
 
 class ULevel : public UObject
 {
+	friend class URenderUnit;
 	friend class UCollision;
 	friend class UEngineCore;
+	friend class ULight;
 
 public:
 	ENGINEAPI ULevel();
@@ -121,6 +124,8 @@ public:
 	ENGINEAPI void CreateCollisionProfile(std::string_view _ProfileName);
 	ENGINEAPI void LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName);
 
+	ENGINEAPI void PushLight(std::shared_ptr<class ULight> _Light);
+
 // #ifdef _DEBUG
 	template<typename ConvertType>
 	ENGINEAPI std::list<std::shared_ptr<ConvertType>> GetAllActorListByClass()
@@ -172,10 +177,19 @@ private:
 
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
 	std::shared_ptr<class UEngineRenderTarget> LastRenderTarget;
+
+	std::vector<std::shared_ptr<class ULight>> Lights;
+	FLightDatas LightDatas;
+
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> CheckCollisions;
 	std::map<std::string, std::list<std::string>> CollisionLinks;
 
 	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD);
+
+	FLightDatas& GetLightDatasRef()
+	{
+		return LightDatas;
+	}
 };
 

@@ -107,7 +107,7 @@ void APlayer::Tick(float _deltaTime)
 		if (!IsTraining)
 		{
 			FILE* file;
-			fopen_s(&file, "train_data.txt", "a");
+			fopen_s(&file, "train_data_.txt", "a");
 
 			if (file != nullptr)
 			{

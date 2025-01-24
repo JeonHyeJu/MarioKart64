@@ -339,7 +339,7 @@
       <Filter>HUD</Filter>
     </ClInclude>
     <ClInclude Include="GameData.h">
-      <Filter>GameInstance</Filter>
+      <Filter>GameData</Filter>
     </ClInclude>
     <ClInclude Include="Driver.h">
       <Filter>Actor\PlayLevel</Filter>
@@ -360,6 +360,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="ShrinkEffect.h">
+      <Filter>Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpandEffect.h">
       <Filter>Effects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -451,7 +454,7 @@
       <Filter>HUD</Filter>
     </ClCompile>
     <ClCompile Include="GameData.cpp">
-      <Filter>GameInstance</Filter>
+      <Filter>GameData</Filter>
     </ClCompile>
     <ClCompile Include="Driver.cpp">
       <Filter>Actor\PlayLevel</Filter>
@@ -473,6 +476,9 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="ShrinkEffect.cpp">
+      <Filter>Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpandEffect.cpp">
       <Filter>Effects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -540,11 +546,11 @@
     <Filter Include="HUD">
       <UniqueIdentifier>{784b31d6-7bf2-443e-b649-121e26f12971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameInstance">
-      <UniqueIdentifier>{081fe426-e4a9-49d4-8bd1-168584caa067}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Effects">
       <UniqueIdentifier>{eef4481e-aceb-4bda-8e42-a2adb314764a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameData">
+      <UniqueIdentifier>{081fe426-e4a9-49d4-8bd1-168584caa067}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -603,6 +609,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shaders\ShrinkEffect.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\ExpandEffect.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

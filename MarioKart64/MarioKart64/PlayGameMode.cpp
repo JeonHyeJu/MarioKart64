@@ -8,6 +8,7 @@
 #include "GameData.h"
 #include "Balloons.h"
 #include "ShrinkEffect.h"
+#include "ExpandEffect.h"
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineRenderTarget.h>
@@ -112,8 +113,10 @@ void APlayGameMode::BeginPlay()
 
 	// Add effect
 	{
-		UEngineRenderTarget* lastTarget = GetWorld()->GetLastRenderTarget();
-		lastTarget->AddEffect<FxShrinkEffect>();
+		UEngineRenderTarget* target = Camera->GetCameraComponent()->GetCameraTarget();
+		//UEngineRenderTarget* target = GetWorld()->GetLastRenderTarget();
+		//target->AddEffect<FxShrinkEffect>();
+		target->AddEffect<FxExpandEffect>();
 
 		/*std::shared_ptr<UPostEffect> Effect = lastTarget->GetPostEffect(0);
 		Effect->IsActive = false;*/

@@ -176,6 +176,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Driver.h" />
+    <ClInclude Include="ExpandEffect.h" />
     <ClInclude Include="Fade.h">
       <SubType>
       </SubType>
@@ -385,6 +386,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="ExpandEffect.cpp" />
     <ClCompile Include="Fade.cpp">
       <SubType>
       </SubType>
@@ -508,6 +510,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shaders\ColorShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\ExpandEffect.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

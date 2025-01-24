@@ -150,30 +150,46 @@ void UContentsCore::InitGraphics()
 			UEngineShader::ReflectionCompile(shaderFiles[i]);
 		}
 
-		std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SHADER_NAME);
-		std::shared_ptr<UEngineMaterial> matSprite = UEngineMaterial::Create(CGlobal::OBJ_SPRITE_SHADER_NAME);
-		std::shared_ptr<UEngineMaterial> matSky = UEngineMaterial::Create(CGlobal::OBJ_SKY_SHADER_NAME);
-		std::shared_ptr<UEngineMaterial> matLine = UEngineMaterial::Create(CGlobal::OBJ_LINE_SHADER_NAME);
-		std::shared_ptr<UEngineMaterial> matShirnkFx = UEngineMaterial::Create(CGlobal::SHRINK_EFFECT);
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SHADER_NAME);
+			mat->SetRasterizerState("CullBack");
+			mat->SetVertexShader("VertexShader.fx");
+			mat->SetPixelShader("PixelShader.fx");
+		}
 
-		mat->SetRasterizerState("CullBack");
-		mat->SetVertexShader("VertexShader.fx");
-		mat->SetPixelShader("PixelShader.fx");
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SPRITE_SHADER_NAME);
+			mat->SetVertexShader("VertexShader.fx");
+			mat->SetPixelShader("PixelShader.fx");
+		}
 
-		matSprite->SetVertexShader("VertexShader.fx");
-		matSprite->SetPixelShader("PixelShader.fx");
-
-		matSky->SetVertexShader("ColorShader.fx");
-		matSky->SetPixelShader("ColorShader.fx");
-		//matSky->SetRasterizerState("CullBack");
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_SKY_SHADER_NAME);
+			mat->SetVertexShader("ColorShader.fx");
+			mat->SetPixelShader("ColorShader.fx");
+			//mat->SetRasterizerState("CullBack");
+		}
 		
-		matLine->SetVertexShader("ColorShader.fx");
-		matLine->SetPixelShader("ColorShader.fx");
-		matLine->SetTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::OBJ_LINE_SHADER_NAME);
+			mat->SetVertexShader("ColorShader.fx");
+			mat->SetPixelShader("ColorShader.fx");
+			mat->SetTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+		}
 
-		matShirnkFx->SetVertexShader("ShrinkEffect.fx");
-		matShirnkFx->SetPixelShader("ShrinkEffect.fx");
-		matShirnkFx->SetDepthStencilState("ALWAYS");
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::SHRINK_EFFECT);
+			mat->SetVertexShader("ShrinkEffect.fx");
+			mat->SetPixelShader("ShrinkEffect.fx");
+			mat->SetDepthStencilState("ALWAYS");
+		}
+
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::EXPAND_EFFECT);
+			mat->SetVertexShader("ExpandEffect.fx");
+			mat->SetPixelShader("ExpandEffect.fx");
+			mat->SetDepthStencilState("ALWAYS");
+		}
 	}
 }
 

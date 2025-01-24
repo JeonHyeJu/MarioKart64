@@ -119,3 +119,8 @@ void UEngineCamera::CalculateViewAndProjection()
 		break;
 	}
 }
+
+UEngineRenderTarget* UEngineCamera::GetCameraTarget()
+{
+	return CameraTarget.get();
+}

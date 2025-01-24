@@ -36,7 +36,7 @@ ULevel::ULevel()
 
 	LastRenderTarget = std::make_shared<UEngineRenderTarget>();
 	LastRenderTarget->CreateTarget(UEngineCore::GetScreenScale());
-	LastRenderTarget->SetClearColor({0.0f, 0.0f, 0.0f, 0.0f});
+	LastRenderTarget->SetClearColor({0.0f, 0.0f, 0.0f, 1.0f});
 	LastRenderTarget->CreateDepth();
 }
 

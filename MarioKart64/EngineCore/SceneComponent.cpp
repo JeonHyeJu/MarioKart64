@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "SceneComponent.h"
+#include <EngineCore/EngineCamera.h>	// Temp
 
 USceneComponent::USceneComponent()
 {
@@ -16,6 +17,13 @@ void USceneComponent::BeginPlay()
 	for (UTransformObject* Child : Childs)
 	{
 		USceneComponent* SceneChild = dynamic_cast<USceneComponent*>(Child);
+
+		// Temp
+		UEngineCamera* cam = dynamic_cast<UEngineCamera*>(SceneChild);
+		if (cam != nullptr)
+		{
+			continue;
+		}
 
 		SceneChild->BeginPlay();
 	}

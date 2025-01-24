@@ -11,6 +11,7 @@ public:
 	static const char* OBJ_SKY_SHADER_NAME;
 	static const char* OBJ_LINE_SHADER_NAME;
 	static const char* SHRINK_EFFECT;
+	static const char* EXPAND_EFFECT;
 	static const int ALL_ITEM_SIZE;
 	static const int WINDOW_W;
 	static const int WINDOW_H;

@@ -51,10 +51,7 @@ public:
 
 	ENGINEAPI void Release(float _DeltaTime);
 
-	UEngineRenderTarget* GetCameraTarget()
-	{
-		return CameraTarget.get();
-	}
+	ENGINEAPI UEngineRenderTarget* GetCameraTarget();
 
 
 protected:

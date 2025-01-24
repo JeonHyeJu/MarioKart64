@@ -82,21 +82,20 @@ public:
 	void AddEffect()
 	{
 		std::shared_ptr<EffectType> NewEffect = std::make_shared<EffectType>();
-
 		std::shared_ptr<UPostEffect> PostEffect = std::dynamic_pointer_cast<UPostEffect>(NewEffect);
 
 		PostEffect->ResultTarget = this;
 		PostEffect->Init();
-		PosEffects.push_back(NewEffect);
+		PostEffects.push_back(PostEffect);
 	}
 
 	void Effect(UEngineCamera* _Camera, float _DeltaTime);
 	std::shared_ptr<UPostEffect> GetPostEffect(int _Index)
 	{
-		return PosEffects[_Index];
+		return PostEffects[_Index];
 	}
 
 private:
-	std::vector<std::shared_ptr<UPostEffect>> PosEffects;
+	std::vector<std::shared_ptr<UPostEffect>> PostEffects;
 };
 

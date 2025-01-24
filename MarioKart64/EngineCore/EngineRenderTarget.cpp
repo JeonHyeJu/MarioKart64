@@ -147,7 +147,8 @@ void UEngineRenderTarget::MergeTo(std::shared_ptr<UEngineRenderTarget> _Target)
 
 void UEngineRenderTarget::Effect(UEngineCamera* _Camera, float _DeltaTime)
 {
-    for (std::shared_ptr<UPostEffect>& Effect : PosEffects)
+    this;
+    for (std::shared_ptr<UPostEffect>& Effect : PostEffects)
     {
         if (false == Effect->IsActive)
         {

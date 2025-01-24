@@ -12,48 +12,47 @@ struct VertexShaderOutPut
 	float4 UV : TEXCOORD;
 };
 
-VertexShaderOutPut ShrinkEffect_VS(FEngineVertex _Vertex)
+VertexShaderOutPut ExpandEffect_VS(FEngineVertex _Vertex)
 {
 	VertexShaderOutPut OutPut;
 	OutPut.UV = _Vertex.UV;
 	OutPut.SVPOSITION = _Vertex.POSITION;
 	
 	float ATime = pow(AccTime, 3);
-    const float INIT_S = -4.f;
-    const float INIT_L = 5.f;
+    const float INIT_S = -3.f;
+    const float INIT_L = 4.f;
 	
-	if (0.5f < OutPut.UV.x)
-	{
-		OutPut.UV.x += ATime;
-        if (OutPut.UV.x > INIT_L)
+    if (0.5f > OutPut.UV.x)
+    {
+        OutPut.UV.x = INIT_S + ATime;
+        if (OutPut.UV.x > 0)
         {
-            OutPut.UV.x = INIT_L;
+            OutPut.UV.x = 0.f;
         }
-
     }
-	else if (0.5f > OutPut.UV.x)
-	{
-		OutPut.UV.x -= ATime;
-        if (OutPut.UV.x < INIT_S)
+    else if (0.5f < OutPut.UV.x)
+    {
+        OutPut.UV.x = INIT_L - ATime;
+        if (OutPut.UV.x < 1)
         {
-            OutPut.UV.x = INIT_S;
+            OutPut.UV.x = 1.f;
         }
     }
 	
-    if (0.5f < OutPut.UV.y)
+    if (0.5f > OutPut.UV.y)
     {
-        OutPut.UV.y += ATime;
-        if (OutPut.UV.y > INIT_L)
+        OutPut.UV.y = INIT_S + ATime;
+        if (OutPut.UV.y > 0)
         {
-            OutPut.UV.y = INIT_L;
+            OutPut.UV.y = 0.f;
         }
     }
-    else if (0.5f > OutPut.UV.y)
+    else if (0.5f < OutPut.UV.y)
     {
-        OutPut.UV.y -= ATime;
-        if (OutPut.UV.y < INIT_S)
+        OutPut.UV.y = INIT_L - ATime;
+        if (OutPut.UV.y < 1)
         {
-            OutPut.UV.y = INIT_S;
+            OutPut.UV.y = 1.f;
         }
     }
 	
@@ -63,7 +62,7 @@ VertexShaderOutPut ShrinkEffect_VS(FEngineVertex _Vertex)
 Texture2D ImageTexture : register(t0);
 SamplerState ImageSampler : register(s0);
 
-float4 ShrinkEffect_PS(VertexShaderOutPut _Vertex) : SV_Target0
+float4 ExpandEffect_PS(VertexShaderOutPut _Vertex) : SV_Target0
 {
     if (_Vertex.UV.x < 0 || _Vertex.UV.x > 1.0f)
 	{

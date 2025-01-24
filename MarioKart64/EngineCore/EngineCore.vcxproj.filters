@@ -180,6 +180,7 @@
     <ClInclude Include="Light.h">
       <Filter>Light</Filter>
     </ClInclude>
+    <ClInclude Include="EngineStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineCore.cpp" />
@@ -348,6 +349,7 @@
     <ClCompile Include="LightActor.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="EngineStruct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -440,6 +442,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="..\EngineShader\Transform.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\EngineShader\RenderBaseData.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

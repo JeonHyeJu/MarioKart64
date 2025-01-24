@@ -7,9 +7,11 @@
 #include "ItemBox.h"
 #include "GameData.h"
 #include "Balloons.h"
+#include "ShrinkEffect.h"
 #include <EngineCore/CameraActor.h>
-#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineCamera.h>
+#include <EngineCore/EngineRenderTarget.h>
+#include <EnginePlatform/EngineInput.h>
 #include <EngineBase/EngineMath.h>
 
 APlayGameMode::APlayGameMode()
@@ -106,6 +108,15 @@ void APlayGameMode::BeginPlay()
 	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
 	{
 		StartRoyalRaceway();
+	}
+
+	// Add effect
+	{
+		UEngineRenderTarget* lastTarget = GetWorld()->GetLastRenderTarget();
+		lastTarget->AddEffect<FxShrinkEffect>();
+
+		/*std::shared_ptr<UPostEffect> Effect = lastTarget->GetPostEffect(0);
+		Effect->IsActive = false;*/
 	}
 
 	State = EState::START;

@@ -167,9 +167,18 @@ void ULevel::Render(float _DeltaTime)
 		MSGASSERT("UI카메라가 존재하지 않습니다. 엔진 오류입니다. UI카메라를 제작해주세요.");
 	}
 	
-	Cameras[static_cast<int>(EEngineCameraType::MainCamera)]->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
-	Cameras[static_cast<int>(EEngineCameraType::UICamera)]->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
+	for (std::pair<const int, std::shared_ptr<class ACameraActor>>& Pair : Cameras)
+	{
+		Pair.second->GetCameraComponent()->CameraTarget->Effect(nullptr, _DeltaTime);
+	}
 
+	for (std::pair<const int, std::shared_ptr<class ACameraActor>>& Pair : Cameras)
+	{
+		Pair.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
+	}
+
+	LastRenderTarget->Effect(nullptr, _DeltaTime);
+	
 	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
 	LastRenderTarget->MergeTo(BackBuffer);
 

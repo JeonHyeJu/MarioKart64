@@ -3,12 +3,13 @@
 #include "Mesh.h"
 #include "EngineMaterial.h"
 #include "EngineEnums.h"
+#include "EngineStruct.h"
 
 class URenderUnit
 {
 public:
-	URenderUnit();
-	~URenderUnit();
+	ENGINEAPI URenderUnit();
+	ENGINEAPI ~URenderUnit();
 
 	class UTransformObject* TransformObject = nullptr;
 	class URenderer* ParentRenderer = nullptr;
@@ -17,6 +18,8 @@ public:
 	std::shared_ptr<UEngineMaterial> Material;
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut;
+
+	FRenderBaseData Data;
 
 	ENGINEAPI void SetMesh(std::string_view _Name);
 	ENGINEAPI void SetMaterial(std::string_view _Name);

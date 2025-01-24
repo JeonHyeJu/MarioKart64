@@ -359,6 +359,9 @@
     <ClInclude Include="InstanceRectRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="ShrinkEffect.h">
+      <Filter>Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -469,6 +472,9 @@
     <ClCompile Include="InstanceRectRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ShrinkEffect.cpp">
+      <Filter>Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -537,6 +543,9 @@
     <Filter Include="GameInstance">
       <UniqueIdentifier>{081fe426-e4a9-49d4-8bd1-168584caa067}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effects">
+      <UniqueIdentifier>{eef4481e-aceb-4bda-8e42-a2adb314764a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\Assimp\Inc\assimp\color4.inl">
@@ -591,6 +600,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shaders\TestShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\ShrinkEffect.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

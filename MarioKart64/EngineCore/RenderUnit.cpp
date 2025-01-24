@@ -68,6 +68,21 @@ void URenderUnit::MaterialResourcesCheck()
 			Resources[i].ConstantBufferLinkData("FLightDatas", Data);
 		}
 	}
+
+	for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
+	{
+		if (false == Resources.contains(i))
+		{
+			continue;
+		}
+
+		if (false == Resources[i].IsConstantBuffer("FRenderBaseData"))
+		{
+			continue;
+		}
+
+		Resources[i].ConstantBufferLinkData("FRenderBaseData", Data);
+	}
 }
 
 void URenderUnit::ConstantBufferLinkData(std::string_view _Name, void* _Data)
@@ -212,6 +227,9 @@ void URenderUnit::SetMaterial(std::string_view _Name)
 
 void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 {
+	Data.DeltaTime = _DeltaTime;
+	Data.AccTime += _DeltaTime;
+	
 	for (std::pair<const EShaderType, UEngineShaderResources>& Pair : Resources)
 	{
 		Pair.second.Setting();

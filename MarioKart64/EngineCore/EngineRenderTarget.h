@@ -4,11 +4,33 @@
 #include "RenderUnit.h"
 #include "EngineGraphicDevice.h"
 
+class UPostEffect
+{
+	friend class UEngineRenderTarget;
+
+public:
+	URenderUnit RenderUnit;
+	UEngineRenderTarget* ResultTarget;
+
+	bool IsActive = true;
+
+protected:
+	ENGINEAPI virtual void Init() = 0
+	{
+
+	}
+	ENGINEAPI virtual void Effect(UEngineCamera* Camera, float _DeltaTime) = 0
+	{
+
+	}
+private:
+};
+
 class UEngineRenderTarget : public UEngineResources
 {
 public:
-	UEngineRenderTarget();
-	~UEngineRenderTarget();
+	ENGINEAPI UEngineRenderTarget();
+	ENGINEAPI ~UEngineRenderTarget();
 
 	UEngineRenderTarget(const UEngineRenderTarget& _Other) = delete;
 	UEngineRenderTarget(UEngineRenderTarget&& _Other) noexcept = delete;
@@ -34,6 +56,14 @@ public:
 
 	ENGINEAPI void MergeTo(std::shared_ptr<UEngineRenderTarget> _Target);
 
+	ENGINEAPI void CopyTo(UEngineRenderTarget* _Target);
+	ENGINEAPI void MergeTo(UEngineRenderTarget* _Target);
+
+	UEngineTexture* GetTexture(int _Index = 0)
+	{
+		return ArrTexture[_Index].get();
+	}
+
 protected:
 
 private:
@@ -46,5 +76,27 @@ private:
 	std::shared_ptr<class UEngineTexture> DepthTexture;
 
 	URenderUnit TargetUnit;
+
+public:
+	template<typename EffectType>
+	void AddEffect()
+	{
+		std::shared_ptr<EffectType> NewEffect = std::make_shared<EffectType>();
+
+		std::shared_ptr<UPostEffect> PostEffect = std::dynamic_pointer_cast<UPostEffect>(NewEffect);
+
+		PostEffect->ResultTarget = this;
+		PostEffect->Init();
+		PosEffects.push_back(NewEffect);
+	}
+
+	void Effect(UEngineCamera* _Camera, float _DeltaTime);
+	std::shared_ptr<UPostEffect> GetPostEffect(int _Index)
+	{
+		return PosEffects[_Index];
+	}
+
+private:
+	std::vector<std::shared_ptr<UPostEffect>> PosEffects;
 };
 

@@ -154,6 +154,7 @@ void UContentsCore::InitGraphics()
 		std::shared_ptr<UEngineMaterial> matSprite = UEngineMaterial::Create(CGlobal::OBJ_SPRITE_SHADER_NAME);
 		std::shared_ptr<UEngineMaterial> matSky = UEngineMaterial::Create(CGlobal::OBJ_SKY_SHADER_NAME);
 		std::shared_ptr<UEngineMaterial> matLine = UEngineMaterial::Create(CGlobal::OBJ_LINE_SHADER_NAME);
+		std::shared_ptr<UEngineMaterial> matShirnkFx = UEngineMaterial::Create(CGlobal::SHRINK_EFFECT);
 
 		mat->SetRasterizerState("CullBack");
 		mat->SetVertexShader("VertexShader.fx");
@@ -169,6 +170,10 @@ void UContentsCore::InitGraphics()
 		matLine->SetVertexShader("ColorShader.fx");
 		matLine->SetPixelShader("ColorShader.fx");
 		matLine->SetTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		matShirnkFx->SetVertexShader("ShrinkEffect.fx");
+		matShirnkFx->SetPixelShader("ShrinkEffect.fx");
+		matShirnkFx->SetDepthStencilState("ALWAYS");
 	}
 }
 

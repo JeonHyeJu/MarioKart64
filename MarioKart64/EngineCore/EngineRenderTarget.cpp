@@ -91,18 +91,50 @@ void UEngineRenderTarget::Clear()
     {
         UEngineCore::GetDevice().GetContext()->ClearRenderTargetView(ArrRTVs[i], ClearColor.Arr1D);
     }
-    UEngineCore::GetDevice().GetContext()->ClearDepthStencilView(DepthTexture->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+    ID3D11DepthStencilView* DSV = nullptr;
+
+    if (nullptr != DepthTexture)
+    {
+        DSV = DepthTexture->GetDSV();
+    }
+
+    if (nullptr != DSV)
+    {
+        UEngineCore::GetDevice().GetContext()->ClearDepthStencilView(DSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    }
 }
 
 void UEngineRenderTarget::Setting()
 {
-    UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRTVs[0], DepthTexture->GetDSV());
+    ID3D11DepthStencilView* DSV = nullptr;
+
+    if (nullptr != DepthTexture)
+    {
+        DSV = DepthTexture->GetDSV();
+    }
+
+    UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRTVs[0], DSV);
 }
 
 void UEngineRenderTarget::CopyTo(std::shared_ptr<UEngineRenderTarget> _Target)
 {
     _Target->Clear();
     MergeTo(_Target);
+}
+
+void UEngineRenderTarget::CopyTo(UEngineRenderTarget* _Target)
+{
+    _Target->Clear();
+    MergeTo(_Target);
+}
+
+void UEngineRenderTarget::MergeTo(UEngineRenderTarget* _Target)
+{
+    _Target->Setting();
+    TargetUnit.SetTexture("MergeTex", ArrTexture[0]);
+    TargetUnit.Render(nullptr, 0.0f);
+    TargetUnit.Reset();
 }
 
 void UEngineRenderTarget::MergeTo(std::shared_ptr<UEngineRenderTarget> _Target)
@@ -112,3 +144,17 @@ void UEngineRenderTarget::MergeTo(std::shared_ptr<UEngineRenderTarget> _Target)
     TargetUnit.Render(nullptr, 0.0f);
     TargetUnit.Reset();
 }
+
+void UEngineRenderTarget::Effect(UEngineCamera* _Camera, float _DeltaTime)
+{
+    for (std::shared_ptr<UPostEffect>& Effect : PosEffects)
+    {
+        if (false == Effect->IsActive)
+        {
+            continue;
+        }
+
+        Effect->Effect(_Camera, _DeltaTime);
+    }
+}
+

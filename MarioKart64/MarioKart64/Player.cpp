@@ -187,16 +187,17 @@ void APlayer::Move(float _deltaTime)
 	/* for debug start */
 	if (UEngineInput::IsPress(VK_LCONTROL))
 	{
-		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
-		SetActorRotation({ 0.f, -110.f, 0.f });
+		SetActorLocation({ 4142.233887f, 70.f, 8755.953125f });
+		SetActorRotation({ 0.f, -117.5f, 0.f });
 		MapPtr->SetNavIndex(-1);
 		return;
 	}
 	if (trfmPlayer.Location.Y < -1000)
 	{
 		Velocity = 0.f;
-		SetActorLocation({ 307.417f, 159.055f, 3478.909f });
-		SetActorRotation({ 0.f, -110.f, 0.f });
+		BoostVal = 0.f;
+		SetActorLocation({ 4142.233887f, 70.f, 8755.953125f });
+		SetActorRotation({ 0.f, -117.5f, 0.f });
 		MapPtr->SetNavIndex(-1);
 		return;
 	}
@@ -207,6 +208,22 @@ void APlayer::Move(float _deltaTime)
 	/* for debug end */
 
 	//return;
+
+	if (IsBoost)
+	{
+		BoostVal += 2000.f * _deltaTime;
+	}
+	else
+	{
+		if (BoostVal > 0)
+		{
+			BoostVal -= 350.f * _deltaTime;
+			if (BoostVal < 0) BoostVal = 0.f;
+		}
+	}
+	//OutputDebugStringA(("BoostVal:" + std::to_string(BoostVal) + "\n").c_str());
+
+	IsBoost = false;
 
 	int navIdx = MapPtr->GetNavIndex();
 	if (navIdx == -1)
@@ -303,6 +320,12 @@ void APlayer::Move(float _deltaTime)
 
 	if (isCollided)
 	{
+		const SNavData& _nd = MapPtr->GetNavData(navIdx);
+		if (_nd.FloorType == ENavType::FLATE_FASTER)
+		{
+			IsBoost = true;
+		}
+
 		MapPtr->SetDebugLocation(float4{ static_cast<float>(navIdx), 0.f, 0.f, 1.f });
 
 		// Temporary physics of slope
@@ -374,8 +397,8 @@ void APlayer::Move(float _deltaTime)
 				// Adjust gravity
 				GetForwardPhysics(_deltaTime, dx);
 
-				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 150.f, _deltaTime);
-				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 150.f, _deltaTime);
+				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 170.f, _deltaTime);
+				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 170.f, _deltaTime);
 
 				dir *= dx;
 				lastVec = dir;
@@ -485,7 +508,7 @@ void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
 		DirVTrain = 2;
-		acc = -ACCELERATION;
+		acc = -ACCELERATION + FRICTION_FORCE;
 	}
 	else
 	{
@@ -503,14 +526,27 @@ void APlayer::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 		{
 			Velocity = -MAX_VELOCITY;
 		}
+
+		Velocity += BoostVal;
 		dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
 	}
 	else
 	{
 		if (fabs(Velocity) > 30)
 		{
-			acc = (Velocity * .5f) - Velocity;
+			acc = -Velocity * .75f;
 			Velocity = FPhysics::GetVf(Velocity, acc, _deltaTime);
+
+			if (Velocity > MAX_VELOCITY)
+			{
+				Velocity = MAX_VELOCITY;
+			}
+			else if (Velocity < -MAX_VELOCITY)
+			{
+				Velocity = -MAX_VELOCITY;
+			}
+
+			Velocity += BoostVal;
 			dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
 		}
 		else

@@ -68,11 +68,11 @@ void AUIPlay::InitMinimap()
 	case ECircuit::SHERBET_LAND:
 		idx = 100;
 		break;
-	case ECircuit::RAINBOW_ROAD:
-		idx = 101;
-		break;
 	case ECircuit::BOWSERS_CASTLE:
-		idx = 101;
+		idx = 102;
+		break;
+	case ECircuit::RAINBOW_ROAD:
+		idx = 107;
 		break;
 	}
 	Minimap->SetSprite("TrackIcons.png", idx);

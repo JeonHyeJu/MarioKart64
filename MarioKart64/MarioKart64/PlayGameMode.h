@@ -25,6 +25,8 @@ public:
 	void StartMarioRaceway();
 	void StartWarioStadium();
 	void StartSherbetLand();
+	void StartBowserCastle();
+	void StartRainbowRoad();
 
 protected:
 	void BeginPlay() override;

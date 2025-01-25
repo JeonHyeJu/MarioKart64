@@ -92,6 +92,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Models\\Courses\\Mario_Raceway");
 	InitTextures("Resources\\Models\\Courses\\Wario_Stadium");
 	InitTextures("Resources\\Models\\Courses\\Sherbet_Land");
+	InitTextures("Resources\\Models\\Courses\\Bowsers_Castle");
+	InitTextures("Resources\\Models\\Courses\\Rainbow_Road");
 	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
 	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
 
@@ -339,5 +341,34 @@ void UContentsCore::InitObjs()
 
 		std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
 		loader.Load(ECircuit::ROYAL_RACEWAY, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "5BC0F9AF_c.png", ENavType::ROAD });
+		navTextures.insert({ "61E8F148_c.png", ENavType::ROAD });
+		navTextures.insert({ "6A18B68A_c.png", ENavType::ROAD });
+		navTextures.insert({ "58291365_c.png", ENavType::ROAD });
+		navTextures.insert({ "315D18F3_c.png", ENavType::ROAD });
+		navTextures.insert({ "1FBCBE21_c.png", ENavType::ROAD });
+		navTextures.insert({ "3A15AC1F_c.png", ENavType::START_POINT });
+		navTextures.insert({ "1897EC7_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Bowsers_Castle", "BowsersCastle");
+		loader.Load(ECircuit::BOWSERS_CASTLE, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "448F972_c.png", ENavType::ROAD });
+		navTextures.insert({ "19CF4260_c.png", ENavType::START_POINT });
+		//navTextures.insert({ "1897EC7_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Rainbow_Road", "rainbow");
+		loader.Load(ECircuit::RAINBOW_ROAD, navTextures, path);
 	}
 }

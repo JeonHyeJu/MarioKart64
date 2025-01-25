@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: "bowser's track.blend"
 # www.blender.org
-mtllib Bowser's Castle.mtl
+mtllib BowsersCastle.mtl
 o Shape_IndexedFaceSet.019
 v -1.981000 -0.050000 -0.100000
 v -1.970000 -0.000000 -0.100000

@@ -47,9 +47,6 @@ private:
 	std::shared_ptr<USpriteRenderer> RendererDebug;
 	std::shared_ptr<class UCollision> CollisionItem = nullptr;
 
-	float Speed = 5.f;
-	float SpeedWeight = 0.f;
-
 	const float FRICTIONAL_FORCE = .05f;
 	const float MAX_SPEED = 20.f;
 	const float MAX_TURN = 5.f;
@@ -59,6 +56,11 @@ private:
 	const float FRICTION_FORCE = WEIGHT * 2.f;
 	const float MAX_VELOCITY = 1000.f;
 	const float GRAVITY_FORCE = -300.f;
+
+	float BoostVal = 0.f;
+	const float BOOST_SPEED_UP = 100.f;
+	const float BOOST_SPEED_DOWN = 50.f;
+	bool IsBoost = false;
 
 	float Velocity = 0.f;
 	float VelocityV = 0.f;

@@ -39,9 +39,9 @@ APlayGameMode::APlayGameMode()
 	//GameData::GetInstance()->SetCurMap(ECircuit::MARIO_RACEWAY);
 	//GameData::GetInstance()->SetCurMap(ECircuit::WARIO_STADIUM);
 	//GameData::GetInstance()->SetCurMap(ECircuit::SHERBET_LAND);
-	GameData::GetInstance()->SetCurMap(ECircuit::ROYAL_RACEWAY);
+	//GameData::GetInstance()->SetCurMap(ECircuit::ROYAL_RACEWAY);
 	//GameData::GetInstance()->SetCurMap(ECircuit::BOWSERS_CASTLE);
-	//GameData::GetInstance()->SetCurMap(ECircuit::RAINBOW_ROAD);
+	GameData::GetInstance()->SetCurMap(ECircuit::RAINBOW_ROAD);
 }
 
 APlayGameMode::~APlayGameMode()
@@ -173,7 +173,6 @@ void APlayGameMode::StartSherbetLand()
 	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
 	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -53.f, 0.f, -58.f };
 }
-
 void APlayGameMode::StartRoyalRaceway()
 {
 	const float SCALE = 4.f;
@@ -186,7 +185,9 @@ void APlayGameMode::StartRoyalRaceway()
 
 	//Player->SetActorLocation({ -1500.0f, 100.0f, 8485.0f });
 
-	Player->SetActorLocation({ 2373.0f, 100.0f, 10796.0f });
+	//Player->SetActorLocation({ 2373.0f, 100.0f, 10796.0f });
+
+	Player->SetActorLocation({ -8662.0f, 0.0f, 2019.0f });
 
 	// Temp
 	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
@@ -194,6 +195,66 @@ void APlayGameMode::StartRoyalRaceway()
 	refSize.Max *= SCALE;
 	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
 	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -90.f, 0.f, -80.f };
+}
+
+void APlayGameMode::StartBowserCastle()
+{
+	const float SCALE = 4000.f;
+	ECircuit type = GameData::GetInstance()->GetCurMap();
+	MapPtr->Init(type);
+	MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
+	MapPtr->SetActorRelativeScale3D({ SCALE, SCALE, SCALE });
+
+	Player->SetActorLocation({ 0.f, 0.f, 0.f });
+
+	//Player->SetActorLocation({ -82.f, 0.f, 6059.f });
+
+	//Player->SetActorLocation({ 4909.f, 0.f, 3198.f });
+
+	//Player->SetActorLocation({ 4838.f, 0.f, -1705.f });
+	//Player->SetActorRotation({ 0.f, -90.f, 0.f });
+
+	// Temp
+	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	refSize.Min *= SCALE;
+	refSize.Max *= SCALE;
+	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -196.f, 0.f, -200.f };
+}
+
+void APlayGameMode::StartRainbowRoad()
+{
+	Skybox->SetActive(false);
+
+	const float SCALE = 100.f;
+	ECircuit type = GameData::GetInstance()->GetCurMap();
+	MapPtr->Init(type);
+	MapPtr->SetActorRelativeScale3D({ SCALE, SCALE, SCALE });
+
+	//Player->SetActorLocation({ 900.f, 5050.f, -1000.f });
+
+	//Player->SetActorLocation({ 1509.f, 2435.f, 24884.f });
+
+	//Player->SetActorLocation({ -605.f, 2155.f, 15872.f });
+
+	//Player->SetActorLocation({ -6979.f, -80.f, 4569.f });
+
+	//Player->SetActorLocation({ -8419.f, 1035.f, -5402.f });
+
+	//Player->SetActorLocation({ -7871.f, 1155.f, -11415.f });
+
+	//Player->SetActorLocation({ 7310.f, 1155.f, -10154.f });
+
+	//Player->SetActorLocation({ -364.f, 2137.f, -13920.f });
+
+	Player->SetActorLocation({ 2654.f, 4050.f, -12532.f });
+
+	// Temp
+	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	refSize.Min *= SCALE;
+	refSize.Max *= SCALE;
+	GameData::GetInstance()->MapSizeInfo = SRenderInfo::MapInfos.find(type)->second.MapSizeInfo;
+	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -83.f, 0.f, -140.f };
 }
 
 void APlayGameMode::BeginPlay()
@@ -219,10 +280,6 @@ void APlayGameMode::BeginPlay()
 	{
 		StartLuigiRaceway();
 	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
-	{
-		StartRoyalRaceway();
-	}
 	else if (GameData::GetInstance()->GetCurMap() == ECircuit::KOOPA_TROOPA_BEACH)
 	{
 		StartKoopaBeach();
@@ -239,6 +296,19 @@ void APlayGameMode::BeginPlay()
 	{
 		StartSherbetLand();
 	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
+	{
+		StartRoyalRaceway();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::BOWSERS_CASTLE)
+	{
+		StartBowserCastle();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::RAINBOW_ROAD)
+	{
+		StartRainbowRoad();
+	}
+
 
 	// Add effect
 	{

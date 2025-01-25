@@ -53,7 +53,6 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         {
             AllWindows[hWnd]->IsFocusValue = true;
         }
-        UEngineDebug::OutPutString("F");
     }
     break;
     case WM_KILLFOCUS:
@@ -62,7 +61,6 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         {
             AllWindows[hWnd]->IsFocusValue = false;
         }
-        UEngineDebug::OutPutString("K");
     }
     break;
     case WM_DESTROY:

@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: "Mario's raceway.blend"
 # www.blender.org
-mtllib Mario Raceway.mtl
+mtllib Mario_Raceway.mtl
 o Shape_IndexedFaceSet.151
 v 0.211512 0.010000 -0.311894
 v 0.242000 0.100000 -0.286000

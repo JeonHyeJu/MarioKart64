@@ -4,7 +4,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/Collision.h>
 
-const float AItemBox::SIZE = 50.f;
+const float AItemBox::SIZE = 30.f;
 const float AItemBox::ROTATION_DEG = 30.f;
 
 AItemBox::AItemBox()
@@ -37,6 +37,27 @@ void AItemBox::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
 
-	float rot = ROTATION_DEG* _deltaTime;
-	BoxRenderer->AddLocalRotation({ 0.f, rot, rot });
+	BoxRenderer->AddLocalRotation(Rotation * _deltaTime);
+}
+
+void AItemBox::SetRandomState(bool _isRotX, bool _isRotY, bool _isRotZ)
+{
+	if (_isRotX == false && _isRotY == false && _isRotZ == false)
+	{
+		Rotation = FVector{ ROTATION_DEG, ROTATION_DEG, ROTATION_DEG };
+		return;
+	}
+
+	if (_isRotX)
+	{
+		Rotation.X = ROTATION_DEG;
+	}
+	if (_isRotY)
+	{
+		Rotation.Y = ROTATION_DEG;
+	}
+	if (_isRotZ)
+	{
+		Rotation.Z = ROTATION_DEG;
+	}
 }

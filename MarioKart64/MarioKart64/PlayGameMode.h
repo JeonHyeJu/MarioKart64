@@ -21,6 +21,10 @@ public:
 
 	void StartLuigiRaceway();
 	void StartRoyalRaceway();
+	void StartKoopaBeach();
+	void StartMarioRaceway();
+	void StartWarioStadium();
+	void StartSherbetLand();
 
 protected:
 	void BeginPlay() override;
@@ -35,7 +39,6 @@ private:
 	//class ADriver* Player = nullptr;
 	class APlayer* Player = nullptr;
 
-	std::shared_ptr<class AItemBox> TestItemBox = nullptr;
 	std::shared_ptr<class ABalloons> Balloons = nullptr;
 
 	EState State = EState::END;

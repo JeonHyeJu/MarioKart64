@@ -28,6 +28,7 @@ private:
 	bool CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist);
 	bool CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, float& _refDist);
 	void CheckCollisionOfAllMap();
+	void CheckFutureCollisionOfAllMap();
 	float GetSlope();
 	void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided=true, bool _isComputer=true);
 	void GetHandleRotation(float _deltaTime, float& _refRot);
@@ -61,7 +62,7 @@ private:
 	const float ACCELERATION = WEIGHT * 5.f;	// 350px/s
 	//const float ACCELERATION = WEIGHT * 7.f;	// 350px/s
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
-	const float MAX_VELOCITY = 1000.f * 2;
+	const float MAX_VELOCITY = 1000.f;
 	const float GRAVITY_FORCE = -300.f;
 
 	float Velocity = 0.f;
@@ -82,7 +83,7 @@ private:
 
 	// Temp S
 	std::shared_ptr<class USpriteRenderer> DebugItem = nullptr;
-	std::vector<float> FutureAngles = { 0.f };
+	std::vector<float> FutureAngles;
 	// Temp E
 
 	int DstRouteNavIdx = 1;
@@ -93,7 +94,8 @@ private:
 		125,124,127,126,121,120,123,122,118,119,114,115,116,117,98,99,100,101,96,97,94,95,92,93,102,103,112,113,110,111,108,109,106,107,104,105,78,79,76,77,74,75,72,73,80,81,90,91,88,89,86,87,84,85,82,83,56,57,54,55,52,53,50,51,48,49,47,46,65,64,63,62,61,60,45,44,59,58,71,70,69,68,66,67,33,32,31,30,29,28,27,26,35,34,43,42,41,40,38,39,37,36,14,15,17,16,19,18,20,21,22,23,24,25,6,7,4,5,2,3,0,1,8,9,13,12,10,11,364,363,365 
 	};
 
-	int FutureNavIdx = -1;
+	int FutureNavIdxs[3] = { 0, 0, 0 };
+	const float STRIDE = 700.f;
 
 	FVector InitCameraLoc = FVector::ZERO;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;

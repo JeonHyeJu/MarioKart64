@@ -15,6 +15,8 @@ public:
 	static const float SIZE;
 	static const float ROTATION_DEG;
 
+	void SetRandomState(bool _isRotX, bool _isRotY, bool _isRotZ);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
@@ -22,4 +24,5 @@ protected:
 private:
 	std::shared_ptr<class CubeRenderer> BoxRenderer = nullptr;
 	std::shared_ptr<class UCollision> Collision = nullptr;
+	FVector Rotation = FVector::ZERO;
 };

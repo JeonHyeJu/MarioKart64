@@ -91,6 +91,7 @@ void APlayer::Tick(float _deltaTime)
 	DirVTrain = 0;
 	DirHTrain = 0;
 	Move(_deltaTime);
+	OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
 
 	/* for debug start */
 	if (UEngineInput::IsDown(VK_SPACE))
@@ -204,6 +205,8 @@ void APlayer::Move(float _deltaTime)
 		Velocity = MAX_VELOCITY;
 	}
 	/* for debug end */
+
+	//return;
 
 	int navIdx = MapPtr->GetNavIndex();
 	if (navIdx == -1)
@@ -591,7 +594,8 @@ void APlayer::OnCollisionEnter(UCollision* _this, UCollision* _other)
 	}
 	else if (name == "ITEMBOX")
 	{
-		_other->GetActor()->Destroy();
+		_other->GetActor()->SetActive(false);
+		//_other->GetActor()->Destroy();
 
 		OutputDebugStringA("Get ITEM!!!!!!!!!!!!!!!!!!!\n");
 

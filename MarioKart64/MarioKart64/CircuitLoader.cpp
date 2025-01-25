@@ -241,9 +241,10 @@ void CircuitLoader::InitNavMesh()
 	int groupIdx = 0;
 	for (size_t i = 0, size = navData.size(); i < size - 1; ++i)
 	{
+		SNavData& leftNd = navData[i];
+
 		for (size_t j = i + 1; j < size; j++)
 		{
-			SNavData& leftNd = navData[i];
 			SNavData& rightNd = navData[j];
 			if (leftNd.GroupIndex == -1)
 			{

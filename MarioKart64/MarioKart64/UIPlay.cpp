@@ -56,6 +56,24 @@ void AUIPlay::InitMinimap()
 	case ECircuit::ROYAL_RACEWAY:
 		idx = 101;
 		break;
+	case ECircuit::KOOPA_TROOPA_BEACH:
+		idx = 93;
+		break;
+	case ECircuit::MARIO_RACEWAY:
+		idx = 98;
+		break;
+	case ECircuit::WARIO_STADIUM:
+		idx = 99;
+		break;
+	case ECircuit::SHERBET_LAND:
+		idx = 100;
+		break;
+	case ECircuit::RAINBOW_ROAD:
+		idx = 101;
+		break;
+	case ECircuit::BOWSERS_CASTLE:
+		idx = 101;
+		break;
 	}
 	Minimap->SetSprite("TrackIcons.png", idx);
 	Minimap->SetAutoScaleRatio(3.f);

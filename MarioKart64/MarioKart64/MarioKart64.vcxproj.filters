@@ -308,9 +308,6 @@
     <ClInclude Include="Title.h">
       <Filter>Actor\TitleLevel</Filter>
     </ClInclude>
-    <ClInclude Include="TestMap.h">
-      <Filter>Actor\PlayLevel</Filter>
-    </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>Actor\PlayLevel</Filter>
     </ClInclude>
@@ -422,9 +419,6 @@
     </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>Actor\TitleLevel</Filter>
-    </ClCompile>
-    <ClCompile Include="TestMap.cpp">
-      <Filter>Actor\PlayLevel</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>Actor\PlayLevel</Filter>

@@ -75,7 +75,7 @@ ADriver::ADriver()
 	Camera = GetWorld()->GetMainCamera();
 
 	FutureAngles.reserve(40);
-	for (int i = 1; i < 36; ++i)
+	for (int i = 1; i < 25; ++i)
 	{
 		FutureAngles.push_back(i * 5.f);
 		FutureAngles.push_back(i * -5.f);
@@ -89,6 +89,8 @@ ADriver::~ADriver()
 void ADriver::BeginPlay()
 {
 	APawn::BeginPlay();
+
+	//CheckFutureCollisionOfAllMap();
 }
 
 void ADriver::Tick(float _deltaTime)
@@ -118,6 +120,7 @@ void ADriver::Move(float _deltaTime)
 	{
 		AddActorLocation({ 0.f, gravityY, 0.f });
 		CheckCollisionOfAllMap();
+		CheckFutureCollisionOfAllMap();
 		return;
 	}
 
@@ -133,7 +136,7 @@ void ADriver::Move(float _deltaTime)
 		OutputDebugStringA(("navIdx: " + std::to_string(navIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
 		if (CurRouteIdx > _idx)
 		{
-			OutputDebugStringA("REVERSE!!!!!!!\n");
+			//OutputDebugStringA("REVERSE!!!!!!!\n");
 		}
 		else if (CurRouteIdx < _idx)
 		{
@@ -165,81 +168,51 @@ void ADriver::Move(float _deltaTime)
 	/* Test start */
 	GetForwardPhysics(_deltaTime, dx, true, true);
 
-	FVector futureDir = dir * Velocity * .45f;
-	LineDebug->SetScale3D({ 1.f, futureDir.Z, 1.f });
-	LineDebug->SetRelativeLocation({ 0.f, 25.f, futureDir.Z * .5f });
 	FVector curLoc = GetActorLocation();
-	futureDir.Y = -10.f;
 
 	float tempFDist = 0.f;
-	if (FutureNavIdx < 0)
-	{
-		FutureNavIdx = navIdx;
-	}
+	bool isRotate = false;
 
-	bool isCol = CheckCollision(futureDir + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
+	FVector futureDir = curLoc + (dir * STRIDE);
+	futureDir.Y = -1000.f;
+
+	LineDebug->SetScale3D({ 1.f, futureDir.Length(), 1.f});
+	LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
+
+	int i = 0;
+	bool isCol = CheckCollision(futureDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
 	if (isCol)
 	{
-		const SNavData& _nd = MapPtr->GetNavData(FutureNavIdx);
-		if (_nd.FloorType != ENavType::ROAD && _nd.FloorType != ENavType::START_POINT)
+		OutputDebugStringA((std::to_string(i) + ": AAAAAAAA").c_str());
+
+		const SNavData& _nd1 = MapPtr->GetNavData(FutureNavIdxs[i]);
+		if (_nd1.FloorType == ENavType::ROAD || _nd1.FloorType == ENavType::START_POINT || _nd1.FloorType == ENavType::FLATE_FASTER)
 		{
-			OutputDebugStringA("AAAAAAA\n");
-
-			bool isBreak = false;
-			for (int f = 200; f < 1000; f += 50)
-			{
-				for (int i = 0; i < FutureAngles.size(); ++i)
-				{
-					FVector tempVec = dir * static_cast<float>(f);
-					tempVec.Y = -10.f;
-					float _angle = FutureAngles[i];
-					tempVec.RotationYDeg(_angle);
-
-					isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
-					if (isCol)
-					{
-						const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdx);
-						if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT)
-						{
-							if (_angle <= -1)
-							{
-								rotVal = 100.f * _deltaTime;
-							}
-							else if (_angle >= 1)
-							{
-								rotVal = -100.f * _deltaTime;
-							}
-							OutputDebugStringA(("f: " + std::to_string(f) + ", angle: " + std::to_string(_angle) + ", rotVal: " + std::to_string(rotVal) + "\n").c_str());
-
-							isBreak = true;
-							break;
-						}
-					}
-				}
-
-				if (isBreak) break;
-			}
+			OutputDebugStringA("---> ROAD\n");
 		}
-	}
-	else
-	{
-		OutputDebugStringA("BBBBBBB\n");
-
-		bool isBreak = false;
-		for (int f = 200; f < 1000; f += 50)
+		else
 		{
-			for (int i = 0; i < FutureAngles.size(); ++i)
+			OutputDebugStringA("---> NO ROAD\n");
+			for (int j = 0; j < FutureAngles.size(); ++j)
 			{
-				FVector tempVec = dir * static_cast<float>(f);
-				tempVec.Y = -10.f;
-				float _angle = FutureAngles[i];
-				tempVec.RotationYDeg(_angle);
+				FVector newDir = dir;
+				float _angle = FutureAngles[j];
+				newDir.Normalize();
+				newDir.RotationYDeg(_angle);
+				newDir *= STRIDE;
+				float lsize = newDir.Length();
+				newDir.Y = -1000.f;
 
-				isCol = CheckCollision(tempVec + curLoc, FutureNavIdx, FutureNavIdx, tempFDist);
+				OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
+
+				LineDebug->SetScale3D({ 1.f, lsize , 1.f});
+				LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
+
+				isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
 				if (isCol)
 				{
-					const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdx);
-					if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT)
+					const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdxs[i]);
+					if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT || _nd2.FloorType == ENavType::FLATE_FASTER)
 					{
 						if (_angle <= -1)
 						{
@@ -249,19 +222,75 @@ void ADriver::Move(float _deltaTime)
 						{
 							rotVal = -100.f * _deltaTime;
 						}
-						OutputDebugStringA(("f: " + std::to_string(f) + ", angle: " + std::to_string(_angle) + ", rotVal: " + std::to_string(rotVal) + "\n").c_str());
 
-						isBreak = true;
+						isRotate = true;
 						break;
+					}
+					else
+					{
+						continue;
 					}
 				}
 			}
-
-			if (isBreak) break;
 		}
 	}
+	else
+	{
+		OutputDebugStringA((std::to_string(i) + ": BBBBBBBB").c_str());
 
+		for (int j = 0; j < FutureAngles.size(); ++j)
+		{
+			FVector newDir = dir;
+			float _angle = FutureAngles[j];
+			newDir.Normalize();
+			newDir.RotationYDeg(_angle);
+			newDir *= STRIDE;
+			float lsize = newDir.Length();
+			newDir.Y = -1000.f;
 
+			OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
+
+			LineDebug->SetScale3D({ 1.f, lsize, 1.f });
+			LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
+
+			isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
+			if (isCol)
+			{
+				OutputDebugStringA(("---> COL (" + std::to_string(_angle) + ")").c_str());
+				const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdxs[i]);
+				if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT || _nd2.FloorType == ENavType::FLATE_FASTER)
+				{
+					OutputDebugStringA(" [ROAD]");
+					if (_angle <= -1)
+					{
+						rotVal = 100.f * _deltaTime;
+					}
+					else if (_angle >= 1)
+					{
+						rotVal = -100.f * _deltaTime;
+					}
+
+					isRotate = true;
+					break;
+				}
+				else
+				{
+					OutputDebugStringA(" [NO ROAD]");
+					continue;
+				}
+			}
+			else
+			{
+				OutputDebugStringA("---> NO COL ");
+			}
+
+			if (isRotate) break;
+		}
+
+		OutputDebugStringA("\n");
+	}
+	//OutputDebugStringA(("FutureIdxs:" + std::to_string(FutureNavIdxs[0]) + ", " + std::to_string(FutureNavIdxs[1]) + ", " + std::to_string(FutureNavIdxs[2]) + "\n").c_str());
+	//OutputDebugStringA(("rotVal:" + std::to_string(rotVal) + "\n").c_str());
 
 	if (isCollided)
 	{
@@ -284,7 +313,8 @@ void ADriver::Move(float _deltaTime)
 			RendererDebug->SetRotation({ slopeAngle, 0.f, 0.f });
 		}
 
-		VelocityV = Velocity * .5f * sinf(-slopeAngle * UEngineMath::D2R);
+		VelocityV = Velocity * sinf(-slopeAngle * UEngineMath::D2R);
+		OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", sinf: " + std::to_string(sinf(-slopeAngle * UEngineMath::D2R)) + "\n").c_str());
 		PrevLoc = GetActorLocation();
 		CheckLab();
 	}
@@ -327,8 +357,8 @@ void ADriver::Move(float _deltaTime)
 				// Adjust gravity
 				//GetForwardPhysics(_deltaTime, dx);
 
-				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 150.f, _deltaTime);
-				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 150.f, _deltaTime);
+				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 50.f, _deltaTime);
+				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 50.f, _deltaTime);
 
 				dir *= dx;
 				lastVec = dir;
@@ -346,8 +376,6 @@ void ADriver::Move(float _deltaTime)
 	dir *= dx;
 	lastVec = dir;
 
-	OutputDebugStringA(("dir: " + std::to_string(dir.X) + ", " + std::to_string(dir.Y) + ", " + std::to_string(dir.Z) + "\n").c_str());
-	OutputDebugStringA(("dx: " + std::to_string(dx) + ", FutureNavIdx: " + std::to_string(FutureNavIdx) + "\n").c_str());
 	lastRot.Y = rotVal;
 	lastVec.Y += fDist;
 
@@ -554,11 +582,11 @@ void ADriver::CheckCollisionOfAllMap()
 {
 	const FTransform& tfrmPlayer = GetTransform();
 	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
+	const FTransform& trfmObj = MapPtr->GetTransform();
 
 	// TODO: Important.. This doesn't take into account children
 	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
 	{
-		const FTransform& trfmObj = MapPtr->GetTransform();
 		const SNavData& nd = navDatas[i];
 
 		float fDist = 0.f;
@@ -568,6 +596,31 @@ void ADriver::CheckCollisionOfAllMap()
 			MapPtr->SetNavIndex(nd.Index);
 			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(nd.Index) + "\n").c_str());
 			break;
+		}
+	}
+}
+
+void ADriver::CheckFutureCollisionOfAllMap()
+{
+	const FVector& tfrmPlayer = GetTransform().Location;
+	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
+	const FTransform& trfmObj = MapPtr->GetTransform();
+
+	// TODO: Important.. This doesn't take into account children
+	for (size_t i = 0, size = navDatas.size(); i < size; ++i)
+	{
+		float fDist = 0.f;
+		const SNavData& nd = navDatas[i];
+		for (int i = 0; i < 3; ++i)
+		{
+			FVector loc = tfrmPlayer + (GetActorForwardVector() * STRIDE * static_cast<float>(i + 1));
+
+			bool isCollided = nd.Intersects(loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
+			if (isCollided)
+			{
+				FutureNavIdxs[i] = nd.Index;
+				break;
+			}
 		}
 	}
 }

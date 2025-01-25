@@ -57,7 +57,7 @@ private:
 	const float WEIGHT = 50.f;
 	const float ACCELERATION = WEIGHT * 5.f;
 	const float FRICTION_FORCE = WEIGHT * 2.f;
-	const float MAX_VELOCITY = 1000.f * 2;
+	const float MAX_VELOCITY = 1000.f;
 	const float GRAVITY_FORCE = -300.f;
 
 	float Velocity = 0.f;

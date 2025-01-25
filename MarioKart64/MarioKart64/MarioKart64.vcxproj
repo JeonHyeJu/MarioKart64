@@ -252,10 +252,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="TestMap.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="TestVertex.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\aabb.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ai_assert.h" />
@@ -462,10 +458,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="TestGameMode.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="TestMap.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -68,7 +68,13 @@ void UContentsCore::InitSprites(std::string_view _path)
 
 void UContentsCore::EngineStart(UEngineInitData& _Data)
 {
-	_Data.WindowPos = { 200, 20 };
+	RECT desktop;
+	const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktop);
+	float horizontal = static_cast<float>(desktop.right);
+	float vertical = static_cast<float>(desktop.bottom);
+
+	_Data.WindowPos = { (horizontal - CGlobal::WINDOW_W) * .5f, (vertical - CGlobal::WINDOW_H) * .5f };
 	_Data.WindowSize = { CGlobal::WINDOW_W, CGlobal::WINDOW_H };
 
 	InitTextures("Resources\\Sprites\\Characters");
@@ -82,6 +88,10 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\UI");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 	InitTextures("Resources\\Models\\Courses\\Luigi_Raceway");
+	InitTextures("Resources\\Models\\Courses\\Koopa_Troopa_Beach");
+	InitTextures("Resources\\Models\\Courses\\Mario_Raceway");
+	InitTextures("Resources\\Models\\Courses\\Wario_Stadium");
+	InitTextures("Resources\\Models\\Courses\\Sherbet_Land");
 	InitTextures("Resources\\Models\\Miscellaneous\\Nintendo_Logo");
 	InitTextures("Resources\\Models\\Miscellaneous\\Title_Screen_Flag");
 
@@ -255,19 +265,6 @@ void UContentsCore::InitObjs()
 		CircuitLoader loader;
 
 		std::map<std::string, ENavType> navTextures;
-		navTextures.insert({ "7EEAA53A_fix.png", ENavType::ROAD });
-		navTextures.insert({ "922DEA6_c.png", ENavType::START_POINT });
-		navTextures.insert({ "3A87458D_c.png", ENavType::BORDER });
-		navTextures.insert({ "5B7CDDF2_fix.png", ENavType::FLATE_FASTER });
-
-		std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
-		loader.Load(ECircuit::ROYAL_RACEWAY, navTextures, path);
-	}
-
-	{
-		CircuitLoader loader;
-
-		std::map<std::string, ENavType> navTextures;
 		navTextures.insert({ "Shape.023.png", ENavType::ROAD });
 		navTextures.insert({ "Shape.022.png", ENavType::ROAD });
 		navTextures.insert({ "Shape.066.png", ENavType::START_POINT });
@@ -276,5 +273,71 @@ void UContentsCore::InitObjs()
 
 		std::string path = CGlobal::GetModelPath("Courses\\Luigi_Raceway", "luigi");
 		loader.Load(ECircuit::LUIGI_RACEWAY, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "1E6BB2A4_c.png", ENavType::ROAD });
+		navTextures.insert({ "53EFB838_c.png", ENavType::START_POINT });
+		navTextures.insert({ "43EFF121_c.png", ENavType::BORDER });
+		//navTextures.insert({ "236F857A_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Koopa_Troopa_Beach", "KoopaTroopaBeach");
+		loader.Load(ECircuit::KOOPA_TROOPA_BEACH, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "7EEA0D6A_c.png", ENavType::ROAD });
+		navTextures.insert({ "92276F6_c.png", ENavType::START_POINT });
+		navTextures.insert({ "73879E4_c.png", ENavType::BORDER });
+		navTextures.insert({ "3ED14A28_c.png", ENavType::BORDER });
+		navTextures.insert({ "6B0CD968_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Mario_Raceway", "Mario_Raceway");
+		loader.Load(ECircuit::MARIO_RACEWAY, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "7FE0379A_c.png", ENavType::ROAD });
+		navTextures.insert({ "19CDB1E0_c.png", ENavType::START_POINT });
+		//navTextures.insert({ "73879E4_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Wario_Stadium", "wario_stadium");
+		loader.Load(ECircuit::WARIO_STADIUM, navTextures, path);
+	}
+	
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "706CCEED_c.png", ENavType::ROAD });
+		navTextures.insert({ "4DD5B9DA_c.png", ENavType::ROAD });
+		navTextures.insert({ "71125E3C_c.png", ENavType::ROAD });
+		navTextures.insert({ "22F0D5A0_c.png", ENavType::START_POINT });
+		//navTextures.insert({ "73879E4_c.png", ENavType::BORDER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Sherbet_Land", "SherbetLand");
+		loader.Load(ECircuit::SHERBET_LAND, navTextures, path);
+	}
+
+	{
+		CircuitLoader loader;
+
+		std::map<std::string, ENavType> navTextures;
+		navTextures.insert({ "7EEAA53A_fix.png", ENavType::ROAD });
+		navTextures.insert({ "922DEA6_c.png", ENavType::START_POINT });
+		navTextures.insert({ "3A87458D_c.png", ENavType::BORDER });
+		navTextures.insert({ "5B7CDDF2_fix.png", ENavType::FLATE_FASTER });
+
+		std::string path = CGlobal::GetModelPath("Courses\\Royal_Raceway", "Royal_Raceway");
+		loader.Load(ECircuit::ROYAL_RACEWAY, navTextures, path);
 	}
 }

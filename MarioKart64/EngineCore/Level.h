@@ -95,7 +95,7 @@ public:
 		return SpawnCamera(static_cast<int>(_Order));
 	}
 
-	std::shared_ptr<class ACameraActor> SpawnCamera(int _Order);
+	ENGINEAPI std::shared_ptr<class ACameraActor> SpawnCamera(int _Order);
 
 	template<typename ActorType>
 	std::shared_ptr<ActorType> SpawnActor(std::string_view _Name ="")

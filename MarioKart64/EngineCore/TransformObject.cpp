@@ -32,6 +32,16 @@ void UTransformObject::SetupAttachment(UTransformObject* _Parent)
 	TransformUpdate();
 }
 
+void UTransformObject::RemoveAttachment()
+{
+	if (Parent != nullptr)
+	{
+		Parent->Childs.remove(this);
+		TransformUpdate();
+		Parent = nullptr;
+	}
+}
+
 void UTransformObject::TransformUpdate()
 {
 	ParentMatrixCheck();

@@ -131,6 +131,7 @@ public:
 	}
 
 	ENGINEAPI void AttachToActor(AActor* _Parent);
+	ENGINEAPI void DetachFromActor();
 
 	FVector GetActorLocation()
 	{
@@ -139,7 +140,8 @@ public:
 	
 	FVector GetActorRotation()
 	{
-		return RootComponent->Transform.WorldRotation;
+		return RootComponent->Transform.Rotation;
+		//return RootComponent->Transform.WorldRotation;
 	}
 
 	// 트랜스폼 자체를 고칠수는 없다. 복사본을 주는 함수.

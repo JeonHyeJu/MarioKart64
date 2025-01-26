@@ -96,8 +96,8 @@ public:
 class UEngineShaderResources
 {
 public:
-	UEngineShaderResources();
-	~UEngineShaderResources();
+	ENGINEAPI UEngineShaderResources();
+	ENGINEAPI ~UEngineShaderResources();
 
 	void CreateSamplerRes(std::string_view _Name, UEngineSamplerRes _Res);
 

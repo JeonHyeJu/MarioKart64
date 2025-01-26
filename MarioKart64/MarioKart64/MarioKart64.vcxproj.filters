@@ -362,6 +362,12 @@
     <ClInclude Include="ExpandEffect.h">
       <Filter>Effects</Filter>
     </ClInclude>
+    <ClInclude Include="TextWidget.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageCustomWidget.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -474,6 +480,12 @@
     </ClCompile>
     <ClCompile Include="ExpandEffect.cpp">
       <Filter>Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWidget.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageCustomWidget.cpp">
+      <Filter>HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -606,6 +618,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shaders\ExpandEffect.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\WidgetShader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

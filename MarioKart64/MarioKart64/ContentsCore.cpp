@@ -10,6 +10,7 @@
 #include <EngineCore/EngineShader.h>
 #include <EngineCore/EngineMaterial.h>
 #include <EngineCore/HUD.h>
+#include <EngineCore/EngineFont.h>
 #include "CGlobal.h"
 #include "CircuitLoader.h"
 #include "TitleGameMode.h"
@@ -86,6 +87,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\SelectCharacter");
 	InitTextures("Resources\\Sprites\\TrackIcons");
 	InitTextures("Resources\\Sprites\\UI");
+	InitTextures("Resources\\Sprites\\LabCount");
 	InitTextures("Resources\\Models\\Courses\\Royal_Raceway");
 	InitTextures("Resources\\Models\\Courses\\Luigi_Raceway");
 	InitTextures("Resources\\Models\\Courses\\Koopa_Troopa_Beach");
@@ -100,6 +102,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitSprites("Resources\\Sprites\\Background");
 	InitSprites("Resources\\Sprites\\SelectGame");
 	InitSprites("Resources\\Sprites\\SelectCharacter");
+	InitSprites("Resources\\Sprites\\LabCount");
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
@@ -113,6 +116,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitGraphics();
 	InitTest();
 	InitObjs();
+
+	UEngineFont::Load("Arial", "Arial");
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
 	UEngineCore::CreateLevel<ASelectGameMode, APawn, AHUD>("SelectLevel");
@@ -202,6 +207,13 @@ void UContentsCore::InitGraphics()
 			mat->SetPixelShader("ExpandEffect.fx");
 			mat->SetDepthStencilState("ALWAYS");
 		}
+
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::WIDGET_SHADER);
+			mat->SetVertexShader("WidgetShader.fx");
+			mat->SetPixelShader("WidgetShader.fx");
+			mat->SetDepthStencilState("UIDepth");
+		}
 	}
 }
 
@@ -240,7 +252,6 @@ void UContentsCore::InitTest()
 	{
 		// Temp.. no reserve or resize
 		std::vector<UINT> indices;
-		
 		for (int i = 0; i < MultipleTriangles.size(); ++i)
 		{
 			indices.push_back(i);
@@ -259,6 +270,83 @@ void UContentsCore::InitTest()
 		UEngineIndexBuffer::Create("Cube", indices);
 		UMesh::Create("Cube");
 	}
+
+	// Text
+	/*
+	{
+		const int RECT_SIZE = 4;
+		const int MAX_TXT_CNT = 2;
+		const int SIZE = MAX_TXT_CNT * RECT_SIZE;
+		const float UV_SIZE = 1.f / MAX_TXT_CNT;
+
+		std::vector<FEngineVertex> rect =
+		{
+			FEngineVertex{ FVector(0.f, 1.f, 0.0f), { 0.0f, 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
+			FEngineVertex{ FVector(1.f, 1.f, 0.0f), { UV_SIZE, 0.f }, {1.0f, 0.0f, 0.0f, 1.0f} },
+			FEngineVertex{ FVector(0.f, 0.f, 0.0f), { 0.0f, 1.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
+			FEngineVertex{ FVector(1.f, 0.f, 0.0f), { UV_SIZE, 1.f }, {1.0f, 0.0f, 0.0f, 1.0f} }
+		};
+
+		
+		std::vector<UINT> indices;
+		std::vector<FEngineVertex> textMesh;
+		textMesh.reserve(SIZE);
+		indices.reserve(MAX_TXT_CNT * 6);
+
+		for (int i = 0; i < RECT_SIZE; ++i)
+		{
+			textMesh.emplace_back(rect[i]);
+		}
+
+		indices.emplace_back(0);
+		indices.emplace_back(1);
+		indices.emplace_back(2);
+		indices.emplace_back(1);
+		indices.emplace_back(3);
+		indices.emplace_back(2);
+
+		int last1Idx = 1;
+		int last2Idx = 3;
+
+		for (int i = 1; i < MAX_TXT_CNT; ++i)
+		{
+			float fi = static_cast<float>(i);
+
+			// first triangle
+			indices.emplace_back(last1Idx);
+
+			FEngineVertex vtx1 = textMesh[last1Idx];
+			vtx1.POSITION += FVector{ 1.f, 0.f, 0.f };
+			vtx1.TEXCOORD += FVector{ UV_SIZE, 0.f };
+			textMesh.emplace_back(vtx1);
+
+			int _idx = static_cast<int>(textMesh.size() - 1);
+			indices.emplace_back(_idx);
+			last1Idx = _idx;
+
+			indices.emplace_back(last2Idx);
+
+			// second triangle
+			indices.emplace_back(last1Idx);
+
+			FEngineVertex vtx2 = textMesh[last2Idx];
+			vtx2.POSITION += FVector{ 1.f, 0.f, 0.f };
+			vtx2.TEXCOORD += FVector{ UV_SIZE, 0.f };
+			textMesh.emplace_back(vtx2);
+			
+			_idx = static_cast<int>(textMesh.size() - 1);
+			indices.emplace_back(_idx);
+
+			indices.emplace_back(last2Idx);
+
+			last2Idx = _idx;
+		}
+		
+		UEngineVertexBuffer::Create("Text", textMesh);
+		UEngineIndexBuffer::Create("Text", indices);
+		UMesh::Create("Text");
+	}
+	*/
 }
 
 void UContentsCore::InitObjs()

@@ -19,28 +19,20 @@ VertexShaderOutPut ShrinkEffect_VS(FEngineVertex _Vertex)
 	OutPut.SVPOSITION = _Vertex.POSITION;
 	
 	float ATime = pow(AccTime, 3);
-    const float INIT_S = -4.f;
-    const float INIT_L = 5.f;
+    const float INIT_S = -1.f;
+    const float INIT_L = 2.f;
 	
-	if (0.5f < OutPut.UV.x)
+    if (OutPut.UV.x > 0.5f)
 	{
 		OutPut.UV.x += ATime;
         if (OutPut.UV.x > INIT_L)
         {
             OutPut.UV.x = INIT_L;
         }
-
-    }
-	else if (0.5f > OutPut.UV.x)
-	{
-		OutPut.UV.x -= ATime;
-        if (OutPut.UV.x < INIT_S)
-        {
-            OutPut.UV.x = INIT_S;
-        }
     }
 	
-    if (0.5f < OutPut.UV.y)
+	
+    if (OutPut.UV.y > 0.5f)
     {
         OutPut.UV.y += ATime;
         if (OutPut.UV.y > INIT_L)
@@ -48,14 +40,8 @@ VertexShaderOutPut ShrinkEffect_VS(FEngineVertex _Vertex)
             OutPut.UV.y = INIT_L;
         }
     }
-    else if (0.5f > OutPut.UV.y)
-    {
-        OutPut.UV.y -= ATime;
-        if (OutPut.UV.y < INIT_S)
-        {
-            OutPut.UV.y = INIT_S;
-        }
-    }
+    
+    
 	
 	return OutPut;
 }

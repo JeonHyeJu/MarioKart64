@@ -102,12 +102,11 @@ public:
 	}
 
 	ENGINEAPI virtual void CameraTransUpdate(class UEngineCamera* _Camera);
+	ENGINEAPI void TransformUpdate();
 
 	ENGINEAPI void SetupAttachment(std::shared_ptr<UTransformObject> _Parent);
-
 	ENGINEAPI void SetupAttachment(UTransformObject* _Parent);
-
-	ENGINEAPI void TransformUpdate();
+	ENGINEAPI void RemoveAttachment();
 
 	UTransformObject* Parent = nullptr;
 protected:

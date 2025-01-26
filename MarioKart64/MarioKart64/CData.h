@@ -5,6 +5,11 @@
 
 #define GRAVITY_ACC 9.8f
 
+enum class ECameraType
+{
+	FINISH = 1,
+};
+
 enum class ECircuit
 {
 	LUIGI_RACEWAY = 0,
@@ -104,6 +109,7 @@ struct SPlayerInfo
 	EItemType Item = EItemType::NONE;
 	float4 MapLoc;
 	float4 Rotation;
+	int Lap = 1;
 };
 
 struct FColor

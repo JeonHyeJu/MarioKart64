@@ -18,6 +18,8 @@ public:
 	void SetMap(class ABaseMap* _ptr);
 	void SetInitCameraLoc(const FVector& _loc);
 
+	bool IsFinish = false;	// Temp
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;

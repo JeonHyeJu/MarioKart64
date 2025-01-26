@@ -33,8 +33,11 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
+	void InitEffects();
 	void Starting(float _deltaTime);
 	void Playing(float _deltaTime);
+	void Finishing(float _deltaTime);
+	void OnFinishRace();
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
@@ -42,9 +45,13 @@ private:
 	class APlayer* Player = nullptr;
 
 	std::shared_ptr<class ABalloons> Balloons = nullptr;
+	std::shared_ptr<class ACameraActor> Camera = nullptr;
 
 	EState State = EState::END;
 	FVector CameraInitLoc = FVector{ 0.f, 100.f, -300.f };
 	FVector CameraMoveLoc = FVector{ 0.f, 1.f, -1.f };
 	const float CAM_MOVE_SCALAR = 100.f;
+
+	bool IsFinish = false;
+	int ChangeCamIdx = 0;
 };

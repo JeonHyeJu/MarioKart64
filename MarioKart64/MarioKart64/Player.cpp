@@ -91,7 +91,7 @@ void APlayer::Tick(float _deltaTime)
 	DirVTrain = 0;
 	DirHTrain = 0;
 	Move(_deltaTime);
-	OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
+	//OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
 
 	/* for debug start */
 	if (UEngineInput::IsDown(VK_SPACE))
@@ -409,7 +409,10 @@ void APlayer::Move(float _deltaTime)
 		}
 	}
 
-	Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
+	if (!IsFinish)
+	{
+		Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
+	}
 
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);

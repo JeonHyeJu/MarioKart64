@@ -76,6 +76,30 @@ void AActor::AttachToActor(AActor* _Parent)
 	RootComponent->SetupAttachment(_Parent->RootComponent);
 }
 
+void AActor::DetachFromActor()
+{
+	if (nullptr == Parent)
+	{
+		// Already detached.
+		return;
+	}
+
+	if (nullptr == RootComponent)
+	{
+		MSGASSERT("RootComponent is empty.");
+		return;
+	}
+
+	if (nullptr == Parent->RootComponent)
+	{
+		MSGASSERT("Parent's RootComponent is nullptr.");
+		return;
+	}
+
+	Parent->ChildList.remove(GetThis<AActor>());
+	RootComponent->RemoveAttachment();
+	Parent = nullptr;
+}
 
 FVector AActor::GetActorUpVector()
 {

@@ -3,6 +3,15 @@
 #include "CData.h"
 #include <EngineCore/EngineVertex.h>
 
+enum class EFinishState
+{
+	FINISH_READY = 0,
+	FINISH_RACING,
+	FINISH_RESULT,
+	FINISH_FX,
+	END
+};
+
 class GameData
 {
 public:
@@ -45,6 +54,12 @@ public:
 	void SetCurMap(ECircuit _type);
 	ECircuit GetCurMap() const;
 
+	void SetFinishState(EFinishState _val);
+	EFinishState GetFinishState() const;
+
+	void SetPlayerLap(uint8_t _playerIdx, int _val);
+	int GetPlayerLap(uint8_t _playerIdx) const;
+
 	static const int MAX_PLAYER_CNT = 8;
 	static const int MAX_MAP_CNT = 4;
 
@@ -62,4 +77,6 @@ private:
 	static GameData* pInstance;
 
 	ECircuit CurMapType = ECircuit::END;
+
+	EFinishState FinishState = EFinishState::END;
 };

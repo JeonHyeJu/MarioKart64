@@ -41,4 +41,22 @@ void AHUD::UIRender(UEngineCamera* _Camera, float _DeltaTime)
 			Widget->Render(_Camera, _DeltaTime);
 		}
 	}
+
+	for (AHUD* child : Childs)
+	{
+		child->UIRender(_Camera, _DeltaTime);
+	}
+}
+
+void AHUD::AddChild(AHUD* _hud)
+{
+	for (AHUD* child : Childs)
+	{
+		if (child == _hud)
+		{
+			return;
+		}
+	}
+
+	Childs.push_back(_hud);
 }

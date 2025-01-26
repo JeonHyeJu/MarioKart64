@@ -59,3 +59,4 @@ static std::vector<FEngineVertex> SingleCube = {
 	FEngineVertex{ FVector(-0.5f, 0.5f, 0.5f), { 0.0f , 1.0f }, {0.0f, 0.0f, 1.0f, 0.8f} },
 	FEngineVertex{ FVector(0.5f, 0.5f, 0.5f), { 0.0f , 1.0f }, {1.0f, 1.0f, 1.0f, 0.8f} },
 };
+

@@ -34,18 +34,111 @@ APlayGameMode::APlayGameMode()
 	// for test
 	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
 	GameData::GetInstance()->SetPlayers(players);
-	//GameData::GetInstance()->SetCurMap(ECircuit::LUIGI_RACEWAY);
+	GameData::GetInstance()->SetCurMap(ECircuit::LUIGI_RACEWAY);
 	//GameData::GetInstance()->SetCurMap(ECircuit::KOOPA_TROOPA_BEACH);
 	//GameData::GetInstance()->SetCurMap(ECircuit::MARIO_RACEWAY);
 	//GameData::GetInstance()->SetCurMap(ECircuit::WARIO_STADIUM);
 	//GameData::GetInstance()->SetCurMap(ECircuit::SHERBET_LAND);
 	//GameData::GetInstance()->SetCurMap(ECircuit::ROYAL_RACEWAY);
 	//GameData::GetInstance()->SetCurMap(ECircuit::BOWSERS_CASTLE);
-	GameData::GetInstance()->SetCurMap(ECircuit::RAINBOW_ROAD);
+	//GameData::GetInstance()->SetCurMap(ECircuit::RAINBOW_ROAD);
+
+	Camera = GetWorld()->GetMainCamera();
+	Camera->GetCameraComponent()->GetCameraTarget()->SetClearColor({ 0.f, 0.f, 0.f, 1.f });
 }
 
 APlayGameMode::~APlayGameMode()
 {
+}
+
+void APlayGameMode::BeginPlay()
+{
+	AActor::BeginPlay();
+
+	ULevel* pLevel = GetWorld();
+	//Player = pLevel->GetMainPawn<ADriver>();
+	Player = pLevel->GetMainPawn<APlayer>();
+	
+	Player->SetMap(MapPtr.get());
+	Player->SetInitCameraLoc(CameraInitLoc);
+
+	Camera->GetCameraComponent()->SetZSort(0, true);
+
+	Camera->AddActorLocation(CameraInitLoc);
+	//Camera->AddActorLocation(CameraInitLoc + CameraMoveLoc * CAM_MOVE_SCALAR);
+	Camera->AttachToActor(Player);
+
+	// Temp
+	if (GameData::GetInstance()->GetCurMap() == ECircuit::LUIGI_RACEWAY)
+	{
+		StartLuigiRaceway();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::KOOPA_TROOPA_BEACH)
+	{
+		StartKoopaBeach();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::MARIO_RACEWAY)
+	{
+		StartMarioRaceway();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::WARIO_STADIUM)
+	{
+		StartWarioStadium();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::SHERBET_LAND)
+	{
+		StartSherbetLand();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
+	{
+		StartRoyalRaceway();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::BOWSERS_CASTLE)
+	{
+		StartBowserCastle();
+	}
+	else if (GameData::GetInstance()->GetCurMap() == ECircuit::RAINBOW_ROAD)
+	{
+		StartRainbowRoad();
+	}
+
+	InitEffects();
+
+	State = EState::START;
+
+	ChangeCamIdx = 0;
+
+	// Temp
+	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_READY);
+}
+
+void APlayGameMode::Tick(float _deltaTime)
+{
+	//OutputDebugStringA(("fps: " + std::to_string(1.f / _deltaTime) + "\n").c_str());
+
+	AActor::Tick(_deltaTime);
+
+	if (State == EState::START)
+	{
+		Starting(_deltaTime);
+	}
+	else if (State == EState::PLAY)
+	{
+		Playing(_deltaTime);
+	}
+}
+
+void APlayGameMode::InitEffects()
+{
+	UEngineRenderTarget* target = Camera->GetCameraComponent()->GetCameraTarget();
+	target->AddEffect<FxShrinkEffect>();
+	target->AddEffect<FxExpandEffect>();
+
+	target->GetPostEffect(0)->IsActive = false;
+	target->GetPostEffect(1)->IsActive = false;
+
+	// Temp
+	target->GetPostEffect(0)->IsActive = true;
 }
 
 void APlayGameMode::StartLuigiRaceway()
@@ -257,89 +350,6 @@ void APlayGameMode::StartRainbowRoad()
 	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -83.f, 0.f, -140.f };
 }
 
-void APlayGameMode::BeginPlay()
-{
-	AActor::BeginPlay();
-
-	ULevel* pLevel = GetWorld();
-	//Player = pLevel->GetMainPawn<ADriver>();
-	Player = pLevel->GetMainPawn<APlayer>();
-	
-	Player->SetMap(MapPtr.get());
-	Player->SetInitCameraLoc(CameraInitLoc);
-
-	std::shared_ptr<ACameraActor> Camera = pLevel->GetMainCamera();
-	Camera->GetCameraComponent()->SetZSort(1, true);
-
-	Camera->AddActorLocation(CameraInitLoc);
-	//Camera->AddActorLocation(CameraInitLoc + CameraMoveLoc * CAM_MOVE_SCALAR);
-	Camera->AttachToActor(Player);
-
-	// Temp
-	if (GameData::GetInstance()->GetCurMap() == ECircuit::LUIGI_RACEWAY)
-	{
-		StartLuigiRaceway();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::KOOPA_TROOPA_BEACH)
-	{
-		StartKoopaBeach();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::MARIO_RACEWAY)
-	{
-		StartMarioRaceway();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::WARIO_STADIUM)
-	{
-		StartWarioStadium();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::SHERBET_LAND)
-	{
-		StartSherbetLand();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::ROYAL_RACEWAY)
-	{
-		StartRoyalRaceway();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::BOWSERS_CASTLE)
-	{
-		StartBowserCastle();
-	}
-	else if (GameData::GetInstance()->GetCurMap() == ECircuit::RAINBOW_ROAD)
-	{
-		StartRainbowRoad();
-	}
-
-
-	// Add effect
-	{
-		UEngineRenderTarget* target = Camera->GetCameraComponent()->GetCameraTarget();
-		//UEngineRenderTarget* target = GetWorld()->GetLastRenderTarget();
-		//target->AddEffect<FxShrinkEffect>();
-		//target->AddEffect<FxExpandEffect>();
-
-		/*std::shared_ptr<UPostEffect> Effect = lastTarget->GetPostEffect(0);
-		Effect->IsActive = false;*/
-	}
-
-	State = EState::START;
-}
-
-void APlayGameMode::Tick(float _deltaTime)
-{
-	//OutputDebugStringA(("fps: " + std::to_string(1.f / _deltaTime) + "\n").c_str());
-
-	AActor::Tick(_deltaTime);
-
-	if (State == EState::START)
-	{
-		Starting(_deltaTime);
-	}
-	else if (State == EState::PLAY)
-	{
-		Playing(_deltaTime);
-	}
-}
-
 void APlayGameMode::Starting(float _deltaTime)
 {
 	Balloons->AddActorLocation({ 0.f, 20.f * _deltaTime, 0.f });
@@ -367,14 +377,19 @@ void APlayGameMode::Starting(float _deltaTime)
 
 void APlayGameMode::Playing(float _deltaTime)
 {
-	// temp. for test
-	if (UEngineInput::IsPress('R'))
+	// Temp. for test
+	if (UEngineInput::IsDown('Q'))
 	{
-		MapPtr->AddActorRotation({ -1.f, 0.f, 0.f });
+		OnFinishRace();
 	}
-	else if (UEngineInput::IsPress('T'))
+	else if (UEngineInput::IsPress('R'))
 	{
-		MapPtr->AddActorRotation({ 1.f, 0.f, 0.f });
+		Camera->AddActorRotation({ 0.f, 100.f * _deltaTime, 0.f });
+	}
+
+	if (IsFinish)
+	{
+		Finishing(_deltaTime);
 	}
 
 	FVector loc = Player->GetActorLocation();
@@ -385,4 +400,82 @@ void APlayGameMode::Playing(float _deltaTime)
 	GameData* pData = GameData::GetInstance();
 	pData->SetMinimapLoc(0, loc);
 	pData->SetPlayerRotation(0, rot);
+}
+
+void APlayGameMode::Finishing(float _deltaTime)
+{
+	FVector playerLoc = Player->GetActorLocation();
+	FVector camLoc = Camera->GetActorLocation();
+	FVector camForward =Camera->GetActorForwardVector();
+	playerLoc.Y = 0.f;
+	camLoc.Y = 0.f;
+	camForward.Y = 0.f;
+
+	FVector sub = playerLoc - camLoc;
+	camForward.Normalize();
+	sub.Normalize();
+	float angle = FVector::GetVectorAngleDeg(camForward, sub);
+	if (isnan(angle)) return;
+
+	FVector crossVal = FVector::Cross(camForward, sub);
+	//OutputDebugStringA(("angle: " + std::to_string(angle) + ", crossVal: " + crossVal.ToString() + "\n").c_str());
+
+	if (crossVal.Y > 0)
+	{
+		Camera->AddActorRotation({ 0.f, angle, 0.f });
+	}
+	else
+	{
+		Camera->AddActorRotation({ 0.f, -angle, 0.f });
+	}
+
+	float camRotY = Camera->GetActorRotation().Y;
+	OutputDebugStringA(("camRot: " + std::to_string(camRotY) + "\n").c_str());
+
+	if (camRotY < 20 || camRotY > 140)
+	{
+		OnFinishRace();
+	}
+
+	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_RESULT)
+	{
+		UEngineRenderTarget* target = Camera->GetCameraComponent()->GetCameraTarget();
+		target->GetPostEffect(0)->IsActive = true;
+
+		// TODO: after some seconds..
+		GameData::GetInstance()->SetFinishState(EFinishState::FINISH_FX);
+	}
+}
+
+void APlayGameMode::OnFinishRace()
+{
+	// Temp
+	if (ChangeCamIdx >= 3)
+	{
+		Camera->AttachToActor(Player);
+		Camera->SetActorLocation({ 0.f, 100.f, 300.f });
+		Camera->SetActorRotation({ 10.f, 180.f, 0.f });
+	}
+	else
+	{
+		// TODO: turn to self-driving
+		if (!IsFinish)
+		{
+			IsFinish = true;
+			Player->IsFinish = true;
+			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RACING);
+		}
+
+		FVector playerLoc = Player->GetActorLocation();
+		FVector forwardVec = Player->GetActorForwardVector();
+		FVector rightVec = Player->GetActorRightVector() * -1;
+		FVector sum = forwardVec + rightVec;
+		sum *= 500;
+		sum.Y = 100.f;
+		Camera->SetActorRotation({ 10.f, 120.f, 0.f });
+		Camera->SetActorLocation(playerLoc + sum);
+		Camera->DetachFromActor();
+
+		ChangeCamIdx++;
+	}
 }

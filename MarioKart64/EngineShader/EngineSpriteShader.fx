@@ -18,7 +18,7 @@ cbuffer FSpriteData : register(b1)
 {
 	float4 CuttingPos;
 	float4 CuttingSize;
-	float4 Pivot; // 0.5 0.0f
+	float4 Pivot;
 };
 
 cbuffer FUVValue : register(b2)

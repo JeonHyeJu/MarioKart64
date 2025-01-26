@@ -1013,10 +1013,25 @@ public:
 		};
 	};
 
+	TColor()
+	{
+		R = 0;
+		G = 0;
+		B = 0;
+		A = 1;
+	}
+
 	TColor(unsigned long _Value)
 		:Color(_Value)
 	{
 
+	}
+
+	void operator=(const TColor& _Other)
+	{
+		R = _Other.R;
+		G = _Other.G;
+		B = _Other.B;
 	}
 
 	bool operator==(const TColor& _Other)
@@ -1024,6 +1039,27 @@ public:
 		return R == _Other.R && G == _Other.G && B == _Other.B;
 	}
 
+	bool operator!=(const TColor& _Other)
+	{
+		return R != _Other.R || G != _Other.G || B != _Other.B;
+	}
+
+	TColor operator-(const TColor& _Other)
+	{
+		TColor res;
+		res.R = R - _Other.R;
+		res.G = G - _Other.G;
+		res.B = B - _Other.B;
+		return res;
+	}
+	
+	TColor& operator+=(const TColor& _Other)
+	{
+		R += _Other.R;
+		G += _Other.G;
+		B += _Other.B;
+		return *this;
+	}
 
 	TColor(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
 		:R(_R), G(_G), B(_B), A(_A)

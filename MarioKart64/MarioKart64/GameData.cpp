@@ -72,13 +72,15 @@ const std::vector<SPlayerInfo>& GameData::GetPlayers() const
 void GameData::GetHighRankPlayersIdx(int* _refArr, int _size)
 {
 	// Temp
-	assert(_size == 4 && "High rank has 4 size only.");
+	assert(_size == 6 && "High rank has 6 size only.");
 
 	// Temp
 	_refArr[0] = 1;
 	_refArr[1] = 2;
 	_refArr[2] = 3;
 	_refArr[3] = 4;
+	_refArr[4] = 5;
+	_refArr[5] = 6;
 }
 
 void GameData::SetItem(uint8_t _playerIdx, EItemType _item)

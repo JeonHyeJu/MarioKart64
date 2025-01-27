@@ -57,6 +57,13 @@ public:
 		TransformUpdate();
 	}
 
+	void AddScale3D(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Scale += _Value;
+		TransformUpdate();
+	}
+
 	void SetScale3D(const FVector& _Value)
 	{
 		IsAbsolute = true;

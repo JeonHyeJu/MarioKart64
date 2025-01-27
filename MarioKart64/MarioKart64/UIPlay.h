@@ -11,7 +11,9 @@ public:
 	{
 		IDLE = 0,
 		RACING,
+		RACING_FINISH,
 		RESULT,
+		RESULT_2,
 		WAIT,
 		TOTAL,
 		TOTAL_2,
@@ -64,23 +66,35 @@ private:
 
 	void SetPlayUIVisible(bool _val);
 
+	void AnimPlayerRankColor(float _deltaTime);
+
 	/* Fsm start function */
 	void OnIdle();
 	void OnRacing();
+	void OnFinishRace();
 	void OnShowResult();
+	void OnShowResult2();
 	void OnWait();
 	void OnShowTotal();
 
 	/* Fsm update function */
 	void Idleing(float _deltaTime);
 	void Racing(float _deltaTime);
+	void FinishingRace(float _deltaTime);
 	void ShowingResult(float _deltaTime);
+	void ShowingResult2(float _deltaTime);
 	void Waiting(float _deltaTime);
 	void ShowingTotal(float _deltaTime);
 
+	static const int HIGH_RANK_CNT = 6;
+
 	std::shared_ptr<UImageWidget> Minimap = nullptr;
-	std::shared_ptr<UImageWidget> PlayerRanking = nullptr;
 	std::vector<UImageWidget*> MinimapLocs;
+
+	// Player ranking
+	std::shared_ptr<UImageWidget> PlayerRanking = nullptr;
+	FVector RankingScale = FVector::ZERO;
+	FVector RankingScaleBig = FVector::ZERO;
 
 	// Lab
 	std::shared_ptr<UImageWidget> LapT = nullptr;	// Title
@@ -92,8 +106,12 @@ private:
 	std::shared_ptr<UImageWidget> TimeS = nullptr;
 	std::vector<UImageWidget*> TimeList;
 
+	// High rank
 	std::vector<UImageWidget*> HighRankNumbers;
 	std::vector<UImageWidget*> HighRankPlayers;
+	FVector HighRankLocs[HIGH_RANK_CNT];
+	FVector HighNumLocs[HIGH_RANK_CNT];
+	float HeightRankImg = 0.f;
 
 	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
 
@@ -113,7 +131,6 @@ private:
 	const float RANK_MUL_COLOR = 0.05f;
 
 	const int TIME_CNT = 6;
-	const int HIGH_RANK_CNT = 4;
 	const int MINIMAP_CAR_INIT_IDX = 43;
 
 	bool IsStartCount = false;

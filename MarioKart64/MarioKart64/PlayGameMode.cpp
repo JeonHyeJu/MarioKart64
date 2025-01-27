@@ -428,7 +428,7 @@ void APlayGameMode::Finishing(float _deltaTime)
 	}
 
 	float camRotY = Camera->GetActorRotation().Y;
-	OutputDebugStringA(("camRot: " + std::to_string(camRotY) + "\n").c_str());
+	//OutputDebugStringA(("camRot: " + std::to_string(camRotY) + "\n").c_str());
 
 	if (camRotY < 20 || camRotY > 140)
 	{
@@ -450,6 +450,13 @@ void APlayGameMode::Finishing(float _deltaTime)
 		{
 			elpasedSec = 0.f;
 			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_FX);
+		}
+	}
+	else if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_TOTAL)
+	{
+		if (UEngineInput::IsDown(VK_SPACE) || UEngineInput::IsDown(VK_RETURN))
+		{
+			OutputDebugStringA("Move to next game!!!\n");
 		}
 	}
 }

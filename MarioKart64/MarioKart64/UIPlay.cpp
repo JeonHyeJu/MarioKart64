@@ -10,7 +10,9 @@ AUIPlay::AUIPlay()
 {
 	Fsm.CreateState(EState::IDLE, std::bind(&AUIPlay::Idleing, this, std::placeholders::_1), std::bind(&AUIPlay::OnIdle, this));
 	Fsm.CreateState(EState::RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
+	Fsm.CreateState(EState::RACING_FINISH, std::bind(&AUIPlay::FinishingRace, this, std::placeholders::_1), std::bind(&AUIPlay::OnFinishRace, this));
 	Fsm.CreateState(EState::RESULT, std::bind(&AUIPlay::ShowingResult, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult, this));
+	Fsm.CreateState(EState::RESULT_2, std::bind(&AUIPlay::ShowingResult2, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult2, this));
 	Fsm.CreateState(EState::WAIT, std::bind(&AUIPlay::Waiting, this, std::placeholders::_1), std::bind(&AUIPlay::OnWait, this));
 	Fsm.CreateState(EState::TOTAL, std::bind(&AUIPlay::ShowingTotal, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowTotal, this));
 }
@@ -52,8 +54,13 @@ void AUIPlay::Tick(float _deltaTime)
 {
 	AHUD::Tick(_deltaTime);
 
-	if (!IsStartCount) return;
-	
+	// It look like HFSM a little..
+	EState curState = static_cast<EState>(Fsm.GetCurIState());
+	if (curState >= EState::RACING_FINISH && curState <= EState::RESULT_2)
+	{
+		AnimPlayerRankColor(_deltaTime);
+	}
+
 	Fsm.Update(_deltaTime);
 }
 
@@ -112,7 +119,11 @@ void AUIPlay::InitPlayerRank()
 	PlayerRanking = CreateWidget<UImageWidget>(-1);
 
 	PlayerRanking->SetSprite(FONT_SPRITE, RANK_1ST_SPRITE_IDX+7);
-	PlayerRanking->SetAutoScaleRatio(1.f);
+	RankingScale = PlayerRanking->GetRealScaleOfSprite();
+	RankingScaleBig = RankingScale * 2.5f;
+
+	PlayerRanking->SetAutoScale(false);
+	PlayerRanking->SetScale3D(RankingScale);
 	PlayerRanking->SetWorldLocation({ -450, -250 });
 
 	SetPlayerRankColor(playerCnt);
@@ -192,16 +203,22 @@ void AUIPlay::InitHighRank()
 			height = scale.Y;
 		}
 
-		ptr->SetWorldLocation({ -550.f, INIT_Y - i * (height + MARGIN) });
+		FVector loc = { -550.f, INIT_Y - i * (height + MARGIN) };
+		ptr->SetWorldLocation(loc);
 		HighRankPlayers.push_back(ptr.get());
+		HighRankLocs[i] = loc;
 
 		// Init numbers
+		loc = ptr->GetWorldLocation() + FVector{ -5.f, -height + 25.f, 0.f };
 		std::shared_ptr<UImageWidget> ptrN = CreateWidget<UImageWidget>(0);
 		ptrN->SetSprite(FONT_SPRITE, 1);
-		ptrN->SetAutoScaleRatio(1.f);
-		ptrN->SetWorldLocation(ptr->GetWorldLocation() + FVector{ -5.f, -height + 25.f, 0.f });
+		ptrN->SetAutoScaleRatio(.8f);
+		ptrN->SetWorldLocation(loc);
 		HighRankNumbers.push_back(ptrN.get());
+		HighNumLocs[i] = loc;
 	}
+
+	HeightRankImg = height;
 }
 
 void AUIPlay::InitItem()
@@ -282,6 +299,8 @@ void AUIPlay::InitTexts()
 
 void AUIPlay::CountTimer(float _deltaTime)
 {
+	if (!IsStartCount) return;
+
 	ElapsedSecs += _deltaTime;
 	SetTimerUI(ElapsedSecs);
 }
@@ -363,7 +382,7 @@ void AUIPlay::SetTimerUI(float _secs)
 
 void AUIPlay::SetHighRankUI()
 {
-	static const int RANK_SIZE = 4;
+	const int RANK_SIZE = 6;
 	int rank[RANK_SIZE];
 
 	GameData* gameData = GameData::GetInstance();
@@ -453,15 +472,52 @@ void AUIPlay::OnIdle()
 void AUIPlay::OnRacing()
 {
 	SetPlayUIVisible(true);
+
+	for (int i = 0; i < HIGH_RANK_CNT; ++i)
+	{
+		HighRankPlayers[i]->SetWorldLocation(HighRankLocs[i]);
+		HighRankNumbers[i]->SetWorldLocation(HighNumLocs[i]);
+	}
+}
+
+void AUIPlay::OnFinishRace()
+{
+
 }
 
 void AUIPlay::OnShowResult()
 {
 	SetPlayUIVisible(false);
+	PlayerRanking->SetActive(true);
+
+	for (size_t i = 0, size = HighRankNumbers.size(); i < size; ++i)
+	{
+		HighRankNumbers[i]->SetActive(true);
+	}
+	for (size_t i = 0, size = HighRankPlayers.size(); i < size; ++i)
+	{
+		HighRankPlayers[i]->SetActive(true);
+	}
+
+	StopTimer();
+	ResetTimer();
+}
+
+void AUIPlay::OnShowResult2()
+{
+	FVector locRank{ 640.f, 0.f, 0.f };
+	for (int i = 0; i < HIGH_RANK_CNT; ++i)
+	{
+		HighRankPlayers[i]->SetWorldLocation(locRank + FVector{ i * (HeightRankImg + 30.f), 0.f });
+		HighRankNumbers[i]->SetWorldLocation(HighRankPlayers[i]->GetWorldLocation() + FVector{ -5.f, -HeightRankImg + 25.f, 0.f });
+	}
 }
 
 void AUIPlay::OnWait()
 {
+	PlayerRanking->SetActive(false);
+	PlayerRanking->SetScale3D(RankingScale);
+
 	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RESULT);
 }
 
@@ -496,16 +552,167 @@ void AUIPlay::Racing(float _deltaTime)
 
 	if (pData->GetFinishState() == EFinishState::FINISH_RACING)
 	{
+		Fsm.ChangeState(EState::RACING_FINISH);
+	}
+}
+
+void AUIPlay::AnimPlayerRankColor(float _deltaTime)
+{
+	static float colorY = -5.f * _deltaTime;
+
+	FVector curColor = PlayerRanking->ColorData.MulColor;
+	if (curColor.Y >= 1)
+	{
+		colorY = -5.f * _deltaTime;
+	}
+	else if (curColor.Y <= 0)
+	{
+		colorY = 5.f * _deltaTime;
+	}
+	curColor.Y += colorY;
+
+	if (curColor.Y > 1) curColor.Y = 1.f;
+	if (curColor.Y < 0) curColor.Y = 0.f;
+
+	PlayerRanking->ColorData.MulColor = curColor;
+}
+
+void AUIPlay::FinishingRace(float _deltaTime)
+{
+	PlayerRanking->AddScale3D({ 400.f * _deltaTime, 400.f * _deltaTime });
+
+	if (PlayerRanking->GetWorldScale3D().X >= RankingScaleBig.X &&
+		PlayerRanking->GetWorldScale3D().Y >= RankingScaleBig.Y)
+	{
 		Fsm.ChangeState(EState::RESULT);
 	}
 }
 
 void AUIPlay::ShowingResult(float _deltaTime)
 {
-	if (true)
+	static float elapsedSec = 0.f;
+	static int startedIdx = 0;
+	static const float SPEED = 500.f;
+
+	bool isStarting = (startedIdx < HIGH_RANK_CNT);
+
+	for (int i = 0; i < HIGH_RANK_CNT; ++i)
 	{
-		GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RESULT);
-		Fsm.ChangeState(EState::WAIT);
+		if (isStarting)
+		{
+			if (i == startedIdx)
+			{
+				HighRankPlayers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+				HighRankNumbers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+			}
+		}
+		else
+		{
+			HighRankPlayers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+			HighRankNumbers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+		}
+	}
+
+	if (isStarting)
+	{
+		elapsedSec += _deltaTime;
+
+		if (elapsedSec > .25f)
+		{
+			elapsedSec = 0.f;
+			startedIdx++;
+		}
+	}
+
+	float x = HighRankPlayers[HIGH_RANK_CNT-1]->GetWorldLocation().X;
+	if (x <= -700.f)
+	{
+		elapsedSec = 0.f;
+		startedIdx = 0;
+
+		Fsm.ChangeState(EState::RESULT_2);
+	}
+}
+
+void AUIPlay::ShowingResult2(float _deltaTime)
+{
+	// Temp
+	static int state = 0;
+	static float elapsedSec = 0.f;
+	static int startedIdx = 1;
+	static int endIdx = -1;
+	static const float SPEED = 1000.f;
+
+	if (state == 0)
+	{
+		for (int i = 0; i < HIGH_RANK_CNT; ++i)
+		{
+			if (i < startedIdx && i > endIdx)
+			{
+				HighRankPlayers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+				HighRankNumbers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+
+				if (HighRankPlayers[i]->GetWorldLocation().X < -250.f + i * (HeightRankImg + 30.f))
+				{
+					endIdx = i;
+				}
+			}
+		}
+
+		elapsedSec += _deltaTime;
+		if (elapsedSec > .25f)
+		{
+			elapsedSec = 0.f;
+			startedIdx = (startedIdx > HIGH_RANK_CNT ? HIGH_RANK_CNT : startedIdx + 1);
+		}
+
+		if (endIdx == HIGH_RANK_CNT - 1)
+		{
+			elapsedSec = 0.f;
+			startedIdx = 1;
+			endIdx = -1;
+			state = 1;
+		}
+	}
+	else if (state == 1)
+	{
+		elapsedSec += _deltaTime;
+		if (elapsedSec > 1.5f)
+		{
+			elapsedSec = 0.f;
+			state = 2;
+		}
+	}
+	else if (state == 2)
+	{
+		for (int i = 0; i < HIGH_RANK_CNT; ++i)
+		{
+			if (i < startedIdx && i > endIdx)
+			{
+				HighRankPlayers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+				HighRankNumbers[i]->AddWorldLocation({ -SPEED * _deltaTime, 0.f, 0.f });
+
+				if (HighRankPlayers[i]->GetWorldLocation().X < -1280.f + i * (HeightRankImg + 30.f))
+				{
+					endIdx = i;
+				}
+			}
+		}
+
+		elapsedSec += _deltaTime;
+		if (elapsedSec > .25f)
+		{
+			elapsedSec = 0.f;
+			startedIdx = (startedIdx > HIGH_RANK_CNT ? HIGH_RANK_CNT : startedIdx + 1);
+		}
+
+		if (endIdx == HIGH_RANK_CNT - 1)
+		{
+			elapsedSec = 0.f;
+			startedIdx = 1;
+			endIdx = -1;
+			Fsm.ChangeState(EState::WAIT);
+		}
 	}
 }
 
@@ -523,6 +730,12 @@ void AUIPlay::ShowingTotal(float _deltaTime)
 	if (static_cast<EState>(Fsm.GetCurIState()) == EState::TOTAL)
 	{
 		bool isEnd = ShowTexts(_deltaTime);
+
+		if (isEnd)
+		{
+			// TODO: move to Total2
+			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_TOTAL);
+		}
 
 		/*if (some case)
 		{

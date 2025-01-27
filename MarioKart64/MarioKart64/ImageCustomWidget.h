@@ -1,7 +1,7 @@
 #pragma once
-#include <EngineCore/Widget.h>
+#include "DefaultWidget.h"
 
-class WImageCustomWidget : public UWidget
+class WImageCustomWidget : public WDefaultWidget
 {
 public:
 	WImageCustomWidget();
@@ -17,7 +17,7 @@ public:
 	void SetSprite(std::string_view _name, UINT _index = 0);
 	FVector GetRealScaleOfSprite() const;
 	void SetColor(const FVector& _color);
-	void SetAutoColor(bool _val, uint8_t _startIdx=0);
+	void SetAutoColor(bool _val, uint8_t _startIdx=0, uint8_t _changeSpeed=15);
 
 protected:
 	void Tick(float _deltaTime) override;
@@ -30,7 +30,6 @@ private:
 	float AutoScaleRatio = 1.0f;
 	class UEngineSprite* Sprite = nullptr;
 
-	URenderUnit RenderUnit;
 	FSpriteData SpriteData;
 	FVector Color = FVector::ZERO;
 	UINT CurIndex = 0;
@@ -38,7 +37,7 @@ private:
 	bool IsAutoColor = false;
 	UINT AutoColorIdx = 0;
 	UColor AutoColor = UColor::BLACK;
-	int VAL = 0;
+	uint8_t ChangeSpeed = 15;
 
 	std::vector<UColor> AutoColors = {
 		{ 255, 0, 0, 255 },

@@ -41,12 +41,10 @@ public:
 		return NewWidgetPtr;
 	}
 
-	ENGINEAPI void AddChild(AHUD* _hud);
+	ENGINEAPI void AddRenderChild(AHUD* _hud);	// No parent's transfrom included..
 
 private:
 	std::map<int, std::list<std::shared_ptr<class UWidget>>> Widgets;
-
-	std::list<AHUD*> Childs;
 
 	void UIRender(UEngineCamera* _Camera, float _DeltaTime);
 };

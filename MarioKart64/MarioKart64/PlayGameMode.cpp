@@ -136,9 +136,6 @@ void APlayGameMode::InitEffects()
 
 	target->GetPostEffect(0)->IsActive = false;
 	target->GetPostEffect(1)->IsActive = false;
-
-	// Temp
-	target->GetPostEffect(0)->IsActive = true;
 }
 
 void APlayGameMode::StartLuigiRaceway()
@@ -415,18 +412,19 @@ void APlayGameMode::Finishing(float _deltaTime)
 	camForward.Normalize();
 	sub.Normalize();
 	float angle = FVector::GetVectorAngleDeg(camForward, sub);
-	if (isnan(angle)) return;
-
-	FVector crossVal = FVector::Cross(camForward, sub);
-	//OutputDebugStringA(("angle: " + std::to_string(angle) + ", crossVal: " + crossVal.ToString() + "\n").c_str());
-
-	if (crossVal.Y > 0)
+	if (!isnan(angle))
 	{
-		Camera->AddActorRotation({ 0.f, angle, 0.f });
-	}
-	else
-	{
-		Camera->AddActorRotation({ 0.f, -angle, 0.f });
+		FVector crossVal = FVector::Cross(camForward, sub);
+		//OutputDebugStringA(("angle: " + std::to_string(angle) + ", crossVal: " + crossVal.ToString() + "\n").c_str());
+
+		if (crossVal.Y > 0)
+		{
+			Camera->AddActorRotation({ 0.f, angle, 0.f });
+		}
+		else
+		{
+			Camera->AddActorRotation({ 0.f, -angle, 0.f });
+		}
 	}
 
 	float camRotY = Camera->GetActorRotation().Y;
@@ -440,10 +438,19 @@ void APlayGameMode::Finishing(float _deltaTime)
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_RESULT)
 	{
 		UEngineRenderTarget* target = Camera->GetCameraComponent()->GetCameraTarget();
-		target->GetPostEffect(0)->IsActive = true;
+		if (!target->GetPostEffect(0)->IsActive)
+		{
+			target->GetPostEffect(0)->IsActive = true;
+		}
 
-		// TODO: after some seconds..
-		GameData::GetInstance()->SetFinishState(EFinishState::FINISH_FX);
+		static float elpasedSec = 0.f;
+		elpasedSec += _deltaTime;
+
+		if (elpasedSec >= 1.f)
+		{
+			elpasedSec = 0.f;
+			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_FX);
+		}
 	}
 }
 
@@ -463,6 +470,7 @@ void APlayGameMode::OnFinishRace()
 		{
 			IsFinish = true;
 			Player->IsFinish = true;
+
 			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RACING);
 		}
 

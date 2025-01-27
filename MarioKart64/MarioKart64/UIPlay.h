@@ -3,6 +3,7 @@
 #include <EngineBase/FSMStateManager.h>
 
 class UImageWidget;
+class WTextWrapper;
 class AUIPlay : public AHUD
 {
 public:
@@ -13,6 +14,7 @@ public:
 		RESULT,
 		WAIT,
 		TOTAL,
+		TOTAL_2,
 		END
 	};
 
@@ -53,6 +55,7 @@ private:
 	}
 
 	void CountTimer(float _deltaTime);
+	bool ShowTexts(float _deltaTime);
 
 	void SetTimerUI(float _secs);
 	void SetHighRankUI();
@@ -95,8 +98,12 @@ private:
 	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
 
 	// Result texts
-	std::vector<class ATextWidget*> UpperTexts;
-	std::vector<class ATextWidget*> LowerTexts;
+	std::shared_ptr<WTextWrapper> TextWrapperU = nullptr;
+	std::shared_ptr<WTextWrapper> TextWrapperL = nullptr;
+	const float InitX_U = 650.f;
+	const float MoveX_U = 50.f;
+	const float InitX_L = -1200.f ;
+	const float MoveX_L = -550.f;
 
 	// Temp
 	FVector MinimapSizeInfo = FVector::ZERO;

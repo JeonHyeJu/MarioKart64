@@ -3,9 +3,8 @@
 #include "GameData.h"
 #include "CData.h"
 #include "CGlobal.h"
-#include "TextWidget.h"
+#include "TextWrapper.h"
 #include <EngineCore/ImageWidget.h>
-#include "TextWidget.h"
 
 AUIPlay::AUIPlay()
 {
@@ -54,7 +53,7 @@ void AUIPlay::Tick(float _deltaTime)
 	AHUD::Tick(_deltaTime);
 
 	if (!IsStartCount) return;
-
+	
 	Fsm.Update(_deltaTime);
 }
 
@@ -250,9 +249,10 @@ void AUIPlay::InitLap()
 
 void AUIPlay::InitTexts()
 {
-	const float MARGIN_H = -50.f;
+	TextWrapperU = CreateWidget<WTextWrapper>(0);
+	TextWrapperL = CreateWidget<WTextWrapper>(0);
+
 	{
-		FVector initLoc{ 50.f, 300.f };
 		std::vector<std::string> initTexts = {
 			"RESULTS",
 			"ROUND1",
@@ -262,25 +262,11 @@ void AUIPlay::InitTexts()
 			"4.MARIO   00'00\"00",
 		};
 
-		for (size_t i = 0, size = initTexts.size(); i < size; ++i)
-		{
-			ATextWidget* ptr = GetWorld()->SpawnActor<ATextWidget>().get();
-			AddChild(ptr);
-			UpperTexts.push_back(ptr);
-			UpperTexts[i]->SetText(initTexts[i]);
-			UpperTexts[i]->Move(initLoc + FVector{ 0.f, MARGIN_H } * static_cast<float>(i));
-		}
-
-		UpperTexts[0]->SetScaleRatio(4.f);
-		UpperTexts[0]->Move(initLoc + FVector{ 100.f, 0.f });
-		//UpperTexts[0]->SetColor({ 1.f, 0.f, 0.f, 1.f });
-		UpperTexts[0]->SetAutoColor(true);
-
-		UpperTexts[1]->Move(initLoc + FVector{ 175.f, MARGIN_H - 4.f });
+		TextWrapperU->InitUpperTexts(initTexts);
+		TextWrapperU->SetWorldLocation({ InitX_U, 0.f });
 	}
 
 	{
-		FVector initLoc{ -100.f, -100.f };
 		std::vector<std::string> initTexts = {
 			"5.MARIO   00'00\"00",
 			"6.MARIO   00'00\"00",
@@ -289,16 +275,8 @@ void AUIPlay::InitTexts()
 			"MUSHROOM CUP 50#",
 		};
 
-		for (size_t i = 0, size = initTexts.size(); i < size; ++i)
-		{
-			ATextWidget* ptr = GetWorld()->SpawnActor<ATextWidget>().get();
-			AddChild(ptr);
-			LowerTexts.push_back(ptr);
-			LowerTexts[i]->SetText(initTexts[i]);
-			LowerTexts[i]->Move(initLoc + FVector{ 0.f, MARGIN_H } * static_cast<float>(i));
-		}
-
-		LowerTexts[LowerTexts.size() - 1]->SetScaleRatio(2.f);
+		TextWrapperL->InitLowerTexts(initTexts);
+		TextWrapperL->SetWorldLocation({ InitX_L, 0.f });
 	}
 }
 
@@ -306,6 +284,38 @@ void AUIPlay::CountTimer(float _deltaTime)
 {
 	ElapsedSecs += _deltaTime;
 	SetTimerUI(ElapsedSecs);
+}
+
+bool AUIPlay::ShowTexts(float _deltaTime)
+{
+	float xu = TextWrapperU->GetWorldLocation().X;
+	float xl = TextWrapperL->GetWorldLocation().X;
+	float speed = 1000.f * _deltaTime;
+	bool isEnd = false;
+
+	if (xu > MoveX_U)
+	{
+		if (xu - speed <= MoveX_U)
+		{
+			speed = xu - MoveX_U;
+			isEnd = true;
+		}
+
+		TextWrapperU->AddWorldLocation({ -speed, 0.f, 0.f });
+	}
+
+	if (xl < MoveX_L)
+	{
+		if (xl + speed >= MoveX_U)
+		{
+			speed = MoveX_U - xl;
+			isEnd = isEnd & true;
+		}
+
+		TextWrapperL->AddWorldLocation({ speed, 0.f, 0.f });
+	}
+
+	return isEnd;
 }
 
 void AUIPlay::ResetTimer()
@@ -412,6 +422,11 @@ void AUIPlay::SetPlayUIVisible(bool _val)
 	TimeC->SetActive(_val);
 	TimeS->SetActive(_val);
 
+	for (size_t i = 0, size = MinimapLocs.size(); i < size; ++i)
+	{
+		MinimapLocs[i]->SetActive(_val);
+	}
+
 	for (size_t i = 0, size = TimeList.size(); i < size; ++i)
 	{
 		TimeList[i]->SetActive(_val);
@@ -487,14 +502,16 @@ void AUIPlay::Racing(float _deltaTime)
 
 void AUIPlay::ShowingResult(float _deltaTime)
 {
-	// Somthing..
-	// after execute this
-
-	Fsm.ChangeState(EState::WAIT);
+	if (true)
+	{
+		GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RESULT);
+		Fsm.ChangeState(EState::WAIT);
+	}
 }
 
 void AUIPlay::Waiting(float _deltaTime)
 {
+	// TODO: Hide ui
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_FX)
 	{
 		Fsm.ChangeState(EState::TOTAL);
@@ -503,5 +520,24 @@ void AUIPlay::Waiting(float _deltaTime)
 
 void AUIPlay::ShowingTotal(float _deltaTime)
 {
+	if (static_cast<EState>(Fsm.GetCurIState()) == EState::TOTAL)
+	{
+		bool isEnd = ShowTexts(_deltaTime);
 
+		/*if (some case)
+		{
+			Fsm.ChangeState(EState::TOTAL_2);
+		}*/
+	}
+	else
+	{
+		//bool isEnd = ShowTexts2(_deltaTime);
+
+		/*if (some case)
+		{
+			Fsm.ChangeState(EState::END);
+		}*/
+	}
+
+	
 }

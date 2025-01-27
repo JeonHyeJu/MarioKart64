@@ -9,6 +9,7 @@ enum class EFinishState
 	FINISH_RACING,
 	FINISH_RESULT,
 	FINISH_FX,
+	FINISH_TOTAL,
 	END
 };
 

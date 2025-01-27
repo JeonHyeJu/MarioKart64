@@ -4,7 +4,6 @@
 
 WImageCustomWidget::WImageCustomWidget()
 {
-	RenderUnit.TransformObject = this;
 	RenderUnit.SetMesh("Rect");
 	RenderUnit.SetMaterial(CGlobal::WIDGET_SHADER);
 
@@ -23,7 +22,7 @@ WImageCustomWidget::~WImageCustomWidget()
 
 void WImageCustomWidget::Tick(float _deltaTime)
 {
-	UWidget::Tick(_deltaTime);
+	WDefaultWidget::Tick(_deltaTime);
 
 	if (IsAutoColor)
 	{
@@ -33,7 +32,7 @@ void WImageCustomWidget::Tick(float _deltaTime)
 
 void WImageCustomWidget::Render(UEngineCamera* _camera, float _deltaTime)
 {
-	UWidget::Render(_camera, _deltaTime);
+	WDefaultWidget::Render(_camera, _deltaTime);
 
 	if (true == IsAutoScale && nullptr != Sprite)
 	{
@@ -50,6 +49,7 @@ void WImageCustomWidget::SetAutoScale(bool _Value)
 {
 	IsAutoScale = _Value;
 }
+
 void WImageCustomWidget::SetAutoScaleRatio(float _Scale)
 {
 	AutoScaleRatio = _Scale;
@@ -75,7 +75,7 @@ void WImageCustomWidget::SetColor(const FVector& _color)
 	Color = _color;
 }
 
-void WImageCustomWidget::SetAutoColor(bool _val, uint8_t _startIdx)
+void WImageCustomWidget::SetAutoColor(bool _val, uint8_t _startIdx, uint8_t _changeSpeed)
 {
 	if (_startIdx > 6)
 	{
@@ -84,6 +84,8 @@ void WImageCustomWidget::SetAutoColor(bool _val, uint8_t _startIdx)
 
 	IsAutoColor = _val;
 	AutoColorIdx = _startIdx;
+	ChangeSpeed = _changeSpeed;
+
 	Color.X = AutoColors[AutoColorIdx].R / 255.f;
 	Color.Y = AutoColors[AutoColorIdx].G / 255.f;
 	Color.Z = AutoColors[AutoColorIdx].B / 255.f;
@@ -114,63 +116,52 @@ void WImageCustomWidget::ChangeAutoColor(float _deltaTime)
 		nextIdx = 0;
 	}
 
-	// Temp. TODO: organize
 	UColor nextColor = AutoColors[nextIdx];
 	FVector addColor = FVector::NONE;
 	if (AutoColor != nextColor)
 	{
-		const char MUL_VAL = 15;
 		UColor subColor = nextColor - AutoColor;
 		if (subColor.R != 0)
 		{
-			subColor.R /= subColor.R;
-			subColor.R *= MUL_VAL;
-
 			float mulVal = 1.f;
 			if (nextColor.R < AutoColor.R)
 			{
-				AutoColor.R -= subColor.R;
+				AutoColor.R -= ChangeSpeed;
 				mulVal = -1.f;
 			}
 			else
 			{
-				AutoColor.R += subColor.R;
+				AutoColor.R += ChangeSpeed;
 			}
-			addColor.X = static_cast<float>(subColor.R * mulVal / 255.f);
+			addColor.X = static_cast<float>(ChangeSpeed * mulVal / 255.f);
 		}
 		if (subColor.G != 0)
 		{
-			subColor.G /= subColor.G;
-			subColor.G *= MUL_VAL;
-
 			float mulVal = 1.f;
 			if (nextColor.G < AutoColor.G)
 			{
-				AutoColor.G -= subColor.G;
+				AutoColor.G -= ChangeSpeed;
 				mulVal = -1.f;
 			}
 			else
 			{
-				AutoColor.G += subColor.G;
+				AutoColor.G += ChangeSpeed;
 			}
-			addColor.Y = static_cast<float>(subColor.G * mulVal / 255.f);
+			addColor.Y = static_cast<float>(ChangeSpeed * mulVal / 255.f);
 		}
 		if (subColor.B != 0)
 		{
-			subColor.B /= subColor.B;
-			subColor.B *= MUL_VAL;
-
 			float mulVal = 1.f;
 			if (nextColor.B < AutoColor.B)
 			{
-				AutoColor.B -= subColor.B;
+				AutoColor.B -= ChangeSpeed;
 				mulVal = -1.f;
 			}
 			else
 			{
-				AutoColor.B += subColor.B;
+				AutoColor.B += ChangeSpeed;
 			}
-			addColor.Z = static_cast<float>(subColor.B * mulVal / 255.f);
+			addColor.Z = static_cast<float>(ChangeSpeed * mulVal / 255.f);
 		}
 
 		Color += addColor;

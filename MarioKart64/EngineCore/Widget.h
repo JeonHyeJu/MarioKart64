@@ -36,11 +36,12 @@ public:
 		Up = _Value;
 	}
 
+protected:
+	class AHUD* HUD;
+
 private:
 	std::function<void()> Hover;
 	std::function<void()> Down;
 	std::function<void()> Up;
-
-	class AHUD* HUD;
 };
 

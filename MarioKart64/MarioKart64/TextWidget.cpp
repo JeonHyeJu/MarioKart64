@@ -1,17 +1,16 @@
 #include "PreCompile.h"
 #include "TextWidget.h"
-//#include <EngineCore/ImageWidget.h>
 #include "ImageCustomWidget.h"
 
-const UINT ATextWidget::MAX_SIZE = 24;
+const UINT WTextWidget::MAX_SIZE = 24;
 
-ATextWidget::ATextWidget()
+WTextWidget::WTextWidget()
 {
 	Texts.reserve(MAX_SIZE);
 
 	for (UINT i = 0; i < MAX_SIZE; ++i)
 	{
-		std::shared_ptr<WImageCustomWidget> ptr = CreateWidget<WImageCustomWidget>(0);
+		std::shared_ptr<WImageCustomWidget> ptr = CreateWidget<WImageCustomWidget>(0, HUD);
 		ptr->SetSprite(SPRITE_NAME, 75);
 		ptr->SetAutoScaleRatio(ScaleRatio);
 		Texts.push_back(ptr.get());
@@ -21,26 +20,26 @@ ATextWidget::ATextWidget()
 			WideWidth = ptr->GetRealScaleOfSprite().X * .85f;
 		}
 	}
-
-	Move(FVector::ZERO);
 }
 
-ATextWidget::~ATextWidget()
+WTextWidget::~WTextWidget()
 {
 
 }
 
-void ATextWidget::BeginPlay()
+void WTextWidget::Tick(float _deltaTime)
 {
-	AHUD::BeginPlay();
+	WDefaultWidget::Tick(_deltaTime);
 }
 
-void ATextWidget::Tick(float _deltaTime)
+void WTextWidget::Render(UEngineCamera* _camera, float _deltaTime)
 {
-	AHUD::Tick(_deltaTime);
+	WDefaultWidget::Render(_camera, _deltaTime);
+
+	//CameraTransUpdate(_camera);
 }
 
-void ATextWidget::SetScaleRatio(float _ratio)
+void WTextWidget::SetScaleRatio(float _ratio)
 {
 	ScaleRatio = _ratio;
 	for (size_t i = 0, size = Texts.size(); i < size; ++i)
@@ -48,14 +47,21 @@ void ATextWidget::SetScaleRatio(float _ratio)
 		Texts[i]->SetAutoScaleRatio(ScaleRatio);
 		if (i == 0)
 		{
-			WideWidth = Texts[i]->GetRealScaleOfSprite().X * .85f;
+			if (ScaleRatio < 3.f)
+			{
+				WideWidth = Texts[i]->GetRealScaleOfSprite().X * .65f;
+			}
+			else
+			{
+				WideWidth = Texts[i]->GetRealScaleOfSprite().X * .85f;
+			}
 		}
 	}
 
 	SetText(Text);	// Temp
 }
 
-void ATextWidget::SetText(std::string_view _text)
+void WTextWidget::SetText(std::string_view _text)
 {
 	Text = _text;
 
@@ -101,13 +107,14 @@ void ATextWidget::SetText(std::string_view _text)
 		// else: number
 
 		Texts[i]->SetSprite(SPRITE_NAME, idx);
-		Texts[i]->SetRelativeLocation(FVector{ InitLoc.X + accMarginX + subX, InitLoc.Y + margin.Y });
+		FVector move = FVector{ InitLoc.X + accMarginX + subX, InitLoc.Y + margin.Y };
+		Texts[i]->SetRelativeLocation(move);
 
 		accMarginX += margin.X;
 	}
 }
 
-void ATextWidget::SetColor(const FVector& _color)
+void WTextWidget::SetColor(const FVector& _color)
 {
 	Color = _color;
 	for (size_t i = 0, size = Texts.size(); i < size; ++i)
@@ -116,21 +123,33 @@ void ATextWidget::SetColor(const FVector& _color)
 	}
 }
 
-void ATextWidget::SetAutoColor(bool _val, uint8_t _startIdx)
+void WTextWidget::SetAutoColor(bool _val, uint8_t _startIdx, uint8_t _changeSpeed)
 {
 	for (size_t i = 0, size = Texts.size(); i < size; ++i)
 	{
-		Texts[i]->SetAutoColor(_val, _startIdx);
+		Texts[i]->SetAutoColor(_val, _startIdx, _changeSpeed);
 	}
 }
 
-void ATextWidget::Move(const FVector& _vec)
+void WTextWidget::SetInitLoc(const FVector& _vec)
 {
-	FVector prevVec = InitLoc;
 	InitLoc = _vec;
-	for (size_t j = 0, size1 = Texts.size(); j < size1; ++j)
+}
+
+void WTextWidget::SetMoveLoc(const FVector& _vec)
+{
+	MoveLoc = _vec;
+}
+
+void WTextWidget::Move(float _deltaTime)
+{
+	for (size_t i = 0, size1 = Texts.size(); i < size1; ++i)
 	{
-		FVector loc = Texts[j]->GetRelativeLocation();
-		Texts[j]->SetRelativeLocation(FVector{ InitLoc.X + loc.X - prevVec.X, InitLoc.Y + loc.Y - prevVec.Y });
+		FVector loc = Texts[i]->GetRelativeLocation();
+		float sub = ((MoveLoc - loc) * _deltaTime * 1.f).X;
+		if (abs(sub) < 1) continue;
+
+		Texts[i]->AddRelativeLocation({ sub, 0.f, 0.f });
+		//Texts[j]->SetRelativeLocation({ MoveLoc.X, 0.f, 0.f });
 	}
 }

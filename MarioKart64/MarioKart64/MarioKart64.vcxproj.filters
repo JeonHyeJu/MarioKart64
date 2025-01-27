@@ -368,6 +368,12 @@
     <ClInclude Include="ImageCustomWidget.h">
       <Filter>HUD</Filter>
     </ClInclude>
+    <ClInclude Include="DefaultWidget.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="TextWrapper.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -485,6 +491,12 @@
       <Filter>HUD</Filter>
     </ClCompile>
     <ClCompile Include="ImageCustomWidget.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultWidget.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWrapper.cpp">
       <Filter>HUD</Filter>
     </ClCompile>
   </ItemGroup>

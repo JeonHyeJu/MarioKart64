@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DefaultWidget.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ImageCustomWidget.h">
       <SubType>
       </SubType>
@@ -261,6 +265,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="TestVertex.h" />
+    <ClInclude Include="TextWrapper.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\aabb.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\ai_assert.h" />
     <ClInclude Include="ThirdParty\Assimp\Inc\assimp\anim.h" />
@@ -364,6 +372,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DefaultWidget.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ImageCustomWidget.cpp">
       <SubType>
       </SubType>
@@ -474,6 +486,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="TestGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TextWrapper.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -4,11 +4,16 @@
 #include "CData.h"
 #include "CGlobal.h"
 #include "TextWrapper.h"
+#include "LetterboxWidget.h"
 #include <EngineCore/ImageWidget.h>
 
 AUIPlay::AUIPlay()
 {
 	Fsm.CreateState(EState::IDLE, std::bind(&AUIPlay::Idleing, this, std::placeholders::_1), std::bind(&AUIPlay::OnIdle, this));
+	Fsm.CreateState(EState::OPEN_GAME, std::bind(&AUIPlay::OpeningGame, this, std::placeholders::_1), std::bind(&AUIPlay::OnOpenGame, this));
+	Fsm.CreateState(EState::TITLE_GAME, std::bind(&AUIPlay::TitlingGame, this, std::placeholders::_1), std::bind(&AUIPlay::OnTitleGame, this));
+	Fsm.CreateState(EState::START_RACING, std::bind(&AUIPlay::StartingRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnStartRacing, this));
+	Fsm.CreateState(EState::RACING_INIT, std::bind(&AUIPlay::InitiatingRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnInitRacing, this));
 	Fsm.CreateState(EState::RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
 	Fsm.CreateState(EState::RACING_FINISH, std::bind(&AUIPlay::FinishingRace, this, std::placeholders::_1), std::bind(&AUIPlay::OnFinishRace, this));
 	Fsm.CreateState(EState::RESULT, std::bind(&AUIPlay::ShowingResult, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult, this));
@@ -34,6 +39,7 @@ void AUIPlay::BeginPlay()
 	InitMinimapLoc();
 	InitLap();
 	InitTexts();
+	InitLetterBox();
 
 	// Temp
 	SetHighRankUI();
@@ -297,6 +303,13 @@ void AUIPlay::InitTexts()
 	}
 }
 
+void AUIPlay::InitLetterBox()
+{
+	LetterBox = CreateWidget<WLetterboxWidget>(0);
+	LetterBox->SetScale3D({ CGlobal::FWINDOW_W, CGlobal::FWINDOW_H });
+	LetterBox->SetLocY(CurH, CGlobal::FWINDOW_H - CurH);
+}
+
 void AUIPlay::CountTimer(float _deltaTime)
 {
 	if (!IsStartCount) return;
@@ -469,6 +482,24 @@ void AUIPlay::OnIdle()
 	SetPlayUIVisible(false);
 }
 
+void AUIPlay::OnOpenGame()
+{
+}
+
+void AUIPlay::OnTitleGame()
+{
+}
+
+void AUIPlay::OnStartRacing()
+{
+	//LetterBox->SetActive(false);
+}
+
+void AUIPlay::OnInitRacing()
+{
+
+}
+
 void AUIPlay::OnRacing()
 {
 	SetPlayUIVisible(true);
@@ -530,8 +561,34 @@ void AUIPlay::Idleing(float _deltaTime)
 {
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_READY)
 	{
-		Fsm.ChangeState(EState::RACING);
+		// Temp
+		Fsm.ChangeState(EState::START_RACING);
 	}
+}
+
+void AUIPlay::OpeningGame(float _deltaTime)
+{
+}
+
+void AUIPlay::TitlingGame(float _deltaTime)
+{
+}
+
+void AUIPlay::StartingRacing(float _deltaTime)
+{
+	CurH -= 100.f * _deltaTime;
+	LetterBox->SetLocY(CurH, CGlobal::FWINDOW_H - CurH);
+
+	if (CurH <= 0)
+	{
+		Fsm.ChangeState(EState::RACING_INIT);
+		CurH = 150.f;
+	}
+}
+
+void AUIPlay::InitiatingRacing(float _deltaTime)
+{
+
 }
 
 void AUIPlay::Racing(float _deltaTime)

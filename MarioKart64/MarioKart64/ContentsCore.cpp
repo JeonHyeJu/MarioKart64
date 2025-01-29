@@ -214,6 +214,13 @@ void UContentsCore::InitGraphics()
 			mat->SetPixelShader("WidgetShader.fx");
 			mat->SetDepthStencilState("UIDepth");
 		}
+
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::COLOR_WIDGET_MATERIAL);
+			mat->SetVertexShader("LetterboxShader.fx");
+			mat->SetPixelShader("LetterboxShader.fx");
+			mat->SetDepthStencilState("UIDepth");
+		}
 	}
 }
 

@@ -10,6 +10,10 @@ public:
 	enum class EState
 	{
 		IDLE = 0,
+		OPEN_GAME,
+		TITLE_GAME,
+		START_RACING,
+		RACING_INIT,
 		RACING,
 		RACING_FINISH,
 		RESULT,
@@ -44,6 +48,7 @@ private:
 	void InitMinimapLoc();
 	void InitLap();
 	void InitTexts();
+	void InitLetterBox();
 
 	void ResetTimer();
 	void StartTimer()
@@ -70,6 +75,10 @@ private:
 
 	/* Fsm start function */
 	void OnIdle();
+	void OnOpenGame();
+	void OnTitleGame();
+	void OnStartRacing();
+	void OnInitRacing();
 	void OnRacing();
 	void OnFinishRace();
 	void OnShowResult();
@@ -79,6 +88,10 @@ private:
 
 	/* Fsm update function */
 	void Idleing(float _deltaTime);
+	void OpeningGame(float _deltaTime);
+	void TitlingGame(float _deltaTime);
+	void StartingRacing(float _deltaTime);
+	void InitiatingRacing(float _deltaTime);
 	void Racing(float _deltaTime);
 	void FinishingRace(float _deltaTime);
 	void ShowingResult(float _deltaTime);
@@ -113,6 +126,9 @@ private:
 	FVector HighNumLocs[HIGH_RANK_CNT];
 	float HeightRankImg = 0.f;
 
+	// Letter box
+	std::shared_ptr<class WLetterboxWidget> LetterBox = nullptr;
+
 	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
 
 	// Result texts
@@ -144,6 +160,8 @@ private:
 
 	int ItemIdx = -1;
 	int ShowingLap = 1;
+
+	float CurH = 150.f;
 
 	UFSMStateManager Fsm;
 };

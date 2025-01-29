@@ -66,7 +66,6 @@ APlayer::APlayer()
 	LastIdx = TempRouteIdxInit.back();
 	TempRouteIdxInit.clear();
 
-	Camera = GetWorld()->GetMainCamera();
 	TrainDatas.reserve(10000);
 }
 
@@ -409,11 +408,6 @@ void APlayer::Move(float _deltaTime)
 		}
 	}
 
-	if (!IsFinish)
-	{
-		Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
-	}
-
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
@@ -426,11 +420,6 @@ void APlayer::Move(float _deltaTime)
 void APlayer::SetMap(ABaseMap* _ptr)
 {
 	MapPtr = _ptr;
-}
-
-void APlayer::SetInitCameraLoc(const FVector& _loc)
-{
-	InitCameraLoc = _loc;
 }
 
 void APlayer::CheckLab()

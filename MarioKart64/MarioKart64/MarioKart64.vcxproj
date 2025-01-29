@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="LetterboxWidget.h" />
     <ClInclude Include="DefaultWidget.h">
       <SubType>
       </SubType>
@@ -372,6 +373,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LetterboxWidget.cpp" />
     <ClCompile Include="DefaultWidget.cpp">
       <SubType>
       </SubType>
@@ -540,6 +542,9 @@
     <FxCompile Include="..\Resources\Shaders\ExpandEffect.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\LetterboxShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\Resources\Shaders\PixelShader.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

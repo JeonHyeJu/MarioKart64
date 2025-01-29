@@ -29,7 +29,6 @@ APlayGameMode::APlayGameMode()
 	
 	// Temp
 	Balloons = pLevel->SpawnActor<ABalloons>();
-	Balloons->SetActorLocation(FVector{-400.f, 0.f, 500.f});
 
 	// for test
 	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
@@ -45,6 +44,9 @@ APlayGameMode::APlayGameMode()
 
 	Camera = GetWorld()->GetMainCamera();
 	Camera->GetCameraComponent()->GetCameraTarget()->SetClearColor({ 0.f, 0.f, 0.f, 1.f });
+
+	Fsm.CreateState(EState::START, std::bind(&APlayGameMode::Starting, this, std::placeholders::_1), std::bind(&APlayGameMode::OnStart, this));
+	Fsm.CreateState(EState::PLAY, std::bind(&APlayGameMode::Playing, this, std::placeholders::_1), std::bind(&APlayGameMode::OnPlay, this));
 }
 
 APlayGameMode::~APlayGameMode()
@@ -60,13 +62,9 @@ void APlayGameMode::BeginPlay()
 	Player = pLevel->GetMainPawn<APlayer>();
 	
 	Player->SetMap(MapPtr.get());
-	Player->SetInitCameraLoc(CameraInitLoc);
+	//Player->SetInitCameraLoc(CameraInitLoc);
 
 	Camera->GetCameraComponent()->SetZSort(0, true);
-
-	Camera->AddActorLocation(CameraInitLoc);
-	//Camera->AddActorLocation(CameraInitLoc + CameraMoveLoc * CAM_MOVE_SCALAR);
-	Camera->AttachToActor(Player);
 
 	// Temp
 	if (GameData::GetInstance()->GetCurMap() == ECircuit::LUIGI_RACEWAY)
@@ -103,13 +101,9 @@ void APlayGameMode::BeginPlay()
 	}
 
 	InitEffects();
-
-	State = EState::START;
-
 	ChangeCamIdx = 0;
 
-	// Temp
-	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_READY);
+	Fsm.ChangeState(EState::START);
 }
 
 void APlayGameMode::Tick(float _deltaTime)
@@ -118,14 +112,7 @@ void APlayGameMode::Tick(float _deltaTime)
 
 	AActor::Tick(_deltaTime);
 
-	if (State == EState::START)
-	{
-		Starting(_deltaTime);
-	}
-	else if (State == EState::PLAY)
-	{
-		Playing(_deltaTime);
-	}
+	Fsm.Update(_deltaTime);
 }
 
 void APlayGameMode::InitEffects()
@@ -135,7 +122,7 @@ void APlayGameMode::InitEffects()
 	target->AddEffect<FxExpandEffect>();
 
 	target->GetPostEffect(0)->IsActive = false;
-	target->GetPostEffect(1)->IsActive = false;
+	//target->GetPostEffect(1)->IsActive = false;
 }
 
 void APlayGameMode::StartLuigiRaceway()
@@ -347,29 +334,33 @@ void APlayGameMode::StartRainbowRoad()
 	GameData::GetInstance()->MapSizeInfo.InitLoc = FVector{ -83.f, 0.f, -140.f };
 }
 
+/* Fsm start function */
+void APlayGameMode::OnStart()
+{
+	Camera->AttachToActor(Player);
+	Camera->SetLoaclLocation(CameraInitLoc + FVector{ 0.f, 300.f, -300.f });
+	Balloons->SetActorLocation(FVector{ -400.f, 0.f, 500.f });
+}
+
+void APlayGameMode::OnPlay()
+{
+	Balloons->Destroy();
+
+	// Temp
+	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_READY);
+}
+
+/* Fsm update function */
 void APlayGameMode::Starting(float _deltaTime)
 {
 	Balloons->AddActorLocation({ 0.f, 20.f * _deltaTime, 0.f });
+	Camera->AddRelativeLocation({ 0.f, -100.f * _deltaTime, 100.f * _deltaTime });
 
-	if (Balloons->GetActorLocation().Y > 100)
+	FVector camLoc = Camera->GetLocalLocation();
+	if (camLoc.Y <= CameraInitLoc.Y && camLoc.Z >= CameraInitLoc.Z)
 	{
-		Balloons->Destroy();
+		Fsm.ChangeState(EState::PLAY);
 	}
-
-	// Temp
-	State = EState::PLAY;
-
-	/*std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-
-	FVector camLoc = Camera->GetActorLocation();
-	if (camLoc.Y > CameraInitLoc.Y)
-	{
-		Camera->AddActorLocation(-CameraMoveLoc * _deltaTime);
-	}
-	else
-	{
-		State = EState::PLAY;
-	}*/
 }
 
 void APlayGameMode::Playing(float _deltaTime)
@@ -397,6 +388,8 @@ void APlayGameMode::Playing(float _deltaTime)
 	GameData* pData = GameData::GetInstance();
 	pData->SetMinimapLoc(0, loc);
 	pData->SetPlayerRotation(0, rot);
+
+	Camera->SetActorLocation(CameraInitLoc - FVector{ 0.f, 0.f, Player->GetVelocity() * .04f });
 }
 
 void APlayGameMode::Finishing(float _deltaTime)

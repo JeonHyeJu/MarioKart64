@@ -90,6 +90,16 @@ public:
 		RootComponent->AddWorldLocation(_Value);
 	}
 
+	void SetLoaclLocation(const FVector& _Value)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->SetRelativeLocation(_Value);
+	}
+
 	void SetActorRelativeScale3D(const FVector& _Scale)
 	{
 		if (nullptr == RootComponent)
@@ -136,6 +146,11 @@ public:
 	FVector GetActorLocation()
 	{
 		return RootComponent->Transform.WorldLocation;
+	}
+
+	FVector GetLocalLocation()
+	{
+		return RootComponent->Transform.Location;
 	}
 	
 	FVector GetActorRotation()

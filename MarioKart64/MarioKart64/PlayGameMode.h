@@ -1,4 +1,5 @@
 #pragma once
+#include <EngineBase/FSMStateManager.h>
 #include <EngineCore/GameMode.h>
 
 class APlayGameMode : public AGameMode
@@ -34,10 +35,16 @@ protected:
 
 private:
 	void InitEffects();
+
+	/* Fsm start function */
+	void OnStart();
+	void OnPlay();
+	void OnFinishRace();
+
+	/* Fsm update function */
 	void Starting(float _deltaTime);
 	void Playing(float _deltaTime);
 	void Finishing(float _deltaTime);
-	void OnFinishRace();
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
@@ -49,9 +56,10 @@ private:
 
 	EState State = EState::END;
 	FVector CameraInitLoc = FVector{ 0.f, 100.f, -300.f };
-	FVector CameraMoveLoc = FVector{ 0.f, 1.f, -1.f };
 	const float CAM_MOVE_SCALAR = 100.f;
 
 	bool IsFinish = false;
 	int ChangeCamIdx = 0;
+
+	UFSMStateManager Fsm;
 };

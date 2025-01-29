@@ -374,6 +374,9 @@
     <ClInclude Include="TextWrapper.h">
       <Filter>HUD</Filter>
     </ClInclude>
+    <ClInclude Include="LetterboxWidget.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -497,6 +500,9 @@
       <Filter>HUD</Filter>
     </ClCompile>
     <ClCompile Include="TextWrapper.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="LetterboxWidget.cpp">
       <Filter>HUD</Filter>
     </ClCompile>
   </ItemGroup>
@@ -633,6 +639,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shaders\WidgetShader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\LetterboxShader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

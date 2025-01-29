@@ -13,6 +13,7 @@ public:
 	static const char* WIDGET_SHADER;
 	static const char* SHRINK_EFFECT;
 	static const char* EXPAND_EFFECT;
+	static const char* COLOR_WIDGET_MATERIAL;
 	static const int ALL_ITEM_SIZE;
 	static const int WINDOW_W;
 	static const int WINDOW_H;

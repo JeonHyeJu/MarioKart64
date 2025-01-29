@@ -12,8 +12,9 @@ public:
 	WTextWrapper& operator=(const WTextWrapper& _other) = delete;
 	WTextWrapper& operator=(WTextWrapper&& _other) noexcept = delete;
 
-	void InitUpperTexts(const std::vector<std::string> _texts);
-	void InitLowerTexts(const std::vector<std::string> _texts);
+	void InitText(std::string_view _text, int _autoColorIdx=0);
+	void InitUpperTexts(const std::vector<std::string>& _texts);
+	void InitLowerTexts(const std::vector<std::string>& _texts);
 
 protected:
 	void Tick(float _deltaTime) override;

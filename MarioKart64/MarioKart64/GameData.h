@@ -6,6 +6,7 @@
 enum class EFinishState
 {
 	FINISH_READY = 0,
+	FINISH_TITLE,
 	FINISH_RACING,
 	FINISH_RESULT,
 	FINISH_FX,

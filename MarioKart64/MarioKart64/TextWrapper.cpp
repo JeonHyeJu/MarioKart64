@@ -20,7 +20,18 @@ void WTextWrapper::Render(UEngineCamera* _camera, float _deltaTime)
 	WDefaultWidget::Render(_camera, _deltaTime);
 }
 
-void WTextWrapper::InitUpperTexts(const std::vector<std::string> _texts)
+void WTextWrapper::InitText(std::string_view _text, int _autoColorIdx)
+{
+	if (Texts.size() > 0) return;
+
+	WTextWidget* ptr = CreateWidget<WTextWidget>(-1, HUD).get();
+	ptr->SetScaleRatio(4.f);
+	ptr->SetText(_text.data());
+	ptr->SetAutoColor(true, _autoColorIdx, 5);
+	Texts.push_back(ptr);
+}
+
+void WTextWrapper::InitUpperTexts(const std::vector<std::string>& _texts)
 {
 	if (Texts.size() > 0) return;
 
@@ -54,7 +65,7 @@ void WTextWrapper::InitUpperTexts(const std::vector<std::string> _texts)
 	Texts[2]->SetAutoColor(true, 0, 255);
 }
 
-void WTextWrapper::InitLowerTexts(const std::vector<std::string> _texts)
+void WTextWrapper::InitLowerTexts(const std::vector<std::string>& _texts)
 {
 	if (Texts.size() > 0) return;
 

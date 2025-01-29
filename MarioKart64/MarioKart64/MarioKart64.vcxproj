@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Lakitu.h" />
     <ClInclude Include="LetterboxWidget.h" />
     <ClInclude Include="DefaultWidget.h">
       <SubType>
@@ -373,6 +374,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lakitu.cpp" />
     <ClCompile Include="LetterboxWidget.cpp" />
     <ClCompile Include="DefaultWidget.cpp">
       <SubType>

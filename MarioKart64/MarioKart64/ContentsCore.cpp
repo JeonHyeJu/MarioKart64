@@ -112,6 +112,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineSprite::CreateSpriteToMeta("FontAndPositions.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Timer.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("RacePositionIcons.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Lakitu.png", ".meta");
 
 	InitGraphics();
 	InitTest();

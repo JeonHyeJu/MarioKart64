@@ -7,6 +7,7 @@
 #include "ItemBox.h"
 #include "GameData.h"
 #include "Balloons.h"
+#include "Lakitu.h"
 #include "ShrinkEffect.h"
 #include "ExpandEffect.h"
 #include <EngineCore/CameraActor.h>
@@ -26,6 +27,7 @@ APlayGameMode::APlayGameMode()
 
 	Skybox = pLevel->SpawnActor<ASkybox>();
 	MapPtr = pLevel->SpawnActor<ABaseMap>();
+	Lakitu = pLevel->SpawnActor<ALakitu>();
 	
 	// Temp
 	Balloons = pLevel->SpawnActor<ABalloons>();
@@ -45,7 +47,9 @@ APlayGameMode::APlayGameMode()
 	Camera = GetWorld()->GetMainCamera();
 	Camera->GetCameraComponent()->GetCameraTarget()->SetClearColor({ 0.f, 0.f, 0.f, 1.f });
 
-	Fsm.CreateState(EState::START, std::bind(&APlayGameMode::Starting, this, std::placeholders::_1), std::bind(&APlayGameMode::OnStart, this));
+	Fsm.CreateState(EState::READY, std::bind(&APlayGameMode::Readying, this, std::placeholders::_1), std::bind(&APlayGameMode::OnGetReady, this));
+	Fsm.CreateState(EState::WAIT_TITLE, std::bind(&APlayGameMode::WaitingTitle, this, std::placeholders::_1));
+	Fsm.CreateState(EState::COUNT, std::bind(&APlayGameMode::Counting, this, std::placeholders::_1), std::bind(&APlayGameMode::OnCount, this));
 	Fsm.CreateState(EState::PLAY, std::bind(&APlayGameMode::Playing, this, std::placeholders::_1), std::bind(&APlayGameMode::OnPlay, this));
 }
 
@@ -103,7 +107,7 @@ void APlayGameMode::BeginPlay()
 	InitEffects();
 	ChangeCamIdx = 0;
 
-	Fsm.ChangeState(EState::START);
+	Fsm.ChangeState(EState::READY);
 }
 
 void APlayGameMode::Tick(float _deltaTime)
@@ -335,23 +339,25 @@ void APlayGameMode::StartRainbowRoad()
 }
 
 /* Fsm start function */
-void APlayGameMode::OnStart()
+void APlayGameMode::OnGetReady()
 {
 	Camera->AttachToActor(Player);
 	Camera->SetLoaclLocation(CameraInitLoc + FVector{ 0.f, 300.f, -300.f });
 	Balloons->SetActorLocation(FVector{ -400.f, 0.f, 500.f });
 }
 
+void APlayGameMode::OnCount()
+{
+	Lakitu->SetActorLocation(Player->GetActorLocation() + FVector{ 100.f, 100.f, 300.f });
+}
+
 void APlayGameMode::OnPlay()
 {
 	Balloons->Destroy();
-
-	// Temp
-	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_READY);
 }
 
 /* Fsm update function */
-void APlayGameMode::Starting(float _deltaTime)
+void APlayGameMode::Readying(float _deltaTime)
 {
 	Balloons->AddActorLocation({ 0.f, 20.f * _deltaTime, 0.f });
 	Camera->AddRelativeLocation({ 0.f, -100.f * _deltaTime, 100.f * _deltaTime });
@@ -359,8 +365,22 @@ void APlayGameMode::Starting(float _deltaTime)
 	FVector camLoc = Camera->GetLocalLocation();
 	if (camLoc.Y <= CameraInitLoc.Y && camLoc.Z >= CameraInitLoc.Z)
 	{
-		Fsm.ChangeState(EState::PLAY);
+		GameData::GetInstance()->SetFinishState(EFinishState::FINISH_READY);
+		Fsm.ChangeState(EState::WAIT_TITLE);
 	}
+}
+
+void APlayGameMode::WaitingTitle(float _deltaTime)
+{
+	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_TITLE)
+	{
+		Fsm.ChangeState(EState::COUNT);
+	}
+}
+
+void APlayGameMode::Counting(float _deltaTime)
+{
+
 }
 
 void APlayGameMode::Playing(float _deltaTime)

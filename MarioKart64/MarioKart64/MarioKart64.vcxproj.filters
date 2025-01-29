@@ -377,6 +377,9 @@
     <ClInclude Include="LetterboxWidget.h">
       <Filter>HUD</Filter>
     </ClInclude>
+    <ClInclude Include="Lakitu.h">
+      <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp">
@@ -504,6 +507,9 @@
     </ClCompile>
     <ClCompile Include="LetterboxWidget.cpp">
       <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Lakitu.cpp">
+      <Filter>Actor\PlayLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

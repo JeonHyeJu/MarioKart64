@@ -10,12 +10,10 @@
 AUIPlay::AUIPlay()
 {
 	Fsm.CreateState(EState::IDLE, std::bind(&AUIPlay::Idleing, this, std::placeholders::_1), std::bind(&AUIPlay::OnIdle, this));
-	Fsm.CreateState(EState::OPEN_GAME, std::bind(&AUIPlay::OpeningGame, this, std::placeholders::_1), std::bind(&AUIPlay::OnOpenGame, this));
-	Fsm.CreateState(EState::TITLE_GAME, std::bind(&AUIPlay::TitlingGame, this, std::placeholders::_1), std::bind(&AUIPlay::OnTitleGame, this));
+	Fsm.CreateState(EState::OPEN_RACING, std::bind(&AUIPlay::OpeningRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnOpenRacing, this));
 	Fsm.CreateState(EState::START_RACING, std::bind(&AUIPlay::StartingRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnStartRacing, this));
-	Fsm.CreateState(EState::RACING_INIT, std::bind(&AUIPlay::InitiatingRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnInitRacing, this));
-	Fsm.CreateState(EState::RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
-	Fsm.CreateState(EState::RACING_FINISH, std::bind(&AUIPlay::FinishingRace, this, std::placeholders::_1), std::bind(&AUIPlay::OnFinishRace, this));
+	Fsm.CreateState(EState::RUN_RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
+	Fsm.CreateState(EState::FINISH_RACING, std::bind(&AUIPlay::FinishingRace, this, std::placeholders::_1), std::bind(&AUIPlay::OnFinishRace, this));
 	Fsm.CreateState(EState::RESULT, std::bind(&AUIPlay::ShowingResult, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult, this));
 	Fsm.CreateState(EState::RESULT_2, std::bind(&AUIPlay::ShowingResult2, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult2, this));
 	Fsm.CreateState(EState::WAIT, std::bind(&AUIPlay::Waiting, this, std::placeholders::_1), std::bind(&AUIPlay::OnWait, this));
@@ -40,6 +38,7 @@ void AUIPlay::BeginPlay()
 	InitLap();
 	InitTexts();
 	InitLetterBox();
+	InitTitle();
 
 	// Temp
 	SetHighRankUI();
@@ -62,7 +61,7 @@ void AUIPlay::Tick(float _deltaTime)
 
 	// It look like HFSM a little..
 	EState curState = static_cast<EState>(Fsm.GetCurIState());
-	if (curState >= EState::RACING_FINISH && curState <= EState::RESULT_2)
+	if (curState >= EState::FINISH_RACING && curState <= EState::RESULT_2)
 	{
 		AnimPlayerRankColor(_deltaTime);
 	}
@@ -310,6 +309,17 @@ void AUIPlay::InitLetterBox()
 	LetterBox->SetLocY(CurH, CGlobal::FWINDOW_H - CurH);
 }
 
+void AUIPlay::InitTitle()
+{
+	TitleOfCup = CreateWidget<WTextWrapper>(0);
+	TitleOfCup->InitText("MUSHROOM CUP", 5);
+	TitleOfCup->SetWorldLocation(InitLocTitleCup - FVector{ 1024.f, 0.f });
+
+	TitleOfMap = CreateWidget<WTextWrapper>(0);
+	TitleOfMap->InitText("LUIGI RACEWAY", 3);
+	TitleOfMap->SetWorldLocation(InitLocTitleMap - FVector{ 1024.f, 0.f });
+}
+
 void AUIPlay::CountTimer(float _deltaTime)
 {
 	if (!IsStartCount) return;
@@ -482,22 +492,14 @@ void AUIPlay::OnIdle()
 	SetPlayUIVisible(false);
 }
 
-void AUIPlay::OnOpenGame()
+void AUIPlay::OnOpenRacing()
 {
-}
-
-void AUIPlay::OnTitleGame()
-{
+	LetterBox->SetActive(true);
 }
 
 void AUIPlay::OnStartRacing()
 {
-	//LetterBox->SetActive(false);
-}
-
-void AUIPlay::OnInitRacing()
-{
-
+	SetPlayUIVisible(true);
 }
 
 void AUIPlay::OnRacing()
@@ -561,34 +563,50 @@ void AUIPlay::Idleing(float _deltaTime)
 {
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_READY)
 	{
-		// Temp
-		Fsm.ChangeState(EState::START_RACING);
+		Fsm.ChangeState(EState::OPEN_RACING);
 	}
 }
 
-void AUIPlay::OpeningGame(float _deltaTime)
+void AUIPlay::OpeningRacing(float _deltaTime)
 {
-}
+	FVector locCup = TitleOfCup->GetWorldLocation();
+	FVector locMap = TitleOfCup->GetWorldLocation();
 
-void AUIPlay::TitlingGame(float _deltaTime)
-{
+	if (locCup.X < InitLocTitleCup.X)
+	{
+		TitleOfCup->AddWorldLocation({ 1000.f * _deltaTime, 0.f });
+		TitleOfMap->AddWorldLocation({ 1000.f * _deltaTime, 0.f });
+	}
+	else
+	{
+		static float elapsedSec = 0.f;
+		elapsedSec += _deltaTime;
+
+		if (elapsedSec < 2.f) return;
+
+		if (CurH <= 0)
+		{
+			elapsedSec = 0.f;
+			CurH = 150.f;
+			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_TITLE);
+			Fsm.ChangeState(EState::START_RACING);
+		}
+		else
+		{
+			// Move texts
+			TitleOfCup->AddWorldLocation({ 0.f, 100.f * _deltaTime, 0.f });
+			TitleOfMap->AddWorldLocation({ 0.f, -100.f * _deltaTime, 0.f });
+
+			// Move letterbox
+			CurH -= 100.f * _deltaTime;
+			LetterBox->SetLocY(CurH, CGlobal::FWINDOW_H - CurH);
+		}
+	}
 }
 
 void AUIPlay::StartingRacing(float _deltaTime)
 {
-	CurH -= 100.f * _deltaTime;
-	LetterBox->SetLocY(CurH, CGlobal::FWINDOW_H - CurH);
-
-	if (CurH <= 0)
-	{
-		Fsm.ChangeState(EState::RACING_INIT);
-		CurH = 150.f;
-	}
-}
-
-void AUIPlay::InitiatingRacing(float _deltaTime)
-{
-
+	
 }
 
 void AUIPlay::Racing(float _deltaTime)
@@ -609,7 +627,7 @@ void AUIPlay::Racing(float _deltaTime)
 
 	if (pData->GetFinishState() == EFinishState::FINISH_RACING)
 	{
-		Fsm.ChangeState(EState::RACING_FINISH);
+		Fsm.ChangeState(EState::FINISH_RACING);
 	}
 }
 

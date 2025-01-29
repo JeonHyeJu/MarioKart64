@@ -7,7 +7,9 @@ class APlayGameMode : public AGameMode
 public:
 	enum class EState
 	{
-		START = 0,
+		READY = 0,
+		WAIT_TITLE,
+		COUNT,
 		PLAY,
 		END,
 	};
@@ -37,12 +39,15 @@ private:
 	void InitEffects();
 
 	/* Fsm start function */
-	void OnStart();
+	void OnGetReady();
+	void OnCount();
 	void OnPlay();
 	void OnFinishRace();
 
 	/* Fsm update function */
-	void Starting(float _deltaTime);
+	void Readying(float _deltaTime);
+	void WaitingTitle(float _deltaTime);
+	void Counting(float _deltaTime);
 	void Playing(float _deltaTime);
 	void Finishing(float _deltaTime);
 
@@ -50,6 +55,7 @@ private:
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
 	//class ADriver* Player = nullptr;
 	class APlayer* Player = nullptr;
+	std::shared_ptr<class ALakitu> Lakitu = nullptr;
 
 	std::shared_ptr<class ABalloons> Balloons = nullptr;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;

@@ -10,12 +10,10 @@ public:
 	enum class EState
 	{
 		IDLE = 0,
-		OPEN_GAME,
-		TITLE_GAME,
+		OPEN_RACING,
 		START_RACING,
-		RACING_INIT,
-		RACING,
-		RACING_FINISH,
+		RUN_RACING,
+		FINISH_RACING,
 		RESULT,
 		RESULT_2,
 		WAIT,
@@ -49,6 +47,7 @@ private:
 	void InitLap();
 	void InitTexts();
 	void InitLetterBox();
+	void InitTitle();
 
 	void ResetTimer();
 	void StartTimer()
@@ -75,10 +74,8 @@ private:
 
 	/* Fsm start function */
 	void OnIdle();
-	void OnOpenGame();
-	void OnTitleGame();
+	void OnOpenRacing();
 	void OnStartRacing();
-	void OnInitRacing();
 	void OnRacing();
 	void OnFinishRace();
 	void OnShowResult();
@@ -88,10 +85,8 @@ private:
 
 	/* Fsm update function */
 	void Idleing(float _deltaTime);
-	void OpeningGame(float _deltaTime);
-	void TitlingGame(float _deltaTime);
+	void OpeningRacing(float _deltaTime);
 	void StartingRacing(float _deltaTime);
-	void InitiatingRacing(float _deltaTime);
 	void Racing(float _deltaTime);
 	void FinishingRace(float _deltaTime);
 	void ShowingResult(float _deltaTime);
@@ -126,10 +121,17 @@ private:
 	FVector HighNumLocs[HIGH_RANK_CNT];
 	float HeightRankImg = 0.f;
 
+	// Player's itembox
+	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
+
 	// Letter box
 	std::shared_ptr<class WLetterboxWidget> LetterBox = nullptr;
 
-	std::shared_ptr<UImageWidget> PlayerItem = nullptr;
+	// Racing title
+	std::shared_ptr<WTextWrapper> TitleOfCup = nullptr;
+	std::shared_ptr<WTextWrapper> TitleOfMap = nullptr;
+	FVector InitLocTitleCup = { -280.f, 330.f };
+	FVector InitLocTitleMap = { -270.f, -330.f };
 
 	// Result texts
 	std::shared_ptr<WTextWrapper> TextWrapperU = nullptr;

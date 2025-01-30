@@ -84,18 +84,17 @@ void ASelectGameMode::OnEndSelectCharacter()
 	uint8_t idx = SelectCharacter->GetSelectedIdx();
 	int size = static_cast<int>(ECharacter::END);
 
-	std::vector<SPlayerInfo> palyerInfos{ SPlayerInfo{ static_cast<ECharacter>(idx), EItemType::NONE } };
+	std::vector<SPlayerInfo> palyerInfos;
 	palyerInfos.reserve(size);
 	
 	for (int i = 0; i < size; ++i)
 	{
-		if (i != idx)
-		{
-			palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
-		}
+		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
 	}
 
+	GameData::GetInstance()->SetPlayerIdx(idx);
 	GameData::GetInstance()->SetPlayers(palyerInfos);
+
 	Fsm.ChangeState(Scene::SELECT_MAP);
 }
 

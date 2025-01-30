@@ -57,6 +57,7 @@ private:
 	//class ADriver* Player = nullptr;
 	class APlayer* Player = nullptr;
 	std::shared_ptr<class ALakitu> Lakitu = nullptr;
+	class ADriver* Players[6] = { nullptr, };
 
 	std::shared_ptr<class ABalloons> Balloons = nullptr;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;

@@ -133,8 +133,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::OpenLevel("TestLevel");*/
 
 	// for test
-	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
-	GameData::GetInstance()->SetPlayers(players);
+	std::vector<SPlayerInfo> palyerInfos;
+	for (int i = 0; i < 6; ++i)
+	{
+		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
+	}
+	GameData::GetInstance()->SetPlayerIdx(0);
+	GameData::GetInstance()->SetPlayers(palyerInfos);
 
 	SMapPackage mapPackage;
 	mapPackage.Maps[0] = ECircuit::LUIGI_RACEWAY;

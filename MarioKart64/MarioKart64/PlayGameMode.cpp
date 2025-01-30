@@ -61,6 +61,20 @@ void APlayGameMode::BeginPlay()
 
 	InitEffects();
 	InitMap();
+
+	/*uint8_t playerIdx = GameData::GetInstance()->GetPlayerIdx();
+	uint8_t size = GameData::GetInstance()->GetPlayerCnt();
+	for (uint8_t i = 0; i < size; ++i)
+	{
+		if (i == playerIdx)
+		{
+
+		}
+		else
+		{
+
+		}
+	}*/
 	
 	Fsm.ChangeState(EState::READY);
 }

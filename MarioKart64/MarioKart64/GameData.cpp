@@ -32,14 +32,9 @@ GameData* GameData::GetInstance()
 	return pInstance;
 }
 
-void GameData::SetMapIdx(uint8_t _val)
+uint8_t GameData::GetPlayerIdx() const
 {
-	MapIdx = _val;
-}
-
-uint8_t GameData::GetMapIdx() const
-{
-	return MapIdx;
+	return PlayerIdx;
 }
 
 uint8_t GameData::GetPlayerCnt() const
@@ -57,10 +52,14 @@ uint8_t GameData::GetPlayerRank() const
 	return PlayerRank;
 }
 
+void GameData::SetPlayerIdx(uint8_t _idx)
+{
+	PlayerIdx = _idx;
+}
+
 void GameData::SetPlayers(const std::vector<SPlayerInfo>& _players)
 {
 	Players = _players;	// copy
-	PlayerCnt = static_cast<uint8_t>(Players.size());
 }
 
 const std::vector<SPlayerInfo>& GameData::GetPlayers() const

@@ -31,14 +31,13 @@ public:
 
 	void GetHighRankPlayersIdx(int* _refArr, int _size);
 
-	void SetMapIdx(uint8_t _val);
-	uint8_t GetMapIdx() const;
-
+	uint8_t GetPlayerIdx() const;
 	uint8_t GetPlayerCnt() const;
 
 	void SetPlayerRank(uint8_t _val);
 	uint8_t GetPlayerRank() const;
 
+	void SetPlayerIdx(uint8_t _idx);
 	void SetPlayers(const std::vector<SPlayerInfo>& _players);
 	const std::vector<SPlayerInfo>& GetPlayers() const;
 
@@ -68,11 +67,10 @@ public:
 	SMapSizeInfo MapSizeInfo;
 
 private:
+	const uint8_t PlayerCnt = 6;
 	uint8_t PlayerRank = 8;
-	uint8_t PlayerCnt = 0;
-	uint8_t MapIdx = 0;
+	uint8_t PlayerIdx = 0;
 
-	// 0 is must be the user's character.
 	std::vector<SPlayerInfo> Players;
 	SMapPackage MapPackage;
 
@@ -82,3 +80,4 @@ private:
 
 	EFinishState FinishState = EFinishState::END;
 };
+

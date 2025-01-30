@@ -11,18 +11,9 @@ ALakitu::ALakitu()
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetOrder(0);
 
-	// Temp
-	/*const int TURN_SIZE = 31;
-	std::vector<int> idxs(TURN_SIZE, 0);
-	std::vector<float> times(TURN_SIZE, 0.2f);
-	for (size_t i = 0; i < TURN_SIZE; ++i)
-	{
-		idxs[i] = static_cast<int>(i * 36);
-	}*/
-
-	Renderer->CreateAnimation("Idle", "Lakitu.png", 0, 0, 1.f);
-	/*Renderer->CreateAnimation("TurnL", "Mario.png", idxs, times, true);
-	Renderer->CreateAnimation("TurnR", "Mario.png", idxs, times, true);*/
+	const char* SPRITE_NAME = "Lakitu.png";
+	Renderer->CreateAnimation("Idle", SPRITE_NAME, 0, 0, 1.f);
+	Renderer->CreateAnimation("Start", SPRITE_NAME, 0, 27, .1f, false);
 
 	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);
@@ -40,4 +31,14 @@ void ALakitu::BeginPlay()
 void ALakitu::Tick(float _deltaTime)
 {
 	AActor::Tick(_deltaTime);
+}
+
+void ALakitu::Launch()
+{
+	Renderer->ChangeAnimation("Start");
+}
+
+bool ALakitu::IsAnimEnd()
+{
+	return Renderer->IsCurAnimationEnd();
 }

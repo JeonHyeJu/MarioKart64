@@ -12,6 +12,9 @@ public:
 	ALakitu& operator=(const ALakitu& _Other) = delete;
 	ALakitu& operator=(ALakitu&& _Other) noexcept = delete;
 
+	void Launch();
+	bool IsAnimEnd();
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;

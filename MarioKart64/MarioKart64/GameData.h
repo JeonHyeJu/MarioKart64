@@ -5,12 +5,13 @@
 
 enum class EFinishState
 {
-	FINISH_READY = 0,
-	FINISH_TITLE,
-	FINISH_RACING,
-	FINISH_RESULT,
-	FINISH_FX,
-	FINISH_TOTAL,
+	FINISH_READY = 0,	// Set by PlayGameMode, Get in UIPlay
+	FINISH_OPEN,		// Set by UIPlay, Get in PlayGameMode
+	FINISH_COUNT,		// Set by PlayGameMode, Get in UIPlay
+	FINISH_RACING,		// Set by PlayGameMode, Get in UIPlay
+	FINISH_RESULT,		// Set by UIPlay, Get in PlayGameMode
+	FINISH_FX,			// Set by PlayGameMode, Get in UIPlay
+	FINISH_TOTAL,		// Set by UIPlay, Get in PlayGameMode
 	END
 };
 
@@ -41,8 +42,7 @@ public:
 	void SetPlayers(const std::vector<SPlayerInfo>& _players);
 	const std::vector<SPlayerInfo>& GetPlayers() const;
 
-	void SetMaps(const std::vector<ECircuit>& _maps);
-	const std::vector<ECircuit>& GetMaps() const;
+	void SetMapPakcage(const SMapPackage& _data);
 
 	void SetItem(uint8_t _playerIdx, EItemType _item);
 	EItemType GetItem(uint8_t _playerIdx);
@@ -53,7 +53,7 @@ public:
 	void SetPlayerRotation(uint8_t _playerIdx, float4 _rot);
 	float4 GetPlayerRotation(uint8_t _playerIdx) const;
 
-	void SetCurMap(ECircuit _type);
+	ECircuit NextMap();
 	ECircuit GetCurMap() const;
 
 	void SetFinishState(EFinishState _val);
@@ -74,7 +74,7 @@ private:
 
 	// 0 is must be the user's character.
 	std::vector<SPlayerInfo> Players;
-	std::vector<ECircuit> Maps;
+	SMapPackage MapPackage;
 
 	static GameData* pInstance;
 

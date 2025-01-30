@@ -10,13 +10,13 @@
 AUIPlay::AUIPlay()
 {
 	Fsm.CreateState(EState::IDLE, std::bind(&AUIPlay::Idleing, this, std::placeholders::_1), std::bind(&AUIPlay::OnIdle, this));
-	Fsm.CreateState(EState::OPEN_RACING, std::bind(&AUIPlay::OpeningRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnOpenRacing, this));
-	Fsm.CreateState(EState::START_RACING, std::bind(&AUIPlay::StartingRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnStartRacing, this));
-	Fsm.CreateState(EState::RUN_RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
+	Fsm.CreateState(EState::READY, std::bind(&AUIPlay::OpeningRacing, this, std::placeholders::_1), std::bind(&AUIPlay::OnOpenRacing, this));
+	Fsm.CreateState(EState::WAIT_PLAY_COUNT, std::bind(&AUIPlay::WaitingCount, this, std::placeholders::_1), std::bind(&AUIPlay::OnWaitCount, this));
+	Fsm.CreateState(EState::PLAY_RACING, std::bind(&AUIPlay::Racing, this, std::placeholders::_1), std::bind(&AUIPlay::OnRacing, this));
 	Fsm.CreateState(EState::FINISH_RACING, std::bind(&AUIPlay::FinishingRace, this, std::placeholders::_1), std::bind(&AUIPlay::OnFinishRace, this));
 	Fsm.CreateState(EState::RESULT, std::bind(&AUIPlay::ShowingResult, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult, this));
 	Fsm.CreateState(EState::RESULT_2, std::bind(&AUIPlay::ShowingResult2, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowResult2, this));
-	Fsm.CreateState(EState::WAIT, std::bind(&AUIPlay::Waiting, this, std::placeholders::_1), std::bind(&AUIPlay::OnWait, this));
+	Fsm.CreateState(EState::WAIT_PLAY_FX, std::bind(&AUIPlay::Waiting, this, std::placeholders::_1), std::bind(&AUIPlay::OnWait, this));
 	Fsm.CreateState(EState::TOTAL, std::bind(&AUIPlay::ShowingTotal, this, std::placeholders::_1), std::bind(&AUIPlay::OnShowTotal, this));
 }
 
@@ -495,9 +495,50 @@ void AUIPlay::OnIdle()
 void AUIPlay::OnOpenRacing()
 {
 	LetterBox->SetActive(true);
+
+	ECircuit mapType = GameData::GetInstance()->GetCurMap();
+	std::string upperName = "";
+	std::string lowerName = "";
+	switch (mapType)
+	{
+	case ECircuit::LUIGI_RACEWAY:
+		upperName = "MUSHROOM CUP";
+		lowerName = "LUIGI RACEWAY";
+		break;
+	case ECircuit::KOOPA_TROOPA_BEACH:
+		upperName = "MUSHROOM CUP";
+		lowerName = "KOOPA TROOPA BEACH";
+		break;
+	case ECircuit::MARIO_RACEWAY:
+		upperName = "MUSHROOM CUP";
+		lowerName = "MARIO RACEWAY";
+		break;
+	case ECircuit::WARIO_STADIUM:
+		upperName = "MUSHROOM CUP";
+		lowerName = "WARIO STADIUM";
+		break;
+	case ECircuit::SHERBET_LAND:
+		upperName = "FLOWER CUP";
+		lowerName = "SHERBET LAND";
+		break;
+	case ECircuit::ROYAL_RACEWAY:
+		upperName = "FLOWER CUP";
+		lowerName = "ROYAL RACEWAY";
+		break;
+	case ECircuit::BOWSERS_CASTLE:
+		upperName = "FLOWER CUP";
+		lowerName = "BOWSERS CASTLE";
+		break;
+	case ECircuit::RAINBOW_ROAD:
+		upperName = "FLOWER CUP";
+		lowerName = "RAINBOW ROAD";
+		break;
+	}
+	TitleOfCup->SetText(upperName, 0);
+	TitleOfMap->SetText(lowerName, 0);
 }
 
-void AUIPlay::OnStartRacing()
+void AUIPlay::OnWaitCount()
 {
 	SetPlayUIVisible(true);
 }
@@ -563,7 +604,7 @@ void AUIPlay::Idleing(float _deltaTime)
 {
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_READY)
 	{
-		Fsm.ChangeState(EState::OPEN_RACING);
+		Fsm.ChangeState(EState::READY);
 	}
 }
 
@@ -588,8 +629,8 @@ void AUIPlay::OpeningRacing(float _deltaTime)
 		{
 			elapsedSec = 0.f;
 			CurH = 150.f;
-			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_TITLE);
-			Fsm.ChangeState(EState::START_RACING);
+			GameData::GetInstance()->SetFinishState(EFinishState::FINISH_OPEN);
+			Fsm.ChangeState(EState::WAIT_PLAY_COUNT);
 		}
 		else
 		{
@@ -604,9 +645,12 @@ void AUIPlay::OpeningRacing(float _deltaTime)
 	}
 }
 
-void AUIPlay::StartingRacing(float _deltaTime)
+void AUIPlay::WaitingCount(float _deltaTime)
 {
-	
+	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_COUNT)
+	{
+		Fsm.ChangeState(EState::PLAY_RACING);
+	}
 }
 
 void AUIPlay::Racing(float _deltaTime)
@@ -786,7 +830,7 @@ void AUIPlay::ShowingResult2(float _deltaTime)
 			elapsedSec = 0.f;
 			startedIdx = 1;
 			endIdx = -1;
-			Fsm.ChangeState(EState::WAIT);
+			Fsm.ChangeState(EState::WAIT_PLAY_FX);
 		}
 	}
 }

@@ -5,11 +5,6 @@
 
 #define GRAVITY_ACC 9.8f
 
-enum class ECameraType
-{
-	FINISH = 1,
-};
-
 enum class ECircuit
 {
 	LUIGI_RACEWAY = 0,
@@ -65,6 +60,12 @@ enum class EItemType
 	FAKE_ITEMBOX,
 	BOWSER_SHELL,
 	SIZE
+};
+
+struct SMapPackage
+{
+	int CurIdx = 0;
+	ECircuit Maps[4] = { ECircuit::END, ECircuit::END, ECircuit::END, ECircuit::END };
 };
 
 struct TrainData

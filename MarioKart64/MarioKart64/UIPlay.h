@@ -10,13 +10,13 @@ public:
 	enum class EState
 	{
 		IDLE = 0,
-		OPEN_RACING,
-		START_RACING,
-		RUN_RACING,
+		READY,
+		WAIT_PLAY_COUNT,
+		PLAY_RACING,
 		FINISH_RACING,
 		RESULT,
 		RESULT_2,
-		WAIT,
+		WAIT_PLAY_FX,
 		TOTAL,
 		TOTAL_2,
 		END
@@ -75,7 +75,7 @@ private:
 	/* Fsm start function */
 	void OnIdle();
 	void OnOpenRacing();
-	void OnStartRacing();
+	void OnWaitCount();
 	void OnRacing();
 	void OnFinishRace();
 	void OnShowResult();
@@ -86,7 +86,7 @@ private:
 	/* Fsm update function */
 	void Idleing(float _deltaTime);
 	void OpeningRacing(float _deltaTime);
-	void StartingRacing(float _deltaTime);
+	void WaitingCount(float _deltaTime);
 	void Racing(float _deltaTime);
 	void FinishingRace(float _deltaTime);
 	void ShowingResult(float _deltaTime);

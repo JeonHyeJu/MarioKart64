@@ -20,6 +20,14 @@ void WTextWrapper::Render(UEngineCamera* _camera, float _deltaTime)
 	WDefaultWidget::Render(_camera, _deltaTime);
 }
 
+void WTextWrapper::SetText(std::string_view _text, uint8_t _idx)
+{
+	if (_idx < Texts.size())
+	{
+		Texts[_idx]->SetText(_text.data());
+	}
+}
+
 void WTextWrapper::InitText(std::string_view _text, int _autoColorIdx)
 {
 	if (Texts.size() > 0) return;

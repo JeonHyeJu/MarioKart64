@@ -103,12 +103,24 @@ void ASelectGameMode::OnEndSelectMap()
 {
 	uint8_t idx = SelectMap->GetSelectedIdx();
 
-	std::vector<ECircuit> mapInfo;
-	mapInfo.reserve(4);
-	for (int i = 0; i < 4; ++i)
+	SMapPackage mapPackage;
+	switch (idx)
 	{
-		mapInfo.push_back(static_cast<ECircuit>(i+idx));
+	case 1:
+		mapPackage.Maps[0] = ECircuit::LUIGI_RACEWAY;
+		mapPackage.Maps[1] = ECircuit::KOOPA_TROOPA_BEACH;
+		mapPackage.Maps[2] = ECircuit::MARIO_RACEWAY;
+		mapPackage.Maps[3] = ECircuit::WARIO_STADIUM;
+		break;
+	default:
+		mapPackage.Maps[0] = ECircuit::SHERBET_LAND;
+		mapPackage.Maps[1] = ECircuit::ROYAL_RACEWAY;
+		mapPackage.Maps[2] = ECircuit::BOWSERS_CASTLE;
+		mapPackage.Maps[3] = ECircuit::RAINBOW_ROAD;
+		break;
 	}
+
+	GameData::GetInstance()->SetMapPakcage(mapPackage);
 
 	UEngineCore::OpenLevel("PlayLevel");
 	Fsm.ChangeState(Scene::END);

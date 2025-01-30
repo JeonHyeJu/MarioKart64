@@ -21,8 +21,6 @@ public:
 		return Velocity;
 	}
 
-	bool IsFinish = false;	// Temp
-
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;

@@ -131,6 +131,23 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
+
+	// for test
+	std::vector<SPlayerInfo> players = { SPlayerInfo{ ECharacter::MARIO, } };
+	GameData::GetInstance()->SetPlayers(players);
+
+	SMapPackage mapPackage;
+	mapPackage.Maps[0] = ECircuit::LUIGI_RACEWAY;
+	mapPackage.Maps[1] = ECircuit::KOOPA_TROOPA_BEACH;
+	mapPackage.Maps[2] = ECircuit::MARIO_RACEWAY;
+	mapPackage.Maps[3] = ECircuit::WARIO_STADIUM;
+	GameData::GetInstance()->SetMapPakcage(mapPackage);
+
+	/*mapPackage.Maps[0] = ECircuit::SHERBET_LAND;
+	mapPackage.Maps[1] = ECircuit::ROYAL_RACEWAY;
+	mapPackage.Maps[2] = ECircuit::BOWSERS_CASTLE;
+	mapPackage.Maps[3] = ECircuit::RAINBOW_ROAD;
+	GameData::GetInstance()->SetMapPakcage(mapPackage);*/
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

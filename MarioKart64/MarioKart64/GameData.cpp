@@ -6,7 +6,6 @@ GameData* GameData::pInstance = nullptr;
 GameData::GameData()
 {
 	Players.reserve(MAX_PLAYER_CNT);
-	Maps.reserve(MAX_MAP_CNT);
 }
 
 GameData::~GameData()
@@ -101,14 +100,9 @@ EItemType GameData::GetItem(uint8_t _playerIdx)
 	return EItemType::NONE;
 }
 
-void GameData::SetMaps(const std::vector<ECircuit>& _maps)
+void GameData::SetMapPakcage(const SMapPackage& _data)
 {
-	Maps = _maps;
-}
-
-const std::vector<ECircuit>& GameData::GetMaps() const
-{
-	return Maps;
+	MapPackage = _data;
 }
 
 void GameData::SetMinimapLoc(uint8_t _playerIdx, float4 _loc)
@@ -147,14 +141,19 @@ float4 GameData::GetPlayerRotation(uint8_t _playerIdx) const
 	return float4{ 0.f, 0.f, 0.f, 0.f };
 }
 
-void GameData::SetCurMap(ECircuit _type)
+ECircuit GameData::NextMap()
 {
-	CurMapType = _type;
+	if (MapPackage.CurIdx >= 3)
+	{
+		return ECircuit::END;
+	}
+
+	return MapPackage.Maps[++MapPackage.CurIdx];
 }
 
 ECircuit GameData::GetCurMap() const
 {
-	return CurMapType;
+	return MapPackage.Maps[MapPackage.CurIdx];
 }
 
 void GameData::SetFinishState(EFinishState  _val)

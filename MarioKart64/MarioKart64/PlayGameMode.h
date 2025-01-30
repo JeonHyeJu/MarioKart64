@@ -8,9 +8,12 @@ public:
 	enum class EState
 	{
 		READY = 0,
-		WAIT_TITLE,
+		WAIT_UI_OPEN,
 		COUNT,
 		PLAY,
+		FINISH,
+		WAIT_UI_RESULT,
+		WAIT_KEY,
 		END,
 	};
 
@@ -22,34 +25,32 @@ public:
 	APlayGameMode& operator=(const APlayGameMode& _other) = delete;
 	APlayGameMode& operator=(APlayGameMode&& _other) noexcept = delete;
 
-	void StartLuigiRaceway();
-	void StartRoyalRaceway();
-	void StartKoopaBeach();
-	void StartMarioRaceway();
-	void StartWarioStadium();
-	void StartSherbetLand();
-	void StartBowserCastle();
-	void StartRainbowRoad();
-
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
 private:
 	void InitEffects();
+	void InitMap();
+	void InitMinimap(const FVector& _initLoc, float _scale);
+	void SetCamFinishRot();
 
 	/* Fsm start function */
 	void OnGetReady();
 	void OnCount();
 	void OnPlay();
-	void OnFinishRace();
+	void OnFinish();
+	void OnWaitUIResult();
+	void OnWaitKey();
 
 	/* Fsm update function */
 	void Readying(float _deltaTime);
-	void WaitingTitle(float _deltaTime);
+	void WaitingUIOpen(float _deltaTime);
 	void Counting(float _deltaTime);
 	void Playing(float _deltaTime);
 	void Finishing(float _deltaTime);
+	void WaitingUIResult(float _deltaTime);
+	void WaitingKey(float _deltaTime);
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
@@ -63,9 +64,6 @@ private:
 	EState State = EState::END;
 	FVector CameraInitLoc = FVector{ 0.f, 100.f, -300.f };
 	const float CAM_MOVE_SCALAR = 100.f;
-
-	bool IsFinish = false;
-	int ChangeCamIdx = 0;
 
 	UFSMStateManager Fsm;
 };

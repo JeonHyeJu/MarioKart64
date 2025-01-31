@@ -73,7 +73,6 @@ private:
 	void TickBoost(float _deltaTime);
 
 	bool CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist);
-	bool CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, float& _refDist);
 	void CheckCollisionOfAllMap();
 	void CheckFutureCollisionOfAllMap();
 	float GetSlope();

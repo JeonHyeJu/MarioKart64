@@ -196,7 +196,7 @@ void ADriver::GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float
 	futureDir.Y = -1000.f;
 
 	int i = 0;
-	bool isCol = CheckCollision(futureDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
+	bool isCol = CheckCollision(futureDir, FutureNavIdxs[i], tempFDist);
 	if (isCol)
 	{
 		if (isLog) OutputDebugStringA((std::to_string(i) + ": AAAAAAAA").c_str());
@@ -221,7 +221,7 @@ void ADriver::GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float
 
 				if (isLog) OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
 
-				isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
+				isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], tempFDist);
 				if (isCol)
 				{
 					const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdxs[i]);
@@ -263,7 +263,7 @@ void ADriver::GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float
 
 			if (isLog) OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
 
-			isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
+			isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], tempFDist);
 			if (isCol)
 			{
 				if (isLog) OutputDebugStringA(("---> COL (" + std::to_string(_angle) + ")").c_str());
@@ -659,38 +659,6 @@ bool ADriver::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 				PrevIdx = _refIdx;
 				PrevGroupIdx = navDatas[_refIdx].GroupIndex;
 
-				_refIdx = linkedIdx;
-				break;
-			}
-		}
-	}
-
-	return isCollided;
-}
-
-bool ADriver::CheckCollision(const FVector& _loc, int _startIdx, int& _refIdx, float& _refDist)
-{
-	bool isCollided = false;
-	const FTransform& trfmObj = MapPtr->GetTransform();
-
-	// TODO: Check size
-	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
-	SNavData nd = navDatas[_startIdx];
-	isCollided = nd.Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
-
-	if (isCollided)
-	{
-		//OutputDebugStringA("CheckCollision first: true\n");
-	}
-	else
-	{
-		//OutputDebugStringA("CheckCollision first: false\n");
-		for (int linkedIdx : nd.LinkData)
-		{
-			isCollided = navDatas[linkedIdx].Intersects(_loc, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, _refDist);
-			if (isCollided)
-			{
-				//OutputDebugStringA(("CheckCollision second: true .. " + std::to_string(linkedIdx) + "\n").c_str());
 				_refIdx = linkedIdx;
 				break;
 			}

@@ -149,6 +149,11 @@ void AItem::SetDirection(const FVector& _dir)
 	Direction.Normalize();
 }
 
+void AItem::SetInitVelocity(float _velocity)
+{
+	Velocity = _velocity;
+}
+
 void AItem::RunningShell(float _deltaTime)
 {
 	if (Velocity < 0)

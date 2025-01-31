@@ -753,6 +753,8 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 
 	if (name == "ITEM")
 	{
+		_other->GetActor()->Destroy();
+
 		IsSpin = true;
 	}
 	else if (name == "ITEMBOX")
@@ -849,6 +851,7 @@ void ADriver::UseItem_Shell(const EItemType& _itemType)
 	item->Init(_itemType);
 	item->SetActorRotation(GetActorRotation());
 	item->SetActorLocation(GetActorLocation() + (forward * item->Size));
+	item->SetInitVelocity(Velocity + 1000.f);
 	item->SetDirection(forward);
 }
 

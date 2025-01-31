@@ -14,6 +14,7 @@ public:
 	AItem& operator=(const AItem& _other) = delete;
 	AItem& operator=(AItem&& _other) noexcept = delete;
 
+	void SetInitVelocity(float _velocity);
 	void SetDirection(const FVector& _dir);
 	void Init(const EItemType& _itemType);
 
@@ -34,7 +35,7 @@ private:
 	std::shared_ptr<class URenderer> Renderer = nullptr;
 	std::shared_ptr<class UCollision> Collision = nullptr;
 
-	float Velocity = 500.f;
+	float Velocity = 1000.f;
 	float Acceleration = -5.f;
 	FVector Direction;
 	EItemType ItemType = EItemType::SIZE;

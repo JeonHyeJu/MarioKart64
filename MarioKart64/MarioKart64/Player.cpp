@@ -121,16 +121,50 @@ void APlayer::Tick(float _deltaTime)
 
 void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 {
+	float rotY = GetActorRotation().Y;
+
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
 		DirHTrain = 1;
-		_refRot = -65.f * _deltaTime;
+		if (PrevH != 0)
+		{
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			Renderer->ChangeAnimation("TurnL");
+			PrevH = 0;
+			WheelVelocity = 0.f;
+		}
+
+		WheelVelocity = FPhysics::GetVf(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
+		_refRot = FPhysics::GetDeltaX(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
 	}
 	else if (UEngineInput::IsPress(VK_RIGHT))
 	{
 		DirHTrain = 2;
-		_refRot = 65.f * _deltaTime;
+		if (PrevH != 1)
+		{
+			Renderer->SetRotation({ 0.f, 180.f, 0.f });
+			Renderer->ChangeAnimation("TurnR");
+			PrevH = 1;
+			WheelVelocity = 0.f;
+		}
+		
+		WheelVelocity = FPhysics::GetVf(WheelVelocity, WHEEL_ACCEL, _deltaTime);
+		_refRot = FPhysics::GetDeltaX(WheelVelocity, WHEEL_ACCEL, _deltaTime);
 	}
+	else
+	{
+		float acc = -1.f * WheelVelocity;
+		if (PrevH != 2)
+		{
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			WheelVelocity = FPhysics::GetVf(WheelVelocity, acc, _deltaTime);
+			_refRot = FPhysics::GetDeltaX(WheelVelocity, acc, _deltaTime);
+		}
+
+		PrevH = 2;
+		Renderer->ChangeAnimation("Idle");
+	}
+
 	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
 }
 

@@ -23,7 +23,6 @@ protected:
 	void GetHandleRotation(float _deltaTime, float& _refRot) override;
 
 private:
-	std::shared_ptr<class USpriteRenderer> Renderer;
-	std::shared_ptr<class UCollision> CollisionItem = nullptr;
+	int PrevH = -1;
 };
 

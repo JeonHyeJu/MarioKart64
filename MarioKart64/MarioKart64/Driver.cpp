@@ -25,6 +25,7 @@ ADriver::ADriver()
 	RendererDebug->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
 	RendererDebug->ChangeAnimation("Idle");
 	RendererDebug->SetupAttachment(RootComponent);
+	RendererDebug->SetActive(false);
 	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
 
 	DebugItem = CreateDefaultSubObject<USpriteRenderer>();
@@ -93,8 +94,8 @@ void ADriver::SetStart(bool _val)
 
 void ADriver::InitCharacter(ECharacter _character)
 {
-	const char* SPRITE_NAME = RENDER_SPRITES[static_cast<int>(_character)];
-	Renderer->CreateAnimation("Idle", SPRITE_NAME, 0, 3, .3f);
+	SpriteName = RENDER_SPRITES[static_cast<int>(_character)];
+	Renderer->CreateAnimation("Idle", SpriteName, 0, 3, .3f);
 
 	{
 		const int TURN_SIZE = 25;
@@ -105,7 +106,7 @@ void ADriver::InitCharacter(ECharacter _character)
 			idxs[i] += static_cast<int>(i);
 		}
 
-		Renderer->CreateAnimation("Spin", SPRITE_NAME, idxs, times, false);
+		Renderer->CreateAnimation("Spin", SpriteName, idxs, times, false);
 	}
 
 	// Temp
@@ -118,20 +119,20 @@ void ADriver::InitCharacter(ECharacter _character)
 			idxs[i] = static_cast<int>(i * 36);
 		}
 
-		Renderer->CreateAnimation("TurnL", SPRITE_NAME, idxs, times, false);
-		Renderer->CreateAnimation("TurnR", SPRITE_NAME, idxs, times, false);
+		Renderer->CreateAnimation("TurnL", SpriteName, idxs, times, false);
+		Renderer->CreateAnimation("TurnR", SpriteName, idxs, times, false);
 	}
 
 	Renderer->ChangeAnimation("Idle");
 
-	float playerWidth = Renderer->GetWorldScale3D().X;
+	RendererSize = Renderer->GetWorldScale3D();
 
 	CollisionItem = CreateDefaultSubObject<UCollision>();
 	CollisionItem->SetCollisionType(ECollisionType::Sphere);
 	CollisionItem->SetupAttachment(RootComponent);
 	CollisionItem->SetCollisionProfileName("Player");
-	CollisionItem->SetScale3D({ playerWidth, playerWidth, playerWidth });
-	CollisionItem->AddRelativeLocation({ 0.f, playerWidth * .5f, 0.f });
+	CollisionItem->SetScale3D({ RendererSize.X, RendererSize.Y, RendererSize.X });
+	CollisionItem->AddRelativeLocation({ 0.f, RendererSize.X * .5f, 0.f });
 	CollisionItem->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -308,8 +309,6 @@ void ADriver::Move(float _deltaTime)
 	float gravityY = GRAVITY_FORCE * _deltaTime;
 	FTransform trfmPlayer = GetActorTransform();
 	FTransform trfmObj = MapPtr->GetActorTransform();
-
-	OutputDebugStringA(("Move: " + trfmPlayer.Location.ToString() + "\n").c_str());
 
 	/* for debug start */
 	if (UEngineInput::IsPress(VK_LCONTROL))
@@ -496,8 +495,9 @@ void ADriver::Move(float _deltaTime)
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
-	//FTransform temp = GetTransform();
+	FTransform temp = GetTransform();
 	//OutputDebugStringA(("Last location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
+	OutputDebugStringA(("player rotation: " + std::to_string(temp.Rotation.X) + ", " + std::to_string(temp.Rotation.Y) + ", " + std::to_string(temp.Rotation.Z) + "\n").c_str());
 
 	//OutputDebugStringA("------------------------------------------\n");
 }

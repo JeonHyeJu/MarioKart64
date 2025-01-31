@@ -80,7 +80,7 @@ void APlayGameMode::InitCharacters()
 
 	uint8_t playerIdx = pData->GetPlayerIdx();
 	//uint8_t size = pData->GetPlayerCnt();
-	uint8_t size = 2;
+	uint8_t size = 1;
 	for (uint8_t i = 0; i < size; ++i)
 	{
 		if (i == playerIdx)
@@ -128,7 +128,7 @@ void APlayGameMode::InitMap()
 		Player->SetActorLocation({ -400.0f, -100.0f, 300.0f });
 
 		// Temp
-		Players[1]->SetActorLocation({ -600.0f, -100.0f, 300.0f });
+		//Players[1]->SetActorLocation({ -600.0f, -100.0f, 300.0f });
 
 		//Player->SetActorLocation({ -400.0f, -60.0f, 7000.0f });
 

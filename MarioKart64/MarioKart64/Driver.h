@@ -50,6 +50,9 @@ protected:
 	bool IsStarted = false;
 	bool IsSpin = false;
 
+	const float WHEEL_ACCEL = 80.f;
+	float WheelVelocity = 0.f;
+
 	float Velocity = 0.f;
 	float VelocityV = 0.f;
 
@@ -68,6 +71,10 @@ protected:
 	bool IsReverseTrain = false;
 	std::vector<TrainData> TrainDatas;
 
+	std::shared_ptr<USpriteRenderer> Renderer = nullptr;
+	std::string SpriteName = "";
+	FVector RendererSize = FVector::ZERO;
+
 private:
 	void Move(float _deltaTime);
 	void TickBoost(float _deltaTime);
@@ -81,7 +88,6 @@ private:
 	void OnCollisionEnter(UCollision* _this, UCollision* _other);
 	void PickItem(float _deltaTime);
 
-	std::shared_ptr<USpriteRenderer> Renderer;
 	std::shared_ptr<UCollision> CollisionItem = nullptr;
 	ABaseMap* MapPtr = nullptr;
 
@@ -90,7 +96,7 @@ private:
 	const float MAX_TURN = 5.f;
 
 	const float WEIGHT = 50.f;
-	const float ACCELERATION = WEIGHT * 5.f;	// 250px/s
+	const float ACCELERATION = WEIGHT * 6.f;
 	const float FRICTION_FORCE = WEIGHT * 2.f;	// 100px/s
 	const float MAX_VELOCITY = 1000.f;
 	const float GRAVITY_FORCE = -300.f;

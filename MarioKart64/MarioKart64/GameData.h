@@ -32,13 +32,14 @@ public:
 	void GetHighRankPlayersIdx(int* _refArr, int _size);
 
 	ECharacter GetPlayerCharacter() const;
-	uint8_t GetPlayerIdx() const;
 	uint8_t GetPlayerCnt() const;
+
+	void SetPlayerIdx(uint8_t _idx);
+	uint8_t GetPlayerIdx() const;
 
 	void SetPlayerRank(uint8_t _val);
 	uint8_t GetPlayerRank() const;
 
-	void SetPlayerIdx(uint8_t _idx);
 	void SetPlayers(const std::vector<SPlayerInfo>& _players);
 	const std::vector<SPlayerInfo>& GetPlayers() const;
 
@@ -59,8 +60,8 @@ public:
 	void SetFinishState(EFinishState _val);
 	EFinishState GetFinishState() const;
 
-	void SetPlayerLap(uint8_t _playerIdx, int _val);
-	int GetPlayerLap(uint8_t _playerIdx) const;
+	void SetPlayerLap(int _val);
+	int GetPlayerLap() const;
 
 	static const int MAX_PLAYER_CNT = 8;
 	static const int MAX_MAP_CNT = 4;

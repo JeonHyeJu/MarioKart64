@@ -22,9 +22,13 @@ APlayGameMode::APlayGameMode()
 	ULevel* pLevel = GetWorld();
 	pLevel->CreateCollisionProfile("ItemBox");
 	pLevel->CreateCollisionProfile("Player");
-	pLevel->CreateCollisionProfile("Item");
+	pLevel->CreateCollisionProfile("SHELL");
+	pLevel->CreateCollisionProfile("BANANA");
+	pLevel->CreateCollisionProfile("FAKE_ITEMBOX");
 	pLevel->LinkCollisionProfile("Player", "ItemBox");
-	pLevel->LinkCollisionProfile("Player", "Item");
+	pLevel->LinkCollisionProfile("Player", "SHELL");
+	pLevel->LinkCollisionProfile("Player", "BANANA");
+	pLevel->LinkCollisionProfile("Player", "FAKE_ITEMBOX");
 
 	Skybox = pLevel->SpawnActor<ASkybox>();
 	MapPtr = pLevel->SpawnActor<ABaseMap>();
@@ -75,8 +79,11 @@ void APlayGameMode::InitCharacters()
 	Player = pLevel->GetMainPawn<APlayer>();
 
 	GameData* pData = GameData::GetInstance();
+	ECircuit map = pData->GetCurMap();
+
 	Player->InitCharacter(pData->GetPlayerCharacter());
 	Player->SetMap(MapPtr.get());
+	Player->InitRouteIndex(map);
 
 	uint8_t playerIdx = pData->GetPlayerIdx();
 	//uint8_t size = pData->GetPlayerCnt();
@@ -92,6 +99,7 @@ void APlayGameMode::InitCharacters()
 			std::shared_ptr<ADriver> driver = pLevel->SpawnActor<ADriver>();
 			driver->InitCharacter(static_cast<ECharacter>(i));
 			driver->SetMap(MapPtr.get());
+			driver->InitRouteIndex(map);
 			Players[i] = driver.get();
 		}
 	}
@@ -409,7 +417,7 @@ void APlayGameMode::Playing(float _deltaTime)
 	}
 
 	// Temp. for test
-	if (UEngineInput::IsDown('Q'))
+	if (Player->IsFinish || UEngineInput::IsDown('Q'))
 	{
 		Fsm.ChangeState(EState::FINISH);
 		return;

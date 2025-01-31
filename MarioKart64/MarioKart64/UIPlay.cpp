@@ -486,6 +486,24 @@ void AUIPlay::SetPlayUIVisible(bool _val)
 	PlayerItem->SetActive(_val);
 }
 
+void AUIPlay::TickLap(float _deltaTime)
+{
+	static float elapsedSec = 0.f;
+
+	elapsedSec += _deltaTime;
+	if (elapsedSec > .5f)
+	{
+		elapsedSec = 0.f;
+
+		int lap = GameData::GetInstance()->GetPlayerLap();
+		if (ShowingLap != lap)
+		{
+			ShowingLap = lap;
+			LapC->SetSprite(LAP_SPRITE, lap - 1);
+		}
+	}
+}
+
 /* Fsm start function */
 void AUIPlay::OnIdle()
 {
@@ -658,18 +676,9 @@ void AUIPlay::Racing(float _deltaTime)
 	CountTimer(_deltaTime);
 	SetItemUI();
 	SetMinimapLoc();
+	TickLap(_deltaTime);
 
-	GameData* pData = GameData::GetInstance();
-
-	// User
-	int lap = pData->GetPlayerLap(0);
-	if (ShowingLap != lap)
-	{
-		ShowingLap = lap;
-		LapC->SetSprite(LAP_SPRITE, lap - 1);
-	}
-
-	if (pData->GetFinishState() == EFinishState::FINISH_RACING)
+	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_RACING)
 	{
 		Fsm.ChangeState(EState::FINISH_RACING);
 	}

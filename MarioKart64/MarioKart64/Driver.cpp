@@ -34,13 +34,6 @@ ADriver::ADriver()
 	DebugItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
 	DebugItem->SetRelativeLocation({ 30.f, 50.f, 0.f });
 
-	for (size_t i = 0, size = TempRouteIdxInit.size(); i < size; ++i)
-	{
-		TempRouteIdx[TempRouteIdxInit[i]] = static_cast<int>(i);
-	}
-	LastIdx = TempRouteIdxInit.back();
-	TempRouteIdxInit.clear();
-
 	FutureAngles.reserve(40);
 	for (int i = 1; i < 25; ++i)
 	{
@@ -134,6 +127,37 @@ void ADriver::InitCharacter(ECharacter _character)
 	CollisionItem->SetScale3D({ RendererSize.X, RendererSize.Y, RendererSize.X });
 	CollisionItem->AddRelativeLocation({ 0.f, RendererSize.X * .5f, 0.f });
 	CollisionItem->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void ADriver::InitRouteIndex(ECircuit _map)
+{
+	switch (_map)
+	{
+	case ECircuit::LUIGI_RACEWAY:
+		CGlobal::GetRouteIdxLuigi(RouteIdx);
+		break;
+	case ECircuit::KOOPA_TROOPA_BEACH:
+		CGlobal::GetRouteIdxKoopa(RouteIdx);
+		break;
+	case ECircuit::MARIO_RACEWAY:
+		CGlobal::GetRouteIdxMario(RouteIdx);
+		break;
+	case ECircuit::WARIO_STADIUM:
+		CGlobal::GetRouteIdxWario(RouteIdx);
+		break;
+	case ECircuit::SHERBET_LAND:
+		CGlobal::GetRouteIdxSherbet(RouteIdx);
+		break;
+	case ECircuit::ROYAL_RACEWAY:
+		CGlobal::GetRouteIdxRoyal(RouteIdx);
+		break;
+	case ECircuit::BOWSERS_CASTLE:
+		CGlobal::GetRouteIdxBowsers(RouteIdx);
+		break;
+	case ECircuit::RAINBOW_ROAD:
+		CGlobal::GetRouteIdxRainbow(RouteIdx);
+		break;
+	}
 }
 
 void ADriver::Spin()
@@ -348,19 +372,31 @@ void ADriver::Move(float _deltaTime)
 	bool isCollided = CheckCollision(trfmPlayer.Location, NavIdx, fDist);
 
 	// Temp start
-	std::map<int, int>::iterator it = TempRouteIdx.find(NavIdx);
-	std::map<int, int>::iterator itEnd = TempRouteIdx.end();
+	bool isReverse = false;
+	std::map<int, int>::iterator it = RouteIdx.find(NavIdx);
+	std::map<int, int>::iterator itEnd = RouteIdx.end();
 	if (it != itEnd)
 	{
 		int _idx = it->second;
-		if (isLog) OutputDebugStringA(("navIdx: " + std::to_string(NavIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
-		if (CurRouteIdx > _idx)
+		if (IsCheckLap == false && _idx == 0)
 		{
-			//OutputDebugStringA("REVERSE!!!!!!!\n");
+			IsCheckLap = true;
 		}
-		else if (CurRouteIdx < _idx)
+
+		if (IsCheckLap)
 		{
-			CurRouteIdx = _idx;
+			//if (isLog) OutputDebugStringA(("navIdx: " + std::to_string(NavIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
+			OutputDebugStringA(("CurRouteIdx : " + std::to_string(CurRouteIdx) + ", _idx: " + std::to_string(_idx) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+			if (CurRouteIdx > _idx)
+			{
+				isReverse = true;
+				OutputDebugStringA("REVERSE!!!!!!!\n");
+			}
+			else if (CurRouteIdx < _idx)
+			{
+				OutputDebugStringA("RIGHT!!!!!!!\n");
+				CurRouteIdx = _idx;
+			}
 		}
 	}
 	else
@@ -368,12 +404,6 @@ void ADriver::Move(float _deltaTime)
 		//OutputDebugStringA("EMPTY!!!!!!!\n");
 	}
 
-	if (TempPrevIdx != NavIdx)
-	{
-		//OutputDebugStringA(("navIdx: " + std::to_string(navIdx) + "\n").c_str());
-		TempPrevIdx = NavIdx;
-		//FileTemp << std::to_string(navIdx) << ",";
-	}
 	// Temp end
 
 	FVector lastRot;
@@ -427,7 +457,7 @@ void ADriver::Move(float _deltaTime)
 		VelocityV = Velocity * sinf(-slopeAngle * UEngineMath::D2R);
 		if (isLog) OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", sinf: " + std::to_string(sinf(-slopeAngle * UEngineMath::D2R)) + "\n").c_str());
 		PrevLoc = GetActorLocation();
-		CheckLab();
+		CheckLap(isReverse);
 	}
 	else
 	{
@@ -463,8 +493,6 @@ void ADriver::Move(float _deltaTime)
 			}
 			else
 			{
-				IsTouchLastTriangle = true;
-
 				// Adjust gravity
 				//GetForwardPhysics(_deltaTime, dx);
 
@@ -495,9 +523,9 @@ void ADriver::Move(float _deltaTime)
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
-	FTransform temp = GetTransform();
+	//FTransform temp = GetTransform();
 	//OutputDebugStringA(("Last location: " + std::to_string(temp.Location.X) + ", " + std::to_string(temp.Location.Y) + ", " + std::to_string(temp.Location.Z) + "\n").c_str());
-	OutputDebugStringA(("player rotation: " + std::to_string(temp.Rotation.X) + ", " + std::to_string(temp.Rotation.Y) + ", " + std::to_string(temp.Rotation.Z) + "\n").c_str());
+	//OutputDebugStringA(("player rotation: " + std::to_string(temp.Rotation.X) + ", " + std::to_string(temp.Rotation.Y) + ", " + std::to_string(temp.Rotation.Z) + "\n").c_str());
 
 	//OutputDebugStringA("------------------------------------------\n");
 }
@@ -507,22 +535,34 @@ void ADriver::SetMap(ABaseMap* _ptr)
 	MapPtr = _ptr;
 }
 
-void ADriver::CheckLab()
+void ADriver::CheckLap(bool _isReverse)
 {
-	if (!IsTouchLastTriangle) return;
+	if (_isReverse) return;
+	if (IsCheckLap == false) return;
 
-	SNavData nd = MapPtr->GetNavData(NavIdx);
-	if (nd.FloorType == ENavType::START_POINT)
+	if (PrevNavIdx != NavIdx)
 	{
-		++Lab;
-		OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lab) + "\n").c_str());
-		IsTouchLastTriangle = false;
-	}
+		SNavData nd = MapPtr->GetNavData(NavIdx);
+		if (nd.FloorType == ENavType::START_POINT)
+		{
+			++Lap;
+			IsCheckLap = false;
+			CurRouteIdx = 0;
+			OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lap) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+			OnChangeLap(Lap);
 
-	//if (Lab == ALL_LAB)
-	//{
-	//	// change state
-	//}
+			if (Lap == ALL_LAB)
+			{
+				EndLap();
+				OutputDebugStringA("GOAL IN!!\n");
+				// change state
+			}
+		}
+
+		//OutputDebugStringA(("NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+		PrevNavIdx = NavIdx;
+		FileTemp << std::to_string(NavIdx) << ",";
+	}
 }
 
 float ADriver::GetSlope()
@@ -719,7 +759,19 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 {
 	const std::string& name = _other->GetCollisionProfileName();
 
-	if (name == "ITEM")
+	if (name == "SHELL")
+	{
+		_other->GetActor()->Destroy();
+
+		IsSpin = true;
+	}
+	else if (name == "BANANA")
+	{
+		_other->GetActor()->Destroy();
+
+		IsSpin = true;
+	}
+	else if (name == "FAKE_ITEMBOX")
 	{
 		_other->GetActor()->Destroy();
 
@@ -729,8 +781,11 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 	{
 		_other->GetActor()->SetActive(false);
 
-		ItemRoulette.Reset();
-		IsPickingItem = true;
+		if (ItemIndex >= ITEM_NONE)
+		{
+			ItemRoulette.Reset();
+			IsPickingItem = true;
+		}
 	}
 }
 
@@ -756,8 +811,7 @@ void ADriver::PickItem(float _deltaTime)
 
 void ADriver::TickItem(float _deltaTime)
 {
-	static const int NONE = static_cast<int>(EItemType::SIZE);
-	if (ItemIndex >= NONE) return;
+	if (ItemIndex >= ITEM_NONE) return;
 
 	UseItem();
 }
@@ -798,9 +852,8 @@ void ADriver::UseItem()
 		break;
 	}
 
-	static const int NONE = static_cast<int>(EItemType::SIZE);
-	ItemIndex = NONE;
-	DebugItem->SetSprite("Items.png", NONE);
+	ItemIndex = ITEM_NONE;
+	DebugItem->SetSprite("Items.png", ITEM_NONE);
 }
 
 void ADriver::UseItem_Shell(const EItemType& _itemType)
@@ -816,9 +869,9 @@ void ADriver::UseItem_Shell(const EItemType& _itemType)
 
 	FVector forward = GetActorForwardVector();
 	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
-	item->Init(_itemType);
+	item->Init(_itemType, MapPtr, NavIdx);
 	item->SetActorRotation(GetActorRotation());
-	item->SetActorLocation(GetActorLocation() + (forward * item->Size));
+	item->SetActorLocation(GetActorLocation() + (forward * item->Size * 2));
 	item->SetInitVelocity(Velocity + 1000.f);
 	item->SetDirection(forward);
 }
@@ -830,7 +883,10 @@ void ADriver::UseItem_Mushroom(const EItemType& _itemType)
 
 void ADriver::UseItem_Banana(const EItemType& _itemType)
 {
+	FVector backward = GetActorForwardVector() * -1.f;
 
+	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
+	item->Init(_itemType, MapPtr, NavIdx);
 }
 
 void ADriver::UseItem_Star(const EItemType& _itemType)
@@ -847,4 +903,9 @@ void ADriver::UseItem_Ghost(const EItemType& _itemType)
 
 void ADriver::UseItem_FakeItemBox(const EItemType& _itemType)
 {
+	FVector backward = GetActorForwardVector() * -1.f;
+
+	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
+	item->Init(_itemType, MapPtr, NavIdx);
+	item->SetActorLocation(GetActorLocation() + FVector{ 0.f, item->Size, 0.f } + (backward * item->Size * 2));
 }

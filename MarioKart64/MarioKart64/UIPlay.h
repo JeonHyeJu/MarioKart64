@@ -70,6 +70,8 @@ private:
 
 	void SetPlayUIVisible(bool _val);
 
+	void TickLap(float _deltaTime);
+
 	void AnimPlayerRankColor(float _deltaTime);
 
 	/* Fsm start function */

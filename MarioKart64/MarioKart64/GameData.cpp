@@ -170,20 +170,12 @@ EFinishState GameData::GetFinishState() const
 	return FinishState;
 }
 
-void GameData::SetPlayerLap(uint8_t _playerIdx, int _val)
+void GameData::SetPlayerLap(int _val)
 {
-	if (_playerIdx < Players.size())
-	{
-		Players[_playerIdx].Lap = _val;
-	}
+	Players[PlayerIdx].Lap = _val;
 }
 
-int GameData::GetPlayerLap(uint8_t _playerIdx) const
+int GameData::GetPlayerLap() const
 {
-	if (_playerIdx < Players.size())
-	{
-		return Players[_playerIdx].Lap;
-	}
-
-	return -1;
+	return Players[PlayerIdx].Lap;
 }

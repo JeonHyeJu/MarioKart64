@@ -20,10 +20,10 @@ APlayer::APlayer()
 APlayer::~APlayer()
 {
 	// Temp
-	/*std::ofstream f;
+	std::ofstream f;
 	f.open("temp.txt");
 	f.write(FileTemp.str().c_str(), FileTemp.str().size());
-	f.close();*/
+	f.close();
 }
 
 void APlayer::BeginPlay()
@@ -41,16 +41,13 @@ void APlayer::Tick(float _deltaTime)
 	//OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
 
 	/* for debug start */
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		UseItem_Shell(EItemType::GREEN_SHELL);
+	//if (UEngineInput::IsDown(VK_SPACE))
+	//{
+	//	//UseItem_Shell(EItemType::GREEN_SHELL);
+	//	//UseItem_Banana(EItemType::BANANA);
+	//	//UseItem_FakeItemBox(EItemType::FAKE_ITEMBOX);
 	//	//IsSpin = true;
-
-	//	/*std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
-	//	item->Init(EItemType::FAKE_ITEMBOX);
-	//	item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
-	//	item->SetDirection(GetActorForwardVector());*/
-	}
+	//}
 	if (UEngineInput::IsDown(VK_F8))
 	{
 		IsTraining = !IsTraining;
@@ -170,11 +167,20 @@ void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 
 void APlayer::TickItem(float _deltaTime)
 {
-	static const int NONE = static_cast<int>(EItemType::SIZE);
-	if (ItemIndex >= NONE) return;
+	if (ItemIndex >= ITEM_NONE) return;
 
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
 		UseItem();
 	}
+}
+
+void APlayer::OnChangeLap(int _lap)
+{
+	GameData::GetInstance()->SetPlayerLap(_lap);
+}
+
+void APlayer::EndLap()
+{
+	IsFinish = true;
 }

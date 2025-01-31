@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 
 class CGlobal	// Contens global
 {
@@ -19,4 +20,13 @@ public:
 	static const int WINDOW_H;
 	static const float FWINDOW_W;
 	static const float FWINDOW_H;
+
+	static void GetRouteIdxLuigi(std::map<int, int>& _refMap);
+	static void GetRouteIdxKoopa(std::map<int, int>& _refMap);
+	static void GetRouteIdxMario(std::map<int, int>& _refMap);
+	static void GetRouteIdxWario(std::map<int, int>& _refMap);
+	static void GetRouteIdxSherbet(std::map<int, int>& _refMap);
+	static void GetRouteIdxRoyal(std::map<int, int>& _refMap);
+	static void GetRouteIdxBowsers(std::map<int, int>& _refMap);
+	static void GetRouteIdxRainbow(std::map<int, int>& _refMap);
 };

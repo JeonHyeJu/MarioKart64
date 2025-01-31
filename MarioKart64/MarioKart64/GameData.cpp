@@ -37,6 +37,11 @@ uint8_t GameData::GetPlayerIdx() const
 	return PlayerIdx;
 }
 
+ECharacter GameData::GetPlayerCharacter() const
+{
+	return static_cast<ECharacter>(PlayerIdx);
+}
+
 uint8_t GameData::GetPlayerCnt() const
 {
 	return PlayerCnt;

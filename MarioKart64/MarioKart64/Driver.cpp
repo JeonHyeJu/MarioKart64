@@ -19,23 +19,7 @@ ADriver::ADriver()
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetOrder(0);
-
-	// Temp
-	const int TURN_SIZE = 31;
-	std::vector<int> idxs(TURN_SIZE, 0);
-	std::vector<float> times(TURN_SIZE, 0.2f);
-	for (size_t i = 0; i < TURN_SIZE; ++i)
-	{
-		idxs[i] = static_cast<int>(i * 36);
-	}
-
-	Renderer->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
-	Renderer->CreateAnimation("TurnL", "Mario.png", idxs, times, true);
-	Renderer->CreateAnimation("TurnR", "Mario.png", idxs, times, true);
-
-	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);
-
 
 	RendererDebug = CreateDefaultSubObject<USpriteRenderer>();
 	RendererDebug->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
@@ -43,36 +27,18 @@ ADriver::ADriver()
 	RendererDebug->SetupAttachment(RootComponent);
 	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
 
-	float playerWidth = Renderer->GetWorldScale3D().X;
-
-	CollisionItem = CreateDefaultSubObject<UCollision>();
-	CollisionItem->SetCollisionType(ECollisionType::Sphere);
-	CollisionItem->SetupAttachment(RootComponent);
-	CollisionItem->SetCollisionProfileName("Player");
-	CollisionItem->SetScale3D({ playerWidth, playerWidth, playerWidth });
-	CollisionItem->AddRelativeLocation({0.f, playerWidth*.5f, 0.f });
-
-	CollisionItem->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
-
 	DebugItem = CreateDefaultSubObject<USpriteRenderer>();
 	DebugItem->SetOrder(0);
 	DebugItem->SetupAttachment(RootComponent);
 	DebugItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
 	DebugItem->SetRelativeLocation({ 30.f, 50.f, 0.f });
 
-	LineDebug = CreateDefaultSubObject<LineRenderer>();
-	LineDebug->SetupAttachment(RootComponent);
-	LineDebug->SetScale3D({ 1.f, 100.f, 1.f });
-	LineDebug->SetRelativeLocation({ 0.f, 25.f, 50.f });
-	LineDebug->SetRotation({ -90.f, 0.f, 0.f });
-
 	for (size_t i = 0, size = TempRouteIdxInit.size(); i < size; ++i)
 	{
 		TempRouteIdx[TempRouteIdxInit[i]] = static_cast<int>(i);
 	}
+	LastIdx = TempRouteIdxInit.back();
 	TempRouteIdxInit.clear();
-
-	Camera = GetWorld()->GetMainCamera();
 
 	FutureAngles.reserve(40);
 	for (int i = 1; i < 25; ++i)
@@ -97,6 +63,17 @@ void ADriver::Tick(float _deltaTime)
 {
 	APawn::Tick(_deltaTime);
 
+	if (!IsStarted)
+	{
+		return;
+	}
+
+	if (IsSpin)
+	{
+		Spin();
+		return;
+	}
+
 	Move(_deltaTime);
 
 	if (IsPickingItem)
@@ -105,97 +82,136 @@ void ADriver::Tick(float _deltaTime)
 	}
 	else
 	{
-		CheckUsingItem(_deltaTime);
+		TickItem(_deltaTime);
 	}
 }
 
-void ADriver::Move(float _deltaTime)
+void ADriver::SetStart(bool _val)
 {
-	float gravityY = GRAVITY_FORCE * _deltaTime;
-	FTransform trfmPlayer = GetActorTransform();
-	FTransform trfmObj = MapPtr->GetActorTransform();
+	IsStarted = _val;
+}
 
-	int navIdx = MapPtr->GetNavIndex();
-	if (navIdx == -1)
+void ADriver::InitCharacter(ECharacter _character)
+{
+	const char* SPRITE_NAME = RENDER_SPRITES[static_cast<int>(_character)];
+	Renderer->CreateAnimation("Idle", SPRITE_NAME, 0, 3, .3f);
+
 	{
-		AddActorLocation({ 0.f, gravityY, 0.f });
-		CheckCollisionOfAllMap();
-		CheckFutureCollisionOfAllMap();
-		return;
+		const int TURN_SIZE = 25;
+		std::vector<int> idxs(TURN_SIZE, 1008);
+		std::vector<float> times(TURN_SIZE, .05f);
+		for (size_t i = 0; i < TURN_SIZE; ++i)
+		{
+			idxs[i] += static_cast<int>(i);
+		}
+
+		Renderer->CreateAnimation("Spin", SPRITE_NAME, idxs, times, false);
 	}
 
-	float fDist = 0.f;
-	bool isCollided = CheckCollision(trfmPlayer.Location, navIdx, fDist);
-
-	// Temp start
-	std::map<int, int>::iterator it = TempRouteIdx.find(navIdx);
-	std::map<int, int>::iterator itEnd = TempRouteIdx.end();
-	if (it != itEnd)
+	// Temp
 	{
-		int _idx = it->second;
-		OutputDebugStringA(("navIdx: " + std::to_string(navIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
-		if (CurRouteIdx > _idx)
+		const int TURN_SIZE = 31;
+		std::vector<int> idxs(TURN_SIZE, 0);
+		std::vector<float> times(TURN_SIZE, .1f);
+		for (size_t i = 0; i < TURN_SIZE; ++i)
 		{
-			//OutputDebugStringA("REVERSE!!!!!!!\n");
+			idxs[i] = static_cast<int>(i * 36);
 		}
-		else if (CurRouteIdx < _idx)
+
+		Renderer->CreateAnimation("TurnL", SPRITE_NAME, idxs, times, false);
+		Renderer->CreateAnimation("TurnR", SPRITE_NAME, idxs, times, false);
+	}
+
+	Renderer->ChangeAnimation("Idle");
+
+	float playerWidth = Renderer->GetWorldScale3D().X;
+
+	CollisionItem = CreateDefaultSubObject<UCollision>();
+	CollisionItem->SetCollisionType(ECollisionType::Sphere);
+	CollisionItem->SetupAttachment(RootComponent);
+	CollisionItem->SetCollisionProfileName("Player");
+	CollisionItem->SetScale3D({ playerWidth, playerWidth, playerWidth });
+	CollisionItem->AddRelativeLocation({ 0.f, playerWidth * .5f, 0.f });
+	CollisionItem->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void ADriver::Spin()
+{
+	const std::string& name = Renderer->GetCurAnimName();
+
+	if (name == "Idle")
+	{
+		Renderer->ChangeAnimation("Spin");
+	}
+	else if (name == "Spin")
+	{
+		if (Renderer->IsCurAnimationEnd())
 		{
-			CurRouteIdx = _idx;
+			if (SpinCount == 0)
+			{
+				SpinCount++;
+				Renderer->ChangeAnimation("Spin", true);
+			}
+			else
+			{
+				Velocity = 0.f;
+				VelocityV = 0.f;
+				BoostVal = 0.f;
+
+				SpinCount = 0;
+				IsSpin = false;
+				Renderer->ChangeAnimation("Idle");
+			}
 		}
+	}
+}
+
+void ADriver::TickBoost(float _deltaTime)
+{
+	if (IsBoost)
+	{
+		BoostVal += 2000.f * _deltaTime;
 	}
 	else
 	{
-		//OutputDebugStringA("EMPTY!!!!!!!\n");
+		if (BoostVal > 0)
+		{
+			BoostVal -= 350.f * _deltaTime;
+			if (BoostVal < 0) BoostVal = 0.f;
+		}
 	}
+	//OutputDebugStringA(("BoostVal:" + std::to_string(BoostVal) + "\n").c_str());
 
-	static int tempPrevIdx = -1;
-	if (tempPrevIdx != navIdx)
-	{
-		OutputDebugStringA(("navIdx: " + std::to_string(navIdx) + "\n").c_str());
-		tempPrevIdx = navIdx;
-	}
-	// Temp end
+	IsBoost = false;
+}
 
-	FVector lastRot;
-	FVector lastVec;
-	FVector dir = GetActorForwardVector();
-	dir.Normalize();
-
-	float dx = 0.f;
-	float rotVal = 0.f;
-	float slopeAngle = 0.f;
-
-	/* Test start */
-	GetForwardPhysics(_deltaTime, dx, true, true);
-
+void ADriver::GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float& _refRot)
+{
 	FVector curLoc = GetActorLocation();
 
 	float tempFDist = 0.f;
 	bool isRotate = false;
 
-	FVector futureDir = curLoc + (dir * STRIDE);
+	FVector futureDir = curLoc + (_dir * STRIDE);
 	futureDir.Y = -1000.f;
-
-	LineDebug->SetScale3D({ 1.f, futureDir.Length(), 1.f});
-	LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
 
 	int i = 0;
 	bool isCol = CheckCollision(futureDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
 	if (isCol)
 	{
-		OutputDebugStringA((std::to_string(i) + ": AAAAAAAA").c_str());
+		if (isLog) OutputDebugStringA((std::to_string(i) + ": AAAAAAAA").c_str());
 
 		const SNavData& _nd1 = MapPtr->GetNavData(FutureNavIdxs[i]);
 		if (_nd1.FloorType == ENavType::ROAD || _nd1.FloorType == ENavType::START_POINT || _nd1.FloorType == ENavType::FLATE_FASTER)
 		{
-			OutputDebugStringA("---> ROAD\n");
+			if (isLog) OutputDebugStringA("---> ROAD\n");
 		}
 		else
 		{
-			OutputDebugStringA("---> NO ROAD\n");
+			if (isLog) OutputDebugStringA("---> NO ROAD\n");
 			for (int j = 0; j < FutureAngles.size(); ++j)
 			{
-				FVector newDir = dir;
+				FVector newDir = _dir;
 				float _angle = FutureAngles[j];
 				newDir.Normalize();
 				newDir.RotationYDeg(_angle);
@@ -203,10 +219,7 @@ void ADriver::Move(float _deltaTime)
 				float lsize = newDir.Length();
 				newDir.Y = -1000.f;
 
-				OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
-
-				LineDebug->SetScale3D({ 1.f, lsize , 1.f});
-				LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
+				if (isLog) OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
 
 				isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
 				if (isCol)
@@ -216,11 +229,11 @@ void ADriver::Move(float _deltaTime)
 					{
 						if (_angle <= -1)
 						{
-							rotVal = 100.f * _deltaTime;
+							_refRot = 100.f * _deltaTime;
 						}
 						else if (_angle >= 1)
 						{
-							rotVal = -100.f * _deltaTime;
+							_refRot = -100.f * _deltaTime;
 						}
 
 						isRotate = true;
@@ -236,11 +249,11 @@ void ADriver::Move(float _deltaTime)
 	}
 	else
 	{
-		OutputDebugStringA((std::to_string(i) + ": BBBBBBBB").c_str());
+		if (isLog) OutputDebugStringA((std::to_string(i) + ": BBBBBBBB").c_str());
 
 		for (int j = 0; j < FutureAngles.size(); ++j)
 		{
-			FVector newDir = dir;
+			FVector newDir = _dir;
 			float _angle = FutureAngles[j];
 			newDir.Normalize();
 			newDir.RotationYDeg(_angle);
@@ -248,26 +261,23 @@ void ADriver::Move(float _deltaTime)
 			float lsize = newDir.Length();
 			newDir.Y = -1000.f;
 
-			OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
-
-			LineDebug->SetScale3D({ 1.f, lsize, 1.f });
-			LineDebug->SetRelativeLocation({ 0.f, 25.f, STRIDE * .5f });
+			if (isLog) OutputDebugStringA(("newDir:" + std::to_string(newDir.X) + ", " + std::to_string(newDir.Y) + ", " + std::to_string(newDir.Z) + "\n").c_str());
 
 			isCol = CheckCollision(curLoc + newDir, FutureNavIdxs[i], FutureNavIdxs[i], tempFDist);
 			if (isCol)
 			{
-				OutputDebugStringA(("---> COL (" + std::to_string(_angle) + ")").c_str());
+				if (isLog) OutputDebugStringA(("---> COL (" + std::to_string(_angle) + ")").c_str());
 				const SNavData& _nd2 = MapPtr->GetNavData(FutureNavIdxs[i]);
 				if (_nd2.FloorType == ENavType::ROAD || _nd2.FloorType == ENavType::START_POINT || _nd2.FloorType == ENavType::FLATE_FASTER)
 				{
-					OutputDebugStringA(" [ROAD]");
+					if (isLog) OutputDebugStringA(" [ROAD]");
 					if (_angle <= -1)
 					{
-						rotVal = 100.f * _deltaTime;
+						_refRot = 100.f * _deltaTime;
 					}
 					else if (_angle >= 1)
 					{
-						rotVal = -100.f * _deltaTime;
+						_refRot = -100.f * _deltaTime;
 					}
 
 					isRotate = true;
@@ -275,26 +285,128 @@ void ADriver::Move(float _deltaTime)
 				}
 				else
 				{
-					OutputDebugStringA(" [NO ROAD]");
+					if (isLog) OutputDebugStringA(" [NO ROAD]");
 					continue;
 				}
 			}
 			else
 			{
-				OutputDebugStringA("---> NO COL ");
+				if (isLog) OutputDebugStringA("---> NO COL ");
 			}
 
 			if (isRotate) break;
 		}
 
-		OutputDebugStringA("\n");
+		if (isLog) OutputDebugStringA("\n");
 	}
 	//OutputDebugStringA(("FutureIdxs:" + std::to_string(FutureNavIdxs[0]) + ", " + std::to_string(FutureNavIdxs[1]) + ", " + std::to_string(FutureNavIdxs[2]) + "\n").c_str());
 	//OutputDebugStringA(("rotVal:" + std::to_string(rotVal) + "\n").c_str());
+}
+
+void ADriver::Move(float _deltaTime)
+{
+	float gravityY = GRAVITY_FORCE * _deltaTime;
+	FTransform trfmPlayer = GetActorTransform();
+	FTransform trfmObj = MapPtr->GetActorTransform();
+
+	OutputDebugStringA(("Move: " + trfmPlayer.Location.ToString() + "\n").c_str());
+
+	/* for debug start */
+	if (UEngineInput::IsPress(VK_LCONTROL))
+	{
+		SetActorLocation({ 4142.233887f, 70.f, 8755.953125f });
+		SetActorRotation({ 0.f, -117.5f, 0.f });
+		NavIdx = -1;
+		return;
+	}
+	if (trfmPlayer.Location.Y < -1000)
+	{
+		Velocity = 0.f;
+		BoostVal = 0.f;
+		SetActorLocation({ 4142.233887f, 70.f, 8755.953125f });
+		SetActorRotation({ 0.f, -117.5f, 0.f });
+		NavIdx = -1;
+		return;
+	}
+	if (UEngineInput::IsPress(VK_LSHIFT))
+	{
+		Velocity = MAX_VELOCITY;
+	}
+	/* for debug end */
+
+
+	TickBoost(_deltaTime);
+
+	if (NavIdx == -1)
+	{
+		AddActorLocation({ 0.f, gravityY, 0.f });
+		CheckCollisionOfAllMap();
+		CheckFutureCollisionOfAllMap();
+		return;
+	}
+
+	float fDist = 0.f;
+	bool isCollided = CheckCollision(trfmPlayer.Location, NavIdx, fDist);
+
+	// Temp start
+	std::map<int, int>::iterator it = TempRouteIdx.find(NavIdx);
+	std::map<int, int>::iterator itEnd = TempRouteIdx.end();
+	if (it != itEnd)
+	{
+		int _idx = it->second;
+		if (isLog) OutputDebugStringA(("navIdx: " + std::to_string(NavIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
+		if (CurRouteIdx > _idx)
+		{
+			//OutputDebugStringA("REVERSE!!!!!!!\n");
+		}
+		else if (CurRouteIdx < _idx)
+		{
+			CurRouteIdx = _idx;
+		}
+	}
+	else
+	{
+		//OutputDebugStringA("EMPTY!!!!!!!\n");
+	}
+
+	if (TempPrevIdx != NavIdx)
+	{
+		//OutputDebugStringA(("navIdx: " + std::to_string(navIdx) + "\n").c_str());
+		TempPrevIdx = NavIdx;
+		//FileTemp << std::to_string(navIdx) << ",";
+	}
+	// Temp end
+
+	FVector lastRot;
+	FVector lastVec;
+	FVector dir = GetActorForwardVector();
+	dir.Normalize();
+
+	float dx = 0.f;
+	float rotVal = 0.f;
+	float slopeAngle = 0.f;
+
+	/* Test start */
+	GetForwardPhysics(_deltaTime, dx, true);
+
+	if (IsAutomative)
+	{
+		GetHandleRotationAuto(_deltaTime, dir, rotVal);
+	}
+	else
+	{
+		GetHandleRotation(_deltaTime, rotVal);
+	}
 
 	if (isCollided)
 	{
-		MapPtr->SetDebugLocation(float4{ static_cast<float>(navIdx), 0.f, 0.f, 1.f });
+		const SNavData& _nd = MapPtr->GetNavData(NavIdx);
+		if (_nd.FloorType == ENavType::FLATE_FASTER)
+		{
+			IsBoost = true;
+		}
+
+		MapPtr->SetDebugLocation(float4{ static_cast<float>(NavIdx), 0.f, 0.f, 1.f });
 
 		// Temporary physics of slope
 		{
@@ -314,14 +426,14 @@ void ADriver::Move(float _deltaTime)
 		}
 
 		VelocityV = Velocity * sinf(-slopeAngle * UEngineMath::D2R);
-		OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", sinf: " + std::to_string(sinf(-slopeAngle * UEngineMath::D2R)) + "\n").c_str());
+		if (isLog) OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", sinf: " + std::to_string(sinf(-slopeAngle * UEngineMath::D2R)) + "\n").c_str());
 		PrevLoc = GetActorLocation();
 		CheckLab();
 	}
 	else
 	{
 		// I didn't multiply deltaTime intentionally.
-		bool hasFloor = CheckCollision(trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f }, navIdx, fDist);
+		bool hasFloor = CheckCollision(trfmPlayer.Location + FVector{ 0.f, GRAVITY_FORCE, 0.f }, NavIdx, fDist);
 
 		if (hasFloor)
 		{
@@ -330,7 +442,7 @@ void ADriver::Move(float _deltaTime)
 			//GetHandleRotation(_deltaTime, rotVal);
 
 			// for fDist. Do not remove
-			CheckCollision(trfmPlayer.Location + FVector{ 0.f, gravityY, 0.f }, navIdx, fDist);
+			CheckCollision(trfmPlayer.Location + FVector{ 0.f, gravityY, 0.f }, NavIdx, fDist);
 
 			dir *= dx;
 			lastVec = dir;
@@ -364,7 +476,7 @@ void ADriver::Move(float _deltaTime)
 				lastVec = dir;
 
 				lastVec.Y += dy;
-				OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", gravityForce: " + std::to_string(gravityY) + ", dy: " + std::to_string(dy) + "\n").c_str());
+				if (isLog) OutputDebugStringA(("VelocityV: " + std::to_string(VelocityV) + ", gravityForce: " + std::to_string(gravityY) + ", dy: " + std::to_string(dy) + "\n").c_str());
 			}
 		}
 
@@ -381,8 +493,6 @@ void ADriver::Move(float _deltaTime)
 
 	/* Test end */
 
-	Camera->SetActorLocation(InitCameraLoc - FVector{ 0.f, 0.f, Velocity * .04f });
-
 	AddActorRotation(lastRot);
 	AddActorLocation(lastVec);
 
@@ -397,16 +507,11 @@ void ADriver::SetMap(ABaseMap* _ptr)
 	MapPtr = _ptr;
 }
 
-void ADriver::SetInitCameraLoc(const FVector& _loc)
-{
-	InitCameraLoc = _loc;
-}
-
 void ADriver::CheckLab()
 {
 	if (!IsTouchLastTriangle) return;
 
-	SNavData nd = MapPtr->GetCurNavData();
+	SNavData nd = MapPtr->GetNavData(NavIdx);
 	if (nd.FloorType == ENavType::START_POINT)
 	{
 		++Lab;
@@ -423,10 +528,9 @@ void ADriver::CheckLab()
 float ADriver::GetSlope()
 {
 	float slopeAngle = 0.f;
-	int idx = MapPtr->GetNavIndex();
-	if (idx < 0) return 0.f;
+	if (NavIdx < 0) return 0.f;
 
-	SNavData nd = MapPtr->GetCurNavData();
+	const SNavData& nd = MapPtr->GetNavData(NavIdx);
 	const FTransform& trfmObj = MapPtr->GetTransform();
 
 	FVector vertex0 = nd.Vertex[0] * trfmObj.ScaleMat * trfmObj.RotationMat * trfmObj.LocationMat;
@@ -455,30 +559,37 @@ void ADriver::GetHandleRotation(float _deltaTime, float& _refRot)
 {
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		_refRot = -100.f * _deltaTime;
+		_refRot = -65.f * _deltaTime;
 	}
 	else if (UEngineInput::IsPress(VK_RIGHT))
 	{
-		_refRot = 100.f * _deltaTime;
+		_refRot = 65.f * _deltaTime;
 	}
 	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
 }
 
-void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided, bool _isComputer)
+void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided)
 {
 	float acc = 0.f;
 	float dx = 0.f;
+	bool isPushed = true;
 
-	if (UEngineInput::IsPress(VK_UP) || _isComputer)
+	if (UEngineInput::IsPress(VK_UP) || IsAutomative)
 	{
+		DirVTrain = 1;
 		acc = ACCELERATION - FRICTION_FORCE;
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
+		DirVTrain = 2;
 		acc = -ACCELERATION + FRICTION_FORCE;
 	}
+	else
+	{
+		isPushed = false;
+	}
 
-	if (_isCollided)
+	if (_isCollided && isPushed)
 	{
 		Velocity = FPhysics::GetVf(Velocity, acc, _deltaTime);
 		if (Velocity > MAX_VELOCITY)
@@ -489,14 +600,27 @@ void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 		{
 			Velocity = -MAX_VELOCITY;
 		}
+
+		Velocity += BoostVal;
 		dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
 	}
 	else
 	{
 		if (fabs(Velocity) > 30)
 		{
-			acc = (Velocity * .5f) - Velocity;
+			acc = -Velocity * .75f;
 			Velocity = FPhysics::GetVf(Velocity, acc, _deltaTime);
+
+			if (Velocity > MAX_VELOCITY)
+			{
+				Velocity = MAX_VELOCITY;
+			}
+			else if (Velocity < -MAX_VELOCITY)
+			{
+				Velocity = -MAX_VELOCITY;
+			}
+
+			Velocity += BoostVal;
 			dx = FPhysics::GetDeltaX(Velocity, acc, _deltaTime);
 		}
 		else
@@ -513,7 +637,6 @@ void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 bool ADriver::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 {
 	bool isCollided = false;
-	_refIdx = MapPtr->GetNavIndex();
 	const FTransform& trfmObj = MapPtr->GetTransform();
 
 	const std::vector<SNavData>& navDatas = MapPtr->GetNavData();
@@ -536,7 +659,6 @@ bool ADriver::CheckCollision(const FVector& _loc, int& _refIdx, float& _refDist)
 				PrevIdx = _refIdx;
 				PrevGroupIdx = navDatas[_refIdx].GroupIndex;
 
-				MapPtr->SetNavIndex(linkedIdx);
 				_refIdx = linkedIdx;
 				break;
 			}
@@ -593,8 +715,8 @@ void ADriver::CheckCollisionOfAllMap()
 		bool isCollided = nd.Intersects(tfrmPlayer.Location, FVector::UP, trfmObj.ScaleMat, trfmObj.RotationMat, trfmObj.LocationMat, fDist);
 		if (isCollided)
 		{
-			MapPtr->SetNavIndex(nd.Index);
-			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(nd.Index) + "\n").c_str());
+			NavIdx = nd.Index;
+			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(NavIdx) + "\n").c_str());
 			break;
 		}
 	}
@@ -631,15 +753,11 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 
 	if (name == "ITEM")
 	{
-		//_other->GetActor()->Destroy();
-
-		OutputDebugStringA("Ouch!!!!!!!!!!!!!!!!!!!\n");
+		IsSpin = true;
 	}
 	else if (name == "ITEMBOX")
 	{
-		_other->GetActor()->Destroy();
-
-		OutputDebugStringA("Get ITEM!!!!!!!!!!!!!!!!!!!\n");
+		_other->GetActor()->SetActive(false);
 
 		ItemRoulette.Reset();
 		IsPickingItem = true;
@@ -648,69 +766,71 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 
 void ADriver::PickItem(float _deltaTime)
 {
-	static int prevItemIdx = -1;
 	int itemIdx = ItemRoulette.PickItem(_deltaTime);
 	if (itemIdx == -1)
 	{
 		//ItemIndex = static_cast<int>(EItemType::FAKE_ITEMBOX);	// for test
-		ItemIndex = prevItemIdx;
+		ItemIndex = PrevItemIdx;
 		IsPickingItem = false;
-		prevItemIdx = -1;
+		PrevItemIdx = -1;
 		return;
 	}
 
-	if (prevItemIdx != itemIdx)
+	if (PrevItemIdx != itemIdx)
 	{
-		prevItemIdx = itemIdx;
+		PrevItemIdx = itemIdx;
 		GameData::GetInstance()->SetItem(0, static_cast<EItemType>(itemIdx));
 		DebugItem->SetSprite("Items.png", itemIdx);	// Temp
 	}
 }
 
-void ADriver::CheckUsingItem(float _deltaTime)
+void ADriver::TickItem(float _deltaTime)
 {
 	static const int NONE = static_cast<int>(EItemType::SIZE);
 	if (ItemIndex >= NONE) return;
 
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		EItemType itemType = static_cast<EItemType>(ItemIndex);
-		switch (itemType)
-		{
-		case EItemType::GREEN_SHELL:
-		case EItemType::GREEN_SHELLS:
-		case EItemType::RED_SHELL:
-		case EItemType::RED_SHELLS:
-		case EItemType::BOWSER_SHELL:
-			UseItem_Shell(itemType);
-			break;
-		case EItemType::MUSHROOM:
-		case EItemType::MUSHROOM2:
-		case EItemType::MUSHROOM3:
-		case EItemType::GOLD_MUSHROOM:
-			UseItem_Mushroom(itemType);
-			break;
-		case EItemType::BANANA:
-		case EItemType::BANANAS:
-			UseItem_Banana(itemType);
-			break;
-		case EItemType::STAR:
-			UseItem_Star(itemType);
-			break;
-		case EItemType::THUNDER:
-			UseItem_Thunder(itemType);
-			break;
-		case EItemType::GHOST:
-			UseItem_Ghost(itemType);
-			break;
-		case EItemType::FAKE_ITEMBOX:
-			UseItem_FakeItemBox(itemType);
-			break;
-		}
+	UseItem();
+}
 
-		ItemIndex = NONE;
-		DebugItem->SetSprite("Items.png", NONE);
+void ADriver::UseItem()
+{
+	EItemType itemType = static_cast<EItemType>(ItemIndex);
+	switch (itemType)
+	{
+	case EItemType::GREEN_SHELL:
+	case EItemType::GREEN_SHELLS:
+	case EItemType::RED_SHELL:
+	case EItemType::RED_SHELLS:
+	case EItemType::BOWSER_SHELL:
+		UseItem_Shell(itemType);
+		break;
+	case EItemType::MUSHROOM:
+	case EItemType::MUSHROOM2:
+	case EItemType::MUSHROOM3:
+	case EItemType::GOLD_MUSHROOM:
+		UseItem_Mushroom(itemType);
+		break;
+	case EItemType::BANANA:
+	case EItemType::BANANAS:
+		UseItem_Banana(itemType);
+		break;
+	case EItemType::STAR:
+		UseItem_Star(itemType);
+		break;
+	case EItemType::THUNDER:
+		UseItem_Thunder(itemType);
+		break;
+	case EItemType::GHOST:
+		UseItem_Ghost(itemType);
+		break;
+	case EItemType::FAKE_ITEMBOX:
+		UseItem_FakeItemBox(itemType);
+		break;
 	}
+
+	static const int NONE = static_cast<int>(EItemType::SIZE);
+	ItemIndex = NONE;
+	DebugItem->SetSprite("Items.png", NONE);
 }
 
 void ADriver::UseItem_Shell(const EItemType& _itemType)
@@ -724,11 +844,12 @@ void ADriver::UseItem_Shell(const EItemType& _itemType)
 		// TODO
 	}
 
+	FVector forward = GetActorForwardVector();
 	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
 	item->Init(_itemType);
-	//item->SetActorRotation(GetActorRotation());
-	item->SetActorLocation(GetActorLocation() + FVector{ -item->Size * .5f, item->Size, 0.f });
-	item->SetDirection(GetActorForwardVector());
+	item->SetActorRotation(GetActorRotation());
+	item->SetActorLocation(GetActorLocation() + (forward * item->Size));
+	item->SetDirection(forward);
 }
 
 void ADriver::UseItem_Mushroom(const EItemType& _itemType)

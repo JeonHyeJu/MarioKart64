@@ -30,9 +30,9 @@ protected:
 	void Tick(float _deltaTime) override;
 
 private:
+	void InitCharacters();
 	void InitEffects();
 	void InitMap();
-	void InitMinimap(const FVector& _initLoc, float _scale);
 	void SetCamFinishRot();
 
 	/* Fsm start function */
@@ -54,9 +54,8 @@ private:
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
-	//class ADriver* Player = nullptr;
-	class APlayer* Player = nullptr;
 	std::shared_ptr<class ALakitu> Lakitu = nullptr;
+	class APlayer* Player = nullptr;
 	class ADriver* Players[6] = { nullptr, };
 
 	std::shared_ptr<class ABalloons> Balloons = nullptr;

@@ -50,32 +50,13 @@ void APlayGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	ULevel* pLevel = GetWorld();
-	//Player = pLevel->GetMainPawn<ADriver>();
-	Player = pLevel->GetMainPawn<APlayer>();
-	
-	Player->SetMap(MapPtr.get());
-	//Player->SetInitCameraLoc(CameraInitLoc);
-
-	Camera->GetCameraComponent()->SetZSort(0, true);
-
+	InitCharacters();
 	InitEffects();
 	InitMap();
 
-	/*uint8_t playerIdx = GameData::GetInstance()->GetPlayerIdx();
-	uint8_t size = GameData::GetInstance()->GetPlayerCnt();
-	for (uint8_t i = 0; i < size; ++i)
-	{
-		if (i == playerIdx)
-		{
+	// TODO
+	Camera->GetCameraComponent()->SetZSort(0, true);
 
-		}
-		else
-		{
-
-		}
-	}*/
-	
 	Fsm.ChangeState(EState::READY);
 }
 
@@ -86,6 +67,34 @@ void APlayGameMode::Tick(float _deltaTime)
 	AActor::Tick(_deltaTime);
 
 	Fsm.Update(_deltaTime);
+}
+
+void APlayGameMode::InitCharacters()
+{
+	ULevel* pLevel = GetWorld();
+	Player = pLevel->GetMainPawn<APlayer>();
+
+	GameData* pData = GameData::GetInstance();
+	Player->InitCharacter(pData->GetPlayerCharacter());
+	Player->SetMap(MapPtr.get());
+
+	uint8_t playerIdx = pData->GetPlayerIdx();
+	//uint8_t size = pData->GetPlayerCnt();
+	uint8_t size = 2;
+	for (uint8_t i = 0; i < size; ++i)
+	{
+		if (i == playerIdx)
+		{
+			Players[i] = Player;
+		}
+		else
+		{
+			std::shared_ptr<ADriver> driver = pLevel->SpawnActor<ADriver>();
+			driver->InitCharacter(static_cast<ECharacter>(i));
+			driver->SetMap(MapPtr.get());
+			Players[i] = driver.get();
+		}
+	}
 }
 
 void APlayGameMode::InitEffects()
@@ -116,7 +125,10 @@ void APlayGameMode::InitMap()
 		MapPtr->SetActorLocation({ 0.0f, 0.f, 0.f });
 		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
-		Player->SetActorLocation({ -400.0f, -60.0f, 300.0f });
+		Player->SetActorLocation({ -400.0f, -100.0f, 300.0f });
+
+		// Temp
+		Players[1]->SetActorLocation({ -600.0f, -100.0f, 300.0f });
 
 		//Player->SetActorLocation({ -400.0f, -60.0f, 7000.0f });
 
@@ -299,6 +311,15 @@ void APlayGameMode::OnPlay()
 		Balloons->Destroy();
 		Balloons = nullptr;
 	}
+
+	int size = ARRAYSIZE(Players);
+	for (int i = 0; i < size; ++i)
+	{
+		if (Players[i] != nullptr)
+		{
+			Players[i]->SetStart(true);
+		}
+	}
 }
 
 void APlayGameMode::OnFinish()
@@ -403,7 +424,7 @@ void APlayGameMode::Playing(float _deltaTime)
 	pData->SetMinimapLoc(0, loc);
 	pData->SetPlayerRotation(0, rot);
 
-	Camera->SetActorLocation(CameraInitLoc - FVector{ 0.f, 0.f, Player->GetVelocity() * .04f });
+	Camera->SetLoaclLocation(CameraInitLoc - FVector{ 0.f, 0.f, Player->GetVelocity() * .04f });
 }
 
 void APlayGameMode::Finishing(float _deltaTime)

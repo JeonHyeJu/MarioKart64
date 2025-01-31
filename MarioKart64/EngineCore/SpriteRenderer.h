@@ -69,6 +69,11 @@ public:
 
 	ENGINEAPI void SetTexture(std::string_view _Name, bool AutoScale = false, float _Ratio = 1.0f);
 
+	const std::string& GetCurAnimName()
+	{
+		return CurAnimName;
+	}
+
 	bool IsCurAnimationEnd()
 	{
 		return CurAnimation->IsEnd;
@@ -123,6 +128,7 @@ private:
 
 	URenderUnit* MainUnit;
 
+	std::string CurAnimName = "";
 	int CurIndex = 0;
 	float CurAnimationSpeed = 1.0f;
 	FrameAnimation* CurAnimation = nullptr; 

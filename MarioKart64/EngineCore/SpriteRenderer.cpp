@@ -289,6 +289,7 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 		CurAnimation->Events[CurAnimation->CurIndex]();
 	}
 
+	CurAnimName = _AnimationName.data();
 	Sprite = CurAnimation->Sprite;	// Temp
 	if (true == IsAutoScale)
 	{

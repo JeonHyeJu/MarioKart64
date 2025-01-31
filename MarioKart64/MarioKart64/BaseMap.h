@@ -25,9 +25,6 @@ public:
 
 	const std::vector<SNavData>& GetNavData() const;
 	const SNavData& GetNavData(UINT _idx) const;
-	const SNavData& GetCurNavData() const;
-	UINT GetNavIndex() const;
-	void SetNavIndex(UINT _idx);
 	void SetDebugLocation(const FVector& _loc);
 	void CheckAllItemBoxes(float _deltaTime);
 	void RemoveAllItemBoxes();
@@ -44,7 +41,6 @@ private:
 	std::vector<SItemInfo> ItemBoxes;
 
 	ECircuit MapType = ECircuit::END;
-	int CurNavIdx = -1;
 	const float ITEM_REGEN_SEC = 10.f;
 
 	// Dummy for return of reference

@@ -17,7 +17,6 @@ AItem::AItem()
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Item");
 	Collision->SetScale3D({ Size, Size, Size });
-	Collision->AddRelativeLocation({ Size * .5f, -Size * .5f, 0.f });
 
 	// TODO: nav mesh
 }
@@ -82,6 +81,7 @@ void AItem::Init(const EItemType& _itemType)
 			std::shared_ptr<USpriteRenderer> renderer = _CreateSpriteRenderer();
 			renderer->CreateAnimation("Run", "Items.png", 25, 32, .1f);
 			renderer->ChangeAnimation("Run");
+			renderer->SetRelativeLocation({ -Size * .5f, Size * .5f, 0.f });
 			break;
 		}
 		case EItemType::MUSHROOM:

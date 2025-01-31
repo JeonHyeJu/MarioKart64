@@ -105,6 +105,11 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitSprites("Resources\\Sprites\\LabCount");
 
 	UEngineSprite::CreateSpriteToMeta("Mario.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Luigi.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Peach.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Yoshi.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Wario.png", ".meta");
+	UEngineSprite::CreateSpriteToMeta("Bowser.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Title_Screen.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Items.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("SelectCharacter.png", ".meta");

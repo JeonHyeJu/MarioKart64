@@ -459,21 +459,6 @@ const SNavData& ABaseMap::GetNavData(UINT _idx) const
 	return (*NavDataPtr)[_idx];
 }
 
-const SNavData& ABaseMap::GetCurNavData() const
-{
-	return GetNavData(CurNavIdx);
-}
-
-UINT ABaseMap::GetNavIndex() const
-{
-	return CurNavIdx;
-}
-
-void ABaseMap::SetNavIndex(UINT _idx)
-{
-	CurNavIdx = _idx;
-}
-
 void ABaseMap::SetDebugLocation(const FVector& _loc)
 {
 	if (RCircuit != nullptr)

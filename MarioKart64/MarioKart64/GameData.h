@@ -31,6 +31,7 @@ public:
 
 	void GetHighRankPlayersIdx(int* _refArr, int _size);
 
+	ECharacter GetPlayerCharacter() const;
 	uint8_t GetPlayerIdx() const;
 	uint8_t GetPlayerCnt() const;
 

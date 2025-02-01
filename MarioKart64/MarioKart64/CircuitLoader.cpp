@@ -234,6 +234,10 @@ void CircuitLoader::InitNavMesh()
 			nd.Index = idx++;
 			nd.FloorType = vnData.FloorType;
 
+			if (nd.Index == 511 && MapType == ECircuit::WARIO_STADIUM)
+			{
+				nd.FloorType = ENavType::FLATE_JUMP;
+			}
 			navData.push_back(nd);
 		}
 	}
@@ -273,6 +277,19 @@ void CircuitLoader::InitNavMesh()
 		navData[373].Link(navData[122]);
 		navData[373].Link(navData[121]);
 		navData[373].Link(navData[120]);
+	}
+	else if (MapType == ECircuit::WARIO_STADIUM)
+	{
+		navData[510].Link(navData[541]);
+		navData[510].Link(navData[540]);
+		navData[510].Link(navData[539]);
+		navData[510].Link(navData[538]);
+		navData[510].Link(navData[537]);
+		navData[510].Link(navData[536]);
+		navData[510].Link(navData[535]);
+		navData[510].Link(navData[534]);
+		navData[510].Link(navData[533]);
+		navData[510].Link(navData[532]);
 	}
 
 	navData.resize(navData.size());

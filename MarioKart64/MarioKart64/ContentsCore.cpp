@@ -130,9 +130,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
 	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
-	//UEngineCore::OpenLevel("TitleLevel");
+	UEngineCore::OpenLevel("TitleLevel");
 	//UEngineCore::OpenLevel("SelectLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -147,14 +147,15 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	GameData::GetInstance()->SetPlayers(palyerInfos);
 
 	SMapPackage mapPackage;
+	//mapPackage.Maps[0] = ECircuit::WARIO_STADIUM;
 	mapPackage.Maps[0] = ECircuit::LUIGI_RACEWAY;
-	mapPackage.Maps[1] = ECircuit::KOOPA_TROOPA_BEACH;
+	mapPackage.Maps[1] = ECircuit::ROYAL_RACEWAY;
 	mapPackage.Maps[2] = ECircuit::MARIO_RACEWAY;
 	mapPackage.Maps[3] = ECircuit::WARIO_STADIUM;
 	GameData::GetInstance()->SetMapPakcage(mapPackage);
 
 	/*mapPackage.Maps[0] = ECircuit::SHERBET_LAND;
-	mapPackage.Maps[1] = ECircuit::ROYAL_RACEWAY;
+	mapPackage.Maps[1] = ECircuit::KOOPA_TROOPA_BEACH;
 	mapPackage.Maps[2] = ECircuit::BOWSERS_CASTLE;
 	mapPackage.Maps[3] = ECircuit::RAINBOW_ROAD;
 	GameData::GetInstance()->SetMapPakcage(mapPackage);*/

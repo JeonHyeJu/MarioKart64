@@ -523,9 +523,9 @@ void AUIPlay::OnOpenRacing()
 		upperName = "MUSHROOM CUP";
 		lowerName = "LUIGI RACEWAY";
 		break;
-	case ECircuit::KOOPA_TROOPA_BEACH:
+	case ECircuit::ROYAL_RACEWAY:
 		upperName = "MUSHROOM CUP";
-		lowerName = "KOOPA TROOPA BEACH";
+		lowerName = "ROYAL RACEWAY";
 		break;
 	case ECircuit::MARIO_RACEWAY:
 		upperName = "MUSHROOM CUP";
@@ -539,9 +539,9 @@ void AUIPlay::OnOpenRacing()
 		upperName = "FLOWER CUP";
 		lowerName = "SHERBET LAND";
 		break;
-	case ECircuit::ROYAL_RACEWAY:
+	case ECircuit::KOOPA_TROOPA_BEACH:
 		upperName = "FLOWER CUP";
-		lowerName = "ROYAL RACEWAY";
+		lowerName = "KOOPA TROOPA BEACH";
 		break;
 	case ECircuit::BOWSERS_CASTLE:
 		upperName = "FLOWER CUP";

@@ -126,6 +126,21 @@ void ASelectCharacter::InitCharacterImgs()
 	}
 }
 
+// Available characters only
+uint8_t ASelectCharacter::GetSelectedIdx() const
+{
+	uint8_t ret = SelectedIdx;
+	if (SelectedIdx > 3)
+	{
+		--ret;
+		if (SelectedIdx > 5)
+		{
+			--ret;
+		}
+	}
+	return ret;
+}
+
 void ASelectCharacter::RunBlink(int _idx)
 {
 	ImageList[_idx]->SetBlink();
@@ -137,7 +152,14 @@ void ASelectCharacter::MoveSelectUI(int _idx)
 	{
 		if (_idx == DISABLE_IDXS[j])
 		{
-			_idx = ++SelectedIdx;
+			if (PrevSelectedIdx > SelectedIdx)
+			{
+				_idx = --SelectedIdx;
+			}
+			else
+			{
+				_idx = ++SelectedIdx;
+			}
 			break;
 		}
 	}
@@ -217,6 +239,7 @@ void ASelectCharacter::Selecting(float _deltaTime)
 	{
 		if (SelectedIdx > 0)
 		{
+			PrevSelectedIdx = SelectedIdx;
 			MoveSelectUI(--SelectedIdx);
 		}
 	}
@@ -224,6 +247,7 @@ void ASelectCharacter::Selecting(float _deltaTime)
 	{
 		if (SelectedIdx < SIZE - 1)
 		{
+			PrevSelectedIdx = SelectedIdx;
 			MoveSelectUI(++SelectedIdx);
 		}
 	}
@@ -231,6 +255,7 @@ void ASelectCharacter::Selecting(float _deltaTime)
 	{
 		if (SelectedIdx >= HALF_SIZE)
 		{
+			PrevSelectedIdx = SelectedIdx;
 			SelectedIdx -= 4;
 			MoveSelectUI(SelectedIdx);
 		}
@@ -239,6 +264,7 @@ void ASelectCharacter::Selecting(float _deltaTime)
 	{
 		if (SelectedIdx < HALF_SIZE)
 		{
+			PrevSelectedIdx = SelectedIdx;
 			SelectedIdx += 4;
 			MoveSelectUI(SelectedIdx);
 		}

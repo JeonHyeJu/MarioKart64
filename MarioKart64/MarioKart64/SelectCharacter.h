@@ -29,10 +29,8 @@ public:
 		EndFuntion = _fn;
 	}
 
-	uint8_t GetSelectedIdx() const
-	{
-		return SelectedIdx;
-	}
+	// Available characters only
+	uint8_t GetSelectedIdx() const;
 
 protected:
 	void BeginPlay() override;
@@ -58,6 +56,7 @@ private:
 
 	static const int SIZE = 8;
 	const int HALF_SIZE = SIZE / 2;
+	uint8_t PrevSelectedIdx = 99;
 	uint8_t SelectedIdx = 0;
 	const float MARGIN_Y = 50.f;
 	FVector SelectMargin = FVector::ZERO;

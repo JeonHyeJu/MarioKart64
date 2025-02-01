@@ -37,6 +37,7 @@ enum class ENavType
 	START_POINT,
 	BORDER,
 	FLATE_FASTER,
+	FLATE_JUMP,
 	WALL,
 	END
 };

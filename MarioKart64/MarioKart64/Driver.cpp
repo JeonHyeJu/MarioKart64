@@ -482,7 +482,8 @@ void ADriver::Move(float _deltaTime)
 		else
 		{
 			// Block
-			if (MapPtr->GetNavData(PrevIdx).FloorType != ENavType::FLATE_FASTER)
+			ENavType floorType = MapPtr->GetNavData(PrevIdx).FloorType;
+			if (floorType != ENavType::FLATE_FASTER && floorType != ENavType::FLATE_JUMP)
 			{
 				Velocity *= .5f;
 
@@ -496,8 +497,10 @@ void ADriver::Move(float _deltaTime)
 				// Adjust gravity
 				//GetForwardPhysics(_deltaTime, dx);
 
-				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 50.f, _deltaTime);
-				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 50.f, _deltaTime);
+				CheckCollisionOfAllMap();
+
+				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 300.f, _deltaTime);
+				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 300.f, _deltaTime);
 
 				dir *= dx;
 				lastVec = dir;
@@ -537,8 +540,8 @@ void ADriver::SetMap(ABaseMap* _ptr)
 
 void ADriver::CheckLap(bool _isReverse)
 {
-	if (_isReverse) return;
-	if (IsCheckLap == false) return;
+	/*if (_isReverse) return;
+	if (IsCheckLap == false) return;*/
 
 	if (PrevNavIdx != NavIdx)
 	{
@@ -549,17 +552,17 @@ void ADriver::CheckLap(bool _isReverse)
 			IsCheckLap = false;
 			CurRouteIdx = 0;
 			OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lap) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
-			OnChangeLap(Lap);
+			//OnChangeLap(Lap);
 
 			if (Lap == ALL_LAB)
 			{
-				EndLap();
+				//EndLap();
 				OutputDebugStringA("GOAL IN!!\n");
 				// change state
 			}
 		}
 
-		//OutputDebugStringA(("NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+		OutputDebugStringA(("NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
 		PrevNavIdx = NavIdx;
 		FileTemp << std::to_string(NavIdx) << ",";
 	}

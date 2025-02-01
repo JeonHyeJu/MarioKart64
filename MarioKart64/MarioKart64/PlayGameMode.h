@@ -56,10 +56,11 @@ private:
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;
 	std::shared_ptr<class ALakitu> Lakitu = nullptr;
 	class APlayer* Player = nullptr;
-	class ADriver* Players[6] = { nullptr, };
+	std::vector<class ADriver*> Players;
 
 	std::shared_ptr<class ABalloons> Balloons = nullptr;
 	std::shared_ptr<class ACameraActor> Camera = nullptr;
+	std::vector<FVector> StartPosition;
 
 	EState State = EState::END;
 	FVector CameraInitLoc = FVector{ 0.f, 100.f, -300.f };

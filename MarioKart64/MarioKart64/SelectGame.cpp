@@ -203,7 +203,7 @@ void ASelectGame::SelectingGame(float _deltaTime)
 	}
 	else if (UEngineInput::IsDown(VK_RIGHT))
 	{
-		if (SelectedGameIdx < SELECT_LIST_SIZE - 1)
+		if (SelectedGameIdx < SELECT_LIST_SIZE - 1)		// Available options: 2
 		{
 			PtrSelectedBox->SetBlinkState(EBlinkState::OFF);
 			SetIndex(++SelectedGameIdx);

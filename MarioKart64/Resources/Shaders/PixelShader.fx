@@ -1,6 +1,12 @@
 Texture2D diffTexture;
 SamplerState SampleType;
 
+// TODO: 250202
+//cbuffer FColor
+//{
+    //float4 Data;
+//};
+
 cbuffer FDebug
 {
     float4 Index;

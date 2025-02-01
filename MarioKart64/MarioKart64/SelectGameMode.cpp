@@ -105,7 +105,7 @@ void ASelectGameMode::OnEndSelectMap()
 	SMapPackage mapPackage;
 	switch (idx)
 	{
-	case 1:
+	case 0:
 		mapPackage.Maps[0] = ECircuit::LUIGI_RACEWAY;
 		mapPackage.Maps[1] = ECircuit::ROYAL_RACEWAY;
 		mapPackage.Maps[2] = ECircuit::MARIO_RACEWAY;

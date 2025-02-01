@@ -144,8 +144,10 @@ void ASelectMap::Selecting(float _deltaTime)
 	}
 	else if (UEngineInput::IsDown(VK_RIGHT))
 	{
-		//if (CurSelectedIdx < SIZE - 1)
-		if (CurSelectedIdx < 1)	// manually block
+		// manually block
+		return;
+
+		if (CurSelectedIdx < SIZE - 1)
 		{
 			Hover(CurSelectedIdx + 1);
 		}

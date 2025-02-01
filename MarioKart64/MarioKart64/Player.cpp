@@ -172,12 +172,18 @@ void APlayer::TickItem(float _deltaTime)
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
 		UseItem();
+		GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(ItemIndex));
 	}
 }
 
 void APlayer::OnChangeLap(int _lap)
 {
 	GameData::GetInstance()->SetPlayerLap(_lap);
+}
+
+void APlayer::OnChangeItem(int _itemIdx)
+{
+	GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(_itemIdx));
 }
 
 void APlayer::EndLap()

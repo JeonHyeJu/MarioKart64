@@ -59,7 +59,7 @@ protected:
 
 private:
 	float Near = 1.0f;
-	float Far = 20000.0f;
+	float Far = 100000.0f;
 	float FOV = 50.0f;
 
 	EProjectionType ProjectionType = EProjectionType::Perspective;

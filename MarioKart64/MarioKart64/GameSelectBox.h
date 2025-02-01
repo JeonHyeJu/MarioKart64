@@ -39,6 +39,7 @@ public:
 	void SetActiveToLayers(ELayer _idx, bool _val);
 	void SetBlinkStateToLayer(ELayer _layerIdx, int _idx, EBlinkState _state = EBlinkState::OFF);
 	void MoveSelectedLayer(ELayer _idx, EDirection _dir);
+	void SetEnable(bool _val);
 
 	void GetRectSize(float* _refW, float* _refH);
 	FVector GetButtonSize(ELayer _layerIdx, int _idx=0);

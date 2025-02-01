@@ -130,9 +130,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
 	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
-	UEngineCore::OpenLevel("TitleLevel");
+	//UEngineCore::OpenLevel("TitleLevel");
 	//UEngineCore::OpenLevel("SelectLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -143,7 +143,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	{
 		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
 	}
-	GameData::GetInstance()->SetPlayerIdx(0);
+	GameData::GetInstance()->SetPlayerIdx(2);
 	GameData::GetInstance()->SetPlayers(palyerInfos);
 
 	SMapPackage mapPackage;

@@ -807,7 +807,7 @@ void ADriver::PickItem(float _deltaTime)
 	if (PrevItemIdx != itemIdx)
 	{
 		PrevItemIdx = itemIdx;
-		GameData::GetInstance()->SetItem(0, static_cast<EItemType>(itemIdx));
+		OnChangeItem(itemIdx);
 		DebugItem->SetSprite("Items.png", itemIdx);	// Temp
 	}
 }

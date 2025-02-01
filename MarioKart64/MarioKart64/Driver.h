@@ -33,7 +33,9 @@ protected:
 	virtual void GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollided = true);
 	virtual void GetHandleRotation(float _deltaTime, float& _refRot);
 	virtual void TickItem(float _deltaTime);
+	virtual void PickItem(float _deltaTime);
 	virtual void OnChangeLap(int _lap) {};
+	virtual void OnChangeItem(int _itemIdx) {};
 	virtual void EndLap() {};
 
 	void GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float& _refRot);
@@ -95,7 +97,6 @@ private:
 	void CheckLap(bool _isReverse);
 
 	void OnCollisionEnter(UCollision* _this, UCollision* _other);
-	void PickItem(float _deltaTime);
 
 	std::shared_ptr<UCollision> CollisionItem = nullptr;
 	ABaseMap* MapPtr = nullptr;

@@ -75,6 +75,8 @@ void APlayGameMode::Tick(float _deltaTime)
 
 void APlayGameMode::InitCharacters()
 {
+	Players.reserve(6);
+
 	ULevel* pLevel = GetWorld();
 	Player = pLevel->GetMainPawn<APlayer>();
 
@@ -87,12 +89,13 @@ void APlayGameMode::InitCharacters()
 
 	uint8_t playerIdx = pData->GetPlayerIdx();
 	//uint8_t size = pData->GetPlayerCnt();
-	uint8_t size = 1;
+	uint8_t size = 3;
 	for (uint8_t i = 0; i < size; ++i)
 	{
+		ADriver* ptr = nullptr;
 		if (i == playerIdx)
 		{
-			Players[i] = Player;
+			ptr = Player;
 		}
 		else
 		{
@@ -100,7 +103,12 @@ void APlayGameMode::InitCharacters()
 			driver->InitCharacter(static_cast<ECharacter>(i));
 			driver->SetMap(MapPtr.get());
 			driver->InitRouteIndex(map);
-			Players[i] = driver.get();
+			ptr = driver.get();
+		}
+
+		if (ptr != nullptr)
+		{
+			Players.push_back(ptr);
 		}
 	}
 }
@@ -133,10 +141,20 @@ void APlayGameMode::InitMap()
 		MapPtr->SetActorLocation({ 0.0f, 0.f, 0.f });
 		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
-		Player->SetActorLocation({ -400.0f, -100.0f, 300.0f });
+		StartPosition = {
+			{ -650.0f, -201.0f, 700.0f },
+			{ -470.0f, -201.0f, 700.0f },
+			{ -650.0f, -201.0f, 500.0f },
+			{ -470.0f, -201.0f, 500.0f },
+			{ -650.0f, -201.0f, 300.0f },
+			{ -470.0f, -201.0f, 300.0f },
+		};
 
-		// Temp
-		//Players[1]->SetActorLocation({ -600.0f, -100.0f, 300.0f });
+		const float MOVE_VAL = -300.f;
+		for (size_t i = 0, size = Players.size(); i < size; ++i)
+		{
+			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
+		}
 
 		//Player->SetActorLocation({ -400.0f, -60.0f, 7000.0f });
 
@@ -320,13 +338,9 @@ void APlayGameMode::OnPlay()
 		Balloons = nullptr;
 	}
 
-	int size = ARRAYSIZE(Players);
-	for (int i = 0; i < size; ++i)
+	for (ADriver* ptr : Players)
 	{
-		if (Players[i] != nullptr)
-		{
-			Players[i]->SetStart(true);
-		}
+		ptr->SetStart(true);
 	}
 }
 
@@ -371,9 +385,32 @@ void APlayGameMode::Readying(float _deltaTime)
 
 void APlayGameMode::WaitingUIOpen(float _deltaTime)
 {
-	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_OPEN)
+	int completeCnt = 0;
+	for (size_t i = 0, size = Players.size(); i < size; ++i)
 	{
-		Fsm.ChangeState(EState::COUNT);
+		float z = Players[i]->GetActorLocation().Z;
+		float dstZ = StartPosition[i].Z;
+		if (z < dstZ)
+		{
+			float addVal = 100.f * _deltaTime;
+			if (z + addVal > dstZ)
+			{
+				addVal = dstZ - z;
+			}
+			Players[i]->AddActorLocation({ 0.f, 0.f, addVal });
+		}
+		else
+		{
+			++completeCnt;
+		}
+	}
+
+	if (completeCnt == Players.size())
+	{
+		if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_OPEN)
+		{
+			Fsm.ChangeState(EState::COUNT);
+		}
 	}
 }
 

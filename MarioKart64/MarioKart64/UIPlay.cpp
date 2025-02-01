@@ -422,7 +422,7 @@ void AUIPlay::SetHighRankUI()
 
 void AUIPlay::SetItemUI()
 {
-	int idx = static_cast<int>(GameData::GetInstance()->GetItem(0));
+	int idx = static_cast<int>(GameData::GetInstance()->GetPlayerItem());
 	if (ItemIdx == idx) return;
 
 	ItemIdx = idx;

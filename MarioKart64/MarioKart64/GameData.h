@@ -45,8 +45,8 @@ public:
 
 	void SetMapPakcage(const SMapPackage& _data);
 
-	void SetItem(uint8_t _playerIdx, EItemType _item);
-	EItemType GetItem(uint8_t _playerIdx);
+	void SetPlayerItem(EItemType _item);
+	EItemType GetPlayerItem();
 
 	void SetMinimapLoc(uint8_t _playerIdx, float4 _loc);
 	float4 GetMinimapLoc(uint8_t _playerIdx) const;

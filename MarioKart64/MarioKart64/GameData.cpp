@@ -86,22 +86,14 @@ void GameData::GetHighRankPlayersIdx(int* _refArr, int _size)
 	_refArr[5] = 6;
 }
 
-void GameData::SetItem(uint8_t _playerIdx, EItemType _item)
+void GameData::SetPlayerItem(EItemType _item)
 {
-	if (_playerIdx < Players.size())
-	{
-		Players[_playerIdx].Item = _item;
-	}
+	Players[PlayerIdx].Item = _item;
 }
 
-EItemType GameData::GetItem(uint8_t _playerIdx)
+EItemType GameData::GetPlayerItem()
 {
-	if (_playerIdx < Players.size())
-	{
-		return Players[_playerIdx].Item;
-	}
-
-	return EItemType::NONE;
+	return Players[PlayerIdx].Item;
 }
 
 void GameData::SetMapPakcage(const SMapPackage& _data)

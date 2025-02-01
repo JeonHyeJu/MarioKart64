@@ -129,3 +129,15 @@ void AGameSelectBox::MoveSelectedLayer(ELayer _idx, EDirection _dir)
 		}
 	}
 }
+
+void AGameSelectBox::SetEnable(bool _val)
+{
+	if (_val)
+	{
+		RRect->ColorData.MulColor = { 1.f, 1.f, 1.f, 1.f };
+	}
+	else
+	{
+		RRect->ColorData.MulColor = { .1f, .1f, .1f, 1.f };
+	}
+}

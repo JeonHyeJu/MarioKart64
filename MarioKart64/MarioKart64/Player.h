@@ -15,6 +15,8 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
+	void EndLap() override;
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
@@ -24,7 +26,6 @@ protected:
 
 	void OnChangeLap(int _lap);
 	void OnChangeItem(int _itemIdx);
-	void EndLap();
 
 private:
 	int PrevItemIdx = -1;

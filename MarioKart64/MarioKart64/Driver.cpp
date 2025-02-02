@@ -66,6 +66,14 @@ void ADriver::Tick(float _deltaTime)
 		return;
 	}
 
+	if (!IsInitSound)
+	{
+		IsInitSound = true;
+		CarSP = UEngineSound::Play("CarNormal.wav");
+		CarSP.Loop(99999);
+		CarSP.SetVolume(.05f);
+	}
+
 	if (IsSpin)
 	{
 		Spin();
@@ -347,13 +355,13 @@ void ADriver::Move(float _deltaTime)
 	FTransform trfmObj = MapPtr->GetActorTransform();
 
 	/* for debug start */
-	if (UEngineInput::IsPress(VK_LCONTROL))
+	/*if (UEngineInput::IsPress(VK_LCONTROL))
 	{
 		SetActorLocation({ 4142.233887f, 70.f, 8755.953125f });
 		SetActorRotation({ 0.f, -117.5f, 0.f });
 		NavIdx = -1;
 		return;
-	}
+	}*/
 	if (trfmPlayer.Location.Y < -1000)
 	{
 		Velocity = 0.f;
@@ -428,8 +436,6 @@ void ADriver::Move(float _deltaTime)
 	float slopeAngle = 0.f;
 
 	/* Test start */
-	GetForwardPhysics(_deltaTime, dx, true);
-
 	if (IsAutomative)
 	{
 		GetHandleRotationAuto(_deltaTime, dir, rotVal);
@@ -438,6 +444,13 @@ void ADriver::Move(float _deltaTime)
 	{
 		GetHandleRotation(_deltaTime, rotVal);
 	}
+
+	if (fabs(rotVal) > .1f)
+	{
+		AdditionalFriction = 10.f;
+	}
+
+	GetForwardPhysics(_deltaTime, dx, true);
 
 	if (isCollided)
 	{
@@ -511,8 +524,8 @@ void ADriver::Move(float _deltaTime)
 
 				CheckCollisionOfAllMap();
 
-				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 300.f, _deltaTime);
-				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 300.f, _deltaTime);
+				VelocityV = FPhysics::GetVf(VelocityV, gravityY * 250.f, _deltaTime);
+				float dy = FPhysics::GetDeltaX(VelocityV, gravityY * 250.f, _deltaTime);
 
 				dir *= dx;
 				lastVec = dir;
@@ -572,7 +585,8 @@ void ADriver::CheckLap(bool _isReverse)
 				EndLap();
 				OutputDebugStringA("GOAL IN!!\n");
 				IsFinished = true;
-				IsAutomative = true;
+				CarSP.Stop();
+				CarAccel.Stop();
 			}
 		}
 
@@ -634,15 +648,28 @@ void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 	if (UEngineInput::IsPress(VK_UP) || IsAutomative)
 	{
 		DirVTrain = 1;
-		acc = ACCELERATION - FRICTION_FORCE;
+		acc = ACCELERATION - FRICTION_FORCE - AdditionalFriction;
+
+		/*if (CarAccel.IsInited() == false)
+		{
+			CarAccel = UEngineSound::Play("CarAccel.wav");
+			CarAccel.Loop(9999);
+			CarAccel.SetVolume(.1f);
+		}
+		else
+		{
+			CarAccel.Resume();
+		}*/
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
+		//CarAccel.Pause();
 		DirVTrain = 2;
-		acc = -ACCELERATION + FRICTION_FORCE;
+		acc = -ACCELERATION + FRICTION_FORCE + AdditionalFriction;
 	}
 	else
 	{
+		//CarAccel.Pause();
 		isPushed = false;
 	}
 

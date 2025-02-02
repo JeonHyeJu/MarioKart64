@@ -401,7 +401,7 @@ void AUIPlay::SetHighRankUI(float _deltaTime)
 	static float elpasedSecs = 0.f;
 
 	elpasedSecs += _deltaTime;
-	if (elpasedSecs > .1f)
+	if (elpasedSecs > .5f)
 	{
 		const std::vector<ECharacter>& rankCharacters = GameData::GetInstance()->GetRankings();
 		ECharacter playerChar = GameData::GetInstance()->GetPlayerCharacter();

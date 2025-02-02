@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Pawn.h>
+#include <EnginePlatform/EngineSound.h>
 #include "CData.h"
 
 class USpriteRenderer;
@@ -77,6 +78,7 @@ protected:
 	bool IsAutomative = true;
 	bool IsStarted = false;
 	bool IsFinished = false;
+	bool IsInitSound = false;
 	bool IsCheckLap = false;
 	bool IsSpin = false;
 
@@ -129,6 +131,7 @@ private:
 	const float FRICTIONAL_FORCE = .05f;
 	const float MAX_SPEED = 20.f;
 	const float MAX_TURN = 5.f;
+	float AdditionalFriction = 0.f;
 
 	const float WEIGHT = 50.f;
 	const float ACCELERATION = WEIGHT * 6.f;
@@ -174,5 +177,8 @@ private:
 		"Wario.png",
 		"Bowser.png",
 	};
+
+	USoundPlayer CarAccel;
+	USoundPlayer CarSP;
 };
 

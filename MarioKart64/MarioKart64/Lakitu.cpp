@@ -13,7 +13,7 @@ ALakitu::ALakitu()
 
 	const char* SPRITE_NAME = "Lakitu.png";
 	Renderer->CreateAnimation("Idle", SPRITE_NAME, 0, 0, 1.f);
-	Renderer->CreateAnimation("Start", SPRITE_NAME, 0, 27, .1f, false);
+	Renderer->CreateAnimation("Start", SPRITE_NAME, 1, 27, .1f, false);
 
 	Renderer->ChangeAnimation("Idle");
 	Renderer->SetupAttachment(RootComponent);

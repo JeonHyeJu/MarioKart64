@@ -41,14 +41,14 @@ void APlayer::Tick(float _deltaTime)
 	//OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
 
 	/* for debug start */
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
+	//if (UEngineInput::IsDown(VK_SPACE))
+	//{
 		//UseItem_Shell(EItemType::GREEN_SHELL);
 		//UseItem_Banana(EItemType::BANANA);
 		//UseItem_FakeItemBox(EItemType::FAKE_ITEMBOX);
-		UseItem_Mushroom(EItemType::MUSHROOM);
+		//UseItem_Mushroom(EItemType::MUSHROOM);
 		//IsSpin = true;
-	}
+	//}
 	if (UEngineInput::IsDown(VK_F8))
 	{
 		IsTraining = !IsTraining;
@@ -189,4 +189,5 @@ void APlayer::OnChangeItem(int _itemIdx)
 
 void APlayer::EndLap()
 {
+	IsAutomative = true;
 }

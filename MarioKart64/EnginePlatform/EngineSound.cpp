@@ -33,12 +33,12 @@ bool USoundPlayer::IsInited() const
 	return true;
 }
 
-void USoundPlayer::On()
+void USoundPlayer::Resume()
 {
 	Control->setPaused(false);
 }
 
-void USoundPlayer::Off()
+void USoundPlayer::Pause()
 {
 	Control->setPaused(true);
 }
@@ -136,7 +136,7 @@ void UEngineSound::AllSoundOn()
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		USoundPlayer& CurSoundPlayer = *StartIter;
-		CurSoundPlayer.On();
+		CurSoundPlayer.Resume();
 	}
 }
 
@@ -148,7 +148,7 @@ void UEngineSound::AllSoundOff()
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		USoundPlayer& CurSoundPlayer = *StartIter;
-		CurSoundPlayer.Off();
+		CurSoundPlayer.Pause();
 	}
 }
 

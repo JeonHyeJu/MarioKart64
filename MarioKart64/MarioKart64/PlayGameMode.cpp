@@ -159,7 +159,6 @@ void APlayGameMode::InitMap()
 			{ -650.0f, -201.0f, 300.0f },
 			{ -470.0f, -201.0f, 300.0f },
 		};
-
 		const float MOVE_VAL = -300.f;
 		for (size_t i = 0, size = Players.size(); i < size; ++i)
 		{
@@ -178,25 +177,52 @@ void APlayGameMode::InitMap()
 		initLoc = { 50.f, 0.f, -200.f };
 		break;
 	}
-	case ECircuit::KOOPA_TROOPA_BEACH:
+	case ECircuit::ROYAL_RACEWAY:
 	{
-		Player->SetActorLocation({ 0.0f, 20.0f, -1000.0f });
+		MapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
 
-		//Player->SetActorLocation({ -395.0f, 15.0f, 4370});
+		StartPosition = {
+			{ -300.0f, 0.0f, 900.0f },
+			{ -150.0f, 0.0f, 900.0f },
+			{ -300.0f, 0.0f, 700.0f },
+			{ -150.0f, 0.0f, 700.0f },
+			{ -300.0f, 0.0f, 500.0f },
+			{ -150.0f, 0.0f, 500.0f },
+		};
+		const float MOVE_VAL = -300.f;
+		for (size_t i = 0, size = Players.size(); i < size; ++i)
+		{
+			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
+		}
 
-		//Player->SetActorLocation({ -7911.f, 15.0f, -2318.f });
+		//Player->SetActorLocation({ -1500.0f, 100.0f, 8485.0f });
 
-		//Player->SetActorLocation({ -6686.f, 15.0f, -12073.f });
+		//Player->SetActorLocation({ 2373.0f, 100.0f, 10796.0f });
 
-		scale = 50.f;
-		initLoc = { -52.f, 0.f, -100.f };
+		//Player->SetActorLocation({ -8662.0f, 0.0f, 2019.0f });
+
+		scale = 4.f;
+		initLoc = { -90.f, 0.f, -80.f };
 		break;
 	}
 	case ECircuit::MARIO_RACEWAY:
 	{
 		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
-		Player->SetActorLocation({ 0.0f, 10.0f, 0.0f });
+		StartPosition = {
+			{ -100.f, 10.0f, 800.0f },
+			{ 100.f, 10.0f, 800.0f },
+			{ -100.f, 10.0f, 600.0f },
+			{ 100.f, 10.0f, 600.0f },
+			{ -100.f, 10.0f, 400.0f },
+			{ 100.f, 10.0f, 400.0f },
+		};
+
+		const float MOVE_VAL = -300.f;
+		for (size_t i = 0, size = Players.size(); i < size; ++i)
+		{
+			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
+		}
 
 		//Player->SetActorLocation({ 1734.f, 10.0f, 4060.0f });
 
@@ -212,7 +238,20 @@ void APlayGameMode::InitMap()
 	{
 		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
 
-		Player->SetActorLocation({ 5000.0f, 10.0f, 0.0f });
+		StartPosition = {
+			{ 5100.0f, 10.0f, -100.0f },
+			{ 4900.0f, 10.0f, -100.0f },
+			{ 5100.0f, 10.0f, -300.0f },
+			{ 4900.0f, 10.0f, -300.0f },
+			{ 5100.0f, 10.0f, -500.0f },
+			{ 4900.0f, 10.0f, -500.0f },
+		};
+
+		const float MOVE_VAL = -300.f;
+		for (size_t i = 0, size = Players.size(); i < size; ++i)
+		{
+			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
+		}
 
 		//Player->SetActorLocation({ -3405.0f, 10.0f, 660.0f });
 		//Player->SetActorRotation({ 0.f, 180.f, 0.f });
@@ -225,6 +264,20 @@ void APlayGameMode::InitMap()
 
 		scale = 1000.f;
 		initLoc = { -64.f, 0.f, -120.f };
+		break;
+	}
+	case ECircuit::KOOPA_TROOPA_BEACH:
+	{
+		Player->SetActorLocation({ 0.0f, 20.0f, -1000.0f });
+
+		//Player->SetActorLocation({ -395.0f, 15.0f, 4370});
+
+		//Player->SetActorLocation({ -7911.f, 15.0f, -2318.f });
+
+		//Player->SetActorLocation({ -6686.f, 15.0f, -12073.f });
+
+		scale = 50.f;
+		initLoc = { -52.f, 0.f, -100.f };
 		break;
 	}
 	case ECircuit::SHERBET_LAND:
@@ -242,22 +295,6 @@ void APlayGameMode::InitMap()
 
 		scale = 50.f;
 		initLoc = { -53.f, 0.f, -58.f };
-		break;
-	}
-	case ECircuit::ROYAL_RACEWAY:
-	{
-		MapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
-
-		Player->SetActorLocation({ -50.0f, 100.0f, 700.0f });
-
-		//Player->SetActorLocation({ -1500.0f, 100.0f, 8485.0f });
-
-		//Player->SetActorLocation({ 2373.0f, 100.0f, 10796.0f });
-
-		//Player->SetActorLocation({ -8662.0f, 0.0f, 2019.0f });
-
-		scale = 4.f;
-		initLoc = { -90.f, 0.f, -80.f };
 		break;
 	}
 	case ECircuit::BOWSERS_CASTLE:
@@ -546,7 +583,15 @@ void APlayGameMode::Counting(float _deltaTime)
 
 void APlayGameMode::Playing(float _deltaTime)
 {
-	if (Player->GetIsFinished() || UEngineInput::IsDown('Q'))	// Q: for test
+	// for test
+	if (UEngineInput::IsDown('Q'))
+	{
+		Player->EndLap();
+		Fsm.ChangeState(EState::FINISH);
+		return;
+	}
+
+	if (Player->GetIsFinished())
 	{
 		Fsm.ChangeState(EState::FINISH);
 		return;
@@ -646,6 +691,7 @@ void APlayGameMode::WaitingKey(float _deltaTime)
 			else
 			{
 				UEngineCore::ResetLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
+				BgmSP.Stop();	// Temp
 			}
 		}
 	}

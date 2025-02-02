@@ -12,8 +12,8 @@ public:
 	ENGINEAPI ~USoundPlayer();
 
 	ENGINEAPI bool IsInited() const;
-	ENGINEAPI void On();
-	ENGINEAPI void Off();
+	ENGINEAPI void Resume();
+	ENGINEAPI void Pause();
 	ENGINEAPI void Stop();
 	ENGINEAPI bool IsPlaying();
 	ENGINEAPI void SetVolume(float _Volume);

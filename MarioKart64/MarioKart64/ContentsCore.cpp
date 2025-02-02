@@ -144,7 +144,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	// for test
 	std::vector<SPlayerInfo> palyerInfos;
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
 	}

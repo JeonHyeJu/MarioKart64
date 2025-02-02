@@ -40,9 +40,6 @@ void AUIPlay::BeginPlay()
 	InitLetterBox();
 	InitTitle();
 
-	// Temp
-	SetHighRankUI();
-
 	// for test
 	/*{
 		std::shared_ptr<UFontWidget> Widget = CreateWidget<UFontWidget>(1);
@@ -134,12 +131,6 @@ void AUIPlay::InitPlayerRank()
 	SetPlayerRankColor(playerCnt);
 }
 
-void AUIPlay::SetPlayerRankColor(uint8_t _val)
-{
-	float val = RANK_MUL_COLOR * _val;
-	PlayerRanking->ColorData.MulColor = { 1.f, 1 - val, 0.f, 1.f };
-}
-
 void AUIPlay::InitElpasedTime()
 {
 	TimeT = CreateWidget<UImageWidget>(-1);
@@ -216,7 +207,7 @@ void AUIPlay::InitHighRank()
 		// Init numbers
 		loc = ptr->GetWorldLocation() + FVector{ -5.f, -height + 25.f, 0.f };
 		std::shared_ptr<UImageWidget> ptrN = CreateWidget<UImageWidget>(0);
-		ptrN->SetSprite(FONT_SPRITE, 1);
+		ptrN->SetSprite(FONT_SPRITE, RANK_HIGH_SPRITE_IDX + i);
 		ptrN->SetAutoScaleRatio(.8f);
 		ptrN->SetWorldLocation(loc);
 		HighRankNumbers.push_back(ptrN.get());
@@ -224,6 +215,8 @@ void AUIPlay::InitHighRank()
 	}
 
 	HeightRankImg = height;
+
+	SetHighRankVisible(true, false);
 }
 
 void AUIPlay::InitItem()
@@ -403,20 +396,30 @@ void AUIPlay::SetTimerUI(float _secs)
 	}
 }
 
-void AUIPlay::SetHighRankUI()
+void AUIPlay::SetHighRankUI(float _deltaTime)
 {
-	const int RANK_SIZE = 6;
-	int rank[RANK_SIZE];
+	static float elpasedSecs = 0.f;
 
-	GameData* gameData = GameData::GetInstance();
-	gameData->GetHighRankPlayersIdx(rank, RANK_SIZE);
-
-	for (int i = 0; i < RANK_SIZE; ++i)
+	elpasedSecs += _deltaTime;
+	if (elpasedSecs > .1f)
 	{
-		// Temp
-		//ECharacter characetrType = static_cast<ECharacter>(rank[i]);
-		HighRankPlayers[i]->SetSprite(RANK_PLAYER_SPRITE, rank[i]);
-		HighRankNumbers[i]->SetSprite(FONT_SPRITE, RANK_HIGH_SPRITE_IDX + i);
+		const std::vector<ECharacter>& rankCharacters = GameData::GetInstance()->GetRankings();
+		ECharacter playerChar = GameData::GetInstance()->GetPlayerCharacter();
+
+		// TODO
+		size_t size = HighRankPlayers.size();
+		for (size_t i = 0; i < size; ++i)
+		{
+			if (rankCharacters[i] != ECharacter::NONE)
+			{
+				HighRankPlayers[i]->SetSprite(RANK_PLAYER_SPRITE, static_cast<int>(rankCharacters[i]) + 1);
+			}
+
+			if (rankCharacters[i] == playerChar)
+			{
+				SetPlayerRankUI(static_cast<uint8_t>(i + 1));
+			}
+		}
 	}
 }
 
@@ -427,6 +430,19 @@ void AUIPlay::SetItemUI()
 
 	ItemIdx = idx;
 	PlayerItem->SetSprite(ITEM_SPRITE, ItemIdx);
+}
+
+void AUIPlay::SetPlayerRankUI(uint8_t _rank)
+{
+	// Index of sprite need to subtract 1
+	PlayerRanking->SetSprite(FONT_SPRITE, RANK_1ST_SPRITE_IDX + (_rank - 1));
+	SetPlayerRankColor(_rank);
+}
+
+void AUIPlay::SetPlayerRankColor(uint8_t _val)
+{
+	float val = RANK_MUL_COLOR * _val;
+	PlayerRanking->ColorData.MulColor = { 1.f, 1 - val, 0.f, 1.f };
 }
 
 void AUIPlay::SetMinimapLoc()
@@ -452,6 +468,16 @@ void AUIPlay::SetMinimapLoc()
 	MinimapLocs[0]->SetRotation(FVector{ 0.f, 0.f, -playerRot.Y });
 }
 
+void AUIPlay::SetHighRankVisible(bool _isAll, bool _val)
+{
+	size_t size = (_isAll) ? HighRankPlayers.size() : 4;
+	for (size_t i = 0; i < size; ++i)
+	{
+		HighRankNumbers[i]->SetActive(_val);
+		HighRankPlayers[i]->SetActive(_val);
+	}
+}
+
 void AUIPlay::SetPlayUIVisible(bool _val)
 {
 	Minimap->SetActive(_val);
@@ -473,15 +499,7 @@ void AUIPlay::SetPlayUIVisible(bool _val)
 	{
 		TimeList[i]->SetActive(_val);
 	}
-
-	for (size_t i = 0, size = HighRankNumbers.size(); i < size; ++i)
-	{
-		HighRankNumbers[i]->SetActive(_val);
-	}
-	for (size_t i = 0, size = HighRankPlayers.size(); i < size; ++i)
-	{
-		HighRankPlayers[i]->SetActive(_val);
-	}
+	SetHighRankVisible(false, _val);
 	
 	PlayerItem->SetActive(_val);
 }
@@ -582,14 +600,7 @@ void AUIPlay::OnShowResult()
 	SetPlayUIVisible(false);
 	PlayerRanking->SetActive(true);
 
-	for (size_t i = 0, size = HighRankNumbers.size(); i < size; ++i)
-	{
-		HighRankNumbers[i]->SetActive(true);
-	}
-	for (size_t i = 0, size = HighRankPlayers.size(); i < size; ++i)
-	{
-		HighRankPlayers[i]->SetActive(true);
-	}
+	SetHighRankVisible(true, true);
 
 	StopTimer();
 	ResetTimer();
@@ -676,6 +687,7 @@ void AUIPlay::Racing(float _deltaTime)
 	CountTimer(_deltaTime);
 	SetItemUI();
 	SetMinimapLoc();
+	SetHighRankUI(_deltaTime);
 	TickLap(_deltaTime);
 
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_RACING)

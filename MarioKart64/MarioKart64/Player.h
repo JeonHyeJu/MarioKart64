@@ -15,8 +15,6 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
-	bool IsFinish = false;
-
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;

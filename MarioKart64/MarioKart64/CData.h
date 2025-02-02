@@ -112,6 +112,7 @@ struct SPlayerInfo
 	float4 MapLoc;
 	float4 Rotation;
 	int Lap = 1;
+	int Rank = 0;
 };
 
 struct FColor

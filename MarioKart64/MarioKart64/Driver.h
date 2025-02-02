@@ -25,6 +25,27 @@ public:
 	{
 		return Velocity;
 	}
+	int GetRouteIdx() const
+	{
+		return CurRouteIdx;
+	}
+	int GetLap() const
+	{
+		return Lap;
+	}
+	bool GetIsCheckingLap() const
+	{
+		return IsCheckLap;
+	}
+	bool GetIsFinished() const
+	{
+		return IsFinished;
+	}
+	float GetDistFromNextRoute();
+	float GetDistWithRouteIdx(int _idx);
+	int GetNextRouteIdx();
+
+	int Rank = -1;
 
 protected:
 	void BeginPlay() override;
@@ -55,6 +76,7 @@ protected:
 
 	bool IsAutomative = true;
 	bool IsStarted = false;
+	bool IsFinished = false;
 	bool IsCheckLap = false;
 	bool IsSpin = false;
 

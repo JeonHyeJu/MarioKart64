@@ -64,9 +64,11 @@ private:
 	bool ShowTexts(float _deltaTime);
 
 	void SetTimerUI(float _secs);
-	void SetHighRankUI();
+	void SetHighRankUI(float _deltaTime);
 	void SetItemUI();
+	void SetPlayerRankUI(uint8_t _rank);
 	void SetMinimapLoc();
+	void SetHighRankVisible(bool _isAll, bool _val);
 
 	void SetPlayUIVisible(bool _val);
 
@@ -148,7 +150,7 @@ private:
 
 	const int RANK_HIGH_SPRITE_IDX = 58;
 	const int RANK_1ST_SPRITE_IDX = 67;
-	const float RANK_MUL_COLOR = 0.05f;
+	const float RANK_MUL_COLOR = 0.05f;		// 0.05
 
 	const int TIME_CNT = 6;
 	const int MINIMAP_CAR_INIT_IDX = 43;

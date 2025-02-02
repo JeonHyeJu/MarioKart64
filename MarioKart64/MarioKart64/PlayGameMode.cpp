@@ -88,8 +88,7 @@ void APlayGameMode::InitCharacters()
 	Player->InitRouteIndex(map);
 
 	uint8_t playerIdx = pData->GetPlayerIdx();
-	//uint8_t size = pData->GetPlayerCnt();
-	uint8_t size = 3;
+	uint8_t size = pData->GetPlayerCnt();
 	for (uint8_t i = 0; i < size; ++i)
 	{
 		ADriver* ptr = nullptr;
@@ -317,6 +316,91 @@ void APlayGameMode::SetCamFinishRot()
 	Camera->SetActorLocation(playerLoc + sum);
 }
 
+void APlayGameMode::SetPlayingLocations()
+{
+	FVector loc = Player->GetActorLocation();
+	FVector rot = Player->GetTransform().Rotation;
+
+	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
+
+	GameData* pData = GameData::GetInstance();
+	pData->SetMinimapLoc(0, loc);
+	pData->SetPlayerRotation(0, rot);
+
+	Camera->SetLoaclLocation(CameraInitLoc - FVector{ 0.f, 0.f, Player->GetVelocity() * .04f });
+}
+
+void APlayGameMode::SetLakituLocation(float _deltaTime)
+{
+	if (Lakitu->IsActive())
+	{
+		Lakitu->AddActorLocation({ -100.f * _deltaTime, 100.f * _deltaTime, -150.f * _deltaTime });
+		FVector loc = Lakitu->GetActorLocation();
+		if (loc.Y >= 60.f && loc.Z < 155.f)
+		{
+			Lakitu->SetActive(false);
+		}
+	}
+}
+
+void APlayGameMode::CheckAndSetRanking(float _deltaTime)
+{
+	static float elapsedSecs = 0.f;
+
+	elapsedSecs += _deltaTime;
+
+	if (elapsedSecs > .1f)
+	{
+		elapsedSecs = 0.f;
+		GameData* pData = GameData::GetInstance();
+
+		size_t size = Players.size();
+		std::vector<int> rank;
+		std::vector<int> scores;
+		rank.reserve(size);
+		scores.reserve(size);
+
+		for (size_t i = 0; i < size; ++i)
+		{
+			ADriver* driver = Players[i];
+			int lap = driver->GetLap();
+			int idx = driver->GetRouteIdx();
+			int score = lap * 10000 + idx;
+			if (Players[i]->GetIsCheckingLap() == false)
+			{
+				score = 0;
+			}
+			scores.push_back(score);
+		}
+
+		for (size_t i = 0; i < size; ++i)
+		{
+			int ranking = 0;
+			float distI = Players[i]->GetDistFromNextRoute();
+			for (size_t j = 0; j < size; ++j)
+			{
+				if (i == j) continue;
+				if (scores[j] > scores[i])
+				{
+					ranking++;
+				}
+				else if (scores[j] == scores[i])
+				{
+					float distJ = Players[j]->GetDistFromNextRoute();
+					if (distI > distJ)
+					{
+						ranking++;
+					}
+				}
+			}
+			Players[i]->Rank = ranking;
+			rank.push_back(ranking);
+		}
+
+		pData->SetRankings(rank);
+	}
+}
+
 /* Fsm start function */
 void APlayGameMode::OnGetReady()
 {
@@ -443,33 +527,15 @@ void APlayGameMode::Counting(float _deltaTime)
 
 void APlayGameMode::Playing(float _deltaTime)
 {
-	if (Lakitu->IsActive())
-	{
-		Lakitu->AddActorLocation({ -100.f * _deltaTime, 100.f * _deltaTime, -150.f * _deltaTime });
-		FVector loc = Lakitu->GetActorLocation();
-		if (loc.Y >= 60.f && loc.Z < 155.f)
-		{
-			Lakitu->SetActive(false);
-		}
-	}
-
-	// Temp. for test
-	if (Player->IsFinish || UEngineInput::IsDown('Q'))
+	if (Player->GetIsFinished() || UEngineInput::IsDown('Q'))	// Q: for test
 	{
 		Fsm.ChangeState(EState::FINISH);
 		return;
 	}
 
-	FVector loc = Player->GetActorLocation();
-	FVector rot = Player->GetTransform().Rotation;
-
-	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
-
-	GameData* pData = GameData::GetInstance();
-	pData->SetMinimapLoc(0, loc);
-	pData->SetPlayerRotation(0, rot);
-
-	Camera->SetLoaclLocation(CameraInitLoc - FVector{ 0.f, 0.f, Player->GetVelocity() * .04f });
+	SetPlayingLocations();
+	SetLakituLocation(_deltaTime);
+	CheckAndSetRanking(_deltaTime);
 }
 
 void APlayGameMode::Finishing(float _deltaTime)

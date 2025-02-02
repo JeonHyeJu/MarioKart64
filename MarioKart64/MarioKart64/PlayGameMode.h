@@ -34,6 +34,9 @@ private:
 	void InitEffects();
 	void InitMap();
 	void SetCamFinishRot();
+	void SetPlayingLocations();
+	void SetLakituLocation(float _deltaTime);
+	void CheckAndSetRanking(float _deltaTime);
 
 	/* Fsm start function */
 	void OnGetReady();

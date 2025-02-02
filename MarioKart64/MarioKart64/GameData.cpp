@@ -44,7 +44,7 @@ ECharacter GameData::GetPlayerCharacter() const
 
 uint8_t GameData::GetPlayerCnt() const
 {
-	return PlayerCnt;
+	return static_cast<uint8_t>(Players.size());
 }
 
 void GameData::SetPlayerRank(uint8_t _val)
@@ -72,18 +72,21 @@ const std::vector<SPlayerInfo>& GameData::GetPlayers() const
 	return Players;
 }
 
-void GameData::GetHighRankPlayersIdx(int* _refArr, int _size)
+void GameData::SetRankings(const std::vector<int>& _vec)
 {
-	// Temp
-	assert(_size == 6 && "High rank has 6 size only.");
+	size_t size = min(_vec.size(), Players.size());
 
-	// Temp
-	_refArr[0] = 1;
-	_refArr[1] = 2;
-	_refArr[2] = 3;
-	_refArr[3] = 4;
-	_refArr[4] = 5;
-	_refArr[5] = 6;
+	for (size_t i = 0; i < size; ++i)
+	{
+		int rank = _vec[i];
+		Players[i].Rank = rank;
+		RankCharacters[rank] = Players[i].Chracter;
+	}
+}
+
+const std::vector<ECharacter>& GameData::GetRankings()
+{
+	return RankCharacters;
 }
 
 void GameData::SetPlayerItem(EItemType _item)

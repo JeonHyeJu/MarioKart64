@@ -29,7 +29,8 @@ public:
 	void Release();
 	static GameData* GetInstance();
 
-	void GetHighRankPlayersIdx(int* _refArr, int _size);
+	void SetRankings(const std::vector<int>& _vec);
+	const std::vector<ECharacter>& GetRankings();
 
 	ECharacter GetPlayerCharacter() const;
 	uint8_t GetPlayerCnt() const;
@@ -69,11 +70,11 @@ public:
 	SMapSizeInfo MapSizeInfo;
 
 private:
-	const uint8_t PlayerCnt = 6;
 	uint8_t PlayerRank = 8;
 	uint8_t PlayerIdx = 0;
 
 	std::vector<SPlayerInfo> Players;
+	std::vector<ECharacter> RankCharacters = { ECharacter::NONE, ECharacter::NONE, ECharacter::NONE, ECharacter::NONE, ECharacter::NONE, ECharacter::NONE };
 	SMapPackage MapPackage;
 
 	static GameData* pInstance;

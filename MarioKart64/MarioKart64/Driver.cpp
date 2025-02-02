@@ -12,6 +12,8 @@
 #include "Item.h"
 #include "CGlobal.h"
 
+#define _ITEM_DEBUG
+
 ADriver::ADriver()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
@@ -28,11 +30,13 @@ ADriver::ADriver()
 	RendererDebug->SetActive(false);
 	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
 
+#ifdef _ITEM_DEBUG
 	DebugItem = CreateDefaultSubObject<USpriteRenderer>();
 	DebugItem->SetOrder(0);
 	DebugItem->SetupAttachment(RootComponent);
 	DebugItem->SetSprite("Items.png", static_cast<int>(EItemType::SIZE));
 	DebugItem->SetRelativeLocation({ 30.f, 50.f, 0.f });
+#endif
 
 	FutureAngles.reserve(40);
 	for (int i = 1; i < 25; ++i)
@@ -386,7 +390,7 @@ void ADriver::Move(float _deltaTime)
 		if (IsCheckLap)
 		{
 			//if (isLog) OutputDebugStringA(("navIdx: " + std::to_string(NavIdx)+", _idx: " + std::to_string(_idx) + "\n").c_str());
-			OutputDebugStringA(("CurRouteIdx : " + std::to_string(CurRouteIdx) + ", _idx: " + std::to_string(_idx) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+			//OutputDebugStringA(("CurRouteIdx : " + std::to_string(CurRouteIdx) + ", _idx: " + std::to_string(_idx) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
 			if (CurRouteIdx > _idx)
 			{
 				isReverse = true;
@@ -394,7 +398,7 @@ void ADriver::Move(float _deltaTime)
 			}
 			else if (CurRouteIdx < _idx)
 			{
-				OutputDebugStringA("RIGHT!!!!!!!\n");
+				//OutputDebugStringA("RIGHT!!!!!!!\n");
 				CurRouteIdx = _idx;
 			}
 		}
@@ -540,25 +544,27 @@ void ADriver::SetMap(ABaseMap* _ptr)
 
 void ADriver::CheckLap(bool _isReverse)
 {
-	/*if (_isReverse) return;
-	if (IsCheckLap == false) return;*/
+	if (_isReverse) return;
+	if (IsCheckLap == false) return;
 
 	if (PrevNavIdx != NavIdx)
 	{
+		SNavData prevNd = MapPtr->GetNavData(PrevNavIdx);
 		SNavData nd = MapPtr->GetNavData(NavIdx);
-		if (nd.FloorType == ENavType::START_POINT)
+		if (prevNd.FloorType != ENavType::START_POINT && nd.FloorType == ENavType::START_POINT)
 		{
 			++Lap;
 			IsCheckLap = false;
 			CurRouteIdx = 0;
 			OutputDebugStringA(("==================== ++Lab: " + std::to_string(Lap) + ", NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
-			//OnChangeLap(Lap);
+			OnChangeLap(Lap);
 
 			if (Lap == ALL_LAB)
 			{
-				//EndLap();
+				EndLap();
 				OutputDebugStringA("GOAL IN!!\n");
-				// change state
+				IsFinished = true;
+				IsAutomative = true;
 			}
 		}
 
@@ -792,6 +798,42 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 	}
 }
 
+float ADriver::GetDistFromNextRoute()
+{
+	return GetDistWithRouteIdx(GetNextRouteIdx());
+}
+
+float ADriver::GetDistWithRouteIdx(int _idx)
+{
+	const SNavData& data = MapPtr->GetNavData(_idx);
+	float x = (data.Vertex[0].X + data.Vertex[1].X + data.Vertex[2].X) / 3.f;
+	float y = (data.Vertex[0].Y + data.Vertex[1].Y + data.Vertex[2].Y) / 3.f;
+	float z = (data.Vertex[0].Z + data.Vertex[1].Z + data.Vertex[2].Z) / 3.f;
+
+	FVector nextCenter{ x, y, z };
+	FVector loc = GetActorLocation();
+	float len = (nextCenter - loc).Length();
+	return len;
+}
+
+int ADriver::GetNextRouteIdx()
+{
+	std::map<int, int>::iterator it = RouteIdx.find(CurRouteIdx + 1);
+	std::map<int, int>::iterator itEnd = RouteIdx.end();
+
+	if (it == itEnd)
+	{
+		it = RouteIdx.find(0);
+	}
+
+	if (it != itEnd)
+	{
+		return it->second;
+	}
+
+	return -1;
+}
+
 void ADriver::PickItem(float _deltaTime)
 {
 	int itemIdx = ItemRoulette.PickItem(_deltaTime);
@@ -808,7 +850,9 @@ void ADriver::PickItem(float _deltaTime)
 	{
 		PrevItemIdx = itemIdx;
 		OnChangeItem(itemIdx);
+#ifdef _ITEM_DEBUG
 		DebugItem->SetSprite("Items.png", itemIdx);	// Temp
+#endif
 	}
 }
 
@@ -856,7 +900,9 @@ void ADriver::UseItem()
 	}
 
 	ItemIndex = ITEM_NONE;
+#ifdef _ITEM_DEBUG
 	DebugItem->SetSprite("Items.png", ITEM_NONE);
+#endif
 }
 
 void ADriver::UseItem_Shell(const EItemType& _itemType)

@@ -188,5 +188,4 @@ void APlayer::OnChangeItem(int _itemIdx)
 
 void APlayer::EndLap()
 {
-	IsFinish = true;
 }

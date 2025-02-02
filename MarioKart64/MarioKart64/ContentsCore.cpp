@@ -139,11 +139,12 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	// for test
 	std::vector<SPlayerInfo> palyerInfos;
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
 	}
-	GameData::GetInstance()->SetPlayerIdx(2);
+	GameData::GetInstance()->SetPlayerIdx(0);
+	//GameData::GetInstance()->SetPlayerIdx(2);
 	GameData::GetInstance()->SetPlayers(palyerInfos);
 
 	SMapPackage mapPackage;
@@ -306,83 +307,6 @@ void UContentsCore::InitTest()
 		UEngineIndexBuffer::Create("Cube", indices);
 		UMesh::Create("Cube");
 	}
-
-	// Text
-	/*
-	{
-		const int RECT_SIZE = 4;
-		const int MAX_TXT_CNT = 2;
-		const int SIZE = MAX_TXT_CNT * RECT_SIZE;
-		const float UV_SIZE = 1.f / MAX_TXT_CNT;
-
-		std::vector<FEngineVertex> rect =
-		{
-			FEngineVertex{ FVector(0.f, 1.f, 0.0f), { 0.0f, 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
-			FEngineVertex{ FVector(1.f, 1.f, 0.0f), { UV_SIZE, 0.f }, {1.0f, 0.0f, 0.0f, 1.0f} },
-			FEngineVertex{ FVector(0.f, 0.f, 0.0f), { 0.0f, 1.0f }, {1.0f, 0.0f, 0.0f, 1.0f} },
-			FEngineVertex{ FVector(1.f, 0.f, 0.0f), { UV_SIZE, 1.f }, {1.0f, 0.0f, 0.0f, 1.0f} }
-		};
-
-		
-		std::vector<UINT> indices;
-		std::vector<FEngineVertex> textMesh;
-		textMesh.reserve(SIZE);
-		indices.reserve(MAX_TXT_CNT * 6);
-
-		for (int i = 0; i < RECT_SIZE; ++i)
-		{
-			textMesh.emplace_back(rect[i]);
-		}
-
-		indices.emplace_back(0);
-		indices.emplace_back(1);
-		indices.emplace_back(2);
-		indices.emplace_back(1);
-		indices.emplace_back(3);
-		indices.emplace_back(2);
-
-		int last1Idx = 1;
-		int last2Idx = 3;
-
-		for (int i = 1; i < MAX_TXT_CNT; ++i)
-		{
-			float fi = static_cast<float>(i);
-
-			// first triangle
-			indices.emplace_back(last1Idx);
-
-			FEngineVertex vtx1 = textMesh[last1Idx];
-			vtx1.POSITION += FVector{ 1.f, 0.f, 0.f };
-			vtx1.TEXCOORD += FVector{ UV_SIZE, 0.f };
-			textMesh.emplace_back(vtx1);
-
-			int _idx = static_cast<int>(textMesh.size() - 1);
-			indices.emplace_back(_idx);
-			last1Idx = _idx;
-
-			indices.emplace_back(last2Idx);
-
-			// second triangle
-			indices.emplace_back(last1Idx);
-
-			FEngineVertex vtx2 = textMesh[last2Idx];
-			vtx2.POSITION += FVector{ 1.f, 0.f, 0.f };
-			vtx2.TEXCOORD += FVector{ UV_SIZE, 0.f };
-			textMesh.emplace_back(vtx2);
-			
-			_idx = static_cast<int>(textMesh.size() - 1);
-			indices.emplace_back(_idx);
-
-			indices.emplace_back(last2Idx);
-
-			last2Idx = _idx;
-		}
-		
-		UEngineVertexBuffer::Create("Text", textMesh);
-		UEngineIndexBuffer::Create("Text", indices);
-		UMesh::Create("Text");
-	}
-	*/
 }
 
 void UContentsCore::InitObjs()

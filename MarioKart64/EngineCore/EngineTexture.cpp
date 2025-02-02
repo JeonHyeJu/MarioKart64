@@ -1,8 +1,6 @@
 #include "PreCompile.h"
 #include "EngineTexture.h"
 
-#pragma comment(lib, "DirectXTex.lib")
-
 UEngineTexture::UEngineTexture()
 {
 }

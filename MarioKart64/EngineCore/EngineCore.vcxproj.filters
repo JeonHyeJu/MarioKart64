@@ -452,14 +452,14 @@
     <Library Include="ThirdParty\DirectXTex\Release\DirectXTex.lib">
       <Filter>ThirdParty\DirectXTex\Release</Filter>
     </Library>
-    <Library Include="ThirdParty\DirectXTex\Debug\DirectXTex.lib">
-      <Filter>ThirdParty\DirectXTex\Debug</Filter>
-    </Library>
     <Library Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.lib">
       <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
     </Library>
     <Library Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.lib">
       <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
+    </Library>
+    <Library Include="ThirdParty\DirectXTex\Debug\DirectXTexd.lib">
+      <Filter>ThirdParty\DirectXTex\Debug</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>
@@ -483,11 +483,11 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.dll">
-      <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.dll">
       <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.dll">
+      <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

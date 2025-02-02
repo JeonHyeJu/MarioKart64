@@ -23,5 +23,6 @@ private:
 	void InitGraphics();
 	void InitTest();
 	void InitObjs();
+	void InitSound(std::string_view _path);
 };
 

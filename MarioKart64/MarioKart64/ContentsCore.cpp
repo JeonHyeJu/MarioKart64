@@ -11,6 +11,7 @@
 #include <EngineCore/EngineMaterial.h>
 #include <EngineCore/HUD.h>
 #include <EngineCore/EngineFont.h>
+#include <EnginePlatform/EngineSound.h>
 #include "CGlobal.h"
 #include "CircuitLoader.h"
 #include "TitleGameMode.h"
@@ -119,6 +120,10 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineSprite::CreateSpriteToMeta("RacePositionIcons.png", ".meta");
 	UEngineSprite::CreateSpriteToMeta("Lakitu.png", ".meta");
 
+	InitSound("Resources\\Sounds\\Bgm");
+	InitSound("Resources\\Sounds\\Voices");
+	InitSound("Resources\\Sounds\\Effect");
+
 	InitGraphics();
 	InitTest();
 	InitObjs();
@@ -130,9 +135,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
 	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
-	//UEngineCore::OpenLevel("TitleLevel");
+	UEngineCore::OpenLevel("TitleLevel");
 	//UEngineCore::OpenLevel("SelectLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
@@ -418,5 +423,22 @@ void UContentsCore::InitObjs()
 
 		std::string path = CGlobal::GetModelPath("Courses\\Rainbow_Road", "rainbow");
 		loader.Load(ECircuit::RAINBOW_ROAD, navTextures, path);
+	}
+}
+
+void UContentsCore::InitSound(std::string_view _path)
+{
+	UEngineDirectory dir;
+	if (false == dir.MoveParentToDirectory(_path))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+
+	std::vector<UEngineFile> files = dir.GetAllFile(true, { ".wav", ".mp3" });
+	for (size_t i = 0; i < files.size(); i++)
+	{
+		std::string path = files[i].GetPathToString();
+		UEngineSound::Load(path);
 	}
 }

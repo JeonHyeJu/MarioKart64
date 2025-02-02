@@ -6,6 +6,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
+#include <EnginePlatform/EngineSound.h>
 
 // TODO: move CC list along rule
 ASelectGame::ASelectGame()
@@ -80,6 +81,9 @@ void ASelectGame::BeginPlay()
 {
 	AActor::BeginPlay();
 
+	USoundPlayer sp = UEngineSound::Play("SelectLevel.wav");
+	sp.SetVolume(.4f);
+
 	Fsm.ChangeState(ESceneState::SELECT_GAME);
 }
 
@@ -146,6 +150,12 @@ void ASelectGame::InitGameSelectBox()
 
 		SelectBoxes[i]->SetActorLocation({ 175.f + (i - 2) * (rectW + 30.f), 100.f, 0.f });
 		SelectBoxes[i]->AttachToActor(this);
+
+		// Temp
+		if (i > 0)
+		{
+			SelectBoxes[i]->SetEnable(false);
+		}
 	}
 }
 
@@ -172,11 +182,27 @@ void ASelectGame::SwitchNoSelectedGameBoxes(bool _isVisible)
 /* Fsm start function */
 void ASelectGame::OnSelectCC()
 {
+	uint8_t idx = PtrSelectedBox->GetSelectedIdx(ELayer::RULE);
+
+	if (idx == 0)
+	{
+		USoundPlayer sp = UEngineSound::Play("MarioGrandprize.wav");
+		sp.SetVolume(.4f);
+	}
+	else if (idx == 1)
+	{
+		USoundPlayer sp = UEngineSound::Play("TimeTrial.wav");
+		sp.SetVolume(.4f);
+	}
+
 	RBtnOk->SetActive(false);
 }
 
 void ASelectGame::OnWaitOk()
 {
+	USoundPlayer sp = UEngineSound::Play("Ok.wav");
+	sp.SetVolume(.4f);
+
 	RBtnOk->SetActive(true);
 	RBtnOk->SetActorRotation({ 0.f, 90.f, 0.f });
 }
@@ -203,6 +229,8 @@ void ASelectGame::SelectingGame(float _deltaTime)
 	}
 	else if (UEngineInput::IsDown(VK_RIGHT))
 	{
+		return;	// Temp
+
 		if (SelectedGameIdx < SELECT_LIST_SIZE - 1)		// Available options: 2
 		{
 			PtrSelectedBox->SetBlinkState(EBlinkState::OFF);

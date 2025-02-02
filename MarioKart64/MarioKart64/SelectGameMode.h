@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineSound.h>
 
 class ASelectGameMode : public AGameMode
 {
@@ -25,6 +26,7 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
+	void LevelChangeEnd() override;
 
 private:
 	/* Fsm start function */
@@ -43,4 +45,7 @@ private:
 	//std::shared_ptr<class AFade> Fade = nullptr;	// TODO
 
 	UFSMStateManager Fsm;
+
+	/* Sounds */
+	USoundPlayer BgmSP;
 };

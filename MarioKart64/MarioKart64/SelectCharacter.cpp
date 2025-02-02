@@ -3,6 +3,7 @@
 #include "SelectButton.h"
 #include "CharacterAndName.h"
 #include "CGlobal.h"
+#include "CData.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EnginePlatform/EngineInput.h>
@@ -61,8 +62,8 @@ ASelectCharacter::ASelectCharacter()
 	Fsm.CreateState(ESceneState::SELECT_MOVING, std::bind(&ASelectCharacter::Moving, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveForward, this));
 	Fsm.CreateState(ESceneState::SELECT_MOVING_REVERSE, std::bind(&ASelectCharacter::Moving, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnSelectMoveBackward, this));
 	Fsm.CreateState(ESceneState::WAIT_OK, std::bind(&ASelectCharacter::Waiting, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnWaitOk, this));
-	Fsm.CreateState(ESceneState::FINISH, nullptr, std::bind(&ASelectCharacter::OnFinish, this));
-	Fsm.CreateState(ESceneState::END, nullptr);
+	Fsm.CreateState(ESceneState::FINISH, std::bind(&ASelectCharacter::Finishing, this, std::placeholders::_1), std::bind(&ASelectCharacter::OnFinish, this));
+	Fsm.CreateState(ESceneState::END, nullptr, std::bind(&ASelectCharacter::OnEnd, this));
 }
 
 ASelectCharacter::~ASelectCharacter()
@@ -74,6 +75,9 @@ void ASelectCharacter::BeginPlay()
 {
 	AActor::BeginPlay();
 	srand(static_cast<unsigned int>(time(nullptr)));
+
+	USoundPlayer sp = UEngineSound::Play("SelectPlayer.wav");
+	sp.SetVolume(.4f);
 
 	MoveSelectUI(0);
 	Fsm.ChangeState(ESceneState::SELECT);
@@ -179,18 +183,47 @@ void ASelectCharacter::OnOffObjs(bool _isActive)
 	}
 }
 
-/* Fsm start functions */
-void ASelectCharacter::OnFinish()
+void ASelectCharacter::LaunchVoice()
 {
-	BtnOk->SetBlinkState(EBlinkState::SELECTED);
-	Fsm.ChangeState(ESceneState::END);
-
-	if (EndFuntion != nullptr)
+	uint8_t idx = SelectedIdx;
+	if (SelectedIdx > 3)
 	{
-		EndFuntion();
+		--idx;
+		if (SelectedIdx > 5)
+		{
+			--idx;
+		}
 	}
+
+	std::string soundFile = "";
+	ECharacter character = static_cast<ECharacter>(idx);
+	switch (character)
+	{
+	case ECharacter::MARIO:
+		soundFile = "SelectMario.wav";
+		break;
+	case ECharacter::LUIGI:
+		soundFile = "SelectLuigi.wav";
+		break;
+	case ECharacter::PEACH:
+		soundFile = "SelectPeach.wav";
+		break;
+	case ECharacter::YOSHI:
+		soundFile = "SelectYoshi.wav";
+		break;
+	case ECharacter::WARIO:
+		soundFile = "SelectWario.wav";
+		break;
+	case ECharacter::BOWSER:
+		soundFile = "SelectBowser.wav";
+		break;
+	}
+
+	USoundPlayer sp = UEngineSound::Play(soundFile);
+	sp.SetVolume(.3f);
 }
 
+/* Fsm start functions */
 void ASelectCharacter::OnSelect()
 {
 	OnOffObjs(true);
@@ -217,9 +250,27 @@ void ASelectCharacter::OnSelectMoveBackward()
 
 void ASelectCharacter::OnWaitOk()
 {
+	LaunchVoice();
+
 	BtnOk->SetActive(true);
 	BtnOk->SetActorRotation({ 0.f, 90.f, 0.f });
 	BtnOk->SetBlinkState(EBlinkState::BLINK);
+}
+
+void ASelectCharacter::OnFinish()
+{
+	SelectSP = UEngineSound::Play("StartGame.mp3");
+	SelectSP.SetVolume(.3f);
+
+	BtnOk->SetBlinkState(EBlinkState::SELECTED);
+}
+
+void ASelectCharacter::OnEnd()
+{
+	if (EndFuntion != nullptr)
+	{
+		EndFuntion();
+	}
 }
 
 /* Fsm update functions */
@@ -322,3 +373,10 @@ void ASelectCharacter::Waiting(float _deltaTime)
 	}
 }
 
+void ASelectCharacter::Finishing(float _deltaTime)
+{
+	if (SelectSP.IsPlaying() == false)
+	{
+		Fsm.ChangeState(ESceneState::END);
+	}
+}

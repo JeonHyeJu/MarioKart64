@@ -11,8 +11,8 @@ public:
 	ENGINEAPI USoundPlayer();
 	ENGINEAPI ~USoundPlayer();
 
+	ENGINEAPI bool IsInited() const;
 	ENGINEAPI void On();
-
 	ENGINEAPI void Off();
 	ENGINEAPI void Stop();
 	ENGINEAPI bool IsPlaying();

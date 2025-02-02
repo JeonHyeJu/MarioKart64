@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineSound.h>
 
 class USpriteRenderer;
 class ASelectMap : public AActor
@@ -40,13 +41,15 @@ private:
 	void Hover(uint8_t _idx);
 
 	/* Fsm start function */
-	void OnFinish();
 	void OnShowSelectMap();
 	void OnWaitOk();
+	void OnFinish();
+	void OnEnd();
 
 	/* Fsm update function */
 	void Selecting(float _deltaTime);
 	void WaitingOk(float _deltaTime);
+	void Finishing(float _deltaTime);
 
 	static const int SIZE = 4;
 
@@ -62,4 +65,6 @@ private:
 	std::function<void()> EndFuntion;
 
 	UFSMStateManager Fsm;
+
+	USoundPlayer SelectSP;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineSound.h>
 
 class USpriteRenderer;
 class ASelectCharacter : public AActor
@@ -41,6 +42,7 @@ private:
 	void RunBlink(int _idx);
 	void MoveSelectUI(int _idx);
 	void OnOffObjs(bool _isActive);
+	void LaunchVoice();
 
 	/* Fsm start functions */
 	void OnSelect();
@@ -48,11 +50,13 @@ private:
 	void OnSelectMoveBackward();
 	void OnWaitOk();
 	void OnFinish();
+	void OnEnd();
 
 	/* Fsm update functions */
 	void Selecting(float _deltaTime);
 	void Moving(float _deltaTime);
 	void Waiting(float _deltaTime);
+	void Finishing(float _deltaTime);
 
 	static const int SIZE = 8;
 	const int HALF_SIZE = SIZE / 2;
@@ -75,4 +79,6 @@ private:
 	std::function<void()> EndFuntion;
 	
 	UFSMStateManager Fsm;
+
+	USoundPlayer SelectSP;
 };

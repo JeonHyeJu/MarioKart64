@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineSound.h>
 
 class ATitleGameMode : public AGameMode
 {
@@ -10,6 +11,7 @@ public:
 		IDLE = 0,
 		NINTENDO_LOGO,
 		TITLE,
+		WAIT_SOUND,
 		END,
 	};
 
@@ -25,6 +27,8 @@ protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
 
+	void LevelChangeEnd() override;
+
 private:
 	void SpinLogoAndTimeCheck(float _deltaTime);
 
@@ -36,6 +40,7 @@ private:
 	/* Fsm update function */
 	void ShowingLogo(float _deltaTime);
 	void ShowingTitle(float _deltaTime);
+	void WaitingSound(float _deltaTime);
 
 	std::shared_ptr<class ANintendoLogo> NintendoLogo = nullptr;
 	std::shared_ptr<class ATitle> Title = nullptr;
@@ -44,4 +49,9 @@ private:
 
 	float LogoElapsedSecs = 0.f;
 	float LogoAngle = 60.f;
+
+	/* Sounds */
+	USoundPlayer StartSP;
+	USoundPlayer IntroSP;
+	USoundPlayer BgmSP;
 };

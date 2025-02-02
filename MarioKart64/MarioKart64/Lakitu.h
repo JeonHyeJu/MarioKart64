@@ -14,6 +14,7 @@ public:
 
 	void Launch();
 	bool IsAnimEnd();
+	int GetCurAnimIdx() const;
 
 protected:
 	void BeginPlay() override;

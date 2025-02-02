@@ -51,9 +51,17 @@ void ASelectGameMode::Tick(float _deltaTime)
 	// Because there are not any update functions.
 }
 
+void ASelectGameMode::LevelChangeEnd()
+{
+	BgmSP.Stop();
+}
+
 /* Fsm start function */
 void ASelectGameMode::OnShowSelectGame()
 {
+	BgmSP = UEngineSound::Play("14.GameSelect.mp3");
+	BgmSP.SetVolume(.4f);
+
 	SelectGame->SetActive(true);
 	SelectCharacter->SetActive(false);
 	SelectMap->SetActive(false);

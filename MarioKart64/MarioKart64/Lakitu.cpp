@@ -42,3 +42,8 @@ bool ALakitu::IsAnimEnd()
 {
 	return Renderer->IsCurAnimationEnd();
 }
+
+int ALakitu::GetCurAnimIdx() const
+{
+	return Renderer->GetCurAnimIdx();
+}

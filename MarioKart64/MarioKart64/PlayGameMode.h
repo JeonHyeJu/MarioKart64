@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineBase/FSMStateManager.h>
 #include <EngineCore/GameMode.h>
+#include <EnginePlatform/EngineSound.h>
 
 class APlayGameMode : public AGameMode
 {
@@ -28,6 +29,7 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick(float _deltaTime) override;
+	void LevelChangeEnd() override;
 
 private:
 	void InitCharacters();
@@ -76,4 +78,6 @@ private:
 	const float CAM_MOVE_SCALAR = 100.f;
 
 	UFSMStateManager Fsm;
+
+	USoundPlayer BgmSP;
 };

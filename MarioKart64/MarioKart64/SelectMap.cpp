@@ -70,8 +70,8 @@ ASelectMap::ASelectMap()
 
 	Fsm.CreateState(ESceneState::SELECT_MAP, std::bind(&ASelectMap::Selecting, this, std::placeholders::_1), std::bind(&ASelectMap::OnShowSelectMap, this));
 	Fsm.CreateState(ESceneState::WAIT_OK, std::bind(&ASelectMap::WaitingOk, this, std::placeholders::_1), std::bind(&ASelectMap::OnWaitOk, this));
-	Fsm.CreateState(ESceneState::FINISH, nullptr, std::bind(&ASelectMap::OnFinish, this));
-	Fsm.CreateState(ESceneState::END, nullptr);
+	Fsm.CreateState(ESceneState::FINISH, std::bind(&ASelectMap::Finishing, this, std::placeholders::_1), std::bind(&ASelectMap::OnFinish, this));
+	Fsm.CreateState(ESceneState::END, nullptr, std::bind(&ASelectMap::OnEnd, this));
 
 	Hover(CurSelectedIdx);
 }
@@ -84,6 +84,9 @@ ASelectMap::~ASelectMap()
 void ASelectMap::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	USoundPlayer sp = UEngineSound::Play("SelectMap.wav");
+	sp.SetVolume(.4f);
 
 	Fsm.ChangeState(ESceneState::SELECT_MAP);
 }
@@ -116,6 +119,9 @@ void ASelectMap::OnShowSelectMap()
 
 void ASelectMap::OnWaitOk()
 {
+	USoundPlayer sp = UEngineSound::Play("Ok.wav");
+	sp.SetVolume(.4f);
+
 	BtnOk->SetActive(true);
 	BtnOk->SetBlinkState(EBlinkState::BLINK);
 	BtnOk->SetActorRotation({ 0.f, 90.f, 0.f });
@@ -124,8 +130,13 @@ void ASelectMap::OnWaitOk()
 void ASelectMap::OnFinish()
 {
 	BtnOk->SetBlinkState(EBlinkState::SELECTED);
-	Fsm.ChangeState(ESceneState::END);
 
+	SelectSP = UEngineSound::Play("StartGame.mp3");
+	SelectSP.SetVolume(.3f);
+}
+
+void ASelectMap::OnEnd()
+{
 	if (EndFuntion != nullptr)
 	{
 		EndFuntion();
@@ -173,5 +184,13 @@ void ASelectMap::WaitingOk(float _deltaTime)
 	else if (UEngineInput::IsDown(VK_ESCAPE))
 	{
 		Fsm.ChangeState(ESceneState::SELECT_MAP);
+	}
+}
+
+void ASelectMap::Finishing(float _deltaTime)
+{
+	if (SelectSP.IsPlaying() == false)
+	{
+		Fsm.ChangeState(ESceneState::END);
 	}
 }

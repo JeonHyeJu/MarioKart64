@@ -69,7 +69,12 @@ public:
 
 	ENGINEAPI void SetTexture(std::string_view _Name, bool AutoScale = false, float _Ratio = 1.0f);
 
-	const std::string& GetCurAnimName()
+	int GetCurAnimIdx() const
+	{
+		return CurIndex;
+	}
+	
+	const std::string& GetCurAnimName() const
 	{
 		return CurAnimName;
 	}

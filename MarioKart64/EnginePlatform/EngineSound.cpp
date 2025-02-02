@@ -23,6 +23,16 @@ USoundPlayer::~USoundPlayer()
 	// Stop();
 }
 
+bool USoundPlayer::IsInited() const
+{
+	if (Control == nullptr)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void USoundPlayer::On()
 {
 	Control->setPaused(false);

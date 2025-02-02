@@ -61,6 +61,12 @@ void APlayGameMode::BeginPlay()
 	// TODO
 	Camera->GetCameraComponent()->SetZSort(0, true);
 
+	USoundPlayer sp1 = UEngineSound::Play("StartGrandPrize.mp3");
+	sp1.SetVolume(.4f);
+
+	USoundPlayer sp2 = UEngineSound::Play("Crowd1.mp3");
+	sp2.SetVolume(.1f);
+
 	Fsm.ChangeState(EState::READY);
 }
 
@@ -71,6 +77,11 @@ void APlayGameMode::Tick(float _deltaTime)
 	AActor::Tick(_deltaTime);
 
 	Fsm.Update(_deltaTime);
+}
+
+void APlayGameMode::LevelChangeEnd()
+{
+	BgmSP.Stop();
 }
 
 void APlayGameMode::InitCharacters()
@@ -425,6 +436,9 @@ void APlayGameMode::OnCount()
 
 void APlayGameMode::OnPlay()
 {
+	BgmSP = UEngineSound::Play("02.RacewayAndWarioStadium.mp3");
+	BgmSP.SetVolume(.4f);
+
 	for (ADriver* ptr : Players)
 	{
 		ptr->SetStart(true);
@@ -513,6 +527,10 @@ void APlayGameMode::Counting(float _deltaTime)
 	if (state == 0)
 	{
 		state = 1;
+
+		USoundPlayer sp1 = UEngineSound::Play("StartSignal.mp3");
+		sp1.SetVolume(1.f);
+
 		Lakitu->Launch();
 	}
 	else if (state == 1)

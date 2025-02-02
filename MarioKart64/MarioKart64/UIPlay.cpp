@@ -676,6 +676,9 @@ void AUIPlay::OpeningRacing(float _deltaTime)
 
 void AUIPlay::WaitingCount(float _deltaTime)
 {
+	SetMinimapLoc();
+	SetHighRankUI(_deltaTime);
+
 	if (GameData::GetInstance()->GetFinishState() == EFinishState::FINISH_COUNT)
 	{
 		Fsm.ChangeState(EState::PLAY_RACING);

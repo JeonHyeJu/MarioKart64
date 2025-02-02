@@ -36,7 +36,7 @@ private:
 	void SetCamFinishRot();
 	void SetPlayingLocations();
 	void SetLakituLocation(float _deltaTime);
-	void CheckAndSetRanking(float _deltaTime);
+	void CheckAndSetRanking(float _deltaTime, bool _isForce=false);
 
 	/* Fsm start function */
 	void OnGetReady();
@@ -54,6 +54,12 @@ private:
 	void Finishing(float _deltaTime);
 	void WaitingUIResult(float _deltaTime);
 	void WaitingKey(float _deltaTime);
+	
+	/* Callbacks */
+	/*void OnUsingThunder()
+	{
+
+	}*/
 
 	std::shared_ptr<class ASkybox> Skybox = nullptr;
 	std::shared_ptr<class ABaseMap> MapPtr = nullptr;

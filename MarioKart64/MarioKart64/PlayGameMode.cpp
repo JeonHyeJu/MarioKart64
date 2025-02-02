@@ -343,13 +343,13 @@ void APlayGameMode::SetLakituLocation(float _deltaTime)
 	}
 }
 
-void APlayGameMode::CheckAndSetRanking(float _deltaTime)
+void APlayGameMode::CheckAndSetRanking(float _deltaTime, bool _isForce)
 {
 	static float elapsedSecs = 0.f;
 
 	elapsedSecs += _deltaTime;
 
-	if (elapsedSecs > .1f)
+	if (_isForce || elapsedSecs > .1f)
 	{
 		elapsedSecs = 0.f;
 		GameData* pData = GameData::GetInstance();
@@ -410,18 +410,21 @@ void APlayGameMode::OnGetReady()
 
 void APlayGameMode::OnCount()
 {
-	Lakitu->SetActive(true);
-	Lakitu->SetActorLocation(Player->GetActorLocation() + FVector{ 100.f, 600.f, 600.f });
-}
-
-void APlayGameMode::OnPlay()
-{
 	if (Balloons != nullptr)
 	{
 		Balloons->Destroy();
 		Balloons = nullptr;
 	}
 
+	Lakitu->SetActive(true);
+	Lakitu->SetActorLocation(Player->GetActorLocation() + FVector{ 100.f, 600.f, 600.f });
+
+	SetPlayingLocations();
+	CheckAndSetRanking(0.f, true);
+}
+
+void APlayGameMode::OnPlay()
+{
 	for (ADriver* ptr : Players)
 	{
 		ptr->SetStart(true);
@@ -430,8 +433,6 @@ void APlayGameMode::OnPlay()
 
 void APlayGameMode::OnFinish()
 {
-	// TODO: turn to self-driving
-	
 	SetCamFinishRot();
 	Camera->DetachFromActor();
 
@@ -501,20 +502,20 @@ void APlayGameMode::WaitingUIOpen(float _deltaTime)
 void APlayGameMode::Counting(float _deltaTime)
 {
 	static int state = 0;
+	FVector dstLoc = Player->GetActorLocation() + FVector{ 100.f, 100.f, 100.f };
 	FVector loc = Lakitu->GetActorLocation();
-	if (!(loc.Y < -100.f && loc.Z < 400.f))
+	if (loc.Y > dstLoc.Y && loc.Z > dstLoc.Z)
 	{
 		Lakitu->AddActorLocation({ -50.f * _deltaTime, -300.f * _deltaTime, -300.f * _deltaTime });
-		state = 1;
 		return;
 	}
 
-	if (state == 1)
+	if (state == 0)
 	{
-		state = 2;
+		state = 1;
 		Lakitu->Launch();
 	}
-	else if (state == 2)
+	else if (state == 1)
 	{
 		if (Lakitu->IsAnimEnd())
 		{

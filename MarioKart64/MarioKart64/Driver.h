@@ -89,10 +89,11 @@ protected:
 	int Lap = 1;
 	int ItemIndex = ITEM_NONE;
 
-	const float BOOST_SPEED_UP = 100.f;
-	const float BOOST_SPEED_DOWN = 50.f;
+	const float BOOST_SPEED_UP = 2000.f;
+	const float BOOST_SPEED_DOWN = 350.f;
 	float BoostVal = 0.f;
 	bool IsBoost = false;
+	int MushroomBoostCnt = 0;
 
 	// For train
 	bool IsTraining = false;

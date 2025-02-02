@@ -12,7 +12,7 @@
 #include "Item.h"
 #include "CGlobal.h"
 
-#define _ITEM_DEBUG
+//#define _ITEM_DEBUG
 
 ADriver::ADriver()
 {
@@ -197,15 +197,23 @@ void ADriver::Spin()
 
 void ADriver::TickBoost(float _deltaTime)
 {
+	float mulVal = 1.f;
+	if (MushroomBoostCnt > 0)
+	{
+		--MushroomBoostCnt;
+		IsBoost = true;
+		mulVal = .5f;
+	}
+
 	if (IsBoost)
 	{
-		BoostVal += 2000.f * _deltaTime;
+		BoostVal += (BOOST_SPEED_UP * mulVal) * _deltaTime;
 	}
 	else
 	{
 		if (BoostVal > 0)
 		{
-			BoostVal -= 350.f * _deltaTime;
+			BoostVal -= BOOST_SPEED_DOWN * _deltaTime;
 			if (BoostVal < 0) BoostVal = 0.f;
 		}
 	}
@@ -927,7 +935,7 @@ void ADriver::UseItem_Shell(const EItemType& _itemType)
 
 void ADriver::UseItem_Mushroom(const EItemType& _itemType)
 {
-	Velocity += 100.f;
+	MushroomBoostCnt = 20;
 }
 
 void ADriver::UseItem_Banana(const EItemType& _itemType)
@@ -936,18 +944,25 @@ void ADriver::UseItem_Banana(const EItemType& _itemType)
 
 	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
 	item->Init(_itemType, MapPtr, NavIdx);
+	item->SetActorLocation(GetActorLocation() + (backward * item->Size * 2));
 }
 
 void ADriver::UseItem_Star(const EItemType& _itemType)
 {
+	// TODO
+	MushroomBoostCnt = 20;
 }
 
 void ADriver::UseItem_Thunder(const EItemType& _itemType)
 {
+	// TODO
+	MushroomBoostCnt = 20;
 }
 
 void ADriver::UseItem_Ghost(const EItemType& _itemType)
 {
+	// TODO
+	MushroomBoostCnt = 20;
 }
 
 void ADriver::UseItem_FakeItemBox(const EItemType& _itemType)

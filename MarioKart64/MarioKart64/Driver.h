@@ -22,6 +22,10 @@ public:
 	void SetStart(bool _val);
 	void InitRouteIndex(ECircuit _map);
 
+	void SetVelocity(float _val)
+	{
+		Velocity = _val;
+	}
 	float GetVelocity() const
 	{
 		return Velocity;
@@ -47,6 +51,7 @@ public:
 	int GetNextRouteIdx();
 
 	int Rank = -1;
+	int CrashBoostCnt = 0;
 
 protected:
 	void BeginPlay() override;
@@ -120,10 +125,11 @@ private:
 	void CheckFutureCollisionOfAllMap();
 	float GetSlope();
 	void CheckLap(bool _isReverse);
+	bool IsCrashFromMe(AActor* _other);
 
 	void OnCollisionEnter(UCollision* _this, UCollision* _other);
 
-	std::shared_ptr<UCollision> CollisionItem = nullptr;
+	std::shared_ptr<UCollision> Collision = nullptr;
 	ABaseMap* MapPtr = nullptr;
 
 	const int ALL_LAB = 3;

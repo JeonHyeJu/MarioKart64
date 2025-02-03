@@ -21,14 +21,15 @@ APlayGameMode::APlayGameMode()
 {
 	ULevel* pLevel = GetWorld();
 	pLevel->CreateCollisionProfile("ItemBox");
-	pLevel->CreateCollisionProfile("Player");
+	pLevel->CreateCollisionProfile("PLAYER");
 	pLevel->CreateCollisionProfile("SHELL");
 	pLevel->CreateCollisionProfile("BANANA");
 	pLevel->CreateCollisionProfile("FAKE_ITEMBOX");
-	pLevel->LinkCollisionProfile("Player", "ItemBox");
-	pLevel->LinkCollisionProfile("Player", "SHELL");
-	pLevel->LinkCollisionProfile("Player", "BANANA");
-	pLevel->LinkCollisionProfile("Player", "FAKE_ITEMBOX");
+	pLevel->LinkCollisionProfile("PLAYER", "PLAYER");
+	pLevel->LinkCollisionProfile("PLAYER", "ItemBox");
+	pLevel->LinkCollisionProfile("PLAYER", "SHELL");
+	pLevel->LinkCollisionProfile("PLAYER", "BANANA");
+	pLevel->LinkCollisionProfile("PLAYER", "FAKE_ITEMBOX");
 
 	Skybox = pLevel->SpawnActor<ASkybox>();
 	MapPtr = pLevel->SpawnActor<ABaseMap>();

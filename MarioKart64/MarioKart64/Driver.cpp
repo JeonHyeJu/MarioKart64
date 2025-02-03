@@ -28,7 +28,6 @@ ADriver::ADriver()
 	RendererDebug->ChangeAnimation("Idle");
 	RendererDebug->SetupAttachment(RootComponent);
 	RendererDebug->SetActive(false);
-	//RendererDebug->ColorData.MulColor = { 0.f, 0.f, 0.f, 0.f };
 
 #ifdef _ITEM_DEBUG
 	DebugItem = CreateDefaultSubObject<USpriteRenderer>();
@@ -132,13 +131,13 @@ void ADriver::InitCharacter(ECharacter _character)
 
 	RendererSize = Renderer->GetWorldScale3D();
 
-	CollisionItem = CreateDefaultSubObject<UCollision>();
-	CollisionItem->SetCollisionType(ECollisionType::Sphere);
-	CollisionItem->SetupAttachment(RootComponent);
-	CollisionItem->SetCollisionProfileName("Player");
-	CollisionItem->SetScale3D({ RendererSize.X, RendererSize.Y, RendererSize.X });
-	CollisionItem->AddRelativeLocation({ 0.f, RendererSize.X * .5f, 0.f });
-	CollisionItem->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
+	Collision = CreateDefaultSubObject<UCollision>();
+	Collision->SetCollisionType(ECollisionType::Sphere);
+	Collision->SetupAttachment(RootComponent);
+	Collision->SetCollisionProfileName("PLAYER");
+	Collision->SetScale3D({ RendererSize.X, RendererSize.Y, RendererSize.X });
+	Collision->AddRelativeLocation({ 0.f, RendererSize.X * .5f, 0.f });
+	Collision->SetCollisionEnter(std::bind(&ADriver::OnCollisionEnter, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void ADriver::InitRouteIndex(ECircuit _map)
@@ -206,6 +205,12 @@ void ADriver::Spin()
 void ADriver::TickBoost(float _deltaTime)
 {
 	float mulVal = 1.f;
+	if (CrashBoostCnt > 0)
+	{
+		--CrashBoostCnt;
+		IsBoost = true;
+		mulVal = .5f;
+	}
 	if (MushroomBoostCnt > 0)
 	{
 		--MushroomBoostCnt;
@@ -370,10 +375,6 @@ void ADriver::Move(float _deltaTime)
 		SetActorRotation({ 0.f, -117.5f, 0.f });
 		NavIdx = -1;
 		return;
-	}
-	if (UEngineInput::IsPress(VK_LSHIFT))
-	{
-		Velocity = MAX_VELOCITY;
 	}
 	/* for debug end */
 
@@ -803,22 +804,39 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 {
 	const std::string& name = _other->GetCollisionProfileName();
 
-	if (name == "SHELL")
+	if (name == "PLAYER")
+	{
+		AActor* actor = _other->GetActor();
+		ADriver* ptr = dynamic_cast<ADriver*>(actor);
+		if (ptr != nullptr)
+		{
+			if (IsCrashFromMe(actor))
+			{
+				Velocity = Velocity * -.1f;
+				ptr->CrashBoostCnt = 1;
+				ptr->SetVelocity(ptr->GetVelocity() * 1.5f);
+			}
+			else
+			{
+				CrashBoostCnt = 1;
+				Velocity = Velocity * 1.5f;
+				ptr->SetVelocity(ptr->GetVelocity() * -.1f);
+			}
+		}
+	}
+	else if (name == "SHELL")
 	{
 		_other->GetActor()->Destroy();
-
 		IsSpin = true;
 	}
 	else if (name == "BANANA")
 	{
 		_other->GetActor()->Destroy();
-
 		IsSpin = true;
 	}
 	else if (name == "FAKE_ITEMBOX")
 	{
 		_other->GetActor()->Destroy();
-
 		IsSpin = true;
 	}
 	else if (name == "ITEMBOX")
@@ -867,6 +885,54 @@ int ADriver::GetNextRouteIdx()
 	}
 
 	return -1;
+}
+
+bool ADriver::IsCrashFromMe(AActor* _other)
+{
+	FVector curForward = GetActorForwardVector();
+	AActor* actor = _other;
+	const FTransform& curTrfm = GetTransform();
+	const FTransform& otherTrfm = actor->GetTransform();
+	FVector up = actor->GetActorUpVector();
+	FVector right = actor->GetActorRightVector();
+	FVector otherLoc = actor->GetActorLocation();
+
+	FVector rt = (up + right) * 1000.f;
+	FVector rb{ rt.X, -rt.Y, rt.Z };
+	FVector lt{ -rt.X, rt.Y, rt.Z };
+	FVector lb{ -rt.X, -rt.Y, rt.Z };
+
+	bool isCol = false;
+	float fDist = 0.f;
+	{
+		DirectX::XMVECTOR v1 = (rt + otherLoc).DirectVector;
+		DirectX::XMVECTOR v2 = (rb + otherLoc).DirectVector;
+		DirectX::XMVECTOR v3 = (lt + otherLoc).DirectVector;
+		/*DirectX::XMVECTOR v1 = (rt * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;
+		DirectX::XMVECTOR v2 = (rb * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;
+		DirectX::XMVECTOR v3 = (lt * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;*/
+		isCol = DirectX::TriangleTests::Intersects(curTrfm.Location.DirectVector, curForward.DirectVector, v1, v2, v3, fDist);
+	}
+
+	if (!isCol)
+	{
+		DirectX::XMVECTOR v1 = (lt + otherLoc).DirectVector;
+		DirectX::XMVECTOR v2 = (rb + otherLoc).DirectVector;
+		DirectX::XMVECTOR v3 = (lb + otherLoc).DirectVector;
+		/*DirectX::XMVECTOR v1 = (lt * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;
+		DirectX::XMVECTOR v2 = (rb * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;
+		DirectX::XMVECTOR v3 = (lb * otherTrfm.ScaleMat * otherTrfm.RotationMat * otherTrfm.LocationMat).DirectVector;*/
+		isCol = DirectX::TriangleTests::Intersects(curTrfm.Location.DirectVector, curForward.DirectVector, v1, v2, v3, fDist);
+	}
+
+	if (isCol)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void ADriver::PickItem(float _deltaTime)

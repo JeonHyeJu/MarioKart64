@@ -132,12 +132,23 @@ void AGameSelectBox::MoveSelectedLayer(ELayer _idx, EDirection _dir)
 
 void AGameSelectBox::SetEnable(bool _val)
 {
+	for (std::pair<const ELayer, std::vector<ASelectButton*>>& data : Buttons)
+	{
+		std::vector<ASelectButton*>& vec = data.second;
+		for (size_t i = 0, size = vec.size(); i < size; ++i)
+		{
+			vec[i]->SetEnable(_val);
+		}
+	}
+
 	if (_val)
 	{
 		RRect->ColorData.MulColor = { 1.f, 1.f, 1.f, 1.f };
+		RDownArrow->ColorData.MulColor = { 1.f, 1.f, 1.f, 1.f };
 	}
 	else
 	{
 		RRect->ColorData.MulColor = { .1f, .1f, .1f, 1.f };
+		RDownArrow->ColorData.MulColor = { .1f, .1f, .1f, 1.f };
 	}
 }

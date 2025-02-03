@@ -49,6 +49,10 @@ void APlayer::Tick(float _deltaTime)
 		//UseItem_Mushroom(EItemType::MUSHROOM);
 		//IsSpin = true;
 	//}
+	if (UEngineInput::IsPress(VK_LSHIFT))
+	{
+		Velocity = 1000.f;
+	}
 	if (UEngineInput::IsDown(VK_F8))
 	{
 		IsTraining = !IsTraining;

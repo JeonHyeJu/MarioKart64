@@ -16,7 +16,7 @@ public:
 	void Init(std::string_view _name, UINT idx, float _scale=1.f);
 	void SetImage(std::string_view _name, UINT idx);
 	void SetAutoScaleRatio(float _val);
-	//void SetEnable(bool _val);	// TODO
+	void SetEnable(bool _val);	// TODO: It's not working..
 	FVector GetRealScaleOfSprite() const;
 
 protected:

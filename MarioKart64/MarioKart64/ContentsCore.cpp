@@ -135,16 +135,16 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
 	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
-	UEngineCore::OpenLevel("TitleLevel");
+	//UEngineCore::OpenLevel("TitleLevel");
 	//UEngineCore::OpenLevel("SelectLevel");
-	//UEngineCore::OpenLevel("PlayLevel");
+	UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/
 
 	// for test
 	std::vector<SPlayerInfo> palyerInfos;
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
 	}

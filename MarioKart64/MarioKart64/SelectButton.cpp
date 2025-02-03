@@ -7,10 +7,10 @@ ASelectButton::ASelectButton()
 {
 	// Already has RootComponent in ABlinkObject
 	RBtn = CreateDefaultSubObject<USpriteRenderer>();
-	//RDisable = CreateDefaultSubObject<ColorRenderer>();
+	RDisable = CreateDefaultSubObject<ColorRenderer>();
 
 	RBtn->SetupAttachment(RootComponent);
-	//RDisable->SetupAttachment(RootComponent);
+	RDisable->SetupAttachment(RootComponent);
 }
 
 ASelectButton::~ASelectButton()
@@ -35,9 +35,10 @@ void ASelectButton::Init(std::string_view _name, UINT idx, float _scale)
 	RBtn->SetAutoScaleRatio(_scale);
 
 	FVector scale = RBtn->GetRealScaleOfSprite();
-	/*RDisable->SetScale3D(scale);
+	RDisable->SetScale3D(scale);
 	RDisable->SetColor({ 0.f, 0.f, 0.f, .5f });
-	RDisable->SetRelativeLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 0.f, -1.f });*/
+	RDisable->SetRelativeLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 0.f, -1.f });
+	RDisable->SetActive(false);
 
 	SetBgScale(scale);
 	SetBgLocation(RBtn->GetRelativeLocation() + FVector{ 0.f, 0.f, 1.f });
@@ -65,4 +66,17 @@ FVector ASelectButton::GetRealScaleOfSprite() const
 	}
 
 	return RBtn->GetRealScaleOfSprite();
+}
+
+// TODO: It's not working..
+void ASelectButton::SetEnable(bool _val)
+{
+	if (_val)
+	{
+		RDisable->SetActive(false);
+	}
+	else
+	{
+		RDisable->SetActive(true);
+	}
 }

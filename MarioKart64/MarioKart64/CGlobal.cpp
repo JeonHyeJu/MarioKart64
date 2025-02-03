@@ -11,6 +11,7 @@ const char* CGlobal::WIDGET_SHADER = "WidgetShader";
 const char* CGlobal::COLOR_WIDGET_MATERIAL = "ColorWidgetMaterial";
 const char* CGlobal::SHRINK_EFFECT = "ShrinkFx";
 const char* CGlobal::EXPAND_EFFECT = "ExpandFx";
+const char* CGlobal::SPRITE_RENDERER = "CustomSprite";
 const int CGlobal::WINDOW_W = 625 * 2;
 const int CGlobal::WINDOW_H = 395 * 2;
 const float CGlobal::FWINDOW_W = static_cast<float>(625 * 2);

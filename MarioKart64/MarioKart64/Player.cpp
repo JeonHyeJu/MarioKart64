@@ -20,10 +20,10 @@ APlayer::APlayer()
 APlayer::~APlayer()
 {
 	// Temp
-	std::ofstream f;
+	/*std::ofstream f;
 	f.open("temp.txt");
 	f.write(FileTemp.str().c_str(), FileTemp.str().size());
-	f.close();
+	f.close();*/
 }
 
 void APlayer::BeginPlay()

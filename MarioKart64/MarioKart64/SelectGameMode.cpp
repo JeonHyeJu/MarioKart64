@@ -97,7 +97,8 @@ void ASelectGameMode::OnEndSelectCharacter()
 	
 	for (int i = 0; i < size; ++i)
 	{
-		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
+		ECharacter character = static_cast<ECharacter>(i);
+		palyerInfos.emplace_back(SPlayerInfo{ character, EItemType::NONE, SPlayerInfo::GetName(character) });
 	}
 
 	GameData::GetInstance()->SetPlayerIdx(idx);

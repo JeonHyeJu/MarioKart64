@@ -15,6 +15,7 @@ public:
 	static const char* SHRINK_EFFECT;
 	static const char* EXPAND_EFFECT;
 	static const char* COLOR_WIDGET_MATERIAL;
+	static const char* SPRITE_RENDERER;
 	static const int ALL_ITEM_SIZE;
 	static const int WINDOW_W;
 	static const int WINDOW_H;

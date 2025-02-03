@@ -3,6 +3,7 @@
 #include <EnginePlatform/EngineSound.h>
 #include "CData.h"
 
+class FrontSpriteRenderer;
 class USpriteRenderer;
 class LineRenderer;
 class UCollision;
@@ -21,6 +22,7 @@ public:
 	void SetMap(class ABaseMap* _ptr);
 	void SetStart(bool _val);
 	void InitRouteIndex(ECircuit _map);
+	void HideDefaultRenderer();
 
 	void SetVelocity(float _val)
 	{
@@ -109,6 +111,7 @@ protected:
 	bool IsReverseTrain = false;
 	std::vector<TrainData> TrainDatas;
 
+	std::shared_ptr<FrontSpriteRenderer> FrontRenderer = nullptr;
 	std::shared_ptr<USpriteRenderer> Renderer = nullptr;
 	std::string SpriteName = "";
 	FVector RendererSize = FVector::ZERO;
@@ -149,6 +152,7 @@ private:
 	int PrevGroupIdx = -1;
 
 	int SpinCount = 0;
+	float ElapsedTime = 0.f;
 
 	SItemRoulette ItemRoulette;
 	bool IsPickingItem = false;
@@ -186,5 +190,7 @@ private:
 
 	USoundPlayer CarAccel;
 	USoundPlayer CarSP;
+
+	ECharacter Character = ECharacter::NONE;
 };
 

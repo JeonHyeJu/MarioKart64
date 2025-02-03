@@ -147,6 +147,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BowserCastle.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="FrontSpriteRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="KoopaTroopaBeach.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Lakitu.h" />
     <ClInclude Include="LetterboxWidget.h" />
     <ClInclude Include="DefaultWidget.h">
@@ -154,6 +166,26 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="ImageCustomWidget.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="LuigiRaceway.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MarioRaceway.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="RainbowRoad.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="RoyalRaceway.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SherbetLand.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -372,8 +404,24 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="WarioStadium.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BowserCastle.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="FrontSpriteRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="KoopaTroopaBeach.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Lakitu.cpp" />
     <ClCompile Include="LetterboxWidget.cpp" />
     <ClCompile Include="DefaultWidget.cpp">
@@ -381,6 +429,26 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="ImageCustomWidget.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="LuigiRaceway.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="MarioRaceway.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="RainbowRoad.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="RoyalRaceway.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SherbetLand.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -512,6 +580,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="UIPlay.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="WarioStadium.cpp">
       <SubType>
       </SubType>
     </ClCompile>

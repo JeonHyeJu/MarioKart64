@@ -174,3 +174,21 @@ int GameData::GetPlayerLap() const
 {
 	return Players[PlayerIdx].Lap;
 }
+
+void GameData::SetPlayerTime(uint8_t _idx, float _val)
+{
+	if (_idx < Players.size())
+	{
+		Players[_idx].Time = _val;
+	}
+}
+
+float GameData::GetPlayerTime(uint8_t _idx) const
+{
+	if (_idx < Players.size())
+	{
+		return Players[_idx].Time;
+	}
+
+	return -1;
+}

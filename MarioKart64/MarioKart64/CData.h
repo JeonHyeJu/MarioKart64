@@ -109,10 +109,40 @@ struct SPlayerInfo
 {
 	ECharacter Chracter = ECharacter::NONE;
 	EItemType Item = EItemType::NONE;
-	float4 MapLoc;
-	float4 Rotation;
+	std::string Name = "";
+	float4 MapLoc = { 0.f, 0.f, 0.f, 0.f };
+	float4 Rotation = { 0.f, 0.f, 0.f, 0.f };
+	float Time = 0.f;
 	int Lap = 1;
 	int Rank = 0;
+
+	static std::string GetName(ECharacter _character)
+	{
+		std::string name = "";
+		switch (_character)
+		{
+		case ECharacter::MARIO:
+			name = "MARIO";
+			break;
+		case ECharacter::LUIGI:
+			name = "LUIGI";
+			break;
+		case ECharacter::PEACH:
+			name = "PEACH";
+			break;
+		case ECharacter::YOSHI:
+			name = "YOSHI";
+			break;
+		case ECharacter::WARIO:
+			name = "WARIO";
+			break;
+		case ECharacter::BOWSER:
+			name = "BOWSER";
+			break;
+		}
+
+		return name;
+	}
 };
 
 struct FColor

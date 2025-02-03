@@ -22,6 +22,25 @@ USpriteRenderer::USpriteRenderer()
 	ColorData.MulColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 }
 
+USpriteRenderer::USpriteRenderer(std::string_view _material)
+{
+	CreateRenderUnit();
+	SetMesh("Rect");
+	SetMaterial(_material);
+
+	GetRenderUnit().ConstantBufferLinkData("ResultColor", ColorData);
+	GetRenderUnit().ConstantBufferLinkData("FSpriteData", SpriteData);
+	GetRenderUnit().ConstantBufferLinkData("FUVValue", UVValue);
+
+	UVValue.PlusUVValue = { 0.0f, 0.0f, 0.0f, 0.0f };
+	SpriteData.CuttingPos = { 0.0f, 0.0f };
+	SpriteData.CuttingSize = { 1.0f, 1.0f };
+	SpriteData.Pivot = { 0.5f, 0.5f };
+
+	ColorData.PlusColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+	ColorData.MulColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+}
+
 USpriteRenderer::~USpriteRenderer()
 {
 }

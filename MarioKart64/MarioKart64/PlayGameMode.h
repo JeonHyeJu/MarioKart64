@@ -35,6 +35,7 @@ private:
 	void InitCharacters();
 	void InitEffects();
 	void InitMap();
+	void InitStartPosition();
 	void SetCamFinishRot();
 	void SetPlayingLocations();
 	void SetLakituLocation(float _deltaTime);

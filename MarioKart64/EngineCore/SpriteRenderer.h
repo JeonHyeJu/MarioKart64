@@ -31,6 +31,7 @@ public:
 
 	// constrcuter destructer
 	ENGINEAPI USpriteRenderer();
+	ENGINEAPI USpriteRenderer(std::string_view _material);
 	ENGINEAPI ~USpriteRenderer();
 
 	USpriteRenderer(const USpriteRenderer& _Other) = delete;
@@ -124,8 +125,8 @@ public:
 
 protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
-	void BeginPlay() override;
-	void ComponentTick(float _DeltaTime) override;
+	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI void ComponentTick(float _DeltaTime) override;
 	ENGINEAPI void CameraTransUpdate(UEngineCamera* _Camera) override;
 
 private:

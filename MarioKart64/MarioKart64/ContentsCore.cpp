@@ -144,9 +144,10 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	// for test
 	std::vector<SPlayerInfo> palyerInfos;
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
-		palyerInfos.emplace_back(SPlayerInfo{ static_cast<ECharacter>(i), EItemType::NONE });
+		ECharacter character = static_cast<ECharacter>(i);
+		palyerInfos.emplace_back(SPlayerInfo{ character, EItemType::NONE, SPlayerInfo::GetName(character) });
 	}
 	GameData::GetInstance()->SetPlayerIdx(0);
 	//GameData::GetInstance()->SetPlayerIdx(2);
@@ -255,6 +256,13 @@ void UContentsCore::InitGraphics()
 			mat->SetVertexShader("LetterboxShader.fx");
 			mat->SetPixelShader("LetterboxShader.fx");
 			mat->SetDepthStencilState("UIDepth");
+		}
+
+		{
+			std::shared_ptr<UEngineMaterial> mat = UEngineMaterial::Create(CGlobal::SPRITE_RENDERER);
+			mat->SetRasterizerState("CullBack");
+			mat->SetVertexShader("EngineSpriteShader.fx");
+			mat->SetPixelShader("EngineSpriteShader.fx");
 		}
 	}
 }

@@ -11,6 +11,14 @@
 #include "ShrinkEffect.h"
 #include "ExpandEffect.h"
 #include "UIPlay.h"
+#include "LuigiRaceway.h"
+#include "RoyalRaceway.h"
+#include "MarioRaceway.h"
+#include "WarioStadium.h"
+#include "KoopaTroopaBeach.h"
+#include "SherbetLand.h"
+#include "BowserCastle.h"
+#include "RainbowRoad.h"
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineRenderTarget.h>
@@ -32,7 +40,6 @@ APlayGameMode::APlayGameMode()
 	pLevel->LinkCollisionProfile("PLAYER", "FAKE_ITEMBOX");
 
 	Skybox = pLevel->SpawnActor<ASkybox>();
-	MapPtr = pLevel->SpawnActor<ABaseMap>();
 	Lakitu = pLevel->SpawnActor<ALakitu>();
 	
 	Camera = GetWorld()->GetMainCamera();
@@ -55,9 +62,10 @@ void APlayGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
+	InitMap();
 	InitCharacters();
 	InitEffects();
-	InitMap();
+	InitStartPosition();
 
 	// TODO
 	Camera->GetCameraComponent()->SetZSort(0, true);
@@ -99,9 +107,9 @@ void APlayGameMode::InitCharacters()
 	Player->SetMap(MapPtr.get());
 	Player->InitRouteIndex(map);
 
-	uint8_t playerIdx = pData->GetPlayerIdx();
-	uint8_t size = pData->GetPlayerCnt();
-	for (uint8_t i = 0; i < size; ++i)
+	size_t playerIdx = static_cast<size_t>(pData->GetPlayerIdx());
+	const std::vector<SPlayerInfo>& infos = pData->GetPlayers();
+	for (size_t i = 0, size = infos.size(); i < size; ++i)
 	{
 		ADriver* ptr = nullptr;
 		if (i == playerIdx)
@@ -111,7 +119,7 @@ void APlayGameMode::InitCharacters()
 		else
 		{
 			std::shared_ptr<ADriver> driver = pLevel->SpawnActor<ADriver>();
-			driver->InitCharacter(static_cast<ECharacter>(i));
+			driver->InitCharacter(infos[i].Chracter);
 			driver->SetMap(MapPtr.get());
 			driver->InitRouteIndex(map);
 			ptr = driver.get();
@@ -131,7 +139,6 @@ void APlayGameMode::InitEffects()
 	target->AddEffect<FxExpandEffect>();
 
 	target->GetPostEffect(0)->IsActive = false;
-	//target->GetPostEffect(1)->IsActive = false;
 }
 
 void APlayGameMode::InitMap()
@@ -139,9 +146,6 @@ void APlayGameMode::InitMap()
 	GameData* pData = GameData::GetInstance();
 	ECircuit mapType = pData->GetCurMap();
 
-	float scale = 1.f;
-	FVector initLoc = FVector::ZERO;
-	MapPtr->Init(mapType);
 	switch (mapType)
 	{
 	case ECircuit::LUIGI_RACEWAY:
@@ -149,208 +153,66 @@ void APlayGameMode::InitMap()
 		Balloons = GetWorld()->SpawnActor<ABalloons>();
 		Balloons->SetActorLocation(FVector{ -400.f, 0.f, 500.f });
 
-		MapPtr->SetActorLocation({ 0.0f, 0.f, 0.f });
-		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		StartPosition = {
-			{ -650.0f, -201.0f, 700.0f },
-			{ -470.0f, -201.0f, 700.0f },
-			{ -650.0f, -201.0f, 500.0f },
-			{ -470.0f, -201.0f, 500.0f },
-			{ -650.0f, -201.0f, 300.0f },
-			{ -470.0f, -201.0f, 300.0f },
-		};
-		const float MOVE_VAL = -300.f;
-		for (size_t i = 0, size = Players.size(); i < size; ++i)
-		{
-			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
-		}
-
-		//Player->SetActorLocation({ -400.0f, -60.0f, 7000.0f });
-
-		//Player->SetActorLocation({ -1200.f, -782.f, 2641.f });
-		//Player->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		//Player->SetActorLocation({ -3800.0f, -60.0f, -6600.f });
-		//Player->SetActorRotation({ 0.f, 90.f, 0.f });
-
-		scale = 4000.f;
-		initLoc = { 50.f, 0.f, -200.f };
+		MapPtr = GetWorld()->SpawnActor<ALuigiRaceway>();
 		break;
 	}
 	case ECircuit::ROYAL_RACEWAY:
 	{
-		MapPtr->SetActorLocation({ 60.0f, 0.f, 0.f });
-
-		StartPosition = {
-			{ -300.0f, 0.0f, 900.0f },
-			{ -150.0f, 0.0f, 900.0f },
-			{ -300.0f, 0.0f, 700.0f },
-			{ -150.0f, 0.0f, 700.0f },
-			{ -300.0f, 0.0f, 500.0f },
-			{ -150.0f, 0.0f, 500.0f },
-		};
-		const float MOVE_VAL = -300.f;
-		for (size_t i = 0, size = Players.size(); i < size; ++i)
-		{
-			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
-		}
-
-		//Player->SetActorLocation({ -1500.0f, 100.0f, 8485.0f });
-
-		//Player->SetActorLocation({ 2373.0f, 100.0f, 10796.0f });
-
-		//Player->SetActorLocation({ -8662.0f, 0.0f, 2019.0f });
-
-		scale = 4.f;
-		initLoc = { -90.f, 0.f, -80.f };
+		MapPtr = GetWorld()->SpawnActor<ARoyalRaceway>();
 		break;
 	}
 	case ECircuit::MARIO_RACEWAY:
 	{
-		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		StartPosition = {
-			{ -100.f, 10.0f, 800.0f },
-			{ 100.f, 10.0f, 800.0f },
-			{ -100.f, 10.0f, 600.0f },
-			{ 100.f, 10.0f, 600.0f },
-			{ -100.f, 10.0f, 400.0f },
-			{ 100.f, 10.0f, 400.0f },
-		};
-
-		const float MOVE_VAL = -300.f;
-		for (size_t i = 0, size = Players.size(); i < size; ++i)
-		{
-			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
-		}
-
-		//Player->SetActorLocation({ 1734.f, 10.0f, 4060.0f });
-
-		//Player->SetActorLocation({ 10238.f, 10.0f, 318.0f });
-
-		//Player->SetActorLocation({ 8657.f, 10.0f, -4202.0f });
-
-		scale = 4500.f;
-		initLoc = { -250.f, 0.f, -55.f };
+		MapPtr = GetWorld()->SpawnActor<AMarioRaceway>();
 		break;
 	}
 	case ECircuit::WARIO_STADIUM:
 	{
-		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		StartPosition = {
-			{ 5100.0f, 10.0f, -100.0f },
-			{ 4900.0f, 10.0f, -100.0f },
-			{ 5100.0f, 10.0f, -300.0f },
-			{ 4900.0f, 10.0f, -300.0f },
-			{ 5100.0f, 10.0f, -500.0f },
-			{ 4900.0f, 10.0f, -500.0f },
-		};
-
-		const float MOVE_VAL = -300.f;
-		for (size_t i = 0, size = Players.size(); i < size; ++i)
-		{
-			Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
-		}
-
-		//Player->SetActorLocation({ -3405.0f, 10.0f, 660.0f });
-		//Player->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		//Player->SetActorLocation({ 1677.0f, 10.0f, 7043.0f });
-		//Player->SetActorRotation({ 0.f, 90.f, 0.f });
-
-		//Player->SetActorLocation({ 18.0f, 10.0f, -180.0f });
-		//Player->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		scale = 1000.f;
-		initLoc = { -64.f, 0.f, -120.f };
+		MapPtr = GetWorld()->SpawnActor<AWarioStadium>();
 		break;
 	}
 	case ECircuit::KOOPA_TROOPA_BEACH:
 	{
-		Player->SetActorLocation({ 0.0f, 20.0f, -1000.0f });
-
-		//Player->SetActorLocation({ -395.0f, 15.0f, 4370});
-
-		//Player->SetActorLocation({ -7911.f, 15.0f, -2318.f });
-
-		//Player->SetActorLocation({ -6686.f, 15.0f, -12073.f });
-
-		scale = 50.f;
-		initLoc = { -52.f, 0.f, -100.f };
+		MapPtr = GetWorld()->SpawnActor<AKoopaTroopaBeach>();
 		break;
 	}
 	case ECircuit::SHERBET_LAND:
 	{
-		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		Player->SetActorLocation({ 4719.f, 150.0f, -3392.0f });
-
-		//Player->SetActorLocation({ -7407.f, 150.0f, -2594.0f });
-		//Player->SetActorRotation({ 0.f, 180.0f, 0.f });
-
-		//Player->SetActorLocation({ -9188.f, -300.0f, -10933.0f });
-
-		//Player->SetActorLocation({ -1849.f, 150.0f, -2965.0f });
-
-		scale = 50.f;
-		initLoc = { -53.f, 0.f, -58.f };
+		MapPtr = GetWorld()->SpawnActor<ASherbetLand>();
 		break;
 	}
 	case ECircuit::BOWSERS_CASTLE:
 	{
-		MapPtr->SetActorRotation({ 0.f, 180.f, 0.f });
-
-		Player->SetActorLocation({ 0.f, 0.f, 0.f });
-
-		//Player->SetActorLocation({ -82.f, 0.f, 6059.f });
-
-		//Player->SetActorLocation({ 4909.f, 0.f, 3198.f });
-
-		//Player->SetActorLocation({ 4838.f, 0.f, -1705.f });
-		//Player->SetActorRotation({ 0.f, -90.f, 0.f });
-
-		scale = 4000.f;
-		initLoc = { -196.f, 0.f, -200.f };
+		MapPtr = GetWorld()->SpawnActor<ABowserCastle>();
 		break;
 	}
 	case ECircuit::RAINBOW_ROAD:
 	{
 		Skybox->SetActive(false);
-
-		Player->SetActorLocation({ 900.f, 5050.f, -1000.f });
-
-		//Player->SetActorLocation({ 1509.f, 2435.f, 24884.f });
-
-		//Player->SetActorLocation({ -605.f, 2155.f, 15872.f });
-
-		//Player->SetActorLocation({ -6979.f, -80.f, 4569.f });
-
-		//Player->SetActorLocation({ -8419.f, 1035.f, -5402.f });
-
-		//Player->SetActorLocation({ -7871.f, 1155.f, -11415.f });
-
-		//Player->SetActorLocation({ 7310.f, 1155.f, -10154.f });
-
-		//Player->SetActorLocation({ -364.f, 2137.f, -13920.f });
-
-		//Player->SetActorLocation({ 2654.f, 4050.f, -12532.f });
-
-		scale = 100.f;
-		initLoc = { -83.f, 0.f, -140.f };
+		MapPtr = GetWorld()->SpawnActor<ARainbowRoad>();
 		break;
 	}
 	}
 
-	MapPtr->SetActorRelativeScale3D({ scale, scale, scale });
-	
 	// Init minimap
+	float scale = MapPtr->GetScale();
+	FVector initLoc = MapPtr->GetMinimapInitLoc();
 	SMapSizeInfo& refSize = SRenderInfo::MapInfos.find(mapType)->second.MapSizeInfo;
 	refSize.Min *= scale;
 	refSize.Max *= scale;
 	pData->MapSizeInfo = SRenderInfo::MapInfos.find(mapType)->second.MapSizeInfo;
 	pData->MapSizeInfo.InitLoc = initLoc;
+}
+
+void APlayGameMode::InitStartPosition()
+{
+	// Init start positions
+	StartPosition = MapPtr->GetStartPosition();
+	const float MOVE_VAL = -300.f;
+	for (size_t i = 0, size = Players.size(); i < size; ++i)
+	{
+		Players[i]->SetActorLocation(StartPosition[i] + FVector{ 0.f, 0.f, MOVE_VAL });
+	}
 }
 
 void APlayGameMode::SetCamFinishRot()
@@ -496,6 +358,8 @@ void APlayGameMode::OnWaitUIResult()
 	Camera->AttachToActor(Player);
 	Camera->SetActorLocation({ 0.f, 100.f, 300.f });
 	Camera->SetActorRotation({ 10.f, 180.f, 0.f });
+
+	Player->HideDefaultRenderer();
 }
 
 void APlayGameMode::OnWaitKey()

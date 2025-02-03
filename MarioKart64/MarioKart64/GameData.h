@@ -64,6 +64,9 @@ public:
 	void SetPlayerLap(int _val);
 	int GetPlayerLap() const;
 
+	void SetPlayerTime(uint8_t _idx, float _val);
+	float GetPlayerTime(uint8_t _idx) const;
+
 	static const int MAX_PLAYER_CNT = 8;
 	static const int MAX_MAP_CNT = 4;
 
@@ -80,7 +83,6 @@ private:
 	static GameData* pInstance;
 
 	ECircuit CurMapType = ECircuit::END;
-
 	EFinishState FinishState = EFinishState::END;
 };
 

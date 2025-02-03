@@ -347,9 +347,6 @@
     <ClInclude Include="CharacterAndName.h">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMap.h">
-      <Filter>Actor\PlayLevel</Filter>
-    </ClInclude>
     <ClInclude Include="Balloons.h">
       <Filter>Actor\PlayLevel</Filter>
     </ClInclude>
@@ -379,6 +376,36 @@
     </ClInclude>
     <ClInclude Include="Lakitu.h">
       <Filter>Actor\PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMap.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="LuigiRaceway.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="RoyalRaceway.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioRaceway.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="WarioStadium.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="KoopaTroopaBeach.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="SherbetLand.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="BowserCastle.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="RainbowRoad.h">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontSpriteRenderer.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -477,9 +504,6 @@
     <ClCompile Include="CharacterAndName.cpp">
       <Filter>Actor\SelectLevel\Component</Filter>
     </ClCompile>
-    <ClCompile Include="BaseMap.cpp">
-      <Filter>Actor\PlayLevel</Filter>
-    </ClCompile>
     <ClCompile Include="CData.cpp" />
     <ClCompile Include="Balloons.cpp">
       <Filter>Actor\PlayLevel</Filter>
@@ -510,6 +534,36 @@
     </ClCompile>
     <ClCompile Include="Lakitu.cpp">
       <Filter>Actor\PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMap.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="LuigiRaceway.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="RoyalRaceway.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioRaceway.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="WarioStadium.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="KoopaTroopaBeach.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="SherbetLand.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="BowserCastle.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="RainbowRoad.cpp">
+      <Filter>Actor\PlayLevel\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="FrontSpriteRenderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,6 +635,9 @@
     </Filter>
     <Filter Include="GameData">
       <UniqueIdentifier>{081fe426-e4a9-49d4-8bd1-168584caa067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\PlayLevel\Maps">
+      <UniqueIdentifier>{08e516bf-5712-4add-9605-430cf212d903}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

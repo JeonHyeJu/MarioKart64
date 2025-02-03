@@ -5,7 +5,7 @@
 #include <EngineCore/CameraActor.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/Collision.h>
-#include "LineRenderer.h"	// for test
+#include "FrontSpriteRenderer.h"
 #include "BaseMap.h"
 #include "GameData.h"
 #include "CData.h"
@@ -18,6 +18,10 @@ ADriver::ADriver()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
+
+	FrontRenderer = CreateDefaultSubObject<FrontSpriteRenderer>();
+	FrontRenderer->SetOrder(0);
+	FrontRenderer->SetupAttachment(RootComponent);
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetOrder(0);
@@ -79,6 +83,7 @@ void ADriver::Tick(float _deltaTime)
 		return;
 	}
 
+	ElapsedTime += _deltaTime;
 	Move(_deltaTime);
 
 	if (IsPickingItem)
@@ -99,7 +104,9 @@ void ADriver::SetStart(bool _val)
 void ADriver::InitCharacter(ECharacter _character)
 {
 	SpriteName = RENDER_SPRITES[static_cast<int>(_character)];
+	FrontRenderer->CreateAnimation("Idle", SpriteName, 968, 971, .3f);
 	Renderer->CreateAnimation("Idle", SpriteName, 0, 3, .3f);
+	Character = _character;
 
 	{
 		const int TURN_SIZE = 25;
@@ -113,7 +120,6 @@ void ADriver::InitCharacter(ECharacter _character)
 		Renderer->CreateAnimation("Spin", SpriteName, idxs, times, false);
 	}
 
-	// Temp
 	{
 		const int TURN_SIZE = 31;
 		std::vector<int> idxs(TURN_SIZE, 0);
@@ -127,7 +133,25 @@ void ADriver::InitCharacter(ECharacter _character)
 		Renderer->CreateAnimation("TurnR", SpriteName, idxs, times, false);
 	}
 
+	/*{
+		const int TURN_SIZE = 31;
+		int startIdx = static_cast<int>(TURN_SIZE * .5f);
+		int realSize = TURN_SIZE - startIdx;
+		std::vector<int> idxs(realSize, 0);
+		std::vector<float> times(realSize, .1f);
+
+		for (int i = startIdx; i < TURN_SIZE; ++i)
+		{
+			idxs[i] = static_cast<int>(i * 36);
+		}
+
+		FrontRenderer->CreateAnimation("TurnL", SpriteName, idxs, times, false);
+	}*/
+
+	FrontRenderer->ChangeAnimation("Idle");
 	Renderer->ChangeAnimation("Idle");
+
+	FrontRenderer->SetRotation({ 0.f, 180.f, 0.f });
 
 	RendererSize = Renderer->GetWorldScale3D();
 
@@ -168,6 +192,14 @@ void ADriver::InitRouteIndex(ECircuit _map)
 	case ECircuit::RAINBOW_ROAD:
 		CGlobal::GetRouteIdxRainbow(RouteIdx);
 		break;
+	}
+}
+
+void ADriver::HideDefaultRenderer()
+{
+	if (Renderer != nullptr)
+	{
+		Renderer->SetActive(false);
 	}
 }
 
@@ -378,7 +410,6 @@ void ADriver::Move(float _deltaTime)
 	}
 	/* for debug end */
 
-
 	TickBoost(_deltaTime);
 
 	if (NavIdx == -1)
@@ -583,17 +614,17 @@ void ADriver::CheckLap(bool _isReverse)
 
 			if (Lap == ALL_LAB)
 			{
+				GameData::GetInstance()->SetPlayerTime(static_cast<uint8_t>(Character), ElapsedTime);
 				EndLap();
-				OutputDebugStringA("GOAL IN!!\n");
 				IsFinished = true;
 				CarSP.Stop();
 				CarAccel.Stop();
 			}
 		}
 
-		OutputDebugStringA(("NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
+		//OutputDebugStringA(("NavIdx: " + std::to_string(NavIdx) + "\n").c_str());
 		PrevNavIdx = NavIdx;
-		FileTemp << std::to_string(NavIdx) << ",";
+		//FileTemp << std::to_string(NavIdx) << ",";
 	}
 }
 

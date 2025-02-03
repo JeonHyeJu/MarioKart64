@@ -40,15 +40,6 @@ void AUIPlay::BeginPlay()
 	InitLetterBox();
 	InitTitle();
 
-	// for test
-	/*{
-		std::shared_ptr<UFontWidget> Widget = CreateWidget<UFontWidget>(1);
-
-		Widget->SetWorldLocation({ 200, 300 });
-		Widget->SetFont("Arial", 40.f, UColor{ 255, 0, 0, 255 });
-		Widget->SetText("ABCDEFGHIJKLMNOP");
-	}*/
-
 	Fsm.ChangeState(EState::IDLE);
 }
 
@@ -285,8 +276,8 @@ void AUIPlay::InitTexts()
 		std::vector<std::string> initTexts = {
 			"5.MARIO   00'00\"00",
 			"6.MARIO   00'00\"00",
-			"7.MARIO   00'00\"00",
-			"8.MARIO   00'00\"00",
+			" ",
+			" ",
 			"MUSHROOM CUP 50#",
 		};
 
@@ -458,8 +449,6 @@ void AUIPlay::SetMinimapLoc()
 	float x = normX * MinimapSizeInfo.X;
 	float z = normZ * MinimapSizeInfo.Y;
 	
-	//OutputDebugStringA(("playerLoc: " + std::to_string(normX) + ", " + std::to_string(normZ) + " -> " + std::to_string(x) + ", " + std::to_string(z) + "\n").c_str());
-
 	FVector mapLoc = Minimap->GetWorldLocation();
 	MinimapLocs[0]->SetWorldLocation(
 		mapLoc + 
@@ -626,6 +615,81 @@ void AUIPlay::OnWait()
 
 void AUIPlay::OnShowTotal()
 {
+	GameData* pData = GameData::GetInstance();
+	const std::vector<ECharacter>& rank = pData->GetRankings();
+
+	for (size_t i = 0, size = rank.size(); i < size; ++i)
+	{
+		if (rank[i] == ECharacter::NONE)
+		{
+			continue;
+		}
+
+		float secs = pData->GetPlayerTime(static_cast<uint8_t>(rank[i]));
+		char buffer[64] = { 0, };
+		std::string name = "MARIO";
+		std::string strM = "";
+		std::string strS = "";
+		std::string strMs = "";
+
+		const int MIN_SEC = 60;
+		const int BASE_10 = 10;
+
+		int m = static_cast<int>(secs / MIN_SEC);
+		secs -= m * MIN_SEC;
+
+		int s = static_cast<int>(trunc(secs));
+		secs -= s;
+
+		int ms = static_cast<int>(trunc(secs * 100));
+
+		strM = std::to_string(m);
+		strS = std::to_string(s);
+		strMs = std::to_string(ms);
+		if (strM.size() == 1)
+		{
+			strM = "0" + strM;
+		}
+		if (strS.size() == 1)
+		{
+			strS = "0" + strS;
+		}
+		if (strMs.size() == 1)
+		{
+			strMs = "0" + strMs;
+		}
+
+		// Temp
+		switch (rank[i])
+		{
+		case ECharacter::LUIGI:
+			name = "LUIGI";
+			break;
+		case ECharacter::PEACH:
+			name = "PEACH";
+			break;
+		case ECharacter::YOSHI:
+			name = "YOSHI";
+			break;
+		case ECharacter::WARIO:
+			name = "WARIO";
+			break;
+		case ECharacter::BOWSER:
+			name = "BOWSER";
+			break;
+		}
+
+		sprintf_s(buffer, "%d.%s %s'%s\"%s", static_cast<int>(i + 1), name.data(), strM.data(), strS.data(), strMs.data());
+
+		if (i < 4)
+		{
+			TextWrapperU->SetText(buffer, static_cast<uint8_t>(2 + i));
+		}
+		else
+		{
+			TextWrapperL->SetText(buffer, static_cast<uint8_t>(2 + i));
+		}
+	}
 }
 
 /* Fsm update function */

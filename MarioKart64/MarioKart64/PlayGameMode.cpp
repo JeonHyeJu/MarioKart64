@@ -350,6 +350,10 @@ void APlayGameMode::OnFinish()
 	SetCamFinishRot();
 	Camera->DetachFromActor();
 
+	BgmSP.Stop();
+	USoundPlayer sp = UEngineSound::Play("17.1stPlaceFanfare.mp3");
+	sp.SetVolume(.5f);
+
 	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RACING);
 }
 
@@ -360,6 +364,9 @@ void APlayGameMode::OnWaitUIResult()
 	Camera->SetActorRotation({ 10.f, 180.f, 0.f });
 
 	Player->HideDefaultRenderer();
+
+	BgmResultSP = UEngineSound::Play("19.1st-4thPlaceResults.mp3");
+	BgmResultSP.SetVolume(.5f);
 }
 
 void APlayGameMode::OnWaitKey()
@@ -556,7 +563,7 @@ void APlayGameMode::WaitingKey(float _deltaTime)
 			else
 			{
 				UEngineCore::ResetLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
-				BgmSP.Stop();	// Temp
+				BgmResultSP.Stop();
 			}
 		}
 	}

@@ -121,6 +121,20 @@ void APlayer::Tick(float _deltaTime)
 	}
 }
 
+void APlayer::PlayHandleSound()
+{
+	if (WheelSP.IsInited() == false)
+	{
+		WheelSP = UEngineSound::Play("Drift.wav");
+		WheelSP.Loop(9999);
+		WheelSP.SetVolume(.1f);
+	}
+	else
+	{
+		WheelSP.Resume();
+	}
+}
+
 void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 {
 	float rotY = GetActorRotation().Y;
@@ -136,6 +150,8 @@ void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 			WheelVelocity = 0.f;
 		}
 
+		PlayHandleSound();
+
 		WheelVelocity = FPhysics::GetVf(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
 		_refRot = FPhysics::GetDeltaX(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
 	}
@@ -150,6 +166,8 @@ void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 			WheelVelocity = 0.f;
 		}
 		
+		PlayHandleSound();
+
 		WheelVelocity = FPhysics::GetVf(WheelVelocity, WHEEL_ACCEL, _deltaTime);
 		_refRot = FPhysics::GetDeltaX(WheelVelocity, WHEEL_ACCEL, _deltaTime);
 	}
@@ -162,6 +180,8 @@ void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
 			WheelVelocity = FPhysics::GetVf(WheelVelocity, acc, _deltaTime);
 			_refRot = FPhysics::GetDeltaX(WheelVelocity, acc, _deltaTime);
 		}
+
+		WheelSP.Pause();
 
 		PrevH = 2;
 		Renderer->ChangeAnimation("Idle");
@@ -177,6 +197,7 @@ void APlayer::TickItem(float _deltaTime)
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
 		UseItem();
+		PlayShootVoice();
 		GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(ItemIndex));
 	}
 }

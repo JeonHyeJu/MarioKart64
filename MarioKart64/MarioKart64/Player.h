@@ -27,7 +27,11 @@ protected:
 	void OnChangeLap(int _lap);
 	void OnChangeItem(int _itemIdx);
 
+	void PlayHandleSound();
+
 private:
+	USoundPlayer WheelSP;
+
 	int PrevItemIdx = -1;
 	int PrevH = -1;
 };

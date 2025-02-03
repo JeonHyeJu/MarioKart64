@@ -74,7 +74,7 @@ void ADriver::Tick(float _deltaTime)
 		IsInitSound = true;
 		CarSP = UEngineSound::Play("CarNormal.wav");
 		CarSP.Loop(99999);
-		CarSP.SetVolume(.05f);
+		CarSP.SetVolume(.025f);
 	}
 
 	if (IsSpin)
@@ -618,7 +618,6 @@ void ADriver::CheckLap(bool _isReverse)
 				EndLap();
 				IsFinished = true;
 				CarSP.Stop();
-				CarAccel.Stop();
 			}
 		}
 
@@ -681,27 +680,14 @@ void ADriver::GetForwardPhysics(float _deltaTime, float& _refDx, bool _isCollide
 	{
 		DirVTrain = 1;
 		acc = ACCELERATION - FRICTION_FORCE - AdditionalFriction;
-
-		/*if (CarAccel.IsInited() == false)
-		{
-			CarAccel = UEngineSound::Play("CarAccel.wav");
-			CarAccel.Loop(9999);
-			CarAccel.SetVolume(.1f);
-		}
-		else
-		{
-			CarAccel.Resume();
-		}*/
 	}
 	else if (UEngineInput::IsPress(VK_DOWN))
 	{
-		//CarAccel.Pause();
 		DirVTrain = 2;
 		acc = -ACCELERATION + FRICTION_FORCE + AdditionalFriction;
 	}
 	else
 	{
-		//CarAccel.Pause();
 		isPushed = false;
 	}
 
@@ -966,6 +952,33 @@ bool ADriver::IsCrashFromMe(AActor* _other)
 	}
 }
 
+void ADriver::PlayShootVoice()
+{
+	std::string fileName = "MarioFire.wav";
+
+	switch (Character)
+	{
+	case ECharacter::LUIGI:
+		fileName = "LuigiFire.wav";
+		break;
+	case ECharacter::PEACH:
+		fileName = "PeachFire.wav";
+		break;
+	case ECharacter::YOSHI:
+		fileName = "YoshiFire.wav";
+		break;
+	case ECharacter::WARIO:
+		fileName = "WarioFire.wav";
+		break;
+	case ECharacter::BOWSER:
+		fileName = "BowserFire.wav";
+		break;
+	}
+
+	USoundPlayer sp = UEngineSound::Play(fileName);
+	sp.SetVolume(.25f);
+}
+
 void ADriver::PickItem(float _deltaTime)
 {
 	int itemIdx = ItemRoulette.PickItem(_deltaTime);
@@ -1069,6 +1082,9 @@ void ADriver::UseItem_Banana(const EItemType& _itemType)
 	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
 	item->Init(_itemType, MapPtr, NavIdx);
 	item->SetActorLocation(GetActorLocation() + (backward * item->Size * 2));
+
+	USoundPlayer sp = UEngineSound::Play("DropItem.wav");
+	sp.SetVolume(.25f);
 }
 
 void ADriver::UseItem_Star(const EItemType& _itemType)
@@ -1096,4 +1112,7 @@ void ADriver::UseItem_FakeItemBox(const EItemType& _itemType)
 	std::shared_ptr<AItem> item = GetWorld()->SpawnActor<AItem>();
 	item->Init(_itemType, MapPtr, NavIdx);
 	item->SetActorLocation(GetActorLocation() + FVector{ 0.f, item->Size, 0.f } + (backward * item->Size * 2));
+
+	USoundPlayer sp = UEngineSound::Play("DropItem.wav");
+	sp.SetVolume(.25f);
 }

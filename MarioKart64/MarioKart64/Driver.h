@@ -66,6 +66,7 @@ protected:
 	virtual void OnChangeLap(int _lap) {};
 	virtual void OnChangeItem(int _itemIdx) {};
 	virtual void EndLap() {};
+	void PlayShootVoice();
 
 	void GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float& _refRot);
 	void UseItem();
@@ -188,7 +189,6 @@ private:
 		"Bowser.png",
 	};
 
-	USoundPlayer CarAccel;
 	USoundPlayer CarSP;
 
 	ECharacter Character = ECharacter::NONE;

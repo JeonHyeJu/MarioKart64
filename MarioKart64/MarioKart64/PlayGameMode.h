@@ -81,4 +81,5 @@ private:
 	UFSMStateManager Fsm;
 
 	USoundPlayer BgmSP;
+	USoundPlayer BgmResultSP;
 };

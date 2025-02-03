@@ -840,6 +840,9 @@ void ADriver::OnCollisionEnter(UCollision* _this, UCollision* _other)
 				ptr->SetVelocity(ptr->GetVelocity() * -.1f);
 			}
 		}
+
+		USoundPlayer sp = UEngineSound::Play("Boom.wav");
+		sp.SetVolume(.25f);
 	}
 	else if (name == "SHELL")
 	{

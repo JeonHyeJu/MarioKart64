@@ -36,7 +36,7 @@ void AItem::Tick(float _deltaTime)
 	{
 		RunningShell(_deltaTime);
 	}
-	else if (ItemType == EItemType::RED_SHELLS)
+	else if (ItemType == EItemType::BOWSER_SHELL)
 	{
 		RunningShell(_deltaTime);
 	}

@@ -144,7 +144,6 @@ class ISerializObject
 public:
 	ENGINEAPI virtual ~ISerializObject() = 0
 	{
-
 	}
 
 public:

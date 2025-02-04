@@ -27,7 +27,6 @@ public:
 	ObjRenderer& operator=(ObjRenderer&& _other) noexcept = delete;
 
 	void Init(std::string_view _path);
-	void Init(std::string_view _objPath, std::string_view _mtlPath);
 
 protected:
 	void BeginPlay() override;

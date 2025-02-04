@@ -350,9 +350,6 @@
     <ClInclude Include="Balloons.h">
       <Filter>Actor\PlayLevel</Filter>
     </ClInclude>
-    <ClInclude Include="InstanceRectRenderer.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="ShrinkEffect.h">
       <Filter>Effects</Filter>
     </ClInclude>
@@ -507,9 +504,6 @@
     <ClCompile Include="CData.cpp" />
     <ClCompile Include="Balloons.cpp">
       <Filter>Actor\PlayLevel</Filter>
-    </ClCompile>
-    <ClCompile Include="InstanceRectRenderer.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="ShrinkEffect.cpp">
       <Filter>Effects</Filter>

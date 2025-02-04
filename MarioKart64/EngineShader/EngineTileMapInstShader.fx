@@ -59,7 +59,7 @@ StructuredBuffer<FResultColor> ColorDataBuffer : register(t1);
 float4 TileMapInst_PS(VertexShaderOutPut _Vertex) : SV_Target0
 {
 	float4 Color = TileMapTex.Sample(ImageSampler, _Vertex.UV.xy);
-	
+
 	if (0.0f >= Color.a)
 	{
 		clip(-1);

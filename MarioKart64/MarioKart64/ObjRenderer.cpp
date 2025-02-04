@@ -9,6 +9,25 @@
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+ObjRenderer::ObjRenderer()
+{
+	RenderInfos.reserve(10000);
+}
+
+ObjRenderer::~ObjRenderer()
+{
+}
+
+void ObjRenderer::BeginPlay()
+{
+	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
+}
+
+void ObjRenderer::Render(UEngineCamera* _camera, float _deltaTime)
+{
+	URenderer::Render(_camera, _deltaTime);
+}
+
 void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 {
 	std::vector<FEngineVertex> vertices;
@@ -25,6 +44,21 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		vertex.POSITION.Y = _mesh->mVertices[i].y;
 		vertex.POSITION.Z = _mesh->mVertices[i].z;
 		vertex.POSITION.W = 1.f;
+
+		if (_mesh->mNormals != nullptr)
+		{
+			aiVector3D v = _mesh->mNormals[i];
+			vertex.NORMAL.X = v.x;
+			vertex.NORMAL.Y = v.y;
+			vertex.NORMAL.Z = v.z;
+		}
+		if (_mesh->mTangents != nullptr)
+		{
+			aiVector3D v = _mesh->mTangents[i];
+			vertex.NORMAL.X = v.x;
+			vertex.NORMAL.Y = v.y;
+			vertex.NORMAL.Z = v.z;
+		}
 
 		if (vertex.POSITION.Z < minZ)
 		{
@@ -43,7 +77,6 @@ void ObjRenderer::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	for (UINT i = 0; i < _mesh->mNumFaces; ++i)
 	{
 		aiFace face = _mesh->mFaces[i];
-
 		for (UINT j = 0; j < face.mNumIndices; ++j)
 		{
 			indices.push_back(face.mIndices[j]);
@@ -100,8 +133,8 @@ bool ObjRenderer::LoadModel()
 	Assimp::Importer importer;
 
 	unsigned int flag;
-	flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded;
-	//flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenNormals;
+	//flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded;
+	flag = aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenNormals | aiProcess_CalcTangentSpace;
 	//flag = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_GenNormals | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
 
 	const aiScene* pScene = importer.ReadFile(fileName, flag);
@@ -113,15 +146,6 @@ bool ObjRenderer::LoadModel()
 
 	ProcessNode(pScene->mRootNode, pScene);
 	return true;
-}
-
-ObjRenderer::ObjRenderer()
-{
-	RenderInfos.reserve(10000);
-}
-
-ObjRenderer::~ObjRenderer()
-{
 }
 
 void ObjRenderer::Init(std::string_view _path)
@@ -153,6 +177,9 @@ void ObjRenderer::_Init()
 		SetMaterial(unitInfo.MatName, i);
 		unit.SetTexture("diffTexture", unitInfo.TexName);
 	}
+
+	RenderInfos.clear();
+	RenderInfos.resize(0);
 }
 
 void ObjRenderer::Sort()
@@ -163,27 +190,3 @@ void ObjRenderer::Sort()
 	});
 }
 
-void ObjRenderer::BeginPlay()
-{
-	USceneComponent::BeginPlay();	// Don't use URenderer::BeginPlay()
-}
-
-void ObjRenderer::Render(UEngineCamera* _camera, float _deltaTime)
-{
-	/*if (nullptr != CurAnimation)
-	{
-		Sprite = CurAnimation->Sprite;
-
-		GetRenderUnit().SetTexture("ImageTexture", Sprite->GetTexture(CurIndex)->GetName());
-		SpriteData = Sprite->GetSpriteData(CurIndex);
-	}
-
-	if (true == IsAutoScale)
-	{
-		FVector Scale = Sprite->GetSpriteScaleToReal(CurIndex);
-		Scale.Z = 1.0f;
-		SetRelativeScale3D(Scale * AutoScaleRatio);
-	}*/
-
-	URenderer::Render(_camera, _deltaTime);
-}

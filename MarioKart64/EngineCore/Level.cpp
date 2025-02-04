@@ -182,6 +182,7 @@ void ULevel::Render(float _DeltaTime)
 	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
 	LastRenderTarget->MergeTo(BackBuffer);
 
+#ifdef _DEBUG
 	{
 		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
 
@@ -200,6 +201,7 @@ void ULevel::Render(float _DeltaTime)
 			}
 		}
 	}
+#endif
 
 	if (true == UEngineWindow::IsApplicationOn())
 	{

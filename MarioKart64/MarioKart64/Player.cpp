@@ -173,6 +173,7 @@ void APlayer::TestForDebug(float _deltaTime)
 	//if (UEngineInput::IsDown(VK_SPACE))
 	//{
 		//UseItem_Shell(EItemType::GREEN_SHELL);
+		//UseItem_Shell(EItemType::BOWSER_SHELL);
 		//UseItem_Banana(EItemType::BANANA);
 		//UseItem_FakeItemBox(EItemType::FAKE_ITEMBOX);
 		//UseItem_Mushroom(EItemType::MUSHROOM);

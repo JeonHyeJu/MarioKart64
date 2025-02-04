@@ -135,9 +135,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<APlayGameMode, APlayer, AUIPlay>("PlayLevel");
 	//UEngineCore::CreateLevel<APlayGameMode, ADriver, AUIPlay>("PlayLevel");
 
-	//UEngineCore::OpenLevel("TitleLevel");
+	UEngineCore::OpenLevel("TitleLevel");
 	//UEngineCore::OpenLevel("SelectLevel");
-	UEngineCore::OpenLevel("PlayLevel");
+	//UEngineCore::OpenLevel("PlayLevel");
 
 	/*UEngineCore::CreateLevel<ATestGameMode, APawn, AHUD>("TestLevel");
 	UEngineCore::OpenLevel("TestLevel");*/

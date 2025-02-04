@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include <map>
+#include "CData.h"
 
 class CGlobal	// Contens global
 {
 public:
 	static const char* ModelPath;
+	static const char* NAV_DATA_PATH;
 	static std::string GetModelPath(std::string_view _append, std::string_view _fileName);
 	static const char* OBJ_SHADER_NAME;
 	static const char* OBJ_SPRITE_SHADER_NAME;
@@ -30,4 +32,5 @@ public:
 	static void GetRouteIdxRoyal(std::map<int, int>& _refMap);
 	static void GetRouteIdxBowsers(std::map<int, int>& _refMap);
 	static void GetRouteIdxRainbow(std::map<int, int>& _refMap);
+	static std::string GetMapName(ECircuit _map);
 };

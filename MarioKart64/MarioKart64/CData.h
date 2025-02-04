@@ -166,8 +166,8 @@ struct SNavData
 	float4 Vertex[3] = { {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f}, {0.f, 0.f, 0.f, 1.f} };
 	int GroupIndex = -1;
 	int Index = -1;
-	std::vector<int> LinkData;
 	ENavType FloorType = ENavType::NONE;
+	std::vector<int> LinkData;
 
 	SNavData()
 	{

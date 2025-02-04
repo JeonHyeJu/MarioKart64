@@ -23,8 +23,8 @@ public:
 	ENGINEAPI void Write(const void* _Ptr, size_t _Size);
 	ENGINEAPI void Read(void* _Ptr, size_t _Size);
 
-	ENGINEAPI void FileOpen(const char* _Mode);
-	void Close();
+	ENGINEAPI bool FileOpen(const char* _Mode);
+	ENGINEAPI void Close();
 
 	int GetFileSize();
 

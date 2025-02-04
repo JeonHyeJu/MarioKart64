@@ -61,7 +61,6 @@ void InstanceRectRenderer::RenderInstancing(class UEngineCamera* _camera, float 
 
 	Scale.Scale(ImageSize);
 
-	// 메모리적 리사이즈가 발생하지 않는다.
 	InstTransform.resize(Tiles.size());
 	InstSpriteData.resize(Tiles.size());
 	InstColorData.resize(Tiles.size());
@@ -91,11 +90,10 @@ void InstanceRectRenderer::RenderInstancing(class UEngineCamera* _camera, float 
 		++RenderCount;
 	}
 
-	// 10~1000
 	Unit.StructuredBufferLinkData("TransformBuffer", InstTransform);
 	Unit.StructuredBufferLinkData("SpriteDataBuffer", InstSpriteData);
 	Unit.StructuredBufferLinkData("ColorDataBuffer", InstColorData);
-	// 한번 딱 랜더하는 구조가 될 것입니다.
+
 	Unit.RenderInst(_Camera, static_cast<UINT>(Tiles.size()), _DeltaTime);*/
 }
 

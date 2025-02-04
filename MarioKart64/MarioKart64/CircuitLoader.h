@@ -1,7 +1,8 @@
 #pragma once
+#include <EngineBase/EngineSerializer.h>
 #include "CData.h"
 
-class CircuitLoader
+class CircuitLoader : public ISerializObject
 {
 public:
 	CircuitLoader();
@@ -21,6 +22,9 @@ private:
 	void ProcessNode(struct aiNode* node, const struct aiScene* scene);
 	void InitNavMesh();
 
+	void Serialize(UEngineSerializer& _Ser) override;
+	void DeSerialize(UEngineSerializer& _Ser) override;
+
 	std::string FileName = "";
 	std::string FolderName = "";
 	std::string ObjPath = "";
@@ -30,7 +34,7 @@ private:
 	std::vector<SVertexToNavData> VertexNavDatas;
 	std::map<std::string, ENavType> NavTextures;
 
-	ECircuit MapType;
+	ECircuit MapType = ECircuit::END;
 	int DebugIndex = 0;
 	int MeshCount = 0;
 };

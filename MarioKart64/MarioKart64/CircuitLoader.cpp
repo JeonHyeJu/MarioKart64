@@ -173,8 +173,6 @@ void CircuitLoader::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 	info.TexName = texName;
 	info.Z = minZ;
 
-	// Temp
-	//if (texName == "7EEAA53A_fix.png" || texName == "922DEA6_c.png" || texName == "3A87458D_c.png" || texName == "5B7CDDF2_fix.png")
 	if (NavTextures.contains(texName))
 	{
 		SVertexToNavData data;
@@ -196,7 +194,6 @@ void CircuitLoader::ProcessMesh(aiMesh* _mesh, const aiScene* _scene)
 		//RenderInfos.push_back(info);
 	}
 
-	// TODO: uncomment
 	RenderInfos.push_back(info);
 }
 
@@ -216,7 +213,28 @@ void CircuitLoader::ProcessNode(aiNode* node, const aiScene* scene)
 
 void CircuitLoader::InitNavMesh()
 {
-	// TODO: deserialize
+	UEngineDirectory dir;
+	std::string mapName = CGlobal::GetMapName(MapType) + ".dat";
+
+	if (dir.MoveParentToDirectory(CGlobal::NAV_DATA_PATH) == false)
+	{
+		MSGASSERT("NavData folder is not exist.");
+	}
+
+	// DeSerialize
+	{
+		UEngineFile file = dir.GetFile(mapName);
+		UEngineSerializer Ser;
+
+		bool isOpen = file.FileOpen("rb");
+		if (isOpen)
+		{
+			file.Read(Ser);
+
+			DeSerialize(Ser);
+			file.Close();
+		}
+	}
 	
 	std::vector<SNavData>& navData = SRenderInfo::MapInfos.find(MapType)->second.NavInfos;
 	navData.reserve(10000);
@@ -295,4 +313,71 @@ void CircuitLoader::InitNavMesh()
 	navData.resize(navData.size());
 
 	VertexNavDatas.clear();
+	VertexNavDatas.resize(0);
+
+	// Serialize
+	{
+		UEngineFile file = dir.GetFile(mapName);
+
+		UEngineSerializer Ser;
+		Serialize(Ser);
+
+		bool isOpen = file.FileOpen("wb");
+		if (isOpen)
+		{
+			file.Write(Ser);
+			file.Close();
+		}
+	}
+}
+
+void CircuitLoader::Serialize(UEngineSerializer& _Ser)
+{
+	std::vector<SNavData>& navData = SRenderInfo::MapInfos.find(MapType)->second.NavInfos;
+	
+	for (SNavData& _data : navData)
+	{
+		_Ser << _data.Vertex[0];
+		_Ser << _data.Vertex[1];
+		_Ser << _data.Vertex[2];
+		_Ser << _data.GroupIndex;
+		_Ser << _data.Index;
+		_Ser << static_cast<int>(_data.FloorType);
+
+		_Ser << static_cast<int>(_data.LinkData.size());
+		for (int val : _data.LinkData)
+		{
+			_Ser << val;
+		}
+	}
+}
+
+void CircuitLoader::DeSerialize(UEngineSerializer& _Ser)
+{
+	std::vector<SNavData>& navData = SRenderInfo::MapInfos.find(MapType)->second.NavInfos;
+
+	for (SNavData& _data : navData)
+	{
+		int floorType = 0;
+		_Ser >> _data.Vertex[0];
+		_Ser >> _data.Vertex[1];
+		_Ser >> _data.Vertex[2];
+		_Ser >> _data.GroupIndex;
+		_Ser >> _data.Index;
+		_Ser >> floorType;
+
+		_data.FloorType = static_cast<ENavType>(floorType);
+
+		int size = 0;
+		_Ser >> size;
+
+		_data.LinkData.clear();
+		_data.LinkData.reserve(size);
+		for (int i = 0; i < size; ++i)
+		{
+			int val = 0;
+			_Ser >> val;
+			_data.LinkData.push_back(val);
+		}
+	}
 }

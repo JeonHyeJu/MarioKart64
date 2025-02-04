@@ -38,14 +38,17 @@ UEngineFile::~UEngineFile()
 	Close();
 }
 
-void UEngineFile::FileOpen(const char* _Mode)
+bool UEngineFile::FileOpen(const char* _Mode)
 {
 	fopen_s(&File, GetPathToString().c_str(), _Mode);
 
 	if (nullptr == File)
 	{
-		MSGASSERT(GetPathToString() + + "파일 오픈에 실패했습니다");
+		return false;
+		//MSGASSERT(GetPathToString() + + "파일 오픈에 실패했습니다");
 	}
+
+	return true;
 }
 
 

@@ -3,6 +3,7 @@
 #include <EngineBase/EngineDirectory.h>
 
 const char* CGlobal::ModelPath = "MarioKart64\\Resources\\Models";
+const char* CGlobal::NAV_DATA_PATH = "Resources\\NavData";
 const char* CGlobal::OBJ_SHADER_NAME = "Object";
 const char* CGlobal::OBJ_SPRITE_SHADER_NAME = "ObjectSprite";
 const char* CGlobal::OBJ_SKY_SHADER_NAME = "Skybox";
@@ -125,4 +126,39 @@ void CGlobal::GetRouteIdxRainbow(std::map<int, int>& _refMap)
 	{
 		_refMap[routeInit[i]] = static_cast<int>(i);
 	}
+}
+
+std::string CGlobal::GetMapName(ECircuit _map)
+{
+	std::string name = "";
+	
+	switch (_map)
+	{
+	case ECircuit::LUIGI_RACEWAY:
+		name = "LuigiRaceway";
+		break;
+	case ECircuit::KOOPA_TROOPA_BEACH:
+		name = "KoopaTroopaBeach";
+		break;
+	case ECircuit::MARIO_RACEWAY:
+		name = "MarioRaceway";
+		break;
+	case ECircuit::WARIO_STADIUM:
+		name = "WarioStadium";
+		break;
+	case ECircuit::SHERBET_LAND:
+		name = "SherbetLand";
+		break;
+	case ECircuit::ROYAL_RACEWAY:
+		name = "RoyalRaceway";
+		break;
+	case ECircuit::BOWSERS_CASTLE:
+		name = "BowserCastle";
+		break;
+	case ECircuit::RAINBOW_ROAD:
+		name = "RainbowRoad";
+		break;
+	}
+
+	return name;
 }

@@ -332,6 +332,9 @@ void APlayGameMode::OnCount()
 
 	SetPlayingLocations();
 	CheckAndSetRanking(0.f, true);
+
+	USoundPlayer sp = UEngineSound::Play("StartBoost.wav");
+	sp.SetVolume(.5f);
 }
 
 void APlayGameMode::OnPlay()
@@ -351,7 +354,8 @@ void APlayGameMode::OnFinish()
 	Camera->DetachFromActor();
 
 	BgmSP.Stop();
-	USoundPlayer sp = UEngineSound::Play("17.1stPlaceFanfare.mp3");
+
+	USoundPlayer sp = UEngineSound::Play("FinishEffect.wav");
 	sp.SetVolume(.5f);
 
 	GameData::GetInstance()->SetFinishState(EFinishState::FINISH_RACING);
@@ -365,13 +369,14 @@ void APlayGameMode::OnWaitUIResult()
 
 	Player->HideDefaultRenderer();
 
-	BgmResultSP = UEngineSound::Play("19.1st-4thPlaceResults.mp3");
-	BgmResultSP.SetVolume(.5f);
+	USoundPlayer sp = UEngineSound::Play("17.1stPlaceFanfare.mp3");
+	sp.SetVolume(.5f);
 }
 
 void APlayGameMode::OnWaitKey()
 {
-
+	BgmResultSP = UEngineSound::Play("19.1st-4thPlaceResults.mp3");
+	BgmResultSP.SetVolume(.5f);
 }
 
 /* Fsm update function */

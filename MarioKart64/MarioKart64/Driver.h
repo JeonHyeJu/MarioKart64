@@ -66,7 +66,12 @@ protected:
 	virtual void OnChangeLap(int _lap) {};
 	virtual void OnChangeItem(int _itemIdx) {};
 	virtual void EndLap() {};
+	virtual void StartDriving() {};
+	virtual void Driving(float _deltaTime) {};
+	virtual void FinishDriving() {};
 	void PlayShootVoice();
+
+	virtual void OnCollisionEnter(UCollision* _this, UCollision* _other);
 
 	void GetHandleRotationAuto(float _deltaTime, const FVector& _dir, float& _refRot);
 	void UseItem();
@@ -131,13 +136,12 @@ private:
 	void CheckLap(bool _isReverse);
 	bool IsCrashFromMe(AActor* _other);
 
-	void OnCollisionEnter(UCollision* _this, UCollision* _other);
-
 	std::shared_ptr<UCollision> Collision = nullptr;
 	ABaseMap* MapPtr = nullptr;
 
 	const int ALL_LAB = 3;
 
+	const float BORDER_FRICTIONAL_FORCE = 10.f;
 	const float FRICTIONAL_FORCE = .05f;
 	const float MAX_SPEED = 20.f;
 	const float MAX_TURN = 5.f;
@@ -189,6 +193,7 @@ private:
 		"Bowser.png",
 	};
 
+	USoundPlayer RoughPathSP;
 	USoundPlayer CarSP;
 
 	ECharacter Character = ECharacter::NONE;

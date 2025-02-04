@@ -4,6 +4,7 @@
 #include <fstream>	// temp
 #include <sstream>	// temp
 
+class UCollision;
 class APlayer : public ADriver
 {
 public:
@@ -26,13 +27,21 @@ protected:
 
 	void OnChangeLap(int _lap);
 	void OnChangeItem(int _itemIdx);
+	void OnCollisionEnter(UCollision* _this, UCollision* _other) override;
+
+	void StartDriving() override;
+	void Driving(float _deltaTime) override;
+	void FinishDriving() override;
 
 	void PlayHandleSound();
 
 private:
+	void TestForDebug(float _deltaTime);
+	void GatherTrainigData(float _deltaTime);
+
+	USoundPlayer BoostSP;
 	USoundPlayer WheelSP;
 
 	int PrevItemIdx = -1;
 	int PrevH = -1;
 };
-

@@ -26,7 +26,7 @@ ADriver::ADriver()
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->SetOrder(0);
 	Renderer->SetupAttachment(RootComponent);
-
+	
 	RendererDebug = CreateDefaultSubObject<USpriteRenderer>();
 	RendererDebug->CreateAnimation("Idle", "Mario.png", 0, 3, .3f);
 	RendererDebug->ChangeAnimation("Idle");
@@ -57,6 +57,11 @@ void ADriver::BeginPlay()
 {
 	APawn::BeginPlay();
 
+	RoughPathSP = UEngineSound::Play("RoughPath.mp3");
+	RoughPathSP.Loop(9999);
+	RoughPathSP.SetVolume(.25f);
+	RoughPathSP.Pause();
+
 	//CheckFutureCollisionOfAllMap();
 }
 
@@ -75,6 +80,8 @@ void ADriver::Tick(float _deltaTime)
 		CarSP = UEngineSound::Play("CarNormal.wav");
 		CarSP.Loop(99999);
 		CarSP.SetVolume(.025f);
+
+		StartDriving();
 	}
 
 	if (IsSpin)
@@ -85,6 +92,7 @@ void ADriver::Tick(float _deltaTime)
 
 	ElapsedTime += _deltaTime;
 	Move(_deltaTime);
+	Driving(_deltaTime);
 
 	if (IsPickingItem)
 	{
@@ -486,10 +494,20 @@ void ADriver::Move(float _deltaTime)
 
 	if (isCollided)
 	{
+		RoughPathSP.Pause();
+
 		const SNavData& _nd = MapPtr->GetNavData(NavIdx);
 		if (_nd.FloorType == ENavType::FLATE_FASTER)
 		{
 			IsBoost = true;
+		}
+		else if (_nd.FloorType == ENavType::BORDER)
+		{
+			if (Velocity > 0)
+			{
+				Velocity -= BORDER_FRICTIONAL_FORCE * _deltaTime;
+			}
+			RoughPathSP.Resume();
 		}
 
 		MapPtr->SetDebugLocation(float4{ static_cast<float>(NavIdx), 0.f, 0.f, 1.f });
@@ -618,6 +636,7 @@ void ADriver::CheckLap(bool _isReverse)
 				EndLap();
 				IsFinished = true;
 				CarSP.Stop();
+				FinishDriving();
 			}
 		}
 
@@ -786,7 +805,7 @@ void ADriver::CheckCollisionOfAllMap()
 		if (isCollided)
 		{
 			NavIdx = nd.Index;
-			OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(NavIdx) + "\n").c_str());
+			//OutputDebugStringA(("CheckCollisionAll index: " + std::to_string(NavIdx) + "\n").c_str());
 			break;
 		}
 	}

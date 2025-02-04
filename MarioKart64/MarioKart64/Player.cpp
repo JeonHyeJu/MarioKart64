@@ -38,9 +38,138 @@ void APlayer::Tick(float _deltaTime)
 
 	DirVTrain = 0;
 	DirHTrain = 0;
-	//OutputDebugStringA(("Player loc: " + GetActorLocation().ToString() + "\n").c_str());
 
-	/* for debug start */
+	TestForDebug(_deltaTime);
+	GatherTrainigData(_deltaTime);
+}
+
+void APlayer::StartDriving()
+{
+	BoostSP = UEngineSound::Play("Boost.mp3");
+	BoostSP.SetVolume(.0f);
+}
+
+void APlayer::Driving(float _deltaTime)
+{
+	if (Velocity < 5)
+	{
+		if (BoostSP.IsPlaying())
+		{
+			BoostSP.Stop();
+		}
+	}
+	else if (Velocity < 200)
+	{
+		if (BoostSP.IsPlaying() == false)
+		{
+			BoostSP = UEngineSound::Play("Boost.mp3");
+			BoostSP.SetVolume(.1f);
+		}
+	}
+	else
+	{
+		if (BoostSP.IsPlaying() == false)
+		{
+			BoostSP = UEngineSound::Play("Boost.mp3");
+			BoostSP.SetVolume(.5f);
+		}
+	}
+}
+
+void APlayer::FinishDriving()
+{
+	BoostSP.Stop();
+}
+
+void APlayer::PlayHandleSound()
+{
+	if (WheelSP.IsInited() == false)
+	{
+		WheelSP = UEngineSound::Play("Drift.wav");
+		WheelSP.Loop(9999);
+		WheelSP.SetVolume(.1f);
+	}
+	else
+	{
+		WheelSP.Resume();
+	}
+}
+
+void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
+{
+	float rotY = GetActorRotation().Y;
+
+	if (UEngineInput::IsPress(VK_LEFT))
+	{
+		DirHTrain = 1;
+		if (PrevH != 0)
+		{
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			Renderer->ChangeAnimation("TurnL");
+			PrevH = 0;
+			WheelVelocity = 0.f;
+		}
+
+		WheelVelocity = FPhysics::GetVf(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
+		_refRot = FPhysics::GetDeltaX(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
+
+		if (WheelVelocity < -30)
+		{
+			PlayHandleSound();
+		}
+	}
+	else if (UEngineInput::IsPress(VK_RIGHT))
+	{
+		DirHTrain = 2;
+		if (PrevH != 1)
+		{
+			Renderer->SetRotation({ 0.f, 180.f, 0.f });
+			Renderer->ChangeAnimation("TurnR");
+			PrevH = 1;
+			WheelVelocity = 0.f;
+		}
+		
+		WheelVelocity = FPhysics::GetVf(WheelVelocity, WHEEL_ACCEL, _deltaTime);
+		_refRot = FPhysics::GetDeltaX(WheelVelocity, WHEEL_ACCEL, _deltaTime);
+
+		if (WheelVelocity > 30)
+		{
+			PlayHandleSound();
+		}
+	}
+	else
+	{
+		float acc = -1.f * WheelVelocity;
+		if (PrevH != 2)
+		{
+			Renderer->SetRotation({ 0.f, 0.f, 0.f });
+			WheelVelocity = FPhysics::GetVf(WheelVelocity, acc, _deltaTime);
+			_refRot = FPhysics::GetDeltaX(WheelVelocity, acc, _deltaTime);
+		}
+
+		WheelSP.Pause();
+
+		PrevH = 2;
+		Renderer->ChangeAnimation("Idle");
+	}
+
+	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
+}
+
+void APlayer::TickItem(float _deltaTime)
+{
+	if (ItemIndex >= ITEM_NONE) return;
+
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		UseItem();
+		PlayShootVoice();
+		GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(ItemIndex));
+	}
+}
+
+void APlayer::TestForDebug(float _deltaTime)
+{
 	//if (UEngineInput::IsDown(VK_SPACE))
 	//{
 		//UseItem_Shell(EItemType::GREEN_SHELL);
@@ -84,132 +213,67 @@ void APlayer::Tick(float _deltaTime)
 	{
 		IsReverseTrain = !IsReverseTrain;
 	}
-	/* for debug end */
-
-	if (IsTraining)
-	{
-		static float elaspedSecTrain = 0.f;
-
-		elaspedSecTrain += _deltaTime;
-
-		if (elaspedSecTrain > .0001f)
-		{
-			elaspedSecTrain = 0.f;
-
-			GameData* pData = GameData::GetInstance();
-			FVector loc = GetActorLocation();
-
-			float subX = pData->MapSizeInfo.Max.X - pData->MapSizeInfo.Min.X;
-			float subZ = pData->MapSizeInfo.Max.Z - pData->MapSizeInfo.Min.Z;
-			float normX = (loc.X - pData->MapSizeInfo.Min.X) / subX;
-			float normZ = (loc.Z - pData->MapSizeInfo.Min.Z) / subZ;
-
-			TrainData data
-			{
-				pData->MapSizeInfo.InitLoc,
-				GetActorForwardVector(),
-				normX,
-				normZ,
-				GetTransform().Rotation.Y,
-				IsReverseTrain ? 1 : 0,
-				Velocity,
-				DirVTrain,
-				DirHTrain
-			};
-			TrainDatas.push_back(data);
-		}
-	}
 }
 
-void APlayer::PlayHandleSound()
+void APlayer::GatherTrainigData(float _deltaTime)
 {
-	if (WheelSP.IsInited() == false)
-	{
-		WheelSP = UEngineSound::Play("Drift.wav");
-		WheelSP.Loop(9999);
-		WheelSP.SetVolume(.1f);
-	}
-	else
-	{
-		WheelSP.Resume();
-	}
-}
+	if (!IsTraining) return;
 
-void APlayer::GetHandleRotation(float _deltaTime, float& _refRot)
-{
-	float rotY = GetActorRotation().Y;
+	static float elaspedSecTrain = 0.f;
 
-	if (UEngineInput::IsPress(VK_LEFT))
+	elaspedSecTrain += _deltaTime;
+
+	if (elaspedSecTrain > .0001f)
 	{
-		DirHTrain = 1;
-		if (PrevH != 0)
+		elaspedSecTrain = 0.f;
+
+		GameData* pData = GameData::GetInstance();
+		FVector loc = GetActorLocation();
+
+		float subX = pData->MapSizeInfo.Max.X - pData->MapSizeInfo.Min.X;
+		float subZ = pData->MapSizeInfo.Max.Z - pData->MapSizeInfo.Min.Z;
+		float normX = (loc.X - pData->MapSizeInfo.Min.X) / subX;
+		float normZ = (loc.Z - pData->MapSizeInfo.Min.Z) / subZ;
+
+		TrainData data
 		{
-			Renderer->SetRotation({ 0.f, 0.f, 0.f });
-			Renderer->ChangeAnimation("TurnL");
-			PrevH = 0;
-			WheelVelocity = 0.f;
-		}
-
-		PlayHandleSound();
-
-		WheelVelocity = FPhysics::GetVf(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
-		_refRot = FPhysics::GetDeltaX(WheelVelocity, -WHEEL_ACCEL, _deltaTime);
-	}
-	else if (UEngineInput::IsPress(VK_RIGHT))
-	{
-		DirHTrain = 2;
-		if (PrevH != 1)
-		{
-			Renderer->SetRotation({ 0.f, 180.f, 0.f });
-			Renderer->ChangeAnimation("TurnR");
-			PrevH = 1;
-			WheelVelocity = 0.f;
-		}
-		
-		PlayHandleSound();
-
-		WheelVelocity = FPhysics::GetVf(WheelVelocity, WHEEL_ACCEL, _deltaTime);
-		_refRot = FPhysics::GetDeltaX(WheelVelocity, WHEEL_ACCEL, _deltaTime);
-	}
-	else
-	{
-		float acc = -1.f * WheelVelocity;
-		if (PrevH != 2)
-		{
-			Renderer->SetRotation({ 0.f, 0.f, 0.f });
-			WheelVelocity = FPhysics::GetVf(WheelVelocity, acc, _deltaTime);
-			_refRot = FPhysics::GetDeltaX(WheelVelocity, acc, _deltaTime);
-		}
-
-		WheelSP.Pause();
-
-		PrevH = 2;
-		Renderer->ChangeAnimation("Idle");
-	}
-
-	//OutputDebugStringA(("rotVal: " + std::to_string(_refRot) + "\n").c_str());
-}
-
-void APlayer::TickItem(float _deltaTime)
-{
-	if (ItemIndex >= ITEM_NONE) return;
-
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		UseItem();
-		PlayShootVoice();
-		GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(ItemIndex));
+			pData->MapSizeInfo.InitLoc,
+			GetActorForwardVector(),
+			normX,
+			normZ,
+			GetTransform().Rotation.Y,
+			IsReverseTrain ? 1 : 0,
+			Velocity,
+			DirVTrain,
+			DirHTrain
+		};
+		TrainDatas.push_back(data);
 	}
 }
 
 void APlayer::OnChangeLap(int _lap)
 {
 	GameData::GetInstance()->SetPlayerLap(_lap);
+
+	USoundPlayer sp = UEngineSound::Play("PassLap.mp3");
+	sp.SetVolume(.5f);
 }
 
 void APlayer::OnChangeItem(int _itemIdx)
 {
 	GameData::GetInstance()->SetPlayerItem(static_cast<EItemType>(_itemIdx));
+}
+
+void APlayer::OnCollisionEnter(UCollision* _this, UCollision* _other)
+{
+	ADriver::OnCollisionEnter(_this, _other);
+
+	const std::string& name = _other->GetCollisionProfileName();
+	if (name == "ITEMBOX")
+	{
+		USoundPlayer sp = UEngineSound::Play("ItemRoulette.mp3");
+		sp.SetVolume(.5f);
+	}
 }
 
 void APlayer::EndLap()

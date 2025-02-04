@@ -82,7 +82,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	InitTextures("Resources\\Sprites\\Characters");
 	InitTextures("Resources\\Sprites\\Background");
 	InitTextures("Resources\\Sprites\\Title");
-	InitTextures("Resources\\Sprites\\Clouds");
+	//InitTextures("Resources\\Sprites\\Clouds");
 	InitTextures("Resources\\Sprites\\GameObjects");
 	InitTextures("Resources\\Sprites\\SelectGame");
 	InitTextures("Resources\\Sprites\\SelectCharacter");
